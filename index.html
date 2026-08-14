@@ -116,19 +116,68 @@
   </main>
 
   <script>
-    function buscarCaballo() {
-      const nombre = document.getElementById("nombreCaballo").value.trim();
-      const resultado = document.getElementById("resultado");
+    const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+    const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
 
-      if (!nombre) {
-        resultado.innerHTML = "<p>Ingresá el nombre de un caballo.</p>";
-        return;
+    function escapar(texto) {
+  return String(texto ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;");
+}
+
+async function buscarCaballo() {
+  const nombre = document.getElementById("nombreCaballo").value.trim();
+  const resultado = document.getElementById("resultado");
+
+  if (!nombre) {
+    resultado.innerHTML = "<p>Ingresá el nombre de un caballo.</p>";
+    return;
+  }
+
+  resultado.innerHTML = "<p>Buscando <strong>" + escapar(nombre) + "</strong>...</p>";
+
+  try {
+    const url =
+      SUPABASE_URL +
+      "/rest/v1/Caballos?select=*&Nombre=ilike." +
+      encodeURIComponent(nombre);
+
+    const respuesta = await fetch(url, {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
       }
+    });
 
-      resultado.innerHTML =
-        "<p>Buscando <strong>" + nombre + "</strong>...</p>";
+    if (!respuesta.ok) {
+      throw new Error("Error " + respuesta.status);
     }
-  </script>
+
+    const caballos = await respuesta.json();
+
+    if (caballos.length === 0) {
+      resultado.innerHTML = "<p>No se encontró ese caballo.</p>";
+      return;
+    }
+
+    const caballo = caballos[0];
+
+    resultado.innerHTML = `
+      <h2>${escapar(caballo.Nombre)}</h2>
+      <p><strong>Sexo:</strong> ${escapar(caballo.Sexo || "-")}</p>
+      <p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento || "-")}</p>
+      <p><strong>RP:</strong> ${escapar(caballo.RP || "-")}</p>
+    `;
+
+  } catch (error) {
+    console.error(error);
+    resultado.innerHTML =
+      "<p>No se pudo consultar la base de datos.</p>";
+  }
+}
+
+</script>
 
 </body>
 </html>
