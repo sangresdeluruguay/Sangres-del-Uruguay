@@ -140,7 +140,7 @@ async function buscarCaballo() {
   try {
     const url =
       SUPABASE_URL +
-      "/rest/v1/Caballos?select=*&Nombre=ilike." +
+      "/rest/v1/Caballos?select=*&Nombre=eq." +
       encodeURIComponent(nombre);
 
     const respuesta = await fetch(url, {
