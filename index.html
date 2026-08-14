@@ -4,9 +4,131 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sangres del Uruguay</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f2;
+      color: #17233b;
+    }
+
+    header {
+      background: #17233b;
+      color: white;
+      text-align: center;
+      padding: 35px 20px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 34px;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: #d5b56b;
+    }
+
+    main {
+      max-width: 900px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+
+    .buscador {
+      background: white;
+      padding: 35px;
+      border-radius: 12px;
+      box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+      text-align: center;
+    }
+
+    .buscador h2 {
+      margin-top: 0;
+    }
+
+    .buscar-fila {
+      display: flex;
+      gap: 10px;
+      margin-top: 25px;
+    }
+
+    input {
+      flex: 1;
+      padding: 14px;
+      border: 1px solid #ccc;
+      border-radius: 7px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 14px 25px;
+      border: none;
+      border-radius: 7px;
+      background: #17233b;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #253758;
+    }
+
+    #resultado {
+      margin-top: 30px;
+    }
+
+    @media (max-width: 600px) {
+      .buscar-fila {
+        flex-direction: column;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Sangres del Uruguay</h1>
-  <p>Base de datos equina</p>
+
+  <header>
+    <h1>Sangres del Uruguay</h1>
+    <p>Registro y genealogía equina</p>
+  </header>
+
+  <main>
+
+    <section class="buscador">
+      <h2>Buscar caballo</h2>
+      <p>Ingresá el nombre del caballo para consultar su información y genealogía.</p>
+
+      <div class="buscar-fila">
+        <input
+          id="nombreCaballo"
+          type="text"
+          placeholder="Nombre del caballo"
+        >
+        <button onclick="buscarCaballo()">Buscar</button>
+      </div>
+
+      <div id="resultado"></div>
+    </section>
+
+  </main>
+
+  <script>
+    function buscarCaballo() {
+      const nombre = document.getElementById("nombreCaballo").value.trim();
+      const resultado = document.getElementById("resultado");
+
+      if (!nombre) {
+        resultado.innerHTML = "<p>Ingresá el nombre de un caballo.</p>";
+        return;
+      }
+
+      resultado.innerHTML =
+        "<p>Buscando <strong>" + nombre + "</strong>...</p>";
+    }
+  </script>
+
 </body>
 </html>
