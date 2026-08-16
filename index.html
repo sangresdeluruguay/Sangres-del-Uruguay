@@ -273,18 +273,51 @@ async function buscarCaballo() {
 if (caballos.length > 1) {
   resultado.innerHTML = `
     <h3>Resultados encontrados</h3>
-    <div class="resultados-caballos">
-      ${caballos.map(c => `
-        <button class="resultado-caballo" onclick="seleccionarCaballo('${c.Nombre.replace(/'/g, "\\'")}')">
-          <span class="resultado-nombre">${c.Nombre || "-"}</span>
-          <span class="resultado-dato">
-            <strong>Padre:</strong> ${c.Padre || "-"}
-          </span>
-          <span class="resultado-dato">
-            <strong>Madre:</strong> ${c.Madre || "-"}
-          </span>
-        </button>
-      `).join("")}
+
+    <div class="tabla-resultados-wrap">
+      <table class="tabla-resultados">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Año de nacimiento</th>
+            <th>Sexo</th>
+            <th>Padre</th>
+            <th>Madre</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          ${caballos.map(c => {
+            const anio = c.Nacimiento
+              ? String(c.Nacimiento).substring(0, 4)
+              : "-";
+
+            let sexo = c.Sexo || "-";
+
+            if (sexo === "H") sexo = "Hembra";
+            if (sexo === "M" || sexo === "MC") sexo = "Macho";
+            if (sexo === "ME") sexo = "Macho";
+
+            return `
+              <tr>
+                <td>
+                  <button
+                    class="nombre-caballo-link"
+                    onclick="seleccionarCaballo('${c.Nombre.replace(/'/g, "\\'")}')"
+                  >
+                    ${c.Nombre || "-"}
+                  </button>
+                </td>
+
+                <td>${anio}</td>
+                <td>${sexo}</td>
+                <td>${c.Padre || "-"}</td>
+                <td>${c.Madre || "-"}</td>
+              </tr>
+            `;
+          }).join("")}
+        </tbody>
+      </table>
     </div>
   `;
 
