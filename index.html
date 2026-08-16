@@ -247,10 +247,11 @@ async function buscarCaballo() {
   resultado.innerHTML = "<p>Buscando <strong>" + escapar(nombre) + "</strong>...</p>";
 
   try {
-    const url =
-      SUPABASE_URL +
-      "/rest/v1/Caballos?select=*&Nombre=eq." +
-      encodeURIComponent(nombre);
+   const url =
+  SUPABASE_URL +
+  "/rest/v1/Caballos?select=&Nombre=ilike." +
+  encodeURIComponent("%" + nombre + "%") +
+  "&order=Nombre.asc";
 
     const respuesta = await fetch(url, {
       headers: {
