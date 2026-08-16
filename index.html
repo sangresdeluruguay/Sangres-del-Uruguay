@@ -270,7 +270,22 @@ async function buscarCaballo() {
       resultado.innerHTML = "<p>No se encontró ese caballo.</p>";
       return;
     }
+if (caballos.length > 1) {
+  resultado.innerHTML = "<h3>Resultados encontrados</h3>";
 
+  caballos.forEach(c => {
+    const boton = document.createElement("button");
+    boton.textContent = c.Nombre;
+    boton.onclick = function() {
+      document.getElementById("nombreCaballo").value = c.Nombre;
+      buscarCaballo();
+    };
+    resultado.appendChild(boton);
+    resultado.appendChild(document.createElement("br"));
+  });
+
+  return;
+}
     const caballo = caballos[0];
     let criador = null;
 
