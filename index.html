@@ -194,6 +194,95 @@
   overflow-x: auto;
   padding-bottom: 15px;
 }
+    /* ===== TABLA DE RESULTADOS ===== */
+
+.tabla-resultados-wrap {
+  width: 100%;
+  margin-top: 20px;
+  overflow-x: auto;
+}
+
+.tabla-resultados {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  table-layout: fixed;
+}
+
+/* Encabezados */
+.tabla-resultados th {
+  text-align: left;
+  padding: 14px 12px;
+  font-weight: 700;
+  color: #333;
+  background: #f5f5f5;
+  border-top: 1px solid #d8d8d8;
+  border-bottom: 2px solid #cfcfcf;
+}
+
+/* Renglones */
+.tabla-resultados td {
+  padding: 14px 12px;
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: 1px solid #dddddd;
+}
+
+/* Suave efecto al pasar el mouse */
+.tabla-resultados tbody tr:hover {
+  background: #fafafa;
+}
+
+/* Nombres registrados: azul + subrayado, SIN botón */
+.enlace-genealogia,
+.nombre-principal {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+
+  color: #0b4ea2 !important;
+  font-family: inherit !important;
+  font-size: inherit !important;
+  font-weight: 600 !important;
+
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  cursor: pointer;
+}
+
+.enlace-genealogia:hover,
+.nombre-principal:hover {
+  color: #063879 !important;
+}
+
+/* Tamaño de las columnas */
+.tabla-resultados th:nth-child(1),
+.tabla-resultados td:nth-child(1) {
+  width: 24%;
+}
+
+.tabla-resultados th:nth-child(2),
+.tabla-resultados td:nth-child(2) {
+  width: 16%;
+}
+
+.tabla-resultados th:nth-child(3),
+.tabla-resultados td:nth-child(3) {
+  width: 10%;
+}
+
+.tabla-resultados th:nth-child(4),
+.tabla-resultados td:nth-child(4) {
+  width: 25%;
+}
+
+.tabla-resultados th:nth-child(5),
+.tabla-resultados td:nth-child(5) {
+  width: 25%;
+}
   </style>
 </head>
 
