@@ -85,6 +85,36 @@
         flex-direction: column;
       }
     }
+    .pedigree {
+  margin-top: 30px;
+  overflow-x: auto;
+  padding: 20px 0;
+}
+
+.pedigree-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(170px, 1fr));
+  gap: 12px 25px;
+  align-items: center;
+  min-width: 850px;
+}
+
+.pedigree-persona {
+  background: white;
+  border: 2px solid #17233b;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  font-weight: bold;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+}
+
+.pedigree-titulo {
+  font-size: 12px;
+  color: #777;
+  display: block;
+  margin-bottom: 4px;
+}
   </style>
 </head>
 
@@ -164,26 +194,32 @@ async function buscarCaballo() {
     const caballo = caballos[0];
 
     resultado.innerHTML = `
-      <h2>${escapar(caballo.Nombre)}</h2>
-      <p><strong>Sexo:</strong> ${escapar(caballo.Sexo || "-")}</p>
-      <p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento || "-")}</p>
-      <p><strong>RP:</strong> ${escapar(caballo.RP || "-")}</p>
-    <p><strong>Padre:</strong> ${escapar(caballo.Padre || "-")}</p>
-<p><strong>Madre:</strong> ${escapar(caballo.Madre || "-")}</p>
-<p><strong>Abuelo paterno:</strong> ${escapar(caballo.abuelo_paterno || "-")}</p>
-<p><strong>Abuela paterna:</strong> ${escapar(caballo.abuela_paterno || "-")}</p>
-<p><strong>Abuelo materno:</strong> ${escapar(caballo.abuelo_materno || "-")}</p>
-<p><strong>Abuela materna:</strong> ${escapar(caballo.abuela_materno || "-")}</p>
-<p><strong>Bisabuelo PP:</strong> ${escapar(caballo.bisabuelo_pp || "-")}</p>
-<p><strong>Bisabuela PP:</strong> ${escapar(caballo.bisabuela_pp || "-")}</p>
-<p><strong>Bisabuelo PM:</strong> ${escapar(caballo.bisabuelo_pm || "-")}</p>
-<p><strong>Bisabuela PM:</strong> ${escapar(caballo.bisabuela_pm || "-")}</p>
-<p><strong>Bisabuelo MP:</strong> ${escapar(caballo.bisabuelo_mp || "-")}</p>
-<p><strong>Bisabuela MP:</strong> ${escapar(caballo.bisabuela_mp || "-")}</p>
-<p><strong>Bisabuelo MM:</strong> ${escapar(caballo.bisabuelo_mm || "-")}</p>
-<p><strong>Bisabuela MM:</strong> ${escapar(caballo.bisabuela_mm || "-")}</p>
-    `;
+  <h2>${escapar(caballo.Nombre)}</h2>
 
+  <p><strong>Sexo:</strong> ${escapar(caballo.Sexo || "-")}</p>
+  <p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento || "-")}</p>
+  <p><strong>RP:</strong> ${escapar(caballo.RP || "-")}</p>
+
+  <h3>Padres</h3>
+  <p><strong>Padre:</strong> ${escapar(caballo.Padre || "-")}</p>
+  <p><strong>Madre:</strong> ${escapar(caballo.Madre || "-")}</p>
+
+  <h3>Abuelos</h3>
+  <p><strong>Abuelo paterno:</strong> ${escapar(caballo.abuelo_paterno || "-")}</p>
+  <p><strong>Abuela paterna:</strong> ${escapar(caballo.abuela_paterno || "-")}</p>
+  <p><strong>Abuelo materno:</strong> ${escapar(caballo.abuelo_materno || "-")}</p>
+  <p><strong>Abuela materna:</strong> ${escapar(caballo.abuela_materno || "-")}</p>
+
+  <h3>Bisabuelos</h3>
+  <p><strong>Bisabuelo PP:</strong> ${escapar(caballo.bisabuelo_pp || "-")}</p>
+  <p><strong>Bisabuela PP:</strong> ${escapar(caballo.bisabuela_pp || "-")}</p>
+  <p><strong>Bisabuelo PM:</strong> ${escapar(caballo.bisabuelo_pm || "-")}</p>
+  <p><strong>Bisabuela PM:</strong> ${escapar(caballo.bisabuela_pm || "-")}</p>
+  <p><strong>Bisabuelo MP:</strong> ${escapar(caballo.bisabuelo_mp || "-")}</p>
+  <p><strong>Bisabuela MP:</strong> ${escapar(caballo.bisabuela_mp || "-")}</p>
+  <p><strong>Bisabuelo MM:</strong> ${escapar(caballo.bisabuelo_mm || "-")}</p>
+  <p><strong>Bisabuela MM:</strong> ${escapar(caballo.bisabuela_mm || "-")}</p>
+`;
   } catch (error) {
     console.error(error);
     resultado.innerHTML =
