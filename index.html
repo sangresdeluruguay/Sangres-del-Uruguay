@@ -271,7 +271,20 @@ async function buscarCaballo() {
     }
 
     const caballo = caballos[0];
+function nodo(nombre, tipo) {
+  if (!nombre) {
+    return '<div class="pedigree-vacio"></div>';
+  }
 
+  return '<div class="pedigree-box ' + tipo + '"><strong>' +
+    escapar(nombre) +
+    '</strong></div>';
+}
+
+function dato(etiqueta, valor) {
+  if (!valor) return '';
+  return '<p><strong>' + etiqueta + ':</strong> ' + escapar(valor) + '</p>';
+}
    resultado.innerHTML = `
   <div class="ficha-caballo">
     <h2>${escapar(caballo.Nombre)}</h2>
@@ -326,7 +339,7 @@ async function buscarCaballo() {
 
   </div>
 `;
-`;
+
   } catch (error) {
     console.error(error);
     resultado.innerHTML =
