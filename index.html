@@ -271,15 +271,87 @@ async function buscarCaballo() {
       return;
     }
 if (caballos.length > 1) {
+
+  // Revisa si un padre o una madre están registrados como caballo
+  async function caballoRegistrado(nombre) {
+    if (!nombre) return false;
+
+    try {
+      const respuesta = await fetch(
+        SUPABASE_URL +
+        "/rest/v1/Caballos?select=Nombre&Nombre=eq." +
+        encodeURIComponent(nombre) +
+        "&limit=1",
+        {
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + SUPABASE_KEY
+          }
+        }
+      );
+
+      if (!respuesta.ok) return false;
+
+      const datos = await respuesta.json();
+      return datos.length > 0;
+
+    } catch (error) {
+      return false;
+    }
+  }
+
+
+  // Para no consultar dos veces el mismo padre o madre
+  const nombresFamilia = [
+    ...new Set(
+      caballos
+        .flatMap(c => [c.Padre, c.Madre])
+        .filter(Boolean)
+    )
+  ];
+
+  const registrados = {};
+
+  await Promise.all(
+    nombresFamilia.map(async nombre => {
+      registrados[nombre] = await caballoRegistrado(nombre);
+    })
+  );
+
+
+  function enlaceCaballo(nombre) {
+
+    if (!nombre) return "-";
+
+    // Si está registrado, queda azul y clickeable
+    if (registrados[nombre]) {
+      return `
+        <button
+          type="button"
+          class="enlace-genealogia"
+          data-caballo="${escapar(nombre)}"
+        >
+          ${escapar(nombre)}
+        </button>
+      `;
+    }
+
+    // Si no está registrado, queda como texto normal
+    return escapar(nombre);
+  }
+
+
   resultado.innerHTML = `
     <h3>Resultados encontrados</h3>
 
     <div class="tabla-resultados-wrap">
+
       <table class="tabla-resultados">
+
         <thead>
           <tr>
             <th>Nombre</th>
-            <th>Año de nacimiento</th>
+            <th>Nacimiento</th>
             <th>Sexo</th>
             <th>Padre</th>
             <th>Madre</th>
@@ -287,44 +359,69 @@ if (caballos.length > 1) {
         </thead>
 
         <tbody>
-          ${caballos.map(c => {
-            const anio = c.Nacimiento
-              ? String(c.Nacimiento).substring(0, 4)
-              : "-";
 
-            let sexo = c.Sexo || "-";
+          ${caballos.map(c => `
+            <tr>
 
-            if (sexo === "H") sexo = "Hembra";
-            if (sexo === "M" || sexo === "MC") sexo = "Macho";
-            if (sexo === "ME") sexo = "Macho";
+              <td>
+                <button
+                  type="button"
+                  class="enlace-genealogia nombre-principal"
+                  data-caballo="${escapar(c.Nombre)}"
+                >
+                  ${escapar(c.Nombre)}
+                </button>
+              </td>
 
-            return `
-              <tr>
-                <td>
-                  <button
-                    class="nombre-caballo-link"
-                    onclick="seleccionarCaballo('${c.Nombre.replace(/'/g, "\\'")}')"
-                  >
-                    ${c.Nombre || "-"}
-                  </button>
-                </td>
+              <td>
+                ${c.Nacimiento || "-"}
+              </td>
 
-                <td>${anio}</td>
-                <td>${sexo}</td>
-                <td>${c.Padre || "-"}</td>
-                <td>${c.Madre || "-"}</td>
-              </tr>
-            `;
-          }).join("")}
+              <td>
+                ${c.Sexo || "-"}
+              </td>
+
+              <td>
+                ${enlaceCaballo(c.Padre)}
+              </td>
+
+              <td>
+                ${enlaceCaballo(c.Madre)}
+              </td>
+
+            </tr>
+          `).join("")}
+
         </tbody>
+
       </table>
+
     </div>
   `;
 
-  window.seleccionarCaballo = function(nombre) {
-    document.getElementById("nombreCaballo").value = nombre;
-    buscarCaballo();
-  };
+
+  // Hace clickeables Nombre, Padre y Madre registrados
+  resultado
+    .querySelectorAll(".enlace-genealogia")
+    .forEach(boton => {
+
+      boton.addEventListener("click", function() {
+
+        const nombre = this.dataset.caballo;
+
+        document.getElementById("nombreCaballo").value = nombre;
+
+        buscarCaballo();
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      });
+
+    });
+
 
   return;
 }
