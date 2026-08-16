@@ -271,18 +271,27 @@ async function buscarCaballo() {
       return;
     }
 if (caballos.length > 1) {
-  resultado.innerHTML = "<h3>Resultados encontrados</h3>";
+  resultado.innerHTML = `
+    <h3>Resultados encontrados</h3>
+    <div class="resultados-caballos">
+      ${caballos.map(c => `
+        <button class="resultado-caballo" onclick="seleccionarCaballo('${c.Nombre.replace(/'/g, "\\'")}')">
+          <span class="resultado-nombre">${c.Nombre || "-"}</span>
+          <span class="resultado-dato">
+            <strong>Padre:</strong> ${c.Padre || "-"}
+          </span>
+          <span class="resultado-dato">
+            <strong>Madre:</strong> ${c.Madre || "-"}
+          </span>
+        </button>
+      `).join("")}
+    </div>
+  `;
 
-  caballos.forEach(c => {
-    const boton = document.createElement("button");
-    boton.textContent = c.Nombre;
-    boton.onclick = function() {
-      document.getElementById("nombreCaballo").value = c.Nombre;
-      buscarCaballo();
-    };
-    resultado.appendChild(boton);
-    resultado.appendChild(document.createElement("br"));
-  });
+  window.seleccionarCaballo = function(nombre) {
+    document.getElementById("nombreCaballo").value = nombre;
+    buscarCaballo();
+  };
 
   return;
 }
