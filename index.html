@@ -115,6 +115,85 @@
   display: block;
   margin-bottom: 4px;
 }
+
+    /* CUADRO GENEALÓGICO HORIZONTAL */
+
+.pedigree {
+  display: grid;
+  grid-template-columns: 190px 190px 190px 190px;
+  gap: 12px 28px;
+  align-items: center;
+  width: max-content;
+  min-width: 100%;
+  margin-top: 20px;
+}
+
+.generacion {
+  display: grid;
+  align-items: center;
+  gap: 10px;
+}
+
+.generacion.caballo {
+  grid-template-rows: 1fr;
+}
+
+.generacion.padres {
+  grid-template-rows: repeat(2, 1fr);
+}
+
+.generacion.abuelos {
+  grid-template-rows: repeat(4, 1fr);
+}
+
+.generacion.bisabuelos {
+  grid-template-rows: repeat(8, 1fr);
+}
+
+.pedigree-box {
+  min-height: 54px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  border: 1px solid rgba(0,0,0,0.12);
+  box-sizing: border-box;
+}
+
+/* Caballo o yegua buscado */
+.pedigree-box.principal {
+  background: #fff3b0;
+}
+
+/* Machos */
+.pedigree-box.macho {
+  background: #d9efff;
+}
+
+/* Hembras */
+.pedigree-box.hembra {
+  background: #f9dce5;
+}
+
+.pedigree-vacio {
+  min-height: 54px;
+}
+
+/* Datos superiores: propietario, criador, etc. */
+.ficha-caballo {
+  margin-bottom: 22px;
+  text-align: center;
+}
+
+/* Permite mantener el árbol horizontal en pantallas chicas */
+#resultado {
+  overflow-x: auto;
+  padding-bottom: 15px;
+}
   </style>
 </head>
 
@@ -193,32 +272,60 @@ async function buscarCaballo() {
 
     const caballo = caballos[0];
 
-    resultado.innerHTML = `
-  <h2>${escapar(caballo.Nombre)}</h2>
+   resultado.innerHTML = `
+  <div class="ficha-caballo">
+    <h2>${escapar(caballo.Nombre)}</h2>
 
-  <p><strong>Sexo:</strong> ${escapar(caballo.Sexo || "-")}</p>
-  <p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento || "-")}</p>
-  <p><strong>RP:</strong> ${escapar(caballo.RP || "-")}</p>
+    ${caballo.Nacimiento ? `<p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento)}</p>` : ""}
+    ${caballo.RP ? `<p><strong>RP:</strong> ${escapar(caballo.RP)}</p>` : ""}
+    ${caballo.Criador ? `<p><strong>Criador:</strong> ${escapar(caballo.Criador)}</p>` : ""}
+    ${caballo.Propietario ? `<p><strong>Propietario:</strong> ${escapar(caballo.Propietario)}</p>` : ""}
+  </div>
 
-  <h3>Padres</h3>
-  <p><strong>Padre:</strong> ${escapar(caballo.Padre || "-")}</p>
-  <p><strong>Madre:</strong> ${escapar(caballo.Madre || "-")}</p>
+  <div class="pedigree">
 
-  <h3>Abuelos</h3>
-  <p><strong>Abuelo paterno:</strong> ${escapar(caballo.abuelo_paterno || "-")}</p>
-  <p><strong>Abuela paterna:</strong> ${escapar(caballo.abuela_paterno || "-")}</p>
-  <p><strong>Abuelo materno:</strong> ${escapar(caballo.abuelo_materno || "-")}</p>
-  <p><strong>Abuela materna:</strong> ${escapar(caballo.abuela_materno || "-")}</p>
+    <div class="generacion sujeto">
+      <div class="pedigree-box principal">
+        <strong>${escapar(caballo.Nombre)}</strong>
+        ${caballo.Nacimiento ? `<small>Nac.: ${escapar(caballo.Nacimiento)}</small>` : ""}
+      </div>
+    </div>
 
-  <h3>Bisabuelos</h3>
-  <p><strong>Bisabuelo PP:</strong> ${escapar(caballo.bisabuelo_pp || "-")}</p>
-  <p><strong>Bisabuela PP:</strong> ${escapar(caballo.bisabuela_pp || "-")}</p>
-  <p><strong>Bisabuelo PM:</strong> ${escapar(caballo.bisabuelo_pm || "-")}</p>
-  <p><strong>Bisabuela PM:</strong> ${escapar(caballo.bisabuela_pm || "-")}</p>
-  <p><strong>Bisabuelo MP:</strong> ${escapar(caballo.bisabuelo_mp || "-")}</p>
-  <p><strong>Bisabuela MP:</strong> ${escapar(caballo.bisabuela_mp || "-")}</p>
-  <p><strong>Bisabuelo MM:</strong> ${escapar(caballo.bisabuelo_mm || "-")}</p>
-  <p><strong>Bisabuela MM:</strong> ${escapar(caballo.bisabuela_mm || "-")}</p>
+    <div class="generacion padres">
+      ${caballo.Padre ? `
+        <div class="pedigree-box macho">
+          <strong>${escapar(caballo.Padre)}</strong>
+        </div>` : `<div class="pedigree-vacio"></div>`}
+
+      ${caballo.Madre ? `
+        <div class="pedigree-box hembra">
+          <strong>${escapar(caballo.Madre)}</strong>
+        </div>` : `<div class="pedigree-vacio"></div>`}
+    </div>
+
+    <div class="generacion abuelos">
+      ${caballo.abuelo_paterno ? `<div class="pedigree-box macho"><strong>${escapar(caballo.abuelo_paterno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.abuela_paterno ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.abuela_paterno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.abuelo_materno ? `<div class="pedigree-box macho"><strong>${escapar(caballo.abuelo_materno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.abuela_materno ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.abuela_materno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+    </div>
+
+    <div class="generacion bisabuelos">
+      ${caballo.bisabuelo_pp ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.bisabuela_pp ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+
+      ${caballo.bisabuelo_pm ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_pm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.bisabuela_pm ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_pm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+
+      ${caballo.bisabuelo_mp ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_mp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.bisabuela_mp ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_mp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+
+      ${caballo.bisabuelo_mm ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_mm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+      ${caballo.bisabuela_mm ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_mm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+    </div>
+
+  </div>
+`;
 `;
   } catch (error) {
     console.error(error);
