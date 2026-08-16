@@ -312,9 +312,9 @@ function dato(etiqueta, valor) {
 
     ${caballo.Nacimiento ? `<p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento)}</p>` : ""}
     ${caballo.RP ? `<p><strong>RP:</strong> ${escapar(caballo.RP)}</p>` : ""}
-   ${criador?.Nombre ? ⁠ <p><strong>Criador:</strong> ${escapar(criador.Nombre)}</p> ⁠ : ""}
-${criador?.["Numero de Criador"] ? ⁠ <p><strong>N.º de criador:</strong> ${escapar(criador["Numero de Criador"])}</p> ⁠ : ""}
-${criador?.["Haras - Cabaña"] ? ⁠ <p><strong>Haras / Cabaña:</strong> ${escapar(criador["Haras - Cabaña"])}</p> ⁠ : ""}
+   ${dato("Criador", criador && criador.Nombre)}
+${dato("N.º de criador", criador && criador["Numero de Criador"])}
+${dato("Haras / Cabaña", criador && criador["Haras - Cabaña"])}
     ${caballo.Propietario ? `<p><strong>Propietario:</strong> ${escapar(caballo.Propietario)}</p>` : ""}
   </div>
 
