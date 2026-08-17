@@ -408,7 +408,16 @@
     margin: 0;
     background: white;
   }
-
+body::before {
+  content: "SDU";
+  position: fixed;
+  top: 6mm;
+  right: 8mm;
+  font-size: 14px;
+  font-weight: 700;
+  color: #173b6c;
+  z-index: 9999;
+}
   #resultado {
     margin-top: 0;
   }
