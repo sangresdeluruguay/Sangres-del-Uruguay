@@ -579,18 +579,18 @@ ${dato("Haras / Cabaña", criador && criador["Haras - Cabaña"])}
   ${nodo(caballo.abuela_materna, "hembra")}
 </div>
     <div class="generacion bisabuelos">
-      ${caballo.bisabuelo_pp ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.bisabuela_pp ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+  ${nodo(caballo.bisabuelo_pp, "macho")}
+  ${nodo(caballo.bisabuela_pp, "hembra")}
 
-      ${caballo.bisabuelo_pm ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_pm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.bisabuela_pm ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_pm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+  ${nodo(caballo.bisabuelo_pm, "macho")}
+  ${nodo(caballo.bisabuela_pm, "hembra")}
 
-      ${caballo.bisabuelo_mp ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_mp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.bisabuela_mp ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_mp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
+  ${nodo(caballo.bisabuelo_mp, "macho")}
+  ${nodo(caballo.bisabuela_mp, "hembra")}
 
-      ${caballo.bisabuelo_mm ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_mm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.bisabuela_mm ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_mm)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-    </div>
+  ${nodo(caballo.bisabuelo_mm, "macho")}
+  ${nodo(caballo.bisabuela_mm, "hembra")}
+</div>
 
   </div>
 `;
