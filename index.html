@@ -634,25 +634,12 @@ if (caballo["Criador ID"]) {
   }
 }
 function nodo(nombre, tipo) {
-  const click = nombre
-    ? ' data-nombre="' + encodeURIComponent(nombre) + '" onclick="abrirCaballoPedigree(this.dataset.nombre)"'
-    : '';
-
-  return '<div class="pedigree-box ' + tipo + '"' + click + '>' +
+  return '<div class="pedigree-box ' + tipo + '"' +
+    (nombre ? ' data-nombre="' + encodeURIComponent(nombre) + '"' : '') +
+    '>' +
     (nombre ? '<strong>' + escapar(nombre) + '</strong>' : '') +
     '</div>';
 }
-window.abrirCaballoPedigree = function(nombreCodificado) {
-  const nombre = decodeURIComponent(nombreCodificado);
-
-  document.getElementById("nombreCaballo").value = nombre;
-  buscarCaballo();
-
-  window.scrollTo({
-    top: 0,
-    behavior: "smooth"
-  });
-};
 function dato(etiqueta, valor) {
   if (!valor) return '';
   return '<p><strong>' + etiqueta + ':</strong> ' + escapar(valor) + '</p>';
@@ -745,7 +732,22 @@ function dato(etiqueta, valor) {
     buscarCaballo();
   }
 });
+document.addEventListener("click", function(event) {
+  const caja = event.target.closest(".pedigree-box[data-nombre]");
 
+  if (!caja) return;
+
+  const nombre = decodeURIComponent(caja.dataset.nombre);
+
+  document.getElementById("nombreCaballo").value = nombre;
+
+  buscarCaballo();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+});
 </script>
 
 </body>
