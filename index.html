@@ -506,13 +506,13 @@ body::before {
       </div>
 
       <div id="resultado"></div>
-      <button class="boton-pdf" onclick="window.print()">
+      <button class="boton-pdf" onclick="generarPDF()">
   Guardar como PDF
 </button>
     </section>
 
   </main>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.12.1/html2pdf.bundle.min.js"></script>
   <script>
     const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
     const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
@@ -523,7 +523,48 @@ body::before {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
+function generarPDF() {
+  const elemento = document.getElementById("resultado");
 
+  if (!elemento || !elemento.innerHTML.trim()) {
+    alert("Primero buscá un caballo.");
+    return;
+  }
+
+  const opciones = {
+    margin: 8,
+    filename: "Sangres-del-Uruguay.pdf",
+
+    image: {
+      type: "jpeg",
+      quality: 1
+    },
+
+    html2canvas: {
+      scale: 3,
+      useCORS: true,
+      scrollX: 0,
+      scrollY: 0
+    },
+
+    jsPDF: {
+      unit: "mm",
+      format: "a4",
+      orientation: "landscape"
+    },
+
+    pagebreak: {
+      mode: ["css", "legacy"],
+      before: ".descendencia",
+      avoid: [".ficha-caballo", ".pedigree"]
+    }
+  };
+
+  html2pdf()
+    .set(opciones)
+    .from(elemento)
+    .save();
+}
 async function buscarCaballo() {
   const nombre = document.getElementById("nombreCaballo").value.trim();
   const resultado = document.getElementById("resultado");
