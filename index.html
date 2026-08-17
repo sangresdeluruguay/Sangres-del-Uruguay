@@ -716,6 +716,12 @@ function dato(etiqueta, valor) {
       "<p>No se pudo consultar la base de datos.</p>";
   }
 }
+    document.getElementById("nombreCaballo").addEventListener("keydown", function(event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    buscarCaballo();
+  }
+});
 
 </script>
 
