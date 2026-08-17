@@ -390,11 +390,44 @@
   background: #0f2d53;
 }
 
+@page {
+  size: A4 landscape;
+  margin: 10mm;
+}
+
 @media print {
   .boton-pdf,
   header,
-  .buscar-caballo {
+  .buscar-fila,
+  .buscador > h2,
+  .buscador > p {
     display: none !important;
+  }
+
+  body {
+    margin: 0;
+    background: white;
+  }
+
+  #resultado {
+    margin-top: 0;
+  }
+
+  .ficha-caballo,
+  .pedigree {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .pedigree {
+    overflow: visible !important;
+    transform: scale(0.88);
+    transform-origin: top center;
+  }
+
+  .descendencia {
+    break-before: page;
+    page-break-before: always;
   }
 }
   </style>
