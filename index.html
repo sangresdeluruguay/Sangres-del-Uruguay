@@ -342,6 +342,29 @@
   height: auto;
   object-fit: contain;
 }
+    .pedigree {
+  position: relative;
+}
+
+.pedigree-watermark {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.pedigree-watermark img {
+  width: 85px;
+  height: auto;
+  opacity: 0.10;
+}
+
+.pedigree .generacion {
+  position: relative;
+  z-index: 1;
+}
   </style>
 </head>
 
@@ -649,7 +672,9 @@ function dato(etiqueta, valor) {
 </div>
 
   <div class="pedigree">
-
+<div class="pedigree-watermark">
+  <img src="Photoroom_20260612_064648.png" alt="Logo SdU">
+</div>
     <div class="generacion sujeto">
       <div class="pedigree-box principal">
         <strong>${escapar(caballo.Nombre)}</strong>
