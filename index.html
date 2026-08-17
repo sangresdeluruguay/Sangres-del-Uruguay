@@ -365,6 +365,15 @@
   position: relative;
   z-index: 1;
 }
+    .pedigree-box[data-nombre] {
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.pedigree-box[data-nombre]:hover {
+  transform: scale(1.03);
+  box-shadow: 0 3px 10px rgba(23, 59, 108, 0.18);
+}
   </style>
 </head>
 
