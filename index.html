@@ -568,24 +568,16 @@ ${dato("Haras / Cabaña", criador && criador["Haras - Cabaña"])}
     </div>
 
     <div class="generacion padres">
-      ${caballo.Padre ? `
-        <div class="pedigree-box macho">
-          <strong>${escapar(caballo.Padre)}</strong>
-        </div>` : `<div class="pedigree-vacio"></div>`}
+  ${nodo(caballo.Padre, "macho")}
+  ${nodo(caballo.Madre, "hembra")}
+</div>
 
-      ${caballo.Madre ? `
-        <div class="pedigree-box hembra">
-          <strong>${escapar(caballo.Madre)}</strong>
-        </div>` : `<div class="pedigree-vacio"></div>`}
-    </div>
-
-    <div class="generacion abuelos">
-      ${caballo.abuelo_paterno ? `<div class="pedigree-box macho"><strong>${escapar(caballo.abuelo_paterno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.abuela_paterno ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.abuela_paterno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.abuelo_materno ? `<div class="pedigree-box macho"><strong>${escapar(caballo.abuelo_materno)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-      ${caballo.abuela_materna ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.abuela_materna)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
-    </div>
-
+<div class="generacion abuelos">
+  ${nodo(caballo.abuelo_paterno, "macho")}
+  ${nodo(caballo.abuela_paterno, "hembra")}
+  ${nodo(caballo.abuelo_materno, "macho")}
+  ${nodo(caballo.abuela_materna, "hembra")}
+</div>
     <div class="generacion bisabuelos">
       ${caballo.bisabuelo_pp ? `<div class="pedigree-box macho"><strong>${escapar(caballo.bisabuelo_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
       ${caballo.bisabuela_pp ? `<div class="pedigree-box hembra"><strong>${escapar(caballo.bisabuela_pp)}</strong></div>` : `<div class="pedigree-vacio"></div>`}
