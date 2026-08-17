@@ -642,7 +642,7 @@ function nodo(nombre, tipo) {
     (nombre ? '<strong>' + escapar(nombre) + '</strong>' : '') +
     '</div>';
 }
-function abrirCaballoPedigree(nombreCodificado) {
+window.abrirCaballoPedigree = function(nombreCodificado) {
   const nombre = decodeURIComponent(nombreCodificado);
 
   document.getElementById("nombreCaballo").value = nombre;
@@ -652,7 +652,7 @@ function abrirCaballoPedigree(nombreCodificado) {
     top: 0,
     behavior: "smooth"
   });
-}
+};
 function dato(etiqueta, valor) {
   if (!valor) return '';
   return '<p><strong>' + etiqueta + ':</strong> ' + escapar(valor) + '</p>';
