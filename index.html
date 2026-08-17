@@ -625,11 +625,25 @@ if (caballo["Criador ID"]) {
   }
 }
 function nodo(nombre, tipo) {
-  return '<div class="pedigree-box ' + tipo + '">' +
+  const click = nombre
+    ? ' data-nombre="' + encodeURIComponent(nombre) + '" onclick="abrirCaballoPedigree(this.dataset.nombre)"'
+    : '';
+
+  return '<div class="pedigree-box ' + tipo + '"' + click + '>' +
     (nombre ? '<strong>' + escapar(nombre) + '</strong>' : '') +
     '</div>';
 }
+function abrirCaballoPedigree(nombreCodificado) {
+  const nombre = decodeURIComponent(nombreCodificado);
 
+  document.getElementById("nombreCaballo").value = nombre;
+  buscarCaballo();
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
 function dato(etiqueta, valor) {
   if (!valor) return '';
   return '<p><strong>' + etiqueta + ':</strong> ' + escapar(valor) + '</p>';
