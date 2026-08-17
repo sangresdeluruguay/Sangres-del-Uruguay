@@ -613,13 +613,7 @@ async function buscarCaballo() {
         </table>
       </div>
     `;
-  } else {
-    htmlHijos = `
-      <div class="descendencia">
-        <h3>Descendencia registrada</h3>
-        <p>No hay descendencia registrada.</p>
-      </div>
-    `;
+ 
   }
 
   resultado.innerHTML = `
@@ -970,12 +964,7 @@ function dato(etiqueta, valor) {
       </tbody>
     </table>
   </div>
-` : `
-  <div class="descendencia">
-    <h3>Descendencia registrada</h3>
-    <p>No hay descendencia registrada.</p>
-  </div>
-`}
+: ""}
 `;
 
   } catch (error) {
