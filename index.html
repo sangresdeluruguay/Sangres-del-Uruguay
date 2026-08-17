@@ -283,6 +283,52 @@
 .tabla-resultados td:nth-child(5) {
   width: 25%;
 }
+ /* TABLA DE INFORMACIÓN DEL CABALLO */
+.tabla-ficha {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid #b59b55;
+  margin: 20px auto 25px;
+  max-width: 900px;
+  background: rgba(255, 255, 255, 0.75);
+}
+
+.dato-ficha {
+  min-height: 58px;
+  padding: 10px 14px;
+  border-right: 1px solid #b59b55;
+  border-bottom: 1px solid #b59b55;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.dato-ficha:nth-child(3n) {
+  border-right: none;
+}
+
+.dato-ficha:nth-child(n+4) {
+  border-bottom: none;
+}
+
+.dato-ficha strong {
+  color: #173b6c;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.dato-ficha span {
+  color: #173b6c;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.ficha-caballo h2 {
+  color: #173b6c;
+  margin-bottom: 10px;
+}
   </style>
 </head>
 
@@ -548,15 +594,40 @@ function dato(etiqueta, valor) {
 }
    resultado.innerHTML = `
   <div class="ficha-caballo">
-    <h2>${escapar(caballo.Nombre)}</h2>
+  <h2>${escapar(caballo.Nombre)}</h2>
 
-    ${caballo.Nacimiento ? `<p><strong>Nacimiento:</strong> ${escapar(caballo.Nacimiento)}</p>` : ""}
-    ${caballo.RP ? `<p><strong>RP:</strong> ${escapar(caballo.RP)}</p>` : ""}
-   ${dato("Criador", criador && criador.Nombre)}
-${dato("N.º de criador", criador && criador["Numero de Criador"])}
-${dato("Haras / Cabaña", criador && criador["Haras - Cabaña"])}
-    ${caballo.Propietario ? `<p><strong>Propietario:</strong> ${escapar(caballo.Propietario)}</p>` : ""}
+  <div class="tabla-ficha">
+    <div class="dato-ficha">
+      <strong>Criador</strong>
+      <span>${criador && criador.Nombre ? escapar(criador.Nombre) : "-"}</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>N.º Criador</strong>
+      <span>${criador && criador["Numero de Criador"] ? escapar(criador["Numero de Criador"]) : "-"}</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Nacimiento</strong>
+      <span>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Pelo</strong>
+      <span>${caballo.Pelo ? escapar(caballo.Pelo) : "-"}</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Propietario</strong>
+      <span>${caballo.Propietario ? escapar(caballo.Propietario) : "-"}</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>RP</strong>
+      <span>${caballo.RP ? escapar(caballo.RP) : "-"}</span>
+    </div>
   </div>
+</div>
 
   <div class="pedigree">
 
