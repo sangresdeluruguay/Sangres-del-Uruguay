@@ -537,13 +537,9 @@ if (caballo["Criador ID"]) {
   }
 }
 function nodo(nombre, tipo) {
-  if (!nombre) {
-    return '<div class="pedigree-vacio"></div>';
-  }
-
-  return '<div class="pedigree-box ' + tipo + '"><strong>' +
-    escapar(nombre) +
-    '</strong></div>';
+  return '<div class="pedigree-box ' + tipo + '">' +
+    (nombre ? '<strong>' + escapar(nombre) + '</strong>' : '') +
+    '</div>';
 }
 
 function dato(etiqueta, valor) {
