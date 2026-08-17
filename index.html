@@ -453,9 +453,114 @@ async function buscarCaballo() {
     const caballos = await respuesta.json();
 
     if (caballos.length === 0) {
-      resultado.innerHTML = "<p>No se encontró ese caballo.</p>";
-      return;
+
+  const urlHijos =
+    SUPABASE_URL +
+    "/rest/v1/Caballos?select=*&or=(Padre.eq." +
+    encodeURIComponent(nombre) +
+    ",Madre.eq." +
+    encodeURIComponent(nombre) +
+    ")&order=Nombre.asc";
+
+  const respuestaHijos = await fetch(urlHijos, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
     }
+  });
+
+  const hijos = await respuestaHijos.json();
+
+  let htmlHijos = "";
+
+  if (hijos.length > 0) {
+    htmlHijos = `
+      <div class="descendencia">
+        <h3>Descendencia registrada</h3>
+
+        <table class="tabla-resultados">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Nacimiento</th>
+              <th>Sexo</th>
+              <th>Padre</th>
+              <th>Madre</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${hijos.map(h => `
+              <tr>
+                <td>
+                  <span
+                    class="descendiente-link"
+                    data-nombre="${encodeURIComponent(h.Nombre || "")}"
+                  >
+                    ${escapar(h.Nombre || "-")}
+                  </span>
+                </td>
+                <td>${escapar(h.Nacimiento || "-")}</td>
+                <td>${escapar(h.Sexo || "-")}</td>
+                <td>${escapar(h.Padre || "-")}</td>
+                <td>${escapar(h.Madre || "-")}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    `;
+  } else {
+    htmlHijos = `
+      <div class="descendencia">
+        <h3>Descendencia registrada</h3>
+        <p>No hay descendencia registrada.</p>
+      </div>
+    `;
+  }
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+      <h2>${escapar(nombre)}</h2>
+
+      <div class="tabla-ficha">
+        <div class="dato-ficha">
+          <strong>Criador</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>N.º Criador</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Nacimiento</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Pelo</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>RP</strong>
+          <span>-</span>
+        </div>
+      </div>
+    </div>
+
+    ${htmlHijos}
+  `;
+
+  return;
+}
 if (caballos.length > 1) {
 
   // Revisa si un padre o una madre están registrados como caballo
