@@ -374,6 +374,29 @@
   transform: scale(1.03);
   box-shadow: 0 3px 10px rgba(23, 59, 108, 0.18);
 }
+    .boton-pdf {
+  margin: 22px auto;
+  display: block;
+  background: #173b6c;
+  color: white;
+  border: none;
+  padding: 11px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.boton-pdf:hover {
+  background: #0f2d53;
+}
+
+@media print {
+  .boton-pdf,
+  header,
+  .buscar-caballo {
+    display: none !important;
+  }
+}
   </style>
 </head>
 
@@ -406,6 +429,9 @@
       </div>
 
       <div id="resultado"></div>
+      <button class="boton-pdf" onclick="window.print()">
+  Guardar como PDF
+</button>
     </section>
 
   </main>
