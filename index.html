@@ -894,6 +894,7 @@ const respuestaHijosRegistrado = await fetch(urlHijosRegistrado, {
 
 const hijosRegistrados = await respuestaHijosRegistrado.json();
     let criador = null;
+    let propietario = null;
 
 if (caballo["Criador ID"]) {
   const respuestaCriador = await fetch(
@@ -914,6 +915,25 @@ if (caballo["Criador ID"]) {
     criador = criadores[0];
   }
 }
+    if (caballo["Propietario ID"]) {
+  const respuestaPropietario = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/Propietarios?select=*&id=eq." +
+    encodeURIComponent(caballo["Propietario ID"]),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const propietarios = await respuestaPropietario.json();
+
+  if (propietarios.length > 0) {
+    propietario = propietarios[0];
+  }
+}
 function nodo(nombre, tipo) {
   return '<div class="pedigree-box ' + tipo + '"' +
     (nombre ? ' data-nombre="' + encodeURIComponent(nombre) + '"' : '') +
@@ -932,12 +952,11 @@ function dato(etiqueta, valor) {
   <div class="tabla-ficha">
     <div class="dato-ficha">
       <strong>Criador</strong>
-      <span>${criador && criador.Nombre ? escapar(criador.Nombre) : "-"}</span>
-    </div>
+<span>${criador && criador["Haras - Cabaña"] ? escapar(criador["Haras - Cabaña"]) : "-"}</span>    </div>
 
     <div class="dato-ficha">
       <strong>N.º Criador</strong>
-      <span>${criador && criador["Numero de Criador"] ? escapar(criador["Numero de Criador"]) : "-"}</span>
+     <span>${criador && criador["Numero de Criador"] ? escapar(criador["Numero de Criador"]) : "-"}</span>
     </div>
 
     <div class="dato-ficha">
@@ -952,7 +971,7 @@ function dato(etiqueta, valor) {
 
     <div class="dato-ficha">
       <strong>Propietario</strong>
-      <span>${caballo.Propietario ? escapar(caballo.Propietario) : "-"}</span>
+      <span>${propietario && propietario.Nombre ? escapar(propietario.Nombre) : "-"}</span>
     </div>
 
     <div class="dato-ficha">
