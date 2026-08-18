@@ -586,14 +586,16 @@ if (sesionGuardada) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
-    async function editarCaballo(id) {
+async function editarCaballo(id) {
   if (!sesionAdmin || !sesionAdmin.access_token) {
-    alert("Primero tenés que iniciar sesión como administrador.");
+    alert("Tenés que iniciar sesión como administrador.");
     return;
   }
 
-  const respuestaCaballo = await fetch(
-    SUPABASE_URL + "/rest/v1/Caballos?select=*&id=eq." + encodeURIComponent(id),
+  const respuesta = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Caballos?select=*&id=eq." +
+      encodeURIComponent(id),
     {
       headers: {
         apikey: SUPABASE_KEY,
@@ -602,41 +604,264 @@ if (sesionGuardada) {
     }
   );
 
-  const caballos = await respuestaCaballo.json();
+  const datos = await respuesta.json();
 
-  if (!caballos.length) {
+  if (!datos.length) {
     alert("No se encontró el caballo.");
     return;
   }
 
-  const caballo = caballos[0];
+  const caballo = datos[0];
 
-  const nombre = prompt("Nombre:", caballo.Nombre || "");
-  if (nombre === null) return;
+  resultado.innerHTML = `
+    <div class="ficha-caballo modo-edicion">
 
-  const nacimiento = prompt("Nacimiento:", caballo.Nacimiento || "");
-  if (nacimiento === null) return;
+      <input
+        id="editNombre"
+        class="editar-nombre"
+        type="text"
+        value="${escapar(caballo.Nombre || "")}"
+      >
 
-  const pelo = prompt("Pelo:", caballo.Pelo || "");
-  if (pelo === null) return;
+      <div class="tabla-ficha">
 
-  const rp = prompt("RP:", caballo.RP || "");
-  if (rp === null) return;
+        <div class="dato-ficha">
+          <strong>Criador</strong>
+          <span>No modificar acá</span>
+        </div>
 
-  const padre = prompt("Padre:", caballo.Padre || "");
-  if (padre === null) return;
+        <div class="dato-ficha">
+          <strong>N.º Criador</strong>
+          <span>No modificar acá</span>
+        </div>
 
-  const madre = prompt("Madre:", caballo.Madre || "");
-  if (madre === null) return;
+        <div class="dato-ficha">
+          <strong>Nacimiento</strong>
+          <input
+            id="editNacimiento"
+            type="date"
+            value="${caballo.Nacimiento || ""}"
+          >
+        </div>
 
-  const respuestaGuardar = await fetch(
+        <div class="dato-ficha">
+          <strong>Pelo</strong>
+          <input
+            id="editPelo"
+            type="text"
+            value="${escapar(caballo.Pelo || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <span>No modificar acá</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>RP</strong>
+          <input
+            id="editRP"
+            type="text"
+            value="${escapar(caballo.RP || "")}"
+          >
+        </div>
+
+      </div>
+
+      <h3>Pedigree</h3>
+
+    <div class="pedigree pedigree-editable">
+
+  <div class="generacion sujeto">
+    <div class="pedigree-box principal">
+      <input
+        id="editNombrePedigree"
+        type="text"
+        value="${escapar(caballo.Nombre || "")}"
+      >
+    </div>
+  </div>
+
+  <div class="generacion padres">
+
+    <div class="pedigree-box macho">
+      <input
+        id="editPadre"
+        type="text"
+        placeholder="Padre"
+        value="${escapar(caballo.Padre || "")}"
+      >
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input
+        id="editMadre"
+        type="text"
+        placeholder="Madre"
+        value="${escapar(caballo.Madre || "")}"
+      >
+    </div>
+
+  </div>
+
+  <div class="generacion abuelos">
+
+    <div class="pedigree-box macho">
+      <input
+        id="editAbueloPaterno"
+        type="text"
+        placeholder="Abuelo paterno"
+        value="${escapar(caballo.abuelo_paterno || "")}"
+      >
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input
+        id="editAbuelaPaterna"
+        type="text"
+        placeholder="Abuela paterna"
+        value="${escapar(caballo.abuela_paterno || "")}"
+      >
+    </div>
+
+    <div class="pedigree-box macho">
+      <input
+        id="editAbueloMaterno"
+        type="text"
+        placeholder="Abuelo materno"
+        value="${escapar(caballo.abuelo_materno || "")}"
+      >
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input
+        id="editAbuelaMaterna"
+        type="text"
+        placeholder="Abuela materna"
+        value="${escapar(caballo.abuela_materna || "")}"
+      >
+    </div>
+
+  </div>
+
+  <div class="generacion bisabuelos">
+
+    <div class="pedigree-box macho">
+      <input id="editBisabueloPP" type="text"
+        placeholder="Bisabuelo PP"
+        value="${escapar(caballo.bisabuelo_pp || "")}">
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input id="editBisabuelaPP" type="text"
+        placeholder="Bisabuela PP"
+        value="${escapar(caballo.bisabuela_pp || "")}">
+    </div>
+
+    <div class="pedigree-box macho">
+      <input id="editBisabueloPM" type="text"
+        placeholder="Bisabuelo PM"
+        value="${escapar(caballo.bisabuelo_pm || "")}">
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input id="editBisabuelaPM" type="text"
+        placeholder="Bisabuela PM"
+        value="${escapar(caballo.bisabuela_pm || "")}">
+    </div>
+
+    <div class="pedigree-box macho">
+      <input id="editBisabueloMP" type="text"
+        placeholder="Bisabuelo MP"
+        value="${escapar(caballo.bisabuelo_mp || "")}">
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input id="editBisabuelaMP" type="text"
+        placeholder="Bisabuela MP"
+        value="${escapar(caballo.bisabuela_mp || "")}">
+    </div>
+
+    <div class="pedigree-box macho">
+      <input id="editBisabueloMM" type="text"
+        placeholder="Bisabuelo MM"
+        value="${escapar(caballo.bisabuelo_mm || "")}">
+    </div>
+
+    <div class="pedigree-box hembra">
+      <input id="editBisabuelaMM" type="text"
+        placeholder="Bisabuela MM"
+        value="${escapar(caballo.bisabuela_mm || "")}">
+    </div>
+
+  </div>
+
+</div>
+
+      <div class="acciones-edicion">
+        <button onclick="guardarCambiosCaballo(${id})">
+          Guardar cambios
+        </button>
+
+        <button onclick="buscarCaballo()">
+          Cancelar
+        </button>
+      </div>
+
+    </div>
+  `;
+
+  const nombrePrincipal = document.getElementById("editNombre");
+  const nombrePedigree = document.getElementById("editNombrePedigree");
+
+  nombrePrincipal.addEventListener("input", function () {
+    nombrePedigree.value = nombrePrincipal.value;
+  });
+
+  nombrePedigree.addEventListener("input", function () {
+    nombrePrincipal.value = nombrePedigree.value;
+  });
+}
+    async function guardarCambiosCaballo(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("La sesión de administrador no está activa.");
+    return;
+  }
+
+  const nombre = document.getElementById("editNombre").value.trim();
+  const nacimiento = document.getElementById("editNacimiento").value;
+  const pelo = document.getElementById("editPelo").value.trim();
+  const rp = document.getElementById("editRP").value.trim();
+  const padre = document.getElementById("editPadre").value.trim();
+  const madre = document.getElementById("editMadre").value.trim();
+const abueloPaterno = document.getElementById("editAbueloPaterno").value.trim();
+const abuelaPaterna = document.getElementById("editAbuelaPaterna").value.trim();
+const abueloMaterno = document.getElementById("editAbueloMaterno").value.trim();
+const abuelaMaterna = document.getElementById("editAbuelaMaterna").value.trim();
+
+const bisabueloPP = document.getElementById("editBisabueloPP").value.trim();
+const bisabuelaPP = document.getElementById("editBisabuelaPP").value.trim();
+const bisabueloPM = document.getElementById("editBisabueloPM").value.trim();
+const bisabuelaPM = document.getElementById("editBisabuelaPM").value.trim();
+const bisabueloMP = document.getElementById("editBisabueloMP").value.trim();
+const bisabuelaMP = document.getElementById("editBisabuelaMP").value.trim();
+const bisabueloMM = document.getElementById("editBisabueloMM").value.trim();
+const bisabuelaMM = document.getElementById("editBisabuelaMM").value.trim();
+  if (!nombre) {
+    alert("El caballo necesita un nombre.");
+    return;
+  }
+
+  const respuesta = await fetch(
     SUPABASE_URL + "/rest/v1/Caballos?id=eq." + encodeURIComponent(id),
     {
       method: "PATCH",
       headers: {
         apikey: SUPABASE_KEY,
         Authorization: "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
       },
       body: JSON.stringify({
         Nombre: nombre,
@@ -644,21 +869,31 @@ if (sesionGuardada) {
         Pelo: pelo || null,
         RP: rp || null,
         Padre: padre || null,
-        Madre: madre || null
+        Madre: madre || null,
+        abuelo_paterno: abueloPaterno || null,
+abuela_paterno: abuelaPaterna || null,
+abuelo_materno: abueloMaterno || null,
+abuela_materna: abuelaMaterna || null,
+
+bisabuelo_pp: bisabueloPP || null,
+bisabuela_pp: bisabuelaPP || null,
+bisabuelo_pm: bisabueloPM || null,
+bisabuela_pm: bisabuelaPM || null,
+bisabuelo_mp: bisabueloMP || null,
+bisabuela_mp: bisabuelaMP || null,
+bisabuelo_mm: bisabueloMM || null,
+bisabuela_mm: bisabuelaMM || null
       })
     }
   );
 
-  if (!respuestaGuardar.ok) {
-    const error = await respuestaGuardar.text();
-    console.error(error);
+  if (!respuesta.ok) {
     alert("No se pudieron guardar los cambios.");
     return;
   }
 
-  alert("Cambios guardados correctamente.");
-
   document.getElementById("nombreCaballo").value = nombre;
+  alert("Cambios guardados.");
   buscarCaballo();
 }
 function generarPDF() {
