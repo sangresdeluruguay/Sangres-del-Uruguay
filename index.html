@@ -586,6 +586,81 @@ if (sesionGuardada) {
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
+    async function editarCaballo(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Primero tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const respuestaCaballo = await fetch(
+    SUPABASE_URL + "/rest/v1/Caballos?select=*&id=eq." + encodeURIComponent(id),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const caballos = await respuestaCaballo.json();
+
+  if (!caballos.length) {
+    alert("No se encontró el caballo.");
+    return;
+  }
+
+  const caballo = caballos[0];
+
+  const nombre = prompt("Nombre:", caballo.Nombre || "");
+  if (nombre === null) return;
+
+  const nacimiento = prompt("Nacimiento:", caballo.Nacimiento || "");
+  if (nacimiento === null) return;
+
+  const pelo = prompt("Pelo:", caballo.Pelo || "");
+  if (pelo === null) return;
+
+  const rp = prompt("RP:", caballo.RP || "");
+  if (rp === null) return;
+
+  const padre = prompt("Padre:", caballo.Padre || "");
+  if (padre === null) return;
+
+  const madre = prompt("Madre:", caballo.Madre || "");
+  if (madre === null) return;
+
+  const respuestaGuardar = await fetch(
+    SUPABASE_URL + "/rest/v1/Caballos?id=eq." + encodeURIComponent(id),
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Nombre: nombre,
+        Nacimiento: nacimiento || null,
+        Pelo: pelo || null,
+        RP: rp || null,
+        Padre: padre || null,
+        Madre: madre || null
+      })
+    }
+  );
+
+  if (!respuestaGuardar.ok) {
+    const error = await respuestaGuardar.text();
+    console.error(error);
+    alert("No se pudieron guardar los cambios.");
+    return;
+  }
+
+  alert("Cambios guardados correctamente.");
+
+  document.getElementById("nombreCaballo").value = nombre;
+  buscarCaballo();
+}
 function generarPDF() {
   const elemento = document.getElementById("resultado");
 
@@ -995,6 +1070,7 @@ function dato(etiqueta, valor) {
    resultado.innerHTML = `
   <div class="ficha-caballo">
   <h2>${escapar(caballo.Nombre)}</h2>
+  ${sesionAdmin ? '<button class="boton-editar" onclick="editarCaballo(' + caballo.id + ')">Editar caballo</button>' : ''}
 
   <div class="tabla-ficha">
     <div class="dato-ficha">
