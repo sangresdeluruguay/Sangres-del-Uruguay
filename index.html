@@ -504,6 +504,7 @@ body::before {
 
   <h1>Sangres del Uruguay</h1>
   <p>Registro y genealogía equina</p>
+    <button id="btnLogin" onclick="abrirLogin()">Ingresar</button>
 </header>
 
   <main>
@@ -532,7 +533,53 @@ body::before {
   <script>
     const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
     const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
+    let sesionAdmin = null;
 
+function abrirLogin() {
+  const email = prompt("Email de administrador:");
+  if (!email) return;
+
+  const password = prompt("Contraseña:");
+  if (!password) return;
+
+  iniciarSesionAdmin(email, password);
+}
+
+async function iniciarSesionAdmin(email, password) {
+  const respuesta = await fetch(
+    SUPABASE_URL + "/auth/v1/token?grant_type=password",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password
+      })
+    }
+  );
+
+  const datos = await respuesta.json();
+
+  if (!respuesta.ok) {
+    alert("Email o contraseña incorrectos.");
+    return;
+  }
+
+  sesionAdmin = datos;
+  localStorage.setItem("sesionAdminSdU", JSON.stringify(datos));
+
+  document.getElementById("btnLogin").textContent = "Administrador";
+  alert("Sesión iniciada correctamente.");
+}
+const sesionGuardada = localStorage.getItem("sesionAdminSdU");
+
+if (sesionGuardada) {
+  sesionAdmin = JSON.parse(sesionGuardada);
+  document.getElementById("btnLogin").textContent = "Administrador";
+}
     function escapar(texto) {
   return String(texto ?? "")
     .replaceAll("&", "&amp;")
