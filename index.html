@@ -994,9 +994,107 @@ async function buscarCaballo() {
 
   const hijos = await respuestaHijos.json();
 
+  // Tomamos un hijo registrado como referencia para reconstruir
+  // la rama conocida del caballo que todavía no está registrado.
+  const hijoReferencia = hijos.length > 0 ? hijos[0] : null;
+
+  const pedigreeProvisional = {
+    Padre: "",
+    Madre: "",
+
+    abuelo_paterno: "",
+    abuela_paterno: "",
+    abuelo_materno: "",
+    abuela_materna: "",
+
+    bisabuelo_pp: "",
+    bisabuela_pp: "",
+    bisabuelo_pm: "",
+    bisabuela_pm: "",
+    bisabuelo_mp: "",
+    bisabuela_mp: "",
+    bisabuelo_mm: "",
+    bisabuela_mm: ""
+  };
+
+  if (hijoReferencia) {
+
+    const nombreBuscado =
+      String(nombre || "").trim().toUpperCase();
+
+    const padreDelHijo =
+      String(hijoReferencia.Padre || "").trim().toUpperCase();
+
+    const madreDelHijo =
+      String(hijoReferencia.Madre || "").trim().toUpperCase();
+
+    // Si el caballo seleccionado es el PADRE del hijo,
+    // subimos toda la rama paterna una generación.
+    if (padreDelHijo === nombreBuscado) {
+
+      pedigreeProvisional.Padre =
+        hijoReferencia.abuelo_paterno || "";
+
+      pedigreeProvisional.Madre =
+        hijoReferencia.abuela_paterno || "";
+
+      pedigreeProvisional.abuelo_paterno =
+        hijoReferencia.bisabuelo_pp || "";
+
+      pedigreeProvisional.abuela_paterno =
+        hijoReferencia.bisabuela_pp || "";
+
+      pedigreeProvisional.abuelo_materno =
+        hijoReferencia.bisabuelo_pm || "";
+
+      pedigreeProvisional.abuela_materna =
+        hijoReferencia.bisabuela_pm || "";
+    }
+
+    // Si el caballo seleccionado es la MADRE del hijo,
+    // subimos toda la rama materna una generación.
+    if (madreDelHijo === nombreBuscado) {
+
+      pedigreeProvisional.Padre =
+        hijoReferencia.abuelo_materno || "";
+
+      pedigreeProvisional.Madre =
+        hijoReferencia.abuela_materna || "";
+
+      pedigreeProvisional.abuelo_paterno =
+        hijoReferencia.bisabuelo_mp || "";
+
+      pedigreeProvisional.abuela_paterno =
+        hijoReferencia.bisabuela_mp || "";
+
+      pedigreeProvisional.abuelo_materno =
+        hijoReferencia.bisabuelo_mm || "";
+
+      pedigreeProvisional.abuela_materna =
+        hijoReferencia.bisabuela_mm || "";
+    }
+  }
+
+  function nodoProvisional(nombreNodo, tipo) {
+    return (
+      '<div class="pedigree-box ' + tipo + '"' +
+      (nombreNodo
+        ? ' data-nombre="' +
+          encodeURIComponent(nombreNodo) +
+          '"'
+        : '') +
+      '>' +
+      (nombreNodo
+        ? '<strong>' + escapar(nombreNodo) + '</strong>'
+        : '') +
+      '</div>'
+    );
+  }
+
   let htmlHijos = "";
 
   if (hijos.length > 0) {
+
     htmlHijos = `
       <div class="descendencia">
         <h3>Descendencia registrada</h3>
@@ -1023,6 +1121,7 @@ async function buscarCaballo() {
                     ${escapar(h.Nombre || "-")}
                   </span>
                 </td>
+
                 <td>${escapar(h.Nacimiento || "-")}</td>
                 <td>${escapar(h.Sexo || "-")}</td>
                 <td>${escapar(h.Padre || "-")}</td>
@@ -1033,14 +1132,28 @@ async function buscarCaballo() {
         </table>
       </div>
     `;
- 
   }
+
+  const botonRegistrar = sesionAdmin
+    ? `
+      <button
+        class="boton-editar"
+        onclick="registrarCaballoProvisional('${encodeURIComponent(nombre)}')"
+      >
+        Registrar caballo
+      </button>
+    `
+    : "";
 
   resultado.innerHTML = `
     <div class="ficha-caballo">
+
       <h2>${escapar(nombre)}</h2>
 
+      ${botonRegistrar}
+
       <div class="tabla-ficha">
+
         <div class="dato-ficha">
           <strong>Criador</strong>
           <span>-</span>
@@ -1070,11 +1183,122 @@ async function buscarCaballo() {
           <strong>RP</strong>
           <span>-</span>
         </div>
-      </div>
-    </div>
 
-    ${htmlHijos}
+      </div>
+
+      <div class="pedigree">
+
+        <div class="pedigree-watermark">
+          <img
+            src="Photoroom_20260612_064648.png"
+            alt="Logo SdU"
+          >
+        </div>
+
+        <div class="generacion sujeto">
+          <div class="pedigree-box principal">
+            <strong>${escapar(nombre)}</strong>
+          </div>
+        </div>
+
+        <div class="generacion padres">
+
+          ${nodoProvisional(
+            pedigreeProvisional.Padre,
+            "macho"
+          )}
+
+          ${nodoProvisional(
+            pedigreeProvisional.Madre,
+            "hembra"
+          )}
+
+        </div>
+
+        <div class="generacion abuelos">
+
+          ${nodoProvisional(
+            pedigreeProvisional.abuelo_paterno,
+            "macho"
+          )}
+
+          ${nodoProvisional(
+            pedigreeProvisional.abuela_paterno,
+            "hembra"
+          )}
+
+          ${nodoProvisional(
+            pedigreeProvisional.abuelo_materno,
+            "macho"
+          )}
+
+          ${nodoProvisional(
+            pedigreeProvisional.abuela_materna,
+            "hembra"
+          )}
+
+        </div>
+
+        <div class="generacion bisabuelos">
+
+          ${nodoProvisional("", "macho")}
+          ${nodoProvisional("", "hembra")}
+
+          ${nodoProvisional("", "macho")}
+          ${nodoProvisional("", "hembra")}
+
+          ${nodoProvisional("", "macho")}
+          ${nodoProvisional("", "hembra")}
+
+          ${nodoProvisional("", "macho")}
+          ${nodoProvisional("", "hembra")}
+
+        </div>
+
+      </div>
+
+      ${htmlHijos}
+
+    </div>
   `;
+
+  // Los nombres conocidos del pedigree provisional
+  // siguen siendo clickeables.
+  resultado
+    .querySelectorAll(".pedigree-box[data-nombre]")
+    .forEach(box => {
+
+      box.style.cursor = "pointer";
+
+      box.addEventListener("click", function () {
+
+        const nombreRelacionado =
+          decodeURIComponent(this.dataset.nombre);
+
+        document.getElementById("nombreCaballo").value =
+          nombreRelacionado;
+
+        buscarCaballo();
+      });
+    });
+
+  resultado
+    .querySelectorAll(".descendiente-link")
+    .forEach(link => {
+
+      link.style.cursor = "pointer";
+
+      link.addEventListener("click", function () {
+
+        const nombreDescendiente =
+          decodeURIComponent(this.dataset.nombre);
+
+        document.getElementById("nombreCaballo").value =
+          nombreDescendiente;
+
+        buscarCaballo();
+      });
+    });
 
   return;
 }
