@@ -896,6 +896,358 @@ bisabuela_mm: bisabuelaMM || null
   alert("Cambios guardados.");
   buscarCaballo();
 }
+    async function registrarCaballoProvisional(nombreCodificado) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const nombre = decodeURIComponent(nombreCodificado);
+
+  const urlHijos =
+    SUPABASE_URL +
+    "/rest/v1/Caballos?select=*&or=(Padre.eq." +
+    encodeURIComponent(nombre) +
+    ",Madre.eq." +
+    encodeURIComponent(nombre) +
+    ")&order=Nombre.asc";
+
+  const respuestaHijos = await fetch(urlHijos, {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    }
+  });
+
+  const hijos = await respuestaHijos.json();
+  const hijo = hijos.length > 0 ? hijos[0] : null;
+
+  const provisional = {
+    Nombre: nombre,
+    Padre: "",
+    Madre: "",
+    abuelo_paterno: "",
+    abuela_paterno: "",
+    abuelo_materno: "",
+    abuela_materna: "",
+    bisabuelo_pp: "",
+    bisabuela_pp: "",
+    bisabuelo_pm: "",
+    bisabuela_pm: "",
+    bisabuelo_mp: "",
+    bisabuela_mp: "",
+    bisabuelo_mm: "",
+    bisabuela_mm: ""
+  };
+
+  if (hijo) {
+    const buscado = nombre.trim().toUpperCase();
+    const padreHijo = String(hijo.Padre || "").trim().toUpperCase();
+    const madreHijo = String(hijo.Madre || "").trim().toUpperCase();
+
+    if (padreHijo === buscado) {
+      provisional.Padre = hijo.abuelo_paterno || "";
+      provisional.Madre = hijo.abuela_paterno || "";
+
+      provisional.abuelo_paterno = hijo.bisabuelo_pp || "";
+      provisional.abuela_paterno = hijo.bisabuela_pp || "";
+
+      provisional.abuelo_materno = hijo.bisabuelo_pm || "";
+      provisional.abuela_materna = hijo.bisabuela_pm || "";
+    }
+
+    if (madreHijo === buscado) {
+      provisional.Padre = hijo.abuelo_materno || "";
+      provisional.Madre = hijo.abuela_materna || "";
+
+      provisional.abuelo_paterno = hijo.bisabuelo_mp || "";
+      provisional.abuela_paterno = hijo.bisabuela_mp || "";
+
+      provisional.abuelo_materno = hijo.bisabuelo_mm || "";
+      provisional.abuela_materna = hijo.bisabuela_mm || "";
+    }
+  }
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo modo-edicion">
+
+      <input
+        id="nuevoNombre"
+        class="editar-nombre"
+        type="text"
+        value="${escapar(provisional.Nombre)}"
+      >
+
+      <div class="tabla-ficha">
+
+        <div class="dato-ficha">
+          <strong>Criador</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>N.º Criador</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Nacimiento</strong>
+          <input id="nuevoNacimiento" type="date">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Pelo</strong>
+          <input id="nuevoPelo" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <span>-</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>RP</strong>
+          <input id="nuevoRP" type="text">
+        </div>
+
+      </div>
+
+      <h3>Pedigree</h3>
+
+      <div class="pedigree pedigree-editable">
+
+        <div class="generacion sujeto">
+          <div class="pedigree-box principal">
+            <input
+              id="nuevoNombrePedigree"
+              type="text"
+              value="${escapar(provisional.Nombre)}"
+            >
+          </div>
+        </div>
+
+        <div class="generacion padres">
+
+          <div class="pedigree-box macho">
+            <input
+              id="nuevoPadre"
+              type="text"
+              placeholder="Padre"
+              value="${escapar(provisional.Padre)}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="nuevaMadre"
+              type="text"
+              placeholder="Madre"
+              value="${escapar(provisional.Madre)}"
+            >
+          </div>
+
+        </div>
+
+        <div class="generacion abuelos">
+
+          <div class="pedigree-box macho">
+            <input
+              id="nuevoAbueloPaterno"
+              type="text"
+              placeholder="Abuelo paterno"
+              value="${escapar(provisional.abuelo_paterno)}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="nuevaAbuelaPaterna"
+              type="text"
+              placeholder="Abuela paterna"
+              value="${escapar(provisional.abuela_paterno)}"
+            >
+          </div>
+
+          <div class="pedigree-box macho">
+            <input
+              id="nuevoAbueloMaterno"
+              type="text"
+              placeholder="Abuelo materno"
+              value="${escapar(provisional.abuelo_materno)}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="nuevaAbuelaMaterna"
+              type="text"
+              placeholder="Abuela materna"
+              value="${escapar(provisional.abuela_materna)}"
+            >
+          </div>
+
+        </div>
+
+        <div class="generacion bisabuelos">
+
+          <div class="pedigree-box macho">
+            <input id="nuevoBisabueloPP" type="text" placeholder="Bisabuelo PP">
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input id="nuevaBisabuelaPP" type="text" placeholder="Bisabuela PP">
+          </div>
+
+          <div class="pedigree-box macho">
+            <input id="nuevoBisabueloPM" type="text" placeholder="Bisabuelo PM">
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input id="nuevaBisabuelaPM" type="text" placeholder="Bisabuela PM">
+          </div>
+
+          <div class="pedigree-box macho">
+            <input id="nuevoBisabueloMP" type="text" placeholder="Bisabuelo MP">
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input id="nuevaBisabuelaMP" type="text" placeholder="Bisabuela MP">
+          </div>
+
+          <div class="pedigree-box macho">
+            <input id="nuevoBisabueloMM" type="text" placeholder="Bisabuelo MM">
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input id="nuevaBisabuelaMM" type="text" placeholder="Bisabuela MM">
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="acciones-edicion">
+        <button onclick="guardarCaballoNuevo()">
+          Guardar caballo
+        </button>
+
+        <button onclick="buscarCaballo()">
+          Cancelar
+        </button>
+      </div>
+
+    </div>
+  `;
+
+  const nombreArriba = document.getElementById("nuevoNombre");
+  const nombrePedigree = document.getElementById("nuevoNombrePedigree");
+
+  nombreArriba.addEventListener("input", function () {
+    nombrePedigree.value = nombreArriba.value;
+  });
+
+  nombrePedigree.addEventListener("input", function () {
+    nombreArriba.value = nombrePedigree.value;
+  });
+}
+
+
+async function guardarCaballoNuevo() {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("La sesión de administrador no está activa.");
+    return;
+  }
+
+  const nombre =
+    document.getElementById("nuevoNombre").value.trim();
+
+  if (!nombre) {
+    alert("El caballo necesita un nombre.");
+    return;
+  }
+
+  const nuevoCaballo = {
+    Nombre: nombre,
+
+    Nacimiento:
+      document.getElementById("nuevoNacimiento").value || null,
+
+    Pelo:
+      document.getElementById("nuevoPelo").value.trim() || null,
+
+    RP:
+      document.getElementById("nuevoRP").value.trim() || null,
+
+    Padre:
+      document.getElementById("nuevoPadre").value.trim() || null,
+
+    Madre:
+      document.getElementById("nuevaMadre").value.trim() || null,
+
+    abuelo_paterno:
+      document.getElementById("nuevoAbueloPaterno").value.trim() || null,
+
+    abuela_paterno:
+      document.getElementById("nuevaAbuelaPaterna").value.trim() || null,
+
+    abuelo_materno:
+      document.getElementById("nuevoAbueloMaterno").value.trim() || null,
+
+    abuela_materna:
+      document.getElementById("nuevaAbuelaMaterna").value.trim() || null,
+
+    bisabuelo_pp:
+      document.getElementById("nuevoBisabueloPP").value.trim() || null,
+
+    bisabuela_pp:
+      document.getElementById("nuevaBisabuelaPP").value.trim() || null,
+
+    bisabuelo_pm:
+      document.getElementById("nuevoBisabueloPM").value.trim() || null,
+
+    bisabuela_pm:
+      document.getElementById("nuevaBisabuelaPM").value.trim() || null,
+
+    bisabuelo_mp:
+      document.getElementById("nuevoBisabueloMP").value.trim() || null,
+
+    bisabuela_mp:
+      document.getElementById("nuevaBisabuelaMP").value.trim() || null,
+
+    bisabuelo_mm:
+      document.getElementById("nuevoBisabueloMM").value.trim() || null,
+
+    bisabuela_mm:
+      document.getElementById("nuevaBisabuelaMM").value.trim() || null
+  };
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/Caballos",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify(nuevoCaballo)
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    console.error(error);
+    alert("No se pudo guardar el caballo.");
+    return;
+  }
+
+  alert("Caballo registrado correctamente.");
+
+  document.getElementById("nombreCaballo").value = nombre;
+
+  buscarCaballo();
+}
 function generarPDF() {
   const elemento = document.getElementById("resultado");
 
