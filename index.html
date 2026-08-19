@@ -574,12 +574,63 @@ async function iniciarSesionAdmin(email, password) {
   document.getElementById("btnLogin").textContent = "Administrador";
   alert("Sesión iniciada correctamente.");
 }
-const sesionGuardada = localStorage.getItem("sesionAdminSdU");
+async function renovarSesionAdmin() {
+  const sesionGuardada = localStorage.getItem("sesionAdminSdU");
 
-if (sesionGuardada) {
+  if (!sesionGuardada) {
+    sesionAdmin = null;
+    document.getElementById("btnLogin").textContent = "Ingresar";
+    return false;
+  }
+
   sesionAdmin = JSON.parse(sesionGuardada);
+
+  if (!sesionAdmin.refresh_token) {
+    localStorage.removeItem("sesionAdminSdU");
+    sesionAdmin = null;
+    document.getElementById("btnLogin").textContent = "Ingresar";
+    return false;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        refresh_token: sesionAdmin.refresh_token
+      })
+    }
+  );
+
+  if (!respuesta.ok) {
+    localStorage.removeItem("sesionAdminSdU");
+    sesionAdmin = null;
+    document.getElementById("btnLogin").textContent = "Ingresar";
+    return false;
+  }
+
+  const nuevaSesion = await respuesta.json();
+
+  sesionAdmin = nuevaSesion;
+  localStorage.setItem(
+    "sesionAdminSdU",
+    JSON.stringify(nuevaSesion)
+  );
+
   document.getElementById("btnLogin").textContent = "Administrador";
+
+  return true;
 }
+
+renovarSesionAdmin();
+
+setInterval(() => {
+  renovarSesionAdmin();
+}, 45 * 60 * 1000);
     function escapar(texto) {
   return String(texto ?? "")
     .replaceAll("&", "&amp;")
