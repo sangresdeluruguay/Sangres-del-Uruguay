@@ -1010,8 +1010,33 @@ setInterval(() => {
     return;
   }
 
-  alert("Criador aprobado correctamente.");
-  verCriadoresPendientes();
+  const nombreWhatsApp = (solicitud.Nombre || "").toUpperCase();
+
+let numeroWhatsApp = String(solicitud.Telefono || "").replace(/\D/g, "");
+
+if (numeroWhatsApp.startsWith("0")) {
+  numeroWhatsApp = "598" + numeroWhatsApp.slice(1);
+} else if (!numeroWhatsApp.startsWith("598")) {
+  numeroWhatsApp = "598" + numeroWhatsApp;
+}
+
+const mensajeWhatsApp =
+  "Hola " + nombreWhatsApp +
+  ". Tu registro como criador en Sangres del Uruguay fue aprobado. " +
+  "Tu número de criador es " + numeroCriador +
+  ". Ya podés utilizar este número para registrar tus caballos.";
+
+const enlaceWhatsApp =
+  "https://wa.me/" +
+  numeroWhatsApp +
+  "?text=" +
+  encodeURIComponent(mensajeWhatsApp);
+
+alert("Criador aprobado correctamente. Se abrirá WhatsApp con el mensaje preparado.");
+
+window.open(enlaceWhatsApp, "_blank");
+
+verCriadoresPendientes();
 }
     function nuevoCaballoDesdePanel() {
   registrarCaballoProvisional(encodeURIComponent(" "));
