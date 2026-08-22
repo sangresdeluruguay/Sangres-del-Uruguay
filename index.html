@@ -18,6 +18,7 @@
   color: white;
   text-align: center;
   padding: 35px 20px;
+     position: relative;
 }
 .portada-foto {
     width: 100%;
@@ -36,6 +37,24 @@
       margin-top: 8px;
       color: #d5b56b;
     }
+    #btnLogin {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: transparent;
+  color: #d5b56b;
+  border: 1px solid #d5b56b;
+  border-radius: 8px;
+  padding: 9px 14px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+#btnLogin:hover {
+  background: #d5b56b;
+  color: #17233b;
+}
 .menu-principal {
   display: flex;
   justify-content: center;
@@ -561,7 +580,7 @@ body::before {
   <button type="button">Sobre SDU</button>
   <button type="button">Contacto</button>
 </nav>
-    <button id="btnLogin" onclick="abrirLogin()">Ingresar</button>
+    <button id="btnLogin" onclick="abrirLogin()">Administrador</button>
     <button id="btnPanelAdmin" onclick="abrirPanelAdmin()" style="display:none;">Panel administrador</button>
 </header>
 <section class="portada-foto">
