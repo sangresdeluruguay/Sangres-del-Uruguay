@@ -647,6 +647,36 @@ function abrirRegistroCriador() {
           <input id="solicitudCriadorHaras" type="text">
         </div>
       </div>
+      <div class="dato-ficha">
+  <strong>Departamento</strong>
+  <select id="solicitudCriadorDepartamento">
+    <option value="">Seleccionar departamento</option>
+    <option value="Artigas">Artigas</option>
+    <option value="Canelones">Canelones</option>
+    <option value="Cerro Largo">Cerro Largo</option>
+    <option value="Colonia">Colonia</option>
+    <option value="Durazno">Durazno</option>
+    <option value="Flores">Flores</option>
+    <option value="Florida">Florida</option>
+    <option value="Lavalleja">Lavalleja</option>
+    <option value="Maldonado">Maldonado</option>
+    <option value="Montevideo">Montevideo</option>
+    <option value="Paysandú">Paysandú</option>
+    <option value="Río Negro">Río Negro</option>
+    <option value="Rivera">Rivera</option>
+    <option value="Rocha">Rocha</option>
+    <option value="Salto">Salto</option>
+    <option value="San José">San José</option>
+    <option value="Soriano">Soriano</option>
+    <option value="Tacuarembó">Tacuarembó</option>
+    <option value="Treinta y Tres">Treinta y Tres</option>
+  </select>
+</div>
+
+<div class="dato-ficha">
+  <strong>Localidad</strong>
+  <input id="solicitudCriadorLocalidad" type="text">
+</div>
 
       <button type="button" onclick="enviarSolicitudCriador()">
         Enviar solicitud
@@ -664,9 +694,11 @@ function abrirRegistroCriador() {
   const email = document.getElementById("solicitudCriadorEmail").value.trim();
   const telefono = document.getElementById("solicitudCriadorTelefono").value.trim();
   const haras = document.getElementById("solicitudCriadorHaras").value.trim();
+      const departamento = document.getElementById("solicitudCriadorDepartamento").value;
+const localidad = document.getElementById("solicitudCriadorLocalidad").value.trim();
 
-  if (!nombre || !email || !telefono) {
-    alert("Completá nombre, email y teléfono.");
+  if (!nombre || !email || !telefono || !departamento || !localidad) {
+    alert("Completá nombre, email, teléfono, departamento y localidad.");
     return;
   }
 
@@ -684,6 +716,8 @@ function abrirRegistroCriador() {
         Email: email,
         Telefono: telefono,
         "Haras - Cabaña": haras,
+        Departamento: departamento,
+Localidad: localidad,
         Estado: "pendiente"
       })
     }
