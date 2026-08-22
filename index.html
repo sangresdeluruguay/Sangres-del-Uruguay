@@ -983,10 +983,11 @@ setInterval(() => {
     }
   );
 
-  if (!respuestaCriador.ok) {
-    alert("No se pudo guardar el criador en el registro oficial.");
-    return;
-  }
+ if (!respuestaCriador.ok) {
+  const errorCriador = await respuestaCriador.text();
+  alert("Error al guardar criador: " + errorCriador);
+  return;
+}
 
   const respuestaActualizar = await fetch(
     SUPABASE_URL + "/rest/v1/SolicitudesCriadores?id=eq." + id,
