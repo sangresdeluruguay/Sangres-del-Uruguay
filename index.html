@@ -922,10 +922,95 @@ setInterval(() => {
           Localidad: ${escapar(s.Localidad || "-")}<br>
           Teléfono: ${escapar(s.Telefono || "-")}<br>
           Email: ${escapar(s.Email || "-")}
+          <br><br>
+<label><strong>Número de criador</strong></label><br>
+<input
+  id="numeroCriador-${s.id}"
+  type="text"
+  placeholder="Ej: N0001"
+>
+<br><br>
+<button onclick="aprobarCriador(${s.id})">
+  Aprobar criador
+</button>
         </div>
       `).join("")}
     </div>
   `;
+}
+    async function aprobarCriador(id) {
+  const inputNumero = document.getElementById("numeroCriador-" + id);
+  const numeroCriador = inputNumero.value.trim().toUpperCase();
+
+  if (!numeroCriador) {
+    alert("Ingresá el número de criador.");
+    return;
+  }
+
+  const respuestaSolicitud = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCriadores?select=*&id=eq." + id,
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const solicitudes = await respuestaSolicitud.json();
+
+  if (!respuestaSolicitud.ok || solicitudes.length === 0) {
+    alert("No se pudo cargar la solicitud.");
+    return;
+  }
+
+  const solicitud = solicitudes[0];
+
+  const respuestaCriador = await fetch(
+    SUPABASE_URL + "/rest/v1/Criadores",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Nombre: (solicitud.Nombre || "").toUpperCase(),
+        "Numero de Criador": numeroCriador,
+        "Haras - Cabaña": (solicitud["Haras - Cabaña"] || "").toUpperCase()
+      })
+    }
+  );
+
+  if (!respuestaCriador.ok) {
+    alert("No se pudo guardar el criador en el registro oficial.");
+    return;
+  }
+
+  const respuestaActualizar = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCriadores?id=eq." + id,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Estado: "aprobado",
+        "Numero de Criador asignado": numeroCriador
+      })
+    }
+  );
+
+  if (!respuestaActualizar.ok) {
+    alert("El criador se guardó, pero no se pudo actualizar la solicitud.");
+    return;
+  }
+
+  alert("Criador aprobado correctamente.");
+  verCriadoresPendientes();
 }
     function nuevoCaballoDesdePanel() {
   registrarCaballoProvisional(encodeURIComponent(" "));
