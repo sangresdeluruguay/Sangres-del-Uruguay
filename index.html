@@ -505,6 +505,7 @@ body::before {
   <h1>Sangres del Uruguay</h1>
   <p>Registro y genealogía equina</p>
     <button id="btnLogin" onclick="abrirLogin()">Ingresar</button>
+    <button id="btnPanelAdmin" onclick="abrirPanelAdmin()" style="display:none;">Panel administrador</button>
 </header>
 
   <main>
@@ -572,6 +573,7 @@ async function iniciarSesionAdmin(email, password) {
   localStorage.setItem("sesionAdminSdU", JSON.stringify(datos));
 
   document.getElementById("btnLogin").textContent = "Administrador";
+  document.getElementById("btnPanelAdmin").style.display = "inline-block";
   alert("Sesión iniciada correctamente.");
 }
 async function renovarSesionAdmin() {
@@ -622,6 +624,7 @@ async function renovarSesionAdmin() {
   );
 
   document.getElementById("btnLogin").textContent = "Administrador";
+  document.getElementById("btnPanelAdmin").style.display = "inline-block";
 
   return true;
 }
@@ -632,6 +635,47 @@ setInterval(() => {
   renovarSesionAdmin();
 }, 45 * 60 * 1000);
     function escapar(texto) {
+      function abrirPanelAdmin() {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const resultado = document.getElementById("resultado");
+
+  resultado.innerHTML = `
+    <div class="panel-admin">
+
+      <h2>Panel administrador</h2>
+
+      <div class="panel-admin-opciones">
+
+        <button onclick="nuevoCaballoDesdePanel()">
+          Nuevo caballo
+        </button>
+
+        <button onclick="volverABuscador()">
+          Buscar / editar caballo
+        </button>
+
+        <button onclick="administrarCriadores()">
+          Criadores
+        </button>
+
+        <button onclick="administrarPropietarios()">
+          Propietarios
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  resultado.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
   return String(texto ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
