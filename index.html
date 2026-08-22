@@ -676,6 +676,9 @@ setInterval(() => {
     block: "start"
   });
 }
+    function nuevoCaballoDesdePanel() {
+  registrarCaballoProvisional(encodeURIComponent(" "));
+}
      function escapar(texto) {
   return String(texto ?? "")
     .replaceAll("&", "&amp;")
