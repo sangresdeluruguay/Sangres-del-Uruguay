@@ -857,6 +857,9 @@ setInterval(() => {
         <button onclick="administrarCriadores()">
           Criadores
         </button>
+        <button onclick="verCriadoresPendientes()">
+  Criadores pendientes
+</button>
 
         <button onclick="administrarPropietarios()">
           Propietarios
@@ -871,6 +874,58 @@ setInterval(() => {
     behavior: "smooth",
     block: "start"
   });
+}
+    async function verCriadoresPendientes() {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCriadores?select=*&Estado=eq.pendiente&order=created_at.desc",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const solicitudes = await respuesta.json();
+
+  const resultado = document.getElementById("resultado");
+
+  if (!respuesta.ok) {
+    resultado.innerHTML = "<p>No se pudieron cargar las solicitudes pendientes.</p>";
+    return;
+  }
+
+  if (solicitudes.length === 0) {
+    resultado.innerHTML = `
+      <div class="panel-admin">
+        <h2>Criadores pendientes</h2>
+        <p>No hay solicitudes pendientes.</p>
+      </div>
+    `;
+    return;
+  }
+
+  resultado.innerHTML = `
+    <div class="panel-admin">
+      <h2>Criadores pendientes</h2>
+
+      ${solicitudes.map(s => `
+        <div class="solicitud-pendiente">
+          <strong>${escapar(s.Nombre || "-")}</strong><br>
+          Haras / Cabaña: ${escapar(s["Haras - Cabaña"] || "-")}<br>
+          Departamento: ${escapar(s.Departamento || "-")}<br>
+          Localidad: ${escapar(s.Localidad || "-")}<br>
+          Teléfono: ${escapar(s.Telefono || "-")}<br>
+          Email: ${escapar(s.Email || "-")}
+        </div>
+      `).join("")}
+    </div>
+  `;
 }
     function nuevoCaballoDesdePanel() {
   registrarCaballoProvisional(encodeURIComponent(" "));
