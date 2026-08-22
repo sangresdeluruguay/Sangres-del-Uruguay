@@ -607,7 +607,7 @@ body::before {
     Registrar caballo
   </button>
 
-  <button type="button" class="tarjeta-registro">
+ <button type="button" class="tarjeta-registro" onclick="abrirRegistroCriador()">
     Registrarse como criador
   </button>
 </div>
@@ -619,7 +619,85 @@ body::before {
     const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
     const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
     let sesionAdmin = null;
+function abrirRegistroCriador() {
+  const resultado = document.getElementById("resultado");
 
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+      <h2>Registrarse como criador</h2>
+
+      <div class="tabla-ficha">
+        <div class="dato-ficha">
+          <strong>Nombre y apellido</strong>
+          <input id="solicitudCriadorNombre" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Email</strong>
+          <input id="solicitudCriadorEmail" type="email">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Teléfono</strong>
+          <input id="solicitudCriadorTelefono" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Haras / Cabaña</strong>
+          <input id="solicitudCriadorHaras" type="text">
+        </div>
+      </div>
+
+      <button type="button" onclick="enviarSolicitudCriador()">
+        Enviar solicitud
+      </button>
+    </div>
+  `;
+
+  resultado.scrollIntoView({
+    behavior: "smooth",
+    block: "start"
+  });
+}
+    async function enviarSolicitudCriador() {
+  const nombre = document.getElementById("solicitudCriadorNombre").value.trim();
+  const email = document.getElementById("solicitudCriadorEmail").value.trim();
+  const telefono = document.getElementById("solicitudCriadorTelefono").value.trim();
+  const haras = document.getElementById("solicitudCriadorHaras").value.trim();
+
+  if (!nombre || !email || !telefono) {
+    alert("Completá nombre, email y teléfono.");
+    return;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCriadores",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Nombre: nombre,
+        Email: email,
+        Telefono: telefono,
+        "Haras - Cabaña": haras,
+        Estado: "pendiente"
+      })
+    }
+  );
+
+  if (!respuesta.ok) {
+    alert("No se pudo enviar la solicitud. Intentá nuevamente.");
+    return;
+  }
+
+  alert("Solicitud enviada correctamente. Quedará pendiente de aprobación.");
+
+  document.getElementById("resultado").innerHTML = "";
+}
 function abrirLogin() {
   const email = prompt("Email de administrador:");
   if (!email) return;
