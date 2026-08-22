@@ -36,7 +36,28 @@
       margin-top: 8px;
       color: #d5b56b;
     }
+.menu-principal {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 22px;
+  flex-wrap: wrap;
+  margin-top: 20px;
+}
 
+.menu-principal button {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+
+.menu-principal button:hover {
+  color: #d5b56b;
+}
     main {
       max-width: 900px;
       margin: 0 auto;
@@ -50,6 +71,28 @@
       box-shadow: 0 3px 15px rgba(0,0,0,0.08);
       text-align: center;
     }
+    .acciones-registro {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 24px;
+}
+
+.tarjeta-registro {
+  background: rgba(23, 35, 59, 0.88);
+  color: white;
+  border: 1px solid #d5b56b;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.tarjeta-registro:hover {
+  background: #17233b;
+  color: #d5b56b;
+}
 
     .buscador h2 {
       margin-top: 0;
@@ -511,6 +554,13 @@ body::before {
 
   <h1>Sangres del Uruguay</h1>
   <p>Registro y genealogía equina</p>
+    <nav class="menu-principal">
+  <button type="button">Inicio</button>
+  <button type="button">Buscar caballo</button>
+  <button type="button">Criadores / Propietarios</button>
+  <button type="button">Sobre SDU</button>
+  <button type="button">Contacto</button>
+</nav>
     <button id="btnLogin" onclick="abrirLogin()">Ingresar</button>
     <button id="btnPanelAdmin" onclick="abrirPanelAdmin()" style="display:none;">Panel administrador</button>
 </header>
@@ -529,6 +579,15 @@ body::before {
         >
         <button onclick="buscarCaballo()">Buscar</button>
       </div>
+      <div class="acciones-registro">
+  <button type="button" class="tarjeta-registro">
+    Registrar caballo
+  </button>
+
+  <button type="button" class="tarjeta-registro">
+    Registrarse como criador
+  </button>
+</div>
 
       <div id="resultado"></div>
       
