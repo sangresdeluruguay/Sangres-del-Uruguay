@@ -634,7 +634,7 @@ renovarSesionAdmin();
 setInterval(() => {
   renovarSesionAdmin();
 }, 45 * 60 * 1000);
-    function escapar(texto) {
+   
       function abrirPanelAdmin() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -676,6 +676,7 @@ setInterval(() => {
     block: "start"
   });
 }
+     function escapar(texto) {
   return String(texto ?? "")
     .replaceAll("&", "&amp;")
     .replaceAll("<", "&lt;")
