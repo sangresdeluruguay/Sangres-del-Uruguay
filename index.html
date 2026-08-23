@@ -992,8 +992,30 @@ body::before {
   }
 
   alert("Caballo enviado correctamente para revisión.");
-  volverABuscador();
+  document.getElementById("caballoNacimiento").value = "";
+document.getElementById("caballoSexo").value = "";
+document.getElementById("caballoPelo").value = "";
+document.getElementById("caballoRP").value = "";
+document.getElementById("caballoPropietario").value = "";
+
+document.getElementById("caballoNombre").value = "";
+document.getElementById("caballoPadre").value = "";
+document.getElementById("caballoMadre").value = "";
+document.getElementById("caballoAbueloPaterno").value = "";
+document.getElementById("caballoAbuelaPaterna").value = "";
+document.getElementById("caballoAbueloMaterno").value = "";
+document.getElementById("caballoAbuelaMaterna").value = "";
+
+document.getElementById("caballoBPPP").value = "";
+document.getElementById("caballoBAPP").value = "";
+document.getElementById("caballoBPPM").value = "";
+document.getElementById("caballoBAPM").value = "";
+document.getElementById("caballoBMP").value = "";
+document.getElementById("caballoBAMP").value = "";
+document.getElementById("caballoBMM").value = "";
+document.getElementById("caballoBAMM").value = "";
 }
+    
 function abrirRegistroCriador() {
   const resultado = document.getElementById("resultado");
 
