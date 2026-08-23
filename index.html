@@ -774,8 +774,9 @@ body::before {
           <strong>Sexo</strong>
           <select id="caballoSexo">
             <option value="">Seleccionar</option>
-            <option value="MACHO">Macho</option>
-            <option value="HEMBRA">Hembra</option>
+           <option value="ME">Macho entero</option>
+<option value="MC">Macho castrado</option>
+<option value="H">Hembra</option>
           </select>
         </div>
 
@@ -783,6 +784,11 @@ body::before {
           <strong>Pelo</strong>
           <input id="caballoPelo" type="text">
         </div>
+
+        <div class="dato-ficha">
+  <strong>Raza</strong>
+  <input id="caballoRaza" type="text">
+</div>
 
         <div class="dato-ficha">
           <strong>RP</strong>
@@ -941,6 +947,7 @@ body::before {
     "Nacimiento": document.getElementById("caballoNacimiento").value,
     "Sexo": document.getElementById("caballoSexo").value,
     "Pelo": document.getElementById("caballoPelo").value.trim().toUpperCase(),
+    "Raza": document.getElementById("caballoRaza").value.trim().toUpperCase(),
     "RP": document.getElementById("caballoRP").value.trim().toUpperCase(),
     "Padre": document.getElementById("caballoPadre").value.trim().toUpperCase(),
     "Madre": document.getElementById("caballoMadre").value.trim().toUpperCase(),
