@@ -738,9 +738,9 @@ body::before {
     return;
   }
 
-  mostrarFormularioCaballo(numero);
+  mostrarFormularioCaballo(numero, criadores[0]);
 }
-    function mostrarFormularioCaballo(numeroCriador) {
+    function mostrarFormularioCaballo(numeroCriador, criador) {
   const resultado = document.getElementById("resultado");
 
   resultado.innerHTML = `
@@ -754,11 +754,16 @@ body::before {
           <input id="caballoNumeroCriador" type="text"
             value="${escapar(numeroCriador)}" readonly>
         </div>
-
         <div class="dato-ficha">
-          <strong>Nombre del caballo</strong>
-          <input id="caballoNombre" type="text">
-        </div>
+  <strong>Haras / Cabaña</strong>
+  <input
+    id="caballoHaras"
+    type="text"
+    value="${escapar(criador && criador["Haras - Cabaña"] ? criador["Haras - Cabaña"] : "")}"
+    readonly
+  >
+</div>
+
 
         <div class="dato-ficha">
           <strong>Fecha de nacimiento</strong>
@@ -783,81 +788,137 @@ body::before {
           <strong>RP</strong>
           <input id="caballoRP" type="text">
         </div>
+        <div class="dato-ficha">
+  <strong>Propietario</strong>
+  <input id="caballoPropietario" type="text">
+</div>
 
-      <div class="arbol-genealogico-form">
+<div class="generacion sujeto">
+  <div class="pedigree-box principal">
+    <input
+      id="caballoNombre"
+      type="text"
+      placeholder="Nombre del caballo"
+    >
+  </div>
+</div>
 
-  <div class="fila fila-caballo">
-    <div class="nodo nodo-caballo">
-      <strong>Caballo</strong>
-      <input id="caballoNombre" type="text">
-    </div>
+<div class="generacion padres">
+  <div class="pedigree-box macho">
+    <input
+      id="caballoPadre"
+      type="text"
+      placeholder=""
+    >
   </div>
 
-  <div class="fila fila-padres">
-    <div class="nodo nodo-macho">
-      <strong>Padre</strong>
-      <input id="caballoPadre" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Madre</strong>
-      <input id="caballoMadre" type="text">
-    </div>
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoMadre"
+      type="text"
+      placeholder=""
+    >
+  </div>
+</div>
+
+<div class="generacion abuelos">
+  <div class="pedigree-box macho">
+    <input
+      id="caballoAbueloPaterno"
+      type="text"
+      placeholder=""
+    >
   </div>
 
-  <div class="fila fila-abuelos">
-    <div class="nodo nodo-macho">
-      <strong>Abuelo paterno</strong>
-      <input id="caballoAbueloPaterno" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Abuela paterna</strong>
-     <input id="caballoAbuelaPaterna" type="text">
-    </div>
-    <div class="nodo nodo-macho">
-      <strong>Abuelo materno</strong>
-      <input id="caballoAbueloMaterno" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Abuela materna</strong>
-      <input id="caballoAbuelaMaterna" type="text">
-    </div>
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoAbuelaPaterna"
+      type="text"
+      placeholder=""
+    >
   </div>
 
-  <div class="fila fila-bisabuelos">
-    <div class="nodo nodo-macho">
-      <strong>Bisabuelo paterno paterno</strong>
-      <input id="caballoBPPP" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Bisabuela paterna paterna</strong>
-      <input id="caballoBAPP" type="text">
-    </div>
-    <div class="nodo nodo-macho">
-      <strong>Bisabuelo paterno materno</strong>
-      <input id="caballoBPPM" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Bisabuela paterna materna</strong>
-      <input id="caballoBAPM" type="text">
-    </div>
-    <div class="nodo nodo-macho">
-      <strong>Bisabuelo materno paterno</strong>
-      <input id="caballoBMP" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Bisabuela materna paterna</strong>
-      <input id="caballoBAMP" type="text">
-    </div>
-    <div class="nodo nodo-macho">
-      <strong>Bisabuelo materno materno</strong>
-      <input id="caballoBMM" type="text">
-    </div>
-    <div class="nodo nodo-hembra">
-      <strong>Bisabuela materna materna</strong>
-     <input id="caballoBAMM" type="text">
-    </div>
+  <div class="pedigree-box macho">
+    <input
+      id="caballoAbueloMaterno"
+      type="text"
+      placeholder=""
+    >
   </div>
 
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoAbuelaMaterna"
+      type="text"
+      placeholder=""
+    >
+  </div>
+</div>
+
+<div class="generacion bisabuelos">
+  <div class="pedigree-box macho">
+    <input
+      id="caballoBPPP"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoBAPP"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box macho">
+    <input
+      id="caballoBPPM"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoBAPM"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box macho">
+    <input
+      id="caballoBMP"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoBAMP"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box macho">
+    <input
+      id="caballoBMM"
+      type="text"
+      placeholder=""
+    >
+  </div>
+
+  <div class="pedigree-box hembra">
+    <input
+      id="caballoBAMM"
+      type="text"
+      placeholder=""
+    >
+  </div>
 </div>
 
       </div>
