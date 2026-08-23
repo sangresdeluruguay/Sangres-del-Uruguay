@@ -621,6 +621,10 @@ body::before {
 .nodo-hembra {
   background: #f8d7e3;
 }
+    input[type="text"],
+textarea {
+  text-transform: uppercase;
+}
   </style>
 </head>
 
@@ -683,6 +687,12 @@ body::before {
     let sesionAdmin = null;
     let ultimaBusquedaCaballos = "";
     let abrirCaballoDirecto = false;
+    function normalizarTexto(texto) {
+  return String(texto || "")
+    .trim()
+    .replace(/\s+/g, " ")
+    .toUpperCase();
+}
     
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
@@ -1426,7 +1436,7 @@ setInterval(() => {
     const respuestaPropietario = await fetch(
       SUPABASE_URL +
       "/rest/v1/Propietarios?select=id&Nombre=eq." +
-      encodeURIComponent(solicitud.Propietario) +
+encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
       "&limit=1",
       {
         headers: {
@@ -1441,7 +1451,7 @@ setInterval(() => {
     if (respuestaPropietario.ok && propietarios.length) {
   propietarioId = propietarios[0].id;
 } else {
-  const nombrePropietario = solicitud.Propietario.trim().toUpperCase();
+ const nombrePropietario = normalizarTexto(solicitud.Propietario);
 
   const respuestaNuevoPropietario = await fetch(
     SUPABASE_URL + "/rest/v1/Propietarios",
