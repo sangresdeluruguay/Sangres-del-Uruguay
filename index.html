@@ -676,7 +676,189 @@ body::before {
     return;
   }
 
-  alert("Criador verificado correctamente.");
+  mostrarFormularioCaballo(numero);
+}
+    function mostrarFormularioCaballo(numeroCriador) {
+  const resultado = document.getElementById("resultado");
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+      <h2>Registro de caballo</h2>
+
+      <div class="tabla-ficha">
+
+        <div class="dato-ficha">
+          <strong>Número de criador</strong>
+          <input id="caballoNumeroCriador" type="text"
+            value="${escapar(numeroCriador)}" readonly>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Nombre del caballo</strong>
+          <input id="caballoNombre" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Fecha de nacimiento</strong>
+          <input id="caballoNacimiento" type="date">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Sexo</strong>
+          <select id="caballoSexo">
+            <option value="">Seleccionar</option>
+            <option value="MACHO">Macho</option>
+            <option value="HEMBRA">Hembra</option>
+          </select>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Pelo</strong>
+          <input id="caballoPelo" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>RP</strong>
+          <input id="caballoRP" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Padre</strong>
+          <input id="caballoPadre" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Madre</strong>
+          <input id="caballoMadre" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <input id="caballoPropietario" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Abuelo paterno</strong>
+          <input id="caballoAbueloPaterno" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Abuela paterna</strong>
+          <input id="caballoAbuelaPaterna" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Abuelo materno</strong>
+          <input id="caballoAbueloMaterno" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Abuela materna</strong>
+          <input id="caballoAbuelaMaterna" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuelo paterno paterno</strong>
+          <input id="caballoBPPP" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuela paterna paterna</strong>
+          <input id="caballoBAPP" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuelo paterno materno</strong>
+          <input id="caballoBPPM" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuela paterna materna</strong>
+          <input id="caballoBAPM" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuelo materno paterno</strong>
+          <input id="caballoBMP" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuela materna paterna</strong>
+          <input id="caballoBAMP" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuelo materno materno</strong>
+          <input id="caballoBMM" type="text">
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Bisabuela materna materna</strong>
+          <input id="caballoBAMM" type="text">
+        </div>
+
+      </div>
+
+      <br>
+
+      <button type="button" onclick="enviarSolicitudCaballo()">
+        Enviar caballo para revisión
+      </button>
+    </div>
+  `;
+}
+    async function enviarSolicitudCaballo() {
+  const datos = {
+    "Numero de Criador": document.getElementById("caballoNumeroCriador").value.trim().toUpperCase(),
+    "Nombre": document.getElementById("caballoNombre").value.trim().toUpperCase(),
+    "Nacimiento": document.getElementById("caballoNacimiento").value,
+    "Sexo": document.getElementById("caballoSexo").value,
+    "Pelo": document.getElementById("caballoPelo").value.trim().toUpperCase(),
+    "RP": document.getElementById("caballoRP").value.trim().toUpperCase(),
+    "Padre": document.getElementById("caballoPadre").value.trim().toUpperCase(),
+    "Madre": document.getElementById("caballoMadre").value.trim().toUpperCase(),
+    "Propietario": document.getElementById("caballoPropietario").value.trim().toUpperCase(),
+    "Abuelo paterno": document.getElementById("caballoAbueloPaterno").value.trim().toUpperCase(),
+    "Abuela paterna": document.getElementById("caballoAbuelaPaterna").value.trim().toUpperCase(),
+    "Abuelo materno": document.getElementById("caballoAbueloMaterno").value.trim().toUpperCase(),
+    "Abuela materna": document.getElementById("caballoAbuelaMaterna").value.trim().toUpperCase(),
+    "Bisabuelo paterno paterno": document.getElementById("caballoBPPP").value.trim().toUpperCase(),
+    "Bisabuela paterna paterna": document.getElementById("caballoBAPP").value.trim().toUpperCase(),
+    "Bisabuelo paterno materno": document.getElementById("caballoBPPM").value.trim().toUpperCase(),
+    "Bisabuela paterna materna": document.getElementById("caballoBAPM").value.trim().toUpperCase(),
+    "Bisabuelo materno paterno": document.getElementById("caballoBMP").value.trim().toUpperCase(),
+    "Bisabuela materna paterna": document.getElementById("caballoBAMP").value.trim().toUpperCase(),
+    "Bisabuelo materno materno": document.getElementById("caballoBMM").value.trim().toUpperCase(),
+    "Bisabuela materna materna": document.getElementById("caballoBAMM").value.trim().toUpperCase(),
+    "Estado": "pendiente"
+  };
+
+  if (!datos.Nombre || !datos["Numero de Criador"]) {
+    alert("Completá el nombre del caballo y el número de criador.");
+    return;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCaballos",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datos)
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    alert("No se pudo enviar el caballo: " + error);
+    return;
+  }
+
+  alert("Caballo enviado correctamente para revisión.");
+  volverABuscador();
 }
 function abrirRegistroCriador() {
   const resultado = document.getElementById("resultado");
