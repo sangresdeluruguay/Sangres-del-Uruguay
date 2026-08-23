@@ -681,6 +681,8 @@ body::before {
     const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
     const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
     let sesionAdmin = null;
+    let ultimaBusquedaCaballos = "";
+    
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
 
@@ -2154,8 +2156,13 @@ elemento.classList.add("modo-pdf");
     elemento.classList.remove("modo-pdf");
   });
 }
+    function volverAResultadosBusqueda() {
+  document.getElementById("nombreCaballo").value = ultimaBusquedaCaballos;
+  buscarCaballo();
+}
 async function buscarCaballo() {
   const nombre = document.getElementById("nombreCaballo").value.trim();
+  ultimaBusquedaCaballos = nombre;
   const resultado = document.getElementById("resultado");
 
   if (!nombre) {
@@ -2512,7 +2519,7 @@ async function buscarCaballo() {
 
   return;
 }
-if (caballos.length > 1) {
+if (caballos.length > 0) {
 
   // Revisa si un padre o una madre están registrados como caballo
   async function caballoRegistrado(nombre) {
@@ -2738,6 +2745,14 @@ function dato(etiqueta, valor) {
 }
    resultado.innerHTML = `
   <div class="ficha-caballo">
+  <button
+  type="button"
+  class="boton-volver-resultados"
+  onclick="volverAResultadosBusqueda()"
+>
+  ← Volver a resultados
+</button>
+
   <h2>${escapar(caballo.Nombre)}</h2>
   ${sesionAdmin ? '<button class="boton-editar" onclick="editarCaballo(' + caballo.id + ')">Editar caballo</button>' : ''}
 
