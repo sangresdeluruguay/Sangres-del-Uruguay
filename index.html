@@ -603,7 +603,7 @@ body::before {
       
     </section>
  <div class="acciones-registro">
-  <button type="button" class="tarjeta-registro">
+  <button type="button" class="tarjeta-registro" onclick="abrirRegistroCaballo()">
     Registrar caballo
   </button>
 
@@ -619,6 +619,65 @@ body::before {
     const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
     const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
     let sesionAdmin = null;
+    function abrirRegistroCaballo() {
+  const resultado = document.getElementById("resultado");
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+      <h2>Registrar caballo</h2>
+
+      <div class="tabla-ficha">
+        <div class="dato-ficha">
+          <strong>Número de criador</strong>
+          <input
+            id="registroCaballoNumeroCriador"
+            type="text"
+            placeholder="Ej: N0001"
+          >
+        </div>
+      </div>
+
+      <br>
+
+      <button type="button" onclick="validarCriadorParaCaballo()">
+        Continuar
+      </button>
+    </div>
+  `;
+}
+    async function validarCriadorParaCaballo() {
+  const numero = document
+    .getElementById("registroCaballoNumeroCriador")
+    .value
+    .trim()
+    .toUpperCase();
+
+  if (!numero) {
+    alert("Ingresá tu número de criador.");
+    return;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Criadores?select=*&Numero%20de%20Criador=eq." +
+      encodeURIComponent(numero),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const criadores = await respuesta.json();
+
+  if (!respuesta.ok || !criadores.length) {
+    alert("El número de criador no está registrado o todavía no fue aprobado.");
+    return;
+  }
+
+  alert("Criador verificado correctamente.");
+}
 function abrirRegistroCriador() {
   const resultado = document.getElementById("resultado");
 
