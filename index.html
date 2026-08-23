@@ -1260,6 +1260,9 @@ setInterval(() => {
         <button onclick="verCriadoresPendientes()">
   Criadores pendientes
 </button>
+<button onclick="verCaballosPendientes()">
+  Caballos pendientes
+</button>
 
         <button onclick="administrarPropietarios()">
           Propietarios
@@ -1274,6 +1277,252 @@ setInterval(() => {
     behavior: "smooth",
     block: "start"
   });
+}
+    async function verCaballosPendientes() {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const resultado = document.getElementById("resultado");
+
+  resultado.innerHTML = "<p>Cargando caballos pendientes...</p>";
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCaballos?select=*&Estado=eq.pendiente&order=created_at.desc",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const caballos = await respuesta.json();
+
+  if (!respuesta.ok) {
+    alert("No se pudieron cargar los caballos pendientes.");
+    return;
+  }
+
+  if (!caballos.length) {
+    resultado.innerHTML = "<p>No hay caballos pendientes.</p>";
+    return;
+  }
+
+  resultado.innerHTML = `
+    <div class="panel-admin">
+      <h2>Caballos pendientes</h2>
+
+      ${caballos.map(c => `
+        <div class="solicitud-pendiente">
+          <strong>${escapar(c.Nombre || "-")}</strong><br>
+          N.º Criador: ${escapar(c["Numero de Criador"] || "-")}<br>
+          Nacimiento: ${escapar(c.Nacimiento || "-")}<br>
+          Sexo: ${escapar(c.Sexo || "-")}<br>
+          Pelo: ${escapar(c.Pelo || "-")}<br>
+          Propietario: ${escapar(c.Propietario || "-")}<br>
+          Estado: ${escapar(c.Estado || "-")}
+          <br><br>
+
+          <button onclick="aprobarCaballoPendiente(${c.id})">
+            Aprobar
+          </button>
+
+          <button onclick="rechazarCaballoPendiente(${c.id})">
+            Rechazar
+          </button>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+    async function rechazarCaballoPendiente(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCaballos?id=eq." + id,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Estado: "rechazado"
+      })
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    alert("No se pudo rechazar el caballo: " + error);
+    return;
+  }
+
+  alert("Caballo rechazado correctamente.");
+  verCaballosPendientes();
+}
+    async function aprobarCaballoPendiente(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  // 1. Traer la solicitud
+  const respuestaSolicitud = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCaballos?select=*&id=eq." + id,
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const solicitudes = await respuestaSolicitud.json();
+
+  if (!respuestaSolicitud.ok || !solicitudes.length) {
+    alert("No se pudo encontrar la solicitud del caballo.");
+    return;
+  }
+
+  const solicitud = solicitudes[0];
+
+  // 2. Buscar el ID del criador por su número
+  const numeroCriador = (solicitud["Numero de Criador"] || "").trim();
+
+  const respuestaCriador = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/Criadores?select=id&Numero%20de%20Criador=eq." +
+    encodeURIComponent(numeroCriador) +
+    "&limit=1",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const criadores = await respuestaCriador.json();
+
+  if (!respuestaCriador.ok || !criadores.length) {
+    alert("No se encontró el criador " + numeroCriador + ".");
+    return;
+  }
+
+  const criadorId = criadores[0].id;
+
+  // 3. Buscar propietario si ya existe
+  let propietarioId = null;
+
+  if (solicitud.Propietario) {
+    const respuestaPropietario = await fetch(
+      SUPABASE_URL +
+      "/rest/v1/Propietarios?select=id&Nombre=eq." +
+      encodeURIComponent(solicitud.Propietario) +
+      "&limit=1",
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    const propietarios = await respuestaPropietario.json();
+
+    if (respuestaPropietario.ok && propietarios.length) {
+      propietarioId = propietarios[0].id;
+    }
+  }
+
+  // 4. Convertir el sexo al formato de Caballos: H / MC / ME
+  let sexo = (solicitud.Sexo || "").trim().toUpperCase();
+
+  if (sexo === "HEMBRA") sexo = "H";
+  if (sexo === "MACHO ENTERO") sexo = "ME";
+  if (sexo === "MACHO CASTRADO") sexo = "MC";
+
+  // 5. Preparar caballo oficial
+  const caballoNuevo = {
+    Nombre: (solicitud.Nombre || "").toUpperCase(),
+    Sexo: sexo || null,
+    Nacimiento: solicitud.Nacimiento || null,
+    RP: solicitud.RP || null,
+    Raza: solicitud.Raza || null,
+    Pelo: solicitud.Pelo || null,
+    "Criador ID": criadorId,
+    "Propietario ID": propietarioId,
+
+    Padre: solicitud.Padre || null,
+    Madre: solicitud.Madre || null,
+
+    abuelo_paterno: solicitud["Abuelo paterno"] || null,
+    abuela_paterna: solicitud["Abuela paterna"] || null,
+    abuelo_materno: solicitud["Abuelo materno"] || null,
+    abuela_materna: solicitud["Abuela materna"] || null,
+
+    bisabuelo_pp: solicitud["Bisabuelo paterno paterno"] || null,
+    bisabuela_pp: solicitud["Bisabuela paterna paterna"] || null,
+    bisabuelo_pm: solicitud["Bisabuelo paterno materno"] || null,
+    bisabuela_pm: solicitud["Bisabuela paterna materna"] || null,
+
+    bisabuelo_mp: solicitud["Bisabuelo materno paterno"] || null,
+    bisabuela_mp: solicitud["Bisabuela materna paterna"] || null,
+    bisabuelo_mm: solicitud["Bisabuelo materno materno"] || null,
+    bisabuela_mm: solicitud["Bisabuela materna materna"] || null
+  };
+
+  // 6. Guardar en la tabla oficial Caballos
+  const respuestaCaballo = await fetch(
+    SUPABASE_URL + "/rest/v1/Caballos",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(caballoNuevo)
+    }
+  );
+
+  if (!respuestaCaballo.ok) {
+    const error = await respuestaCaballo.text();
+    alert("No se pudo aprobar el caballo: " + error);
+    return;
+  }
+
+  // 7. Marcar solicitud como aprobada
+  const respuestaEstado = await fetch(
+    SUPABASE_URL + "/rest/v1/SolicitudesCaballos?id=eq." + id,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        Estado: "aprobado"
+      })
+    }
+  );
+
+  if (!respuestaEstado.ok) {
+    alert("El caballo se guardó, pero no se pudo actualizar el estado de la solicitud.");
+    return;
+  }
+
+  alert("Caballo aprobado y registrado correctamente.");
+  verCaballosPendientes();
 }
     async function verCriadoresPendientes() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
