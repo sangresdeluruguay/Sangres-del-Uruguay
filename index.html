@@ -640,8 +640,8 @@ textarea {
   <h1>Sangres del Uruguay</h1>
   <p>Registro y genealogía equina</p>
     <nav class="menu-principal">
-  <button type="button">Inicio</button>
-  <button type="button">Buscar caballo</button>
+  <button type="button" onclick="mostrarInicio()">Inicio</button>
+  <button type="button" onclick="mostrarBuscadorCaballos()">🔍 Buscar caballo</button>
   <button type="button">Criadores / Propietarios</button>
   <button type="button">Sobre SDU</button>
   <button type="button">Contacto</button>
@@ -653,7 +653,7 @@ textarea {
 
   <main>
 
-    <section class="buscador">
+   <section class="buscador" id="seccionBuscador" style="display:none;">
      
 
       <div class="buscar-fila">
@@ -693,7 +693,39 @@ textarea {
     .replace(/\s+/g, " ")
     .toUpperCase();
 }
-    
+    function mostrarBuscadorCaballos() {
+  const seccionBuscador = document.getElementById("seccionBuscador");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "block";
+    seccionBuscador.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+}
+    function mostrarInicio() {
+  const seccionBuscador = document.getElementById("seccionBuscador");
+  const resultado = document.getElementById("resultado");
+  const nombreCaballo = document.getElementById("nombreCaballo");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "none";
+  }
+
+  if (resultado) {
+    resultado.innerHTML = "";
+  }
+
+  if (nombreCaballo) {
+    nombreCaballo.value = "";
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
 
