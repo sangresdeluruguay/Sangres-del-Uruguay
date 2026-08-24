@@ -3078,36 +3078,51 @@ function dato(etiqueta, valor) {
   <h2>${escapar(caballo.Nombre)}</h2>
   ${sesionAdmin ? '<button class="boton-editar" onclick="editarCaballo(' + caballo.id + ')">Editar caballo</button>' : ''}
 
-  <div class="tabla-ficha">
-    <div class="dato-ficha">
-      <strong>Criador</strong>
-<span>${criador && criador["Haras - Cabaña"] ? escapar(criador["Haras - Cabaña"]) : "-"}</span>    </div>
+<div class="tabla-ficha">
 
-    <div class="dato-ficha">
-      <strong>N.º Criador</strong>
-     <span>${criador && criador["Numero de Criador"] ? escapar(criador["Numero de Criador"]) : "-"}</span>
-    </div>
-
-    <div class="dato-ficha">
-      <strong>Nacimiento</strong>
-      <span>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</span>
-    </div>
-
-    <div class="dato-ficha">
-      <strong>Pelo</strong>
-      <span>${caballo.Pelo ? escapar(caballo.Pelo) : "-"}</span>
-    </div>
-
-    <div class="dato-ficha">
-      <strong>Propietario</strong>
-      <span>${propietario && propietario.Nombre ? escapar(propietario.Nombre) : "-"}</span>
-    </div>
-
-    <div class="dato-ficha">
-      <strong>RP</strong>
-      <span>${caballo.RP ? escapar(caballo.RP) : "-"}</span>
-    </div>
+  <div class="dato-ficha">
+    <strong>Criador</strong>
+    <span>${criador && criador["Haras - Cabaña"] ? escapar(criador["Haras - Cabaña"]) : "-"}</span>
   </div>
+
+  <div class="dato-ficha">
+    <strong>N.º Criador</strong>
+    <span>${criador && criador["Numero de Criador"] ? escapar(criador["Numero de Criador"]) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>Propietario</strong>
+    <span>${propietario && propietario.Nombre ? escapar(propietario.Nombre) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>Nacimiento</strong>
+    <span>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>Raza</strong>
+    <span>${caballo.Raza ? escapar(caballo.Raza) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>Sexo</strong>
+    <span>${caballo.Sexo ? escapar(caballo.Sexo) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>Pelo</strong>
+    <span>${caballo.Pelo ? escapar(caballo.Pelo) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+    <strong>RP</strong>
+    <span>${caballo.RP ? escapar(caballo.RP) : "-"}</span>
+  </div>
+
+  <div class="dato-ficha">
+  </div>
+
 </div>
 
   <div class="pedigree">
