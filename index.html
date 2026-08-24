@@ -534,7 +534,7 @@ body::before {
 
   .pedigree {
     overflow: visible !important;
-    transform: scale(0.88);
+    transform: none;
     transform-origin: top center;
   }
 
@@ -544,8 +544,8 @@ body::before {
   }
 }
     #resultado.modo-pdf {
-  width: 1100px !important;
-  max-width: 1100px !important;
+ width: 100% !important;
+max-width: 100% !important;
   overflow: visible !important;
   margin: 0 auto !important;
 }
@@ -555,7 +555,13 @@ body::before {
   overflow: visible !important;
   transform: none !important;
 }
-
+#resultado.modo-pdf .boton-pdf,
+#resultado.modo-pdf .boton-editar,
+#resultado.modo-pdf .boton-volver-resultados,
+#resultado.modo-pdf .buscar-fila,
+#resultado.modo-pdf .buscador {
+  display: none !important;
+}
 #resultado.modo-pdf .ficha-caballo {
   width: 100% !important;
 }
@@ -2457,7 +2463,7 @@ elemento.classList.add("modo-pdf");
     jsPDF: {
       unit: "mm",
       format: "a4",
-      orientation: "landscape"
+      orientation: "portrait"
     },
 
     pagebreak: {
@@ -3077,7 +3083,7 @@ function dato(etiqueta, valor) {
 
   <h2>${escapar(caballo.Nombre)}</h2>
   ${sesionAdmin ? '<button class="boton-editar" onclick="editarCaballo(' + caballo.id + ')">Editar caballo</button>' : ''}
-
+<button type="button" class="boton-pdf" onclick="generarPDF()">🖨 Imprimir / PDF</button>
 <div class="tabla-ficha">
 
   <div class="dato-ficha">
