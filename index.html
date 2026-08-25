@@ -648,7 +648,7 @@ textarea {
     <nav class="menu-principal">
   <button type="button" onclick="mostrarInicio()">Inicio</button>
   <button type="button" onclick="mostrarBuscadorCaballos()">🔍 Buscar caballo</button>
-  <button type="button">Criadores / Propietarios</button>
+  <button type="button" onclick="mostrarBusquedaCriadoresPropietarios()">Criadores / Propietarios</button>
   <button type="button">Sobre SDU</button>
   <button type="button">Contacto</button>
 </nav>
@@ -731,6 +731,166 @@ textarea {
     top: 0,
     behavior: "smooth"
   });
+}
+    function mostrarBusquedaCriadoresPropietarios() {
+  const seccionBuscador = document.getElementById("seccionBuscador");
+  const resultado = document.getElementById("resultado");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "none";
+  }
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+      <h2>Criadores / Propietarios</h2>
+
+      <div class="buscar-fila">
+        <input
+          id="buscarPersonaCaballos"
+          type="text"
+          placeholder="N.º de criador, criador, haras o propietario"
+        >
+        <button type="button" onclick="buscarCaballosPorPersona()">
+          Buscar
+        </button>
+      </div>
+
+      <div id="resultadoPersonaCaballos"></div>
+    </div>
+  `;
+
+  document.getElementById("buscarPersonaCaballos").focus();
+}
+    async function buscarCaballosPorPersona() {
+  const input = document.getElementById("buscarPersonaCaballos");
+  const resultadoPersona = document.getElementById("resultadoPersonaCaballos");
+  const texto = normalizarTexto(input.value);
+
+  if (!texto) {
+    resultadoPersona.innerHTML = "<p>Ingresá un criador, número de criador, haras o propietario.</p>";
+    return;
+  }
+
+  resultadoPersona.innerHTML = "<p>Buscando...</p>";
+      const respuestaCriadores = await fetch(
+  SUPABASE_URL + "/rest/v1/Criadores?select=*",
+  {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    }
+  }
+);
+
+const todosCriadores = await respuestaCriadores.json();
+
+const criadoresEncontrados = todosCriadores.filter(c => {
+  const nombre = normalizarTexto(c.Nombre);
+  const numero = normalizarTexto(c["Numero de Criador"]);
+  const haras = normalizarTexto(c["Haras - Cabaña"]);
+
+  return (
+    nombre.includes(texto) ||
+    numero.includes(texto) ||
+    haras.includes(texto)
+  );
+});
+      const idsCriadores = criadoresEncontrados.map(c => c.id);
+
+let caballosPorCriador = [];
+
+if (idsCriadores.length > 0) {
+  const filtrosCriador = idsCriadores
+    .map(id => `"Criador ID".eq.${id}`)
+    .join(",");
+
+  const respuestaCaballosCriador = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Caballos?select=*&or=(" +
+      encodeURIComponent(filtrosCriador) +
+      ")&order=Nombre.asc",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  caballosPorCriador = await respuestaCaballosCriador.json();
+}
+}
+    const respuestaPropietarios = await fetch(
+  SUPABASE_URL + "/rest/v1/Propietarios?select=*",
+  {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    }
+  }
+);
+
+const todosPropietarios = await respuestaPropietarios.json();
+
+const propietariosEncontrados = todosPropietarios.filter(p => {
+  const nombre = normalizarTexto(p.Nombre);
+  return nombre.includes(texto);
+});
+
+const idsPropietarios = propietariosEncontrados.map(p => p.id);
+
+let caballosPorPropietario = [];
+
+if (idsPropietarios.length > 0) {
+  const filtrosPropietario = idsPropietarios
+    .map(id => `"Propietario ID".eq.${id}`)
+    .join(",");
+
+  const respuestaCaballosPropietario = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Caballos?select=*&or=(" +
+      encodeURIComponent(filtrosPropietario) +
+      ")&order=Nombre.asc",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  caballosPorPropietario = await respuestaCaballosPropietario.json();
+}
+    const todosCaballosEncontrados = [
+  ...caballosPorCriador,
+  ...caballosPorPropietario
+];
+
+const caballosUnicos = Array.from(
+  new Map(
+    todosCaballosEncontrados.map(caballo => [caballo.id, caballo])
+  ).values()
+);
+
+if (caballosUnicos.length === 0) {
+  resultadoPersona.innerHTML =
+    "<p>No se encontraron caballos registrados con ese criador, número de criador, haras o propietario.</p>";
+  return;
+}
+
+resultadoPersona.innerHTML = `
+  <h3>Caballos encontrados</h3>
+
+  ${caballosUnicos.map(caballo => `
+    <p>
+      <a href="#"
+         onclick="document.getElementById('nombreCaballo').value='${escapar(caballo.Nombre)}'; buscarCaballo(); return false;">
+        ${escapar(caballo.Nombre)}
+      </a>
+    </p>
+  `).join("")}
+`;
+
 }
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
