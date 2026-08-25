@@ -1468,7 +1468,32 @@ document.getElementById("caballoBAMM").value = "";
 }
     
 function abrirRegistroCriador() {
+
   const resultado = document.getElementById("resultado");
+
+  const seccionBuscador = document.getElementById("seccionBuscador");
+
+  const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
+
+  if (seccionBuscador) {
+
+    seccionBuscador.style.display = "block";
+
+    const filaBuscador = seccionBuscador.querySelector(".buscar-fila");
+
+    if (filaBuscador) {
+
+      filaBuscador.style.display = "none";
+
+    }
+
+  }
+
+  if (seccionCriadoresPropietarios) {
+
+    seccionCriadoresPropietarios.style.display = "none";
+
+  }
 
   resultado.innerHTML = `
     <div class="ficha-caballo">
