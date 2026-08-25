@@ -631,6 +631,55 @@ max-width: 100% !important;
 textarea {
   text-transform: uppercase;
 }
+    .panel-admin {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 28px;
+  background: rgba(255, 255, 255, 0.88);
+  border-radius: 18px;
+  box-sizing: border-box;
+}
+
+.panel-admin h2 {
+  text-align: center;
+  margin-bottom: 24px;
+  color: #17233b;
+}
+
+.panel-admin-opciones {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.panel-admin-opciones button {
+  width: 100%;
+  min-height: 58px;
+  padding: 12px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #17233b;
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel-admin-opciones button:hover {
+  transform: translateY(-1px);
+  opacity: 0.92;
+}
+    .panel-admin {
+  max-width: 820px;
+  margin: 20px auto;
+  padding: 32px;
+  background: rgba(255, 255, 255, 0.92);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(23, 35, 59, 0.15);
+}
+
+.panel-admin-opciones {
+  margin-top: 18px;
+}
   </style>
 </head>
 
@@ -1611,7 +1660,21 @@ setInterval(() => {
   }
 
   const resultado = document.getElementById("resultado");
+        const seccionBuscador = document.getElementById("seccionBuscador");
+const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
+if (seccionBuscador) {
+  seccionBuscador.style.display = "block";
 
+  const filaBuscador = seccionBuscador.querySelector(".buscar-fila");
+
+  if (filaBuscador) {
+    filaBuscador.style.display = "none";
+  }
+}
+
+if (seccionCriadoresPropietarios) {
+  seccionCriadoresPropietarios.style.display = "none";
+}
   resultado.innerHTML = `
     <div class="panel-admin">
 
