@@ -578,7 +578,16 @@ max-width: 100% !important;
   overflow: visible !important;
   box-sizing: border-box;
 }
+#resultado.modo-pdf .pedigree {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 8px 10px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+}
 
+#resultado.modo-pdf .generacion {
+  min-width: 0 !important;
+}
 #resultado.modo-pdf .fila {
   width: 100% !important;
   min-width: 0 !important;
