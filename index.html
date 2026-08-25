@@ -819,7 +819,6 @@ if (idsCriadores.length > 0) {
 
   caballosPorCriador = await respuestaCaballosCriador.json();
 }
-}
     const respuestaPropietarios = await fetch(
   SUPABASE_URL + "/rest/v1/Propietarios?select=*",
   {
