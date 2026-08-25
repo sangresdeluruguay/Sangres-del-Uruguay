@@ -902,19 +902,81 @@ if (caballosUnicos.length === 0) {
   return;
 }
 
+const criadorEncontrado = criadoresEncontrados[0] || null;
+const propietarioEncontrado = propietariosEncontrados[0] || null;
+
 resultadoPersona.innerHTML = `
-  <h3>Caballos encontrados</h3>
+  <div class="ficha-caballo">
 
-  ${caballosUnicos.map(caballo => `
-    <p>
-      <a href="#"
-         onclick="document.getElementById('nombreCaballo').value='${escapar(caballo.Nombre)}'; buscarCaballo(); return false;">
-        ${escapar(caballo.Nombre)}
-      </a>
-    </p>
-  `).join("")}
+    ${criadorEncontrado ? `
+      <h2>${escapar(criadorEncontrado["Haras - Cabaña"] || criadorEncontrado.Nombre || "CRIADOR")}</h2>
+
+      <div class="tabla-ficha">
+        <div class="dato-ficha">
+          <strong>Criador</strong>
+          <span>${escapar(criadorEncontrado.Nombre || "-")}</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>N.º Criador</strong>
+          <span>${escapar(criadorEncontrado["Numero de Criador"] || "-")}</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Haras / Cabaña</strong>
+          <span>${escapar(criadorEncontrado["Haras - Cabaña"] || "-")}</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Caballos registrados</strong>
+          <span>${caballosUnicos.length}</span>
+        </div>
+      </div>
+    ` : propietarioEncontrado ? `
+      <h2>${escapar(propietarioEncontrado.Nombre || "PROPIETARIO")}</h2>
+
+      <div class="tabla-ficha">
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <span>${escapar(propietarioEncontrado.Nombre || "-")}</span>
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Caballos registrados</strong>
+          <span>${caballosUnicos.length}</span>
+        </div>
+      </div>
+    ` : ""}
+
+    <h3>Caballos registrados</h3>
+
+    ${caballosUnicos.map(caballo => `
+      <div class="resultado-item">
+        <p>
+          <a href="#"
+             onclick="document.getElementById('seccionCriadoresPropietarios').style.display='none'; document.getElementById('seccionBuscador').style.display='block'; document.getElementById('nombreCaballo').value='${escapar(caballo.Nombre)}'; buscarCaballo(); return false;">
+            <strong>${escapar(caballo.Nombre)}</strong>
+          </a>
+        </p>
+
+        <p>
+          Nacimiento: ${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}
+          &nbsp; | &nbsp;
+          Raza: ${caballo.Raza ? escapar(caballo.Raza) : "-"}
+          &nbsp; | &nbsp;
+          Sexo: ${caballo.Sexo ? escapar(caballo.Sexo) : "-"}
+        </p>
+
+        <p>
+          Padre: ${caballo.Padre ? escapar(caballo.Padre) : "-"}
+          &nbsp; | &nbsp;
+          Madre: ${caballo.Madre ? escapar(caballo.Madre) : "-"}
+        </p>
+      </div>
+    `).join("")}
+
+  </div>
 `;
-
 }
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
