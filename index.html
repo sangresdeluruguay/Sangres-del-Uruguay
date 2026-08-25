@@ -773,6 +773,12 @@ const resultado = document.getElementById("resultado");
       
   if (seccionBuscador) {
     seccionBuscador.style.display = "block";
+
+    const filaBuscador = seccionBuscador.querySelector(".buscar-fila");
+
+if (filaBuscador) {
+  filaBuscador.style.display = "";
+}
     seccionBuscador.scrollIntoView({
       behavior: "smooth",
       block: "start"
