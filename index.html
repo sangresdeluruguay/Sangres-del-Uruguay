@@ -674,6 +674,22 @@ textarea {
       <div id="resultado"></div>
       
     </section>
+    
+    <section class="buscador" id="seccionCriadoresPropietarios" style="display:none;">
+
+  <div class="buscar-fila">
+    <input
+      id="buscarPersonaCaballos"
+      type="text"
+      placeholder="N.º de criador, criador, haras o propietario"
+    >
+    <button type="button" onclick="buscarCaballosPorPersona()">Buscar</button>
+  </div>
+
+  <div id="resultadoPersonaCaballos"></div>
+
+</section>
+    
  <div class="acciones-registro">
   <button type="button" class="tarjeta-registro" onclick="abrirRegistroCaballo()">
     Registrar caballo
@@ -736,34 +752,39 @@ const resultado = document.getElementById("resultado");
     behavior: "smooth"
   });
 }
-    function mostrarBusquedaCriadoresPropietarios() {
+ function mostrarBusquedaCriadoresPropietarios() {
   const seccionBuscador = document.getElementById("seccionBuscador");
+  const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
   const resultado = document.getElementById("resultado");
 
   if (seccionBuscador) {
     seccionBuscador.style.display = "none";
   }
 
-  resultado.innerHTML = `
-    <div class="ficha-caballo">
-      <h2>Criadores / Propietarios</h2>
+  if (resultado) {
+    resultado.innerHTML = "";
+  }
 
-      <div class="buscar-fila">
-        <input
-          id="buscarPersonaCaballos"
-          type="text"
-          placeholder="N.º de criador, criador, haras o propietario"
-        >
-        <button type="button" onclick="buscarCaballosPorPersona()">
-          Buscar
-        </button>
-      </div>
+  if (seccionCriadoresPropietarios) {
+    seccionCriadoresPropietarios.style.display = "block";
+    seccionCriadoresPropietarios.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
 
-      <div id="resultadoPersonaCaballos"></div>
-    </div>
-  `;
+  const input = document.getElementById("buscarPersonaCaballos");
 
-  document.getElementById("buscarPersonaCaballos").focus();
+  if (input) {
+    input.value = "";
+    input.focus();
+  }
+
+  const resultadoPersona = document.getElementById("resultadoPersonaCaballos");
+
+  if (resultadoPersona) {
+    resultadoPersona.innerHTML = "";
+  }
 }
     async function buscarCaballosPorPersona() {
   const input = document.getElementById("buscarPersonaCaballos");
