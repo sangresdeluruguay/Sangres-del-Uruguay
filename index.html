@@ -709,6 +709,7 @@ textarea {
     let sesionAdmin = null;
     let ultimaBusquedaCaballos = "";
     let abrirCaballoDirecto = false;
+    let origenFichaCaballo = "";
     function normalizarTexto(texto) {
   return String(texto || "")
     .trim()
@@ -785,6 +786,29 @@ const resultado = document.getElementById("resultado");
   if (resultadoPersona) {
     resultadoPersona.innerHTML = "";
   }
+}
+    function volverACriadoresPropietarios() {
+  const seccionBuscador = document.getElementById("seccionBuscador");
+  const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
+  const resultado = document.getElementById("resultado");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "none";
+  }
+
+  if (resultado) {
+    resultado.innerHTML = "";
+  }
+
+  if (seccionCriadoresPropietarios) {
+    seccionCriadoresPropietarios.style.display = "block";
+    seccionCriadoresPropietarios.scrollIntoView({
+      behavior: "smooth",
+      block: "start"
+    });
+  }
+
+  origenFichaCaballo = "";
 }
     async function buscarCaballosPorPersona() {
   const input = document.getElementById("buscarPersonaCaballos");
@@ -948,35 +972,83 @@ resultadoPersona.innerHTML = `
       </div>
     ` : ""}
 
-    <h3>Caballos registrados</h3>
+<h3>Caballos registrados</h3>
 
-    ${caballosUnicos.map(caballo => `
-      <div class="resultado-item">
-        <p>
-          <a href="#"
-             onclick="document.getElementById('seccionCriadoresPropietarios').style.display='none'; document.getElementById('seccionBuscador').style.display='block'; document.getElementById('nombreCaballo').value='${escapar(caballo.Nombre)}'; buscarCaballo(); return false;">
-            <strong>${escapar(caballo.Nombre)}</strong>
-          </a>
-        </p>
+<div class="tabla-resultados-wrap">
 
-        <p>
-          Nacimiento: ${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}
-          &nbsp; | &nbsp;
-          Raza: ${caballo.Raza ? escapar(caballo.Raza) : "-"}
-          &nbsp; | &nbsp;
-          Sexo: ${caballo.Sexo ? escapar(caballo.Sexo) : "-"}
-        </p>
+  <table class="tabla-resultados">
 
-        <p>
-          Padre: ${caballo.Padre ? escapar(caballo.Padre) : "-"}
-          &nbsp; | &nbsp;
-          Madre: ${caballo.Madre ? escapar(caballo.Madre) : "-"}
-        </p>
-      </div>
-    `).join("")}
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Nacimiento</th>
+        <th>Raza</th>
+        <th>Sexo</th>
+        <th>Padre</th>
+        <th>Madre</th>
+      </tr>
+    </thead>
+
+    <tbody>
+
+      ${caballosUnicos.map(caballo => `
+        <tr>
+
+          <td>
+            <button
+              type="button"
+              class="enlace-genealogia nombre-principal enlace-persona-caballo"
+              data-caballo="${escapar(caballo.Nombre)}"
+            >
+              ${escapar(caballo.Nombre)}
+            </button>
+          </td>
+
+          <td>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</td>
+
+          <td>${caballo.Raza ? escapar(caballo.Raza) : "-"}</td>
+
+          <td>${caballo.Sexo ? escapar(caballo.Sexo) : "-"}</td>
+
+          <td>${caballo.Padre ? escapar(caballo.Padre) : "-"}</td>
+
+          <td>${caballo.Madre ? escapar(caballo.Madre) : "-"}</td>
+
+        </tr>
+      `).join("")}
+
+    </tbody>
+
+  </table>
+
+</div>
 
   </div>
 `;
+      document
+
+  .querySelectorAll(".enlace-persona-caballo")
+
+  .forEach(boton => {
+
+    boton.addEventListener("click", function() {
+
+      const nombre = this.dataset.caballo;
+      
+origenFichaCaballo = "criadores";
+      abrirCaballoDirecto = true;
+
+      document.getElementById("seccionCriadoresPropietarios").style.display = "none";
+
+      document.getElementById("seccionBuscador").style.display = "block";
+
+      document.getElementById("nombreCaballo").value = nombre;
+
+      buscarCaballo();
+
+    });
+
+  });
 }
     function abrirRegistroCaballo() {
   const resultado = document.getElementById("resultado");
@@ -3319,13 +3391,23 @@ function dato(etiqueta, valor) {
 }
    resultado.innerHTML = `
   <div class="ficha-caballo">
+${origenFichaCaballo === "criadores" ? `
   <button
-  type="button"
-  class="boton-volver-resultados"
-  onclick="volverAResultadosBusqueda()"
->
-  ← Volver a resultados
-</button>
+    type="button"
+    class="boton-volver-resultados"
+    onclick="volverACriadoresPropietarios()"
+  >
+    ← Volver a criador / propietario
+  </button>
+` : `
+  <button
+    type="button"
+    class="boton-volver-resultados"
+    onclick="volverAResultadosBusqueda()"
+  >
+    ← Volver a resultados
+  </button>
+`}
 
   <h2>${escapar(caballo.Nombre)}</h2>
   ${sesionAdmin ? '<button class="boton-editar" onclick="editarCaballo(' + caballo.id + ')">Editar caballo</button>' : ''}
