@@ -719,6 +719,7 @@ textarea {
     function mostrarBuscadorCaballos() {
   const seccionBuscador = document.getElementById("seccionBuscador");
 const resultado = document.getElementById("resultado");
+      const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
       
   if (seccionBuscador) {
     seccionBuscador.style.display = "block";
@@ -727,6 +728,9 @@ const resultado = document.getElementById("resultado");
       block: "start"
     });
   }
+      if (seccionCriadoresPropietarios) {
+  seccionCriadoresPropietarios.style.display = "none";
+}
       if (resultado) {
   resultado.innerHTML = "";
 }
@@ -735,11 +739,14 @@ const resultado = document.getElementById("resultado");
   const seccionBuscador = document.getElementById("seccionBuscador");
   const resultado = document.getElementById("resultado");
   const nombreCaballo = document.getElementById("nombreCaballo");
+      const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
 
   if (seccionBuscador) {
     seccionBuscador.style.display = "none";
   }
-
+if (seccionCriadoresPropietarios) {
+  seccionCriadoresPropietarios.style.display = "none";
+}
   if (resultado) {
     resultado.innerHTML = "";
   }
