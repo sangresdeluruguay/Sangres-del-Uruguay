@@ -701,7 +701,8 @@ textarea {
 }
     function mostrarBuscadorCaballos() {
   const seccionBuscador = document.getElementById("seccionBuscador");
-
+const resultado = document.getElementById("resultado");
+      
   if (seccionBuscador) {
     seccionBuscador.style.display = "block";
     seccionBuscador.scrollIntoView({
@@ -709,6 +710,9 @@ textarea {
       block: "start"
     });
   }
+      if (resultado) {
+  resultado.innerHTML = "";
+}
 }
     function mostrarInicio() {
   const seccionBuscador = document.getElementById("seccionBuscador");
