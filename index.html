@@ -2709,14 +2709,14 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     });
   });
 }
-    async function buscarSugerenciasAncestros(texto, sexoPermitido) {
+async function buscarSugerenciasAncestros(texto, sexoPermitido) {
   const busqueda = texto.trim().toLowerCase();
 
   if (busqueda.length < 3) return [];
 
   const respuesta = await fetch(
     SUPABASE_URL +
-    "/rest/v1/Caballos?select=Nombre,Sexo,Padre,Madre,abuelo_paterno,abuela_paterno,abuelo_materno,abuela_materna&limit=1000",
+    "/rest/v1/Caballos?select=Nombre,Sexo,Padre,Madre,abuelo_paterno,abuela_paterno,abuelo_materno,abuela_materna,bisabuelo_pp,bisabuela_pp,bisabuelo_pm,bisabuela_pm,bisabuelo_mp,bisabuela_mp,bisabuelo_mm,bisabuela_mm&limit=1000",
     {
       headers: {
         apikey: SUPABASE_KEY,
@@ -2729,61 +2729,93 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
 
   const caballos = await respuesta.json();
 
-  const nombres = new Set();
+  const encontrados = new Map();
+
+  function agregar(nombre, padre, madre) {
+    if (!nombre) return;
+
+    if (!nombre.toLowerCase().includes(busqueda)) return;
+
+    const clave = nombre.trim().toLowerCase();
+
+    if (!encontrados.has(clave)) {
+      encontrados.set(clave, {
+        Nombre: nombre,
+        Padre: padre || "",
+        Madre: madre || ""
+      });
+    } else {
+      const existente = encontrados.get(clave);
+
+      if (!existente.Padre && padre) existente.Padre = padre;
+      if (!existente.Madre && madre) existente.Madre = madre;
+    }
+  }
 
   caballos.forEach(function (caballo) {
 
     if (sexoPermitido === "M") {
-      if (
-        (caballo.Sexo === "ME" || caballo.Sexo === "MC") &&
-        caballo.Nombre &&
-        caballo.Nombre.toLowerCase().includes(busqueda)
-      ) {
-        nombres.add(caballo.Nombre);
+
+      if (caballo.Sexo === "ME" || caballo.Sexo === "MC") {
+        agregar(
+          caballo.Nombre,
+          caballo.Padre,
+          caballo.Madre
+        );
       }
 
-      [
+      agregar(
         caballo.Padre,
         caballo.abuelo_paterno,
-        caballo.abuelo_materno
-      ].forEach(function (nombre) {
-        if (
-          nombre &&
-          nombre.toLowerCase().includes(busqueda)
-        ) {
-          nombres.add(nombre);
-        }
-      });
+        caballo.abuela_paterno
+      );
+
+      agregar(
+        caballo.abuelo_paterno,
+        caballo.bisabuelo_pp,
+        caballo.bisabuela_pp
+      );
+
+      agregar(
+        caballo.abuelo_materno,
+        caballo.bisabuelo_mp,
+        caballo.bisabuela_mp
+      );
     }
 
     if (sexoPermitido === "H") {
-      if (
-        caballo.Sexo === "H" &&
-        caballo.Nombre &&
-        caballo.Nombre.toLowerCase().includes(busqueda)
-      ) {
-        nombres.add(caballo.Nombre);
+
+      if (caballo.Sexo === "H") {
+        agregar(
+          caballo.Nombre,
+          caballo.Padre,
+          caballo.Madre
+        );
       }
 
-      [
+      agregar(
         caballo.Madre,
-        caballo.abuela_paterno,
+        caballo.abuelo_materno,
         caballo.abuela_materna
-      ].forEach(function (nombre) {
-        if (
-          nombre &&
-          nombre.toLowerCase().includes(busqueda)
-        ) {
-          nombres.add(nombre);
-        }
-      });
+      );
+
+      agregar(
+        caballo.abuela_paterno,
+        caballo.bisabuelo_pm,
+        caballo.bisabuela_pm
+      );
+
+      agregar(
+        caballo.abuela_materna,
+        caballo.bisabuelo_mm,
+        caballo.bisabuela_mm
+      );
     }
   });
 
-  return Array.from(nombres)
-    .sort((a, b) => a.localeCompare(b))
-    .slice(0, 8)
-    .map(nombre => ({ Nombre: nombre }));
+  return Array.from(encontrados.values())
+    .sort((a, b) => a.Nombre.localeCompare(b.Nombre))
+    .slice(0, 8);
 }
     function activarSugerenciasCampoPedigree(idInput, sexoPermitido) {
   const input = document.getElementById(idInput);
@@ -2811,12 +2843,50 @@ const sugerencias = await buscarSugerenciasAncestros(texto, sexoPermitido);
       boton.type = "button";
       boton.textContent = caballo.Nombre;
 
-      boton.addEventListener("pointerdown", function (event) {
-        event.preventDefault();
+     boton.addEventListener("pointerdown", function (event) {
+  event.preventDefault();
 
-        input.value = caballo.Nombre || "";
-        contenedor.innerHTML = "";
-      });
+  input.value = caballo.Nombre || "";
+
+  const destinos = {
+    editAbueloPaterno: {
+      padre: "editBisabueloPP",
+      madre: "editBisabuelaPP"
+    },
+
+    editAbuelaPaterna: {
+      padre: "editBisabueloPM",
+      madre: "editBisabuelaPM"
+    },
+
+    editAbueloMaterno: {
+      padre: "editBisabueloMP",
+      madre: "editBisabuelaMP"
+    },
+
+    editAbuelaMaterna: {
+      padre: "editBisabueloMM",
+      madre: "editBisabuelaMM"
+    }
+  };
+
+  const destino = destinos[idInput];
+
+  if (destino) {
+    const campoPadre = document.getElementById(destino.padre);
+    const campoMadre = document.getElementById(destino.madre);
+
+    if (campoPadre) {
+      campoPadre.value = caballo.Padre || "";
+    }
+
+    if (campoMadre) {
+      campoMadre.value = caballo.Madre || "";
+    }
+  }
+
+  contenedor.innerHTML = "";
+});
 
       contenedor.appendChild(boton);
     });
