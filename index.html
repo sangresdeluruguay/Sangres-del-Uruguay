@@ -1530,19 +1530,32 @@ async function buscarPedigreeRegistroPublico(texto, sexoPermitido) {
   }
 );
 
-let datosPedigree = [];
-
-if (respuestaPedigree.ok) {
-  datosPedigree = await respuestaPedigree.json();
+if (!respuestaPedigree.ok) {
+  console.error(
+    "Error leyendo pedigree:",
+    await respuestaPedigree.text()
+  );
+  return [];
 }
 
-const registrados = datosPedigree.filter(
-  caballo => caballo.Origen === "registrado"
-);
+let datosPedigree = await respuestaPedigree.json();
 
-const pendientes = datosPedigree.filter(
-  caballo => caballo.Origen === "pendiente"
-);
+if (typeof datosPedigree === "string") {
+  datosPedigree = JSON.parse(datosPedigree);
+}
+
+if (!Array.isArray(datosPedigree)) {
+  console.error("Pedigree recibido no es una lista:", datosPedigree);
+  return [];
+}
+
+const registrados = datosPedigree.filter(function(caballo) {
+  return String(caballo.Origen || "").toLowerCase() === "registrado";
+});
+
+const pendientes = datosPedigree.filter(function(caballo) {
+  return String(caballo.Origen || "").toLowerCase() === "pendiente";
+});
 
   const encontrados = new Map();
 
