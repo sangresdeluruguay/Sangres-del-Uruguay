@@ -1487,6 +1487,484 @@ origenFichaCaballo = "criadores";
     </div>
   `;
 }
+   // ==========================================================
+// SUGERENCIAS DE PEDIGREE - REGISTRO PUBLICO
+// Busca en:
+// 1) Caballos aprobados
+// 2) Solicitudes pendientes
+// 3) Ancestros que aparecen dentro de esos pedigrees
+// ==========================================================
+
+async function buscarPedigreeRegistroPublico(texto, sexoPermitido) {
+  const busqueda = texto.trim().toLowerCase();
+
+  if (busqueda.length < 3) return [];
+
+  async function obtenerDatos(url) {
+    try {
+      const respuesta = await fetch(url, {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: "Bearer " + SUPABASE_KEY
+        }
+      });
+
+      if (!respuesta.ok) return [];
+
+      return await respuesta.json();
+    } catch (error) {
+      return [];
+    }
+  }
+
+  const [registrados, pendientes] = await Promise.all([
+    obtenerDatos(
+      SUPABASE_URL +
+      "/rest/v1/Caballos?select=*&limit=1000"
+    ),
+
+    obtenerDatos(
+      SUPABASE_URL +
+      "/rest/v1/SolicitudesCaballos?select=*&Estado=eq.pendiente&limit=1000"
+    )
+  ]);
+
+  const encontrados = new Map();
+
+  function agregar(
+    nombre,
+    sexo,
+    padre,
+    madre,
+    abueloPaterno,
+    abuelaPaterna,
+    abueloMaterno,
+    abuelaMaterna
+  ) {
+    if (!nombre) return;
+
+    const nombreLimpio = String(nombre).trim();
+
+    if (!nombreLimpio) return;
+
+    if (!nombreLimpio.toLowerCase().includes(busqueda)) return;
+
+    if (sexoPermitido === "M" && sexo === "H") return;
+
+    if (
+      sexoPermitido === "H" &&
+      (sexo === "ME" || sexo === "MC" || sexo === "M")
+    ) {
+      return;
+    }
+
+    const clave = nombreLimpio.toLowerCase();
+
+    const nuevo = {
+      Nombre: nombreLimpio,
+      Padre: padre || "",
+      Madre: madre || "",
+      AbueloPaterno: abueloPaterno || "",
+      AbuelaPaterna: abuelaPaterna || "",
+      AbueloMaterno: abueloMaterno || "",
+      AbuelaMaterna: abuelaMaterna || ""
+    };
+
+    if (!encontrados.has(clave)) {
+      encontrados.set(clave, nuevo);
+      return;
+    }
+
+    const existente = encontrados.get(clave);
+
+    if (!existente.Padre && nuevo.Padre) {
+      existente.Padre = nuevo.Padre;
+    }
+
+    if (!existente.Madre && nuevo.Madre) {
+      existente.Madre = nuevo.Madre;
+    }
+
+    if (!existente.AbueloPaterno && nuevo.AbueloPaterno) {
+      existente.AbueloPaterno = nuevo.AbueloPaterno;
+    }
+
+    if (!existente.AbuelaPaterna && nuevo.AbuelaPaterna) {
+      existente.AbuelaPaterna = nuevo.AbuelaPaterna;
+    }
+
+    if (!existente.AbueloMaterno && nuevo.AbueloMaterno) {
+      existente.AbueloMaterno = nuevo.AbueloMaterno;
+    }
+
+    if (!existente.AbuelaMaterna && nuevo.AbuelaMaterna) {
+      existente.AbuelaMaterna = nuevo.AbuelaMaterna;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // CABALLOS YA APROBADOS
+  // ----------------------------------------------------------
+
+  registrados.forEach(function (caballo) {
+
+    // Caballo registrado como individuo
+    agregar(
+      caballo.Nombre,
+      caballo.Sexo,
+      caballo.Padre,
+      caballo.Madre,
+      caballo.abuelo_paterno,
+      caballo.abuela_paterno,
+      caballo.abuelo_materno,
+      caballo.abuela_materna
+    );
+
+    // PADRE
+    agregar(
+      caballo.Padre,
+      "M",
+      caballo.abuelo_paterno,
+      caballo.abuela_paterno,
+      caballo.bisabuelo_pp,
+      caballo.bisabuela_pp,
+      caballo.bisabuelo_pm,
+      caballo.bisabuela_pm
+    );
+
+    // MADRE
+    agregar(
+      caballo.Madre,
+      "H",
+      caballo.abuelo_materno,
+      caballo.abuela_materna,
+      caballo.bisabuelo_mp,
+      caballo.bisabuela_mp,
+      caballo.bisabuelo_mm,
+      caballo.bisabuela_mm
+    );
+
+    // ABUELO PATERNO
+    agregar(
+      caballo.abuelo_paterno,
+      "M",
+      caballo.bisabuelo_pp,
+      caballo.bisabuela_pp
+    );
+
+    // ABUELA PATERNA
+    agregar(
+      caballo.abuela_paterno,
+      "H",
+      caballo.bisabuelo_pm,
+      caballo.bisabuela_pm
+    );
+
+    // ABUELO MATERNO
+    agregar(
+      caballo.abuelo_materno,
+      "M",
+      caballo.bisabuelo_mp,
+      caballo.bisabuela_mp
+    );
+
+    // ABUELA MATERNA
+    agregar(
+      caballo.abuela_materna,
+      "H",
+      caballo.bisabuelo_mm,
+      caballo.bisabuela_mm
+    );
+
+    // BISABUELOS MACHOS
+    agregar(caballo.bisabuelo_pp, "M");
+    agregar(caballo.bisabuelo_pm, "M");
+    agregar(caballo.bisabuelo_mp, "M");
+    agregar(caballo.bisabuelo_mm, "M");
+
+    // BISABUELAS HEMBRAS
+    agregar(caballo.bisabuela_pp, "H");
+    agregar(caballo.bisabuela_pm, "H");
+    agregar(caballo.bisabuela_mp, "H");
+    agregar(caballo.bisabuela_mm, "H");
+  });
+
+  // ----------------------------------------------------------
+  // CABALLOS TODAVIA PENDIENTES
+  // ----------------------------------------------------------
+
+  pendientes.forEach(function (caballo) {
+
+    // Caballo pendiente como individuo
+    agregar(
+      caballo["Nombre"],
+      caballo["Sexo"],
+      caballo["Padre"],
+      caballo["Madre"],
+      caballo["Abuelo paterno"],
+      caballo["Abuela paterna"],
+      caballo["Abuelo materno"],
+      caballo["Abuela materna"]
+    );
+
+    // PADRE DEL CABALLO PENDIENTE
+    agregar(
+      caballo["Padre"],
+      "M",
+      caballo["Abuelo paterno"],
+      caballo["Abuela paterna"],
+      caballo["Bisabuelo paterno paterno"],
+      caballo["Bisabuela paterna paterna"],
+      caballo["Bisabuelo paterno materno"],
+      caballo["Bisabuela paterna materna"]
+    );
+
+    // MADRE DEL CABALLO PENDIENTE
+    agregar(
+      caballo["Madre"],
+      "H",
+      caballo["Abuelo materno"],
+      caballo["Abuela materna"],
+      caballo["Bisabuelo materno paterno"],
+      caballo["Bisabuela materna paterna"],
+      caballo["Bisabuelo materno materno"],
+      caballo["Bisabuela materna materna"]
+    );
+
+    // ABUELOS
+    agregar(
+      caballo["Abuelo paterno"],
+      "M",
+      caballo["Bisabuelo paterno paterno"],
+      caballo["Bisabuela paterna paterna"]
+    );
+
+    agregar(
+      caballo["Abuela paterna"],
+      "H",
+      caballo["Bisabuelo paterno materno"],
+      caballo["Bisabuela paterna materna"]
+    );
+
+    agregar(
+      caballo["Abuelo materno"],
+      "M",
+      caballo["Bisabuelo materno paterno"],
+      caballo["Bisabuela materna paterna"]
+    );
+
+    agregar(
+      caballo["Abuela materna"],
+      "H",
+      caballo["Bisabuelo materno materno"],
+      caballo["Bisabuela materna materna"]
+    );
+
+    // BISABUELOS MACHOS
+    agregar(caballo["Bisabuelo paterno paterno"], "M");
+    agregar(caballo["Bisabuelo paterno materno"], "M");
+    agregar(caballo["Bisabuelo materno paterno"], "M");
+    agregar(caballo["Bisabuelo materno materno"], "M");
+
+    // BISABUELAS HEMBRAS
+    agregar(caballo["Bisabuela paterna paterna"], "H");
+    agregar(caballo["Bisabuela paterna materna"], "H");
+    agregar(caballo["Bisabuela materna paterna"], "H");
+    agregar(caballo["Bisabuela materna materna"], "H");
+  });
+
+  return Array.from(encontrados.values())
+    .sort(function (a, b) {
+      return a.Nombre.localeCompare(b.Nombre);
+    })
+    .slice(0, 8);
+}
+
+
+// ==========================================================
+// ACTIVA UN CASILLERO DEL PEDIGREE PUBLICO
+// ==========================================================
+
+function activarCampoPedigreePublico(idInput, sexoPermitido) {
+  const input = document.getElementById(idInput);
+
+  if (!input) return;
+
+  let contenedor =
+    input.parentElement.querySelector(".sugerencias-pedigree");
+
+  if (!contenedor) {
+    contenedor = document.createElement("div");
+    contenedor.className = "sugerencias-pedigree";
+    input.parentElement.appendChild(contenedor);
+  }
+
+  input.addEventListener("input", async function () {
+    contenedor.innerHTML = "";
+
+    const texto = input.value.trim();
+
+    if (texto.length < 3) return;
+
+    const sugerencias =
+      await buscarPedigreeRegistroPublico(
+        texto,
+        sexoPermitido
+      );
+
+    sugerencias.forEach(function (caballo) {
+      const boton = document.createElement("button");
+
+      boton.type = "button";
+      boton.textContent = caballo.Nombre;
+
+      boton.addEventListener(
+        "pointerdown",
+        function (event) {
+          event.preventDefault();
+
+          input.value = caballo.Nombre || "";
+
+          const destinos = {
+
+            caballoPadre: {
+              padre: "caballoAbueloPaterno",
+              madre: "caballoAbuelaPaterna",
+              pp: "caballoBPPP",
+              pm: "caballoBAPP",
+              mp: "caballoBPPM",
+              mm: "caballoBAPM"
+            },
+
+            caballoMadre: {
+              padre: "caballoAbueloMaterno",
+              madre: "caballoAbuelaMaterna",
+              pp: "caballoBMP",
+              pm: "caballoBAMP",
+              mp: "caballoBMM",
+              mm: "caballoBAMM"
+            },
+
+            caballoAbueloPaterno: {
+              padre: "caballoBPPP",
+              madre: "caballoBAPP"
+            },
+
+            caballoAbuelaPaterna: {
+              padre: "caballoBPPM",
+              madre: "caballoBAPM"
+            },
+
+            caballoAbueloMaterno: {
+              padre: "caballoBMP",
+              madre: "caballoBAMP"
+            },
+
+            caballoAbuelaMaterna: {
+              padre: "caballoBMM",
+              madre: "caballoBAMM"
+            }
+          };
+
+          const destino = destinos[idInput];
+
+          if (destino) {
+
+            if (destino.padre) {
+              const campo =
+                document.getElementById(destino.padre);
+
+              if (campo) {
+                campo.value = caballo.Padre || "";
+              }
+            }
+
+            if (destino.madre) {
+              const campo =
+                document.getElementById(destino.madre);
+
+              if (campo) {
+                campo.value = caballo.Madre || "";
+              }
+            }
+
+            if (destino.pp) {
+              const campo =
+                document.getElementById(destino.pp);
+
+              if (campo) {
+                campo.value =
+                  caballo.AbueloPaterno || "";
+              }
+            }
+
+            if (destino.pm) {
+              const campo =
+                document.getElementById(destino.pm);
+
+              if (campo) {
+                campo.value =
+                  caballo.AbuelaPaterna || "";
+              }
+            }
+
+            if (destino.mp) {
+              const campo =
+                document.getElementById(destino.mp);
+
+              if (campo) {
+                campo.value =
+                  caballo.AbueloMaterno || "";
+              }
+            }
+
+            if (destino.mm) {
+              const campo =
+                document.getElementById(destino.mm);
+
+              if (campo) {
+                campo.value =
+                  caballo.AbuelaMaterna || "";
+              }
+            }
+          }
+
+          contenedor.innerHTML = "";
+        }
+      );
+
+      contenedor.appendChild(boton);
+    });
+  });
+}
+
+
+// ==========================================================
+// ACTIVAR TODO EL PEDIGREE PUBLICO
+// ==========================================================
+
+// PADRES
+activarCampoPedigreePublico("caballoPadre", "M");
+activarCampoPedigreePublico("caballoMadre", "H");
+
+// ABUELOS
+activarCampoPedigreePublico("caballoAbueloPaterno", "M");
+activarCampoPedigreePublico("caballoAbuelaPaterna", "H");
+activarCampoPedigreePublico("caballoAbueloMaterno", "M");
+activarCampoPedigreePublico("caballoAbuelaMaterna", "H");
+
+// BISABUELOS RAMA PATERNA
+activarCampoPedigreePublico("caballoBPPP", "M");
+activarCampoPedigreePublico("caballoBAPP", "H");
+activarCampoPedigreePublico("caballoBPPM", "M");
+activarCampoPedigreePublico("caballoBAPM", "H");
+
+// BISABUELOS RAMA MATERNA
+activarCampoPedigreePublico("caballoBMP", "M");
+activarCampoPedigreePublico("caballoBAMP", "H");
+activarCampoPedigreePublico("caballoBMM", "M");
+activarCampoPedigreePublico("caballoBAMM", "H");
+    
     async function enviarSolicitudCaballo() {
   const datos = {
     "Numero de Criador": document.getElementById("caballoNumeroCriador").value.trim().toUpperCase(),
