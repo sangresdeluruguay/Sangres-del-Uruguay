@@ -2596,7 +2596,8 @@ activarSugerenciasEditPadre();
       boton.type = "button";
       boton.textContent = caballo.Nombre;
 
-      boton.addEventListener("click", function () {
+      boton.addEventListener("pointerdown", function (event) {
+  event.preventDefault();
         input.value = caballo.Nombre || "";
 
         document.getElementById("editAbueloPaterno").value =
