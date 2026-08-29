@@ -2576,6 +2576,12 @@ if (caballo["Propietario ID"]) {
   `;
   
 activarSugerenciasEditPadre();
+activarSugerenciasEditMadre();
+
+  activarSugerenciasCampoPedigree("editAbueloPaterno", "M");
+activarSugerenciasCampoPedigree("editAbuelaPaterna", "H");
+activarSugerenciasCampoPedigree("editAbueloMaterno", "M");
+activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
   
   const nombrePrincipal = document.getElementById("editNombre");
   const nombrePedigree = document.getElementById("editNombrePedigree");
@@ -2627,7 +2633,8 @@ activarSugerenciasEditPadre();
 
     if (texto.length < 3) return;
 
-    const sugerencias = await buscarSugerenciasPedigree(texto);
+    const sugerencias = (await buscarSugerenciasPedigree(texto))
+  .filter(caballo => caballo.Sexo === "ME" || caballo.Sexo === "MC");
 
     sugerencias.forEach(function (caballo) {
       const boton = document.createElement("button");
@@ -2656,6 +2663,95 @@ activarSugerenciasEditPadre();
         document.getElementById("editBisabuelaPM").value =
           caballo.abuela_materna || "";
 
+        contenedor.innerHTML = "";
+      });
+
+      contenedor.appendChild(boton);
+    });
+  });
+}
+    function activarSugerenciasEditMadre() {
+  const input = document.getElementById("editMadre");
+  const contenedor = document.getElementById("sugerenciasEditMadre");
+
+  if (!input || !contenedor) return;
+
+  input.addEventListener("input", async function () {
+    contenedor.innerHTML = "";
+
+    const texto = input.value.trim();
+
+    if (texto.length < 3) return;
+
+    const sugerencias = (await buscarSugerenciasPedigree(texto))
+      .filter(caballo => caballo.Sexo === "H");
+
+    sugerencias.forEach(function (caballo) {
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.textContent = caballo.Nombre;
+
+      boton.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+
+        input.value = caballo.Nombre || "";
+
+        document.getElementById("editAbueloMaterno").value =
+          caballo.Padre || "";
+
+        document.getElementById("editAbuelaMaterna").value =
+          caballo.Madre || "";
+
+        contenedor.innerHTML = "";
+      });
+
+      contenedor.appendChild(boton);
+    });
+  });
+}
+    function activarSugerenciasCampoPedigree(idInput, sexoPermitido) {
+  const input = document.getElementById(idInput);
+
+  if (!input) return;
+
+  let contenedor = input.parentElement.querySelector(".sugerencias-pedigree");
+
+  if (!contenedor) {
+    contenedor = document.createElement("div");
+    contenedor.className = "sugerencias-pedigree";
+    input.parentElement.appendChild(contenedor);
+  }
+
+  input.addEventListener("input", async function () {
+    contenedor.innerHTML = "";
+
+    const texto = input.value.trim();
+
+    if (texto.length < 3) return;
+
+    let sugerencias = await buscarSugerenciasPedigree(texto);
+
+    if (sexoPermitido === "M") {
+      sugerencias = sugerencias.filter(
+        caballo => caballo.Sexo === "ME" || caballo.Sexo === "MC"
+      );
+    }
+
+    if (sexoPermitido === "H") {
+      sugerencias = sugerencias.filter(
+        caballo => caballo.Sexo === "H"
+      );
+    }
+
+    sugerencias.forEach(function (caballo) {
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.textContent = caballo.Nombre;
+
+      boton.addEventListener("pointerdown", function (event) {
+        event.preventDefault();
+
+        input.value = caballo.Nombre || "";
         contenedor.innerHTML = "";
       });
 
