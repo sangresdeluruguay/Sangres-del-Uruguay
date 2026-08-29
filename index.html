@@ -2414,7 +2414,9 @@ if (caballo["Propietario ID"]) {
         placeholder="Padre"
         value="${escapar(caballo.Padre || "")}"
       >
+      <div id="sugerenciasEditPadre" class="sugerencias-pedigree"></div>
     </div>
+
 
     <div class="pedigree-box hembra">
       <input
@@ -2423,6 +2425,7 @@ if (caballo["Propietario ID"]) {
         placeholder="Madre"
         value="${escapar(caballo.Madre || "")}"
       >
+      <div id="sugerenciasEditMadre" class="sugerencias-pedigree"></div>
     </div>
 
   </div>
@@ -2533,7 +2536,9 @@ if (caballo["Propietario ID"]) {
 
     </div>
   `;
-
+  
+activarSugerenciasEditPadre();
+  
   const nombrePrincipal = document.getElementById("editNombre");
   const nombrePedigree = document.getElementById("editNombrePedigree");
 
@@ -2543,6 +2548,80 @@ if (caballo["Propietario ID"]) {
 
   nombrePedigree.addEventListener("input", function () {
     nombrePrincipal.value = nombrePedigree.value;
+  });
+}
+    async function buscarSugerenciasPedigree(texto) {
+  const busqueda = texto.trim();
+
+  if (busqueda.length < 3) {
+    return [];
+  }
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/Caballos?select=*&Nombre=ilike.*" +
+    encodeURIComponent(busqueda) +
+    "*&limit=8",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    return [];
+  }
+
+  return await respuesta.json();
+}
+    function activarSugerenciasEditPadre() {
+  const input = document.getElementById("editPadre");
+  const contenedor = document.getElementById("sugerenciasEditPadre");
+
+  if (!input || !contenedor) return;
+
+  input.addEventListener("input", async function () {
+    contenedor.innerHTML = "";
+
+    const texto = input.value.trim();
+
+    if (texto.length < 3) return;
+
+    const sugerencias = await buscarSugerenciasPedigree(texto);
+
+    sugerencias.forEach(function (caballo) {
+      const boton = document.createElement("button");
+      boton.type = "button";
+      boton.textContent = caballo.Nombre;
+
+      boton.addEventListener("click", function () {
+        input.value = caballo.Nombre || "";
+
+        document.getElementById("editAbueloPaterno").value =
+          caballo.Padre || "";
+
+        document.getElementById("editAbuelaPaterna").value =
+          caballo.Madre || "";
+
+        document.getElementById("editBisabueloPP").value =
+          caballo.abuelo_paterno || "";
+
+        document.getElementById("editBisabuelaPP").value =
+          caballo.abuela_paterna || "";
+
+        document.getElementById("editBisabueloPM").value =
+          caballo.abuelo_materno || "";
+
+        document.getElementById("editBisabuelaPM").value =
+          caballo.abuela_materna || "";
+
+        contenedor.innerHTML = "";
+      });
+
+      contenedor.appendChild(boton);
+    });
   });
 }
     async function guardarCambiosCaballo(id) {
