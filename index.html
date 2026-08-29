@@ -2031,7 +2031,7 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
     Raza: solicitud.Raza || null,
     Pelo: solicitud.Pelo || null,
     "Criador ID": criadorId,
-    "Propietario ID": propietarioId,
+    
 
     Padre: solicitud.Padre || null,
     Madre: solicitud.Madre || null,
@@ -2294,7 +2294,28 @@ async function editarCaballo(id) {
   }
 
   const caballo = datos[0];
+let propietarioActual = "";
 
+if (caballo["Propietario ID"]) {
+  const respuestaPropietario = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Propietarios?select=Nombre&id=eq." +
+      encodeURIComponent(caballo["Propietario ID"]) +
+      "&limit=1",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  const propietarios = await respuestaPropietario.json();
+
+  if (respuestaPropietario.ok && propietarios.length) {
+    propietarioActual = propietarios[0].Nombre || "";
+  }
+}
   resultado.innerHTML = `
     <div class="ficha-caballo modo-edicion">
 
@@ -2336,9 +2357,13 @@ async function editarCaballo(id) {
         </div>
 
         <div class="dato-ficha">
-          <strong>Propietario</strong>
-          <span>No modificar acá</span>
-        </div>
+  <strong>Propietario</strong>
+  <input
+    id="editPropietario"
+    type="text"
+   value="${escapar(propietarioActual)}"
+  >
+</div>
 
         <div class="dato-ficha">
           <strong>RP</strong>
@@ -2348,7 +2373,22 @@ async function editarCaballo(id) {
             value="${escapar(caballo.RP || "")}"
           >
         </div>
-
+        <div class="dato-ficha">
+  <strong>Raza</strong>
+  <input
+    id="editRaza"
+    type="text"
+    value="${escapar(caballo.Raza || "")}"
+  >
+</div>
+<div class="dato-ficha">
+  <strong>Sexo</strong>
+  <input
+    id="editSexo"
+    type="text"
+    value="${escapar(caballo.Sexo || "")}"
+  >
+</div>
       </div>
 
       <h3>Pedigree</h3>
@@ -2515,6 +2555,58 @@ async function editarCaballo(id) {
   const nacimiento = document.getElementById("editNacimiento").value;
   const pelo = document.getElementById("editPelo").value.trim();
   const rp = document.getElementById("editRP").value.trim();
+      const propietario = document.getElementById("editPropietario").value.trim();
+const raza = document.getElementById("editRaza").value.trim();
+const sexo = document.getElementById("editSexo").value.trim();
+      let propietarioId = null;
+      if (propietario) {
+  const respuestaPropietario = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Propietarios?select=id&Nombre=eq." +
+      encodeURIComponent(normalizarTexto(propietario)) +
+      "&limit=1",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const propietarios = await respuestaPropietario.json();
+
+  if (respuestaPropietario.ok && propietarios.length) {
+    propietarioId = propietarios[0].id;
+  }
+        else {
+  const nombrePropietario = normalizarTexto(propietario);
+
+  const respuestaNuevoPropietario = await fetch(
+    SUPABASE_URL + "/rest/v1/Propietarios",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json",
+        Prefer: "return=representation"
+      },
+      body: JSON.stringify({
+        Nombre: nombrePropietario
+      })
+    }
+  );
+
+  const nuevoPropietario = await respuestaNuevoPropietario.json();
+
+  if (!respuestaNuevoPropietario.ok || !nuevoPropietario.length) {
+    alert("No se pudo registrar el propietario.");
+    return;
+  }
+
+  propietarioId = nuevoPropietario[0].id;
+}
+}
   const padre = document.getElementById("editPadre").value.trim();
   const madre = document.getElementById("editMadre").value.trim();
 const abueloPaterno = document.getElementById("editAbueloPaterno").value.trim();
@@ -2550,6 +2642,9 @@ const bisabuelaMM = document.getElementById("editBisabuelaMM").value.trim();
         Nacimiento: nacimiento || null,
         Pelo: pelo || null,
         RP: rp || null,
+        "Propietario ID": propietarioId,
+Raza: raza || null,
+Sexo: sexo || null,
         Padre: padre || null,
         Madre: madre || null,
         abuelo_paterno: abueloPaterno || null,
