@@ -2709,6 +2709,82 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     });
   });
 }
+    async function buscarSugerenciasAncestros(texto, sexoPermitido) {
+  const busqueda = texto.trim().toLowerCase();
+
+  if (busqueda.length < 3) return [];
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/Caballos?select=Nombre,Sexo,Padre,Madre,abuelo_paterno,abuela_paterno,abuelo_materno,abuela_materna&limit=1000",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  if (!respuesta.ok) return [];
+
+  const caballos = await respuesta.json();
+
+  const nombres = new Set();
+
+  caballos.forEach(function (caballo) {
+
+    if (sexoPermitido === "M") {
+      if (
+        (caballo.Sexo === "ME" || caballo.Sexo === "MC") &&
+        caballo.Nombre &&
+        caballo.Nombre.toLowerCase().includes(busqueda)
+      ) {
+        nombres.add(caballo.Nombre);
+      }
+
+      [
+        caballo.Padre,
+        caballo.abuelo_paterno,
+        caballo.abuelo_materno
+      ].forEach(function (nombre) {
+        if (
+          nombre &&
+          nombre.toLowerCase().includes(busqueda)
+        ) {
+          nombres.add(nombre);
+        }
+      });
+    }
+
+    if (sexoPermitido === "H") {
+      if (
+        caballo.Sexo === "H" &&
+        caballo.Nombre &&
+        caballo.Nombre.toLowerCase().includes(busqueda)
+      ) {
+        nombres.add(caballo.Nombre);
+      }
+
+      [
+        caballo.Madre,
+        caballo.abuela_paterno,
+        caballo.abuela_materna
+      ].forEach(function (nombre) {
+        if (
+          nombre &&
+          nombre.toLowerCase().includes(busqueda)
+        ) {
+          nombres.add(nombre);
+        }
+      });
+    }
+  });
+
+  return Array.from(nombres)
+    .sort((a, b) => a.localeCompare(b))
+    .slice(0, 8)
+    .map(nombre => ({ Nombre: nombre }));
+}
     function activarSugerenciasCampoPedigree(idInput, sexoPermitido) {
   const input = document.getElementById(idInput);
 
@@ -2728,21 +2804,8 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     const texto = input.value.trim();
 
     if (texto.length < 3) return;
-
-    let sugerencias = await buscarSugerenciasPedigree(texto);
-
-    if (sexoPermitido === "M") {
-      sugerencias = sugerencias.filter(
-        caballo => caballo.Sexo === "ME" || caballo.Sexo === "MC"
-      );
-    }
-
-    if (sexoPermitido === "H") {
-      sugerencias = sugerencias.filter(
-        caballo => caballo.Sexo === "H"
-      );
-    }
-
+    
+const sugerencias = await buscarSugerenciasAncestros(texto, sexoPermitido);
     sugerencias.forEach(function (caballo) {
       const boton = document.createElement("button");
       boton.type = "button";
