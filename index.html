@@ -1823,6 +1823,12 @@ pendientes.forEach(function (caballo) {
   agregar(caballo.bisabuela_mm, "H");
 
 });
+    return Array.from(encontrados.values())
+    .sort(function (a, b) {
+      return a.Nombre.localeCompare(b.Nombre);
+    })
+    .slice(0, 8);
+}
 
 // ==========================================================
 // ACTIVA UN CASILLERO DEL PEDIGREE PUBLICO
