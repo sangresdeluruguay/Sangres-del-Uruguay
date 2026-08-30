@@ -1847,6 +1847,13 @@ function activarCampoPedigreePublico(idInput, sexoPermitido) {
     contenedor.className = "sugerencias-pedigree";
     input.parentElement.appendChild(contenedor);
   }
+  input.addEventListener("focus", function () {
+  document.querySelectorAll(".sugerencias-pedigree").forEach(function(lista) {
+    if (lista !== contenedor) {
+      lista.innerHTML = "";
+    }
+  });
+});
 
   input.addEventListener("input", async function () {
     contenedor.innerHTML = "";
@@ -1987,32 +1994,6 @@ function activarCampoPedigreePublico(idInput, sexoPermitido) {
   });
 }
 
-
-// ==========================================================
-// ACTIVAR TODO EL PEDIGREE PUBLICO
-// ==========================================================
-
-// PADRES
-activarCampoPedigreePublico("caballoPadre", "M");
-activarCampoPedigreePublico("caballoMadre", "H");
-
-// ABUELOS
-activarCampoPedigreePublico("caballoAbueloPaterno", "M");
-activarCampoPedigreePublico("caballoAbuelaPaterna", "H");
-activarCampoPedigreePublico("caballoAbueloMaterno", "M");
-activarCampoPedigreePublico("caballoAbuelaMaterna", "H");
-
-// BISABUELOS RAMA PATERNA
-activarCampoPedigreePublico("caballoBPPP", "M");
-activarCampoPedigreePublico("caballoBAPP", "H");
-activarCampoPedigreePublico("caballoBPPM", "M");
-activarCampoPedigreePublico("caballoBAPM", "H");
-
-// BISABUELOS RAMA MATERNA
-activarCampoPedigreePublico("caballoBMP", "M");
-activarCampoPedigreePublico("caballoBAMP", "H");
-activarCampoPedigreePublico("caballoBMM", "M");
-activarCampoPedigreePublico("caballoBAMM", "H");
     
     async function enviarSolicitudCaballo() {
   const datos = {
