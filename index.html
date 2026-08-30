@@ -1740,93 +1740,89 @@ const pendientes = datosPedigree.filter(function(caballo) {
   // CABALLOS TODAVIA PENDIENTES
   // ----------------------------------------------------------
 
-  pendientes.forEach(function (caballo) {
+pendientes.forEach(function (caballo) {
 
-    // Caballo pendiente como individuo
-    agregar(
-      caballo["Nombre"],
-      caballo["Sexo"],
-      caballo["Padre"],
-      caballo["Madre"],
-      caballo["Abuelo paterno"],
-      caballo["Abuela paterna"],
-      caballo["Abuelo materno"],
-      caballo["Abuela materna"]
-    );
+  // CABALLO PENDIENTE COMO INDIVIDUO
+  agregar(
+    caballo.Nombre,
+    caballo.Sexo,
+    caballo.Padre,
+    caballo.Madre,
+    caballo.abuelo_paterno,
+    caballo.abuela_paterno,
+    caballo.abuelo_materno,
+    caballo.abuela_materna
+  );
 
-    // PADRE DEL CABALLO PENDIENTE
-    agregar(
-      caballo["Padre"],
-      "M",
-      caballo["Abuelo paterno"],
-      caballo["Abuela paterna"],
-      caballo["Bisabuelo paterno paterno"],
-      caballo["Bisabuela paterna paterna"],
-      caballo["Bisabuelo paterno materno"],
-      caballo["Bisabuela paterna materna"]
-    );
+  // PADRE
+  agregar(
+    caballo.Padre,
+    "M",
+    caballo.abuelo_paterno,
+    caballo.abuela_paterno,
+    caballo.bisabuelo_pp,
+    caballo.bisabuela_pp,
+    caballo.bisabuelo_pm,
+    caballo.bisabuela_pm
+  );
 
-    // MADRE DEL CABALLO PENDIENTE
-    agregar(
-      caballo["Madre"],
-      "H",
-      caballo["Abuelo materno"],
-      caballo["Abuela materna"],
-      caballo["Bisabuelo materno paterno"],
-      caballo["Bisabuela materna paterna"],
-      caballo["Bisabuelo materno materno"],
-      caballo["Bisabuela materna materna"]
-    );
+  // MADRE
+  agregar(
+    caballo.Madre,
+    "H",
+    caballo.abuelo_materno,
+    caballo.abuela_materna,
+    caballo.bisabuelo_mp,
+    caballo.bisabuela_mp,
+    caballo.bisabuelo_mm,
+    caballo.bisabuela_mm
+  );
 
-    // ABUELOS
-    agregar(
-      caballo["Abuelo paterno"],
-      "M",
-      caballo["Bisabuelo paterno paterno"],
-      caballo["Bisabuela paterna paterna"]
-    );
+  // ABUELO PATERNO
+  agregar(
+    caballo.abuelo_paterno,
+    "M",
+    caballo.bisabuelo_pp,
+    caballo.bisabuela_pp
+  );
 
-    agregar(
-      caballo["Abuela paterna"],
-      "H",
-      caballo["Bisabuelo paterno materno"],
-      caballo["Bisabuela paterna materna"]
-    );
+  // ABUELA PATERNA
+  agregar(
+    caballo.abuela_paterno,
+    "H",
+    caballo.bisabuelo_pm,
+    caballo.bisabuela_pm
+  );
 
-    agregar(
-      caballo["Abuelo materno"],
-      "M",
-      caballo["Bisabuelo materno paterno"],
-      caballo["Bisabuela materna paterna"]
-    );
+  // ABUELO MATERNO
+  agregar(
+    caballo.abuelo_materno,
+    "M",
+    caballo.bisabuelo_mp,
+    caballo.bisabuela_mp
+  );
 
-    agregar(
-      caballo["Abuela materna"],
-      "H",
-      caballo["Bisabuelo materno materno"],
-      caballo["Bisabuela materna materna"]
-    );
+  // ABUELA MATERNA
+  agregar(
+    caballo.abuela_materna,
+    "H",
+    caballo.bisabuelo_mm,
+    caballo.bisabuela_mm
+  );
 
-    // BISABUELOS MACHOS
-    agregar(caballo["Bisabuelo paterno paterno"], "M");
-    agregar(caballo["Bisabuelo paterno materno"], "M");
-    agregar(caballo["Bisabuelo materno paterno"], "M");
-    agregar(caballo["Bisabuelo materno materno"], "M");
+  // BISABUELOS MACHOS
+  agregar(caballo.bisabuelo_pp, "M");
+  agregar(caballo.bisabuelo_pm, "M");
+  agregar(caballo.bisabuelo_mp, "M");
+  agregar(caballo.bisabuelo_mm, "M");
 
-    // BISABUELAS HEMBRAS
-    agregar(caballo["Bisabuela paterna paterna"], "H");
-    agregar(caballo["Bisabuela paterna materna"], "H");
-    agregar(caballo["Bisabuela materna paterna"], "H");
-    agregar(caballo["Bisabuela materna materna"], "H");
-  });
+  // BISABUELAS HEMBRAS
+  agregar(caballo.bisabuela_pp, "H");
+  agregar(caballo.bisabuela_pm, "H");
+  agregar(caballo.bisabuela_mp, "H");
+  agregar(caballo.bisabuela_mm, "H");
 
-  return Array.from(encontrados.values())
-    .sort(function (a, b) {
-      return a.Nombre.localeCompare(b.Nombre);
-    })
-    .slice(0, 8);
-}
-
+});
 
 // ==========================================================
 // ACTIVA UN CASILLERO DEL PEDIGREE PUBLICO
