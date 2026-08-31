@@ -2095,6 +2095,58 @@ function activarCampoPedigreePublico(idInput, sexoPermitido) {
   });
 }
 
+    function abrirFotoGrande(src, alt) {
+  const fondo = document.createElement("div");
+
+  fondo.style.position = "fixed";
+  fondo.style.inset = "0";
+  fondo.style.background = "rgba(0, 0, 0, 0.88)";
+  fondo.style.zIndex = "99999";
+  fondo.style.display = "flex";
+  fondo.style.alignItems = "center";
+  fondo.style.justifyContent = "center";
+  fondo.style.padding = "20px";
+  fondo.style.boxSizing = "border-box";
+
+  const imagen = document.createElement("img");
+  imagen.src = src;
+  imagen.alt = alt || "Foto del caballo";
+  imagen.style.maxWidth = "95%";
+  imagen.style.maxHeight = "90%";
+  imagen.style.objectFit = "contain";
+  imagen.style.borderRadius = "10px";
+
+  const cerrar = document.createElement("button");
+  cerrar.innerHTML = "×";
+  cerrar.type = "button";
+  cerrar.style.position = "absolute";
+  cerrar.style.top = "15px";
+  cerrar.style.right = "20px";
+  cerrar.style.fontSize = "38px";
+  cerrar.style.color = "white";
+  cerrar.style.background = "transparent";
+  cerrar.style.border = "none";
+  cerrar.style.cursor = "pointer";
+
+  function cerrarFoto() {
+    fondo.remove();
+    document.body.style.overflow = "";
+  }
+
+  cerrar.onclick = cerrarFoto;
+
+  fondo.onclick = function(evento) {
+    if (evento.target === fondo) {
+      cerrarFoto();
+    }
+  };
+
+  fondo.appendChild(imagen);
+  fondo.appendChild(cerrar);
+  document.body.appendChild(fondo);
+  document.body.style.overflow = "hidden";
+}
+    
     async function proponerFotoCaballo(nombreCaballo, caballoId) {
   const input = document.createElement("input");
   input.type = "file";
@@ -4895,7 +4947,7 @@ ${origenFichaCaballo === "criadores" ? `
     <img
       src="${SUPABASE_URL}/storage/v1/object/public/fotos-caballos/${escapar(caballo.foto_path)}"
       alt="${escapar(caballo.Nombre)}"
-      class="foto-caballo-img"
+      class="foto-caballo-img" onclick="abrirFotoGrande(this.src, this.alt)" style="cursor:pointer;"
     >
   ` : `
   
