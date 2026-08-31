@@ -577,6 +577,30 @@ header p {
   margin: 8px auto 0;
   border-radius: 3px;
 }
+    .acciones-ficha-superior {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 18px;
+}
+
+.acciones-ficha-superior .boton-volver-resultados,
+.acciones-ficha-superior .boton-pdf {
+  background: #173b59;
+  color: white;
+  border: 1px solid #c9a227;
+  border-radius: 8px;
+  padding: 10px 16px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.acciones-ficha-superior .boton-volver-resultados:hover,
+.acciones-ficha-superior .boton-pdf:hover {
+  opacity: 0.92;
+}
     header {
   position: relative;
 }
@@ -4929,18 +4953,25 @@ ${origenFichaCaballo === "criadores" ? `
     ← Volver a criador / propietario
   </button>
 ` : `
+  <div class="acciones-ficha-superior">
   <button
     type="button"
     class="boton-volver-resultados"
     onclick="volverAResultadosBusqueda()"
   >
-    ← Volver a resultados
+    ← Volver
   </button>
-`}
 
-  <h2 class="nombre-caballo-ficha">${escapar(caballo.Nombre)}</h2>
-  
-<button type="button" class="boton-pdf" onclick="generarPDF()">🖨 Imprimir / PDF</button>
+  <button
+    type="button"
+    class="boton-pdf"
+    onclick="generarPDF()"
+  >
+    🖨 Imprimir / PDF
+  </button>
+</div>
+
+<h2 class="nombre-caballo-ficha">${escapar(caballo.Nombre)}</h2>
 <div class="ficha-superior-caballo">
 <div class="foto-caballo-ficha">
   ${caballo.foto_path ? `
