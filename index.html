@@ -4055,6 +4055,21 @@ bisabuela_mm: bisabuelaMM || null
         </div>
 
         <div class="dato-ficha">
+  <strong>Sexo</strong>
+  <select id="nuevoSexo">
+    <option value="">Seleccionar</option>
+    <option value="H">H</option>
+    <option value="ME">ME</option>
+    <option value="MC">MC</option>
+  </select>
+</div>
+
+<div class="dato-ficha">
+  <strong>Raza</strong>
+  <input id="nuevoRaza" type="text">
+</div>
+
+        <div class="dato-ficha">
           <strong>Pelo</strong>
           <input id="nuevoPelo" type="text">
         </div>
@@ -4230,6 +4245,12 @@ async function guardarCaballoNuevo() {
 
     Nacimiento:
       document.getElementById("nuevoNacimiento").value || null,
+
+    Sexo:
+  document.getElementById("nuevoSexo").value || null,
+
+Raza:
+  document.getElementById("nuevoRaza").value.trim() || null,
 
     Pelo:
       document.getElementById("nuevoPelo").value.trim() || null,
@@ -4954,14 +4975,15 @@ if (filaBuscador) filaBuscador.style.display = "none";
    resultado.innerHTML = `
   <div class="ficha-caballo">
 ${origenFichaCaballo === "criadores" ? `
+<div class="acciones-ficha-superior">
   <button
     type="button"
     class="boton-volver-resultados"
     onclick="volverACriadoresPropietarios()"
   >
-    ← Volver a criador / propietario
+    ← Volver
   </button>
-` : `
+</div>` : `
   <div class="acciones-ficha-superior">
   <button
     type="button"
