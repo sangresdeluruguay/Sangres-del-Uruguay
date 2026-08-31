@@ -4355,7 +4355,10 @@ elemento.classList.add("modo-pdf");
     elemento.classList.remove("modo-pdf");
   });
 }
-    function volverAResultadosBusqueda() {
+  function volverAResultadosBusqueda() {
+  const filaBuscador = document.querySelector("#seccionBuscador .buscar-fila");
+  if (filaBuscador) filaBuscador.style.display = "flex";
+
   document.getElementById("nombreCaballo").value = ultimaBusquedaCaballos;
   buscarCaballo();
 }
@@ -4945,6 +4948,9 @@ function dato(etiqueta, valor) {
   if (!valor) return '';
   return '<p><strong>' + etiqueta + ':</strong> ' + escapar(valor) + '</p>';
 }
+    const filaBuscador = document.querySelector("#seccionBuscador .buscar-fila");
+if (filaBuscador) filaBuscador.style.display = "none";
+    
    resultado.innerHTML = `
   <div class="ficha-caballo">
 ${origenFichaCaballo === "criadores" ? `
