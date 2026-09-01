@@ -2047,7 +2047,24 @@ function activarCampoPedigreePublico(idInput, sexoPermitido) {
             caballoAbuelaMaterna: {
               padre: "caballoBMM",
               madre: "caballoBAMM"
-            }
+            },
+            nuevoPadre: {
+  padre: "nuevoAbueloPaterno",
+  madre: "nuevaAbuelaPaterna",
+  pp: "nuevoBisabueloPP",
+  pm: "nuevaBisabuelaPP",
+  mp: "nuevoBisabueloPM",
+  mm: "nuevaBisabuelaPM"
+},
+
+nuevaMadre: {
+  padre: "nuevoAbueloMaterno",
+  madre: "nuevaAbuelaMaterna",
+  pp: "nuevoBisabueloMP",
+  pm: "nuevaBisabuelaMP",
+  mp: "nuevoBisabueloMM",
+  mm: "nuevaBisabuelaMM"
+}
           };
 
           const destino = destinos[idInput];
