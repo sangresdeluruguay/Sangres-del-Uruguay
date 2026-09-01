@@ -4040,14 +4040,14 @@ bisabuela_mm: bisabuelaMM || null
       <div class="tabla-ficha">
 
         <div class="dato-ficha">
-          <strong>Criador</strong>
-          <span>-</span>
-        </div>
+  <strong>Criador</strong>
+  <input id="nuevoCriador" type="text">
+</div>
 
-        <div class="dato-ficha">
-          <strong>N.º Criador</strong>
-          <span>-</span>
-        </div>
+ <div class="dato-ficha">
+  <strong>N.º Criador</strong>
+  <input id="nuevoNumeroCriador" type="text">
+</div>
 
         <div class="dato-ficha">
           <strong>Nacimiento</strong>
@@ -4075,8 +4075,8 @@ bisabuela_mm: bisabuelaMM || null
         </div>
 
         <div class="dato-ficha">
-          <strong>Propietario</strong>
-          <span>-</span>
+         <strong>Propietario</strong>
+<input id="nuevoPropietario" type="text">
         </div>
 
         <div class="dato-ficha">
@@ -4242,6 +4242,14 @@ async function guardarCaballoNuevo() {
 
   const nuevoCaballo = {
     Nombre: nombre,
+    Criador:
+  document.getElementById("nuevoCriador").value.trim() || null,
+
+"Numero de Criador":
+  document.getElementById("nuevoNumeroCriador").value.trim() || null,
+
+Propietario:
+  document.getElementById("nuevoPropietario").value.trim() || null,
 
     Nacimiento:
       document.getElementById("nuevoNacimiento").value || null,
