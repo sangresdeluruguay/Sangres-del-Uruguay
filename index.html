@@ -2158,6 +2158,78 @@ nuevaAbuelaMaterna: {
   });
 }
 
+    function activarCriadorPredictivoNuevo() {
+  const input = document.getElementById("nuevoCriador");
+  const inputNumero = document.getElementById("nuevoNumeroCriador");
+
+  if (!input || !inputNumero) return;
+
+  let contenedor = document.createElement("div");
+  contenedor.className = "sugerencias-pedigree";
+  input.parentElement.appendChild(contenedor);
+
+  input.addEventListener("input", async function () {
+    contenedor.innerHTML = "";
+
+    const texto = input.value.trim();
+
+    if (texto.length < 3) return;
+
+    const respuesta = await fetch(
+      SUPABASE_URL + "/rest/v1/Criadores?select=*",
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!respuesta.ok) return;
+
+    const criadores = await respuesta.json();
+    const buscado = normalizarTexto(texto);
+
+    const coincidencias = criadores.filter(function (c) {
+      const nombre = normalizarTexto(c.Nombre || "");
+      const numero = normalizarTexto(c["Numero de Criador"] || "");
+      const haras = normalizarTexto(c["Haras - Cabaña"] || "");
+
+      return (
+        nombre.includes(buscado) ||
+        numero.includes(buscado) ||
+        haras.includes(buscado)
+      );
+    }).slice(0, 8);
+
+    coincidencias.forEach(function (criador) {
+      const boton = document.createElement("button");
+      boton.type = "button";
+
+      boton.textContent =
+        (criador.Nombre || criador["Haras - Cabaña"] || "Criador") +
+        (criador["Numero de Criador"]
+          ? " — " + criador["Numero de Criador"]
+          : "");
+
+      boton.addEventListener("click", function () {
+        input.value =
+          criador.Nombre ||
+          criador["Haras - Cabaña"] ||
+          "";
+
+        inputNumero.value =
+          criador["Numero de Criador"] ||
+          "";
+
+        contenedor.innerHTML = "";
+      });
+
+      contenedor.appendChild(boton);
+    });
+  });
+}
+
     function abrirFotoGrande(src, alt) {
   const fondo = document.createElement("div");
 
@@ -4263,6 +4335,7 @@ activarCampoPedigreePublico("nuevoBisabueloMP", "M");
 activarCampoPedigreePublico("nuevaBisabuelaMP", "H");
 activarCampoPedigreePublico("nuevoBisabueloMM", "M");
 activarCampoPedigreePublico("nuevaBisabuelaMM", "H");
+      activarCriadorPredictivoNuevo();
       
   const nombreArriba = document.getElementById("nuevoNombre");
   const nombrePedigree = document.getElementById("nuevoNombrePedigree");
