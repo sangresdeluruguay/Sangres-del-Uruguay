@@ -2217,6 +2217,8 @@ nuevaAbuelaMaterna: {
           criador.Nombre ||
           criador["Haras - Cabaña"] ||
           "";
+        
+        input.dataset.criadorId = criador.id;
 
         inputNumero.value =
           criador["Numero de Criador"] ||
@@ -4366,14 +4368,15 @@ async function guardarCaballoNuevo() {
 
   const nuevoCaballo = {
     Nombre: nombre,
-    Criador:
-  document.getElementById("nuevoCriador").value.trim() || null,
+    "Criador ID":
+  document.getElementById("nuevoCriador").dataset.criadorId
+    ? Number(document.getElementById("nuevoCriador").dataset.criadorId)
+    : null,
 
 "Numero de Criador":
   document.getElementById("nuevoNumeroCriador").value.trim() || null,
 
-Propietario:
-  document.getElementById("nuevoPropietario").value.trim() || null,
+"Propietario ID": null,
 
     Nacimiento:
       document.getElementById("nuevoNacimiento").value || null,
