@@ -5035,12 +5035,14 @@ buscarCaballo();
 }
     abrirCaballoDirecto = false;
     const caballo = caballos[0];
-    const urlHijosRegistrado =
+    const nombreFiltroRegistrado = encodeURIComponent('"' + caballo.Nombre.replace(/"/g, '\\"') + '"');
+
+const urlHijosRegistrado =
   SUPABASE_URL +
   "/rest/v1/Caballos?select=*&or=(Padre.eq." +
-  encodeURIComponent(caballo.Nombre) +
+  nombreFiltroRegistrado +
   ",Madre.eq." +
-  encodeURIComponent(caballo.Nombre) +
+  nombreFiltroRegistrado +
   ")&order=Nombre.asc";
 
 const respuestaHijosRegistrado = await fetch(urlHijosRegistrado, {
