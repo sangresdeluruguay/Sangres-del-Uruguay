@@ -4550,13 +4550,14 @@ async function buscarCaballo() {
 
     if (caballos.length === 0) {
 
-  const urlHijos =
-    SUPABASE_URL +
-    "/rest/v1/Caballos?select=*&or=(Padre.eq." +
-    encodeURIComponent(nombre) +
-    ",Madre.eq." +
-    encodeURIComponent(nombre) +
-    ")&order=Nombre.asc";
+  const nombreFiltro = encodeURIComponent('"' + nombre.replace(/"/g, '\\"') + '"');
+const urlHijos =
+  SUPABASE_URL +
+  "/rest/v1/Caballos?select=*&or=(Padre.eq." +
+  nombreFiltro +
+  ",Madre.eq." +
+  nombreFiltro +
+  ")&order=Nombre.asc";
 
   const respuestaHijos = await fetch(urlHijos, {
     headers: {
