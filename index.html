@@ -2402,6 +2402,38 @@ nuevaAbuelaMaterna: {
     return;
   }
 
+      const numeroCriadorLote = datos["Numero de Criador"];
+
+const respuestaCriadorLote = await fetch(
+  SUPABASE_URL +
+  "/rest/v1/Criadores?select=id,Ultimo%20Lote&Numero%20de%20Criador=eq." +
+  encodeURIComponent(numeroCriadorLote) +
+  "&limit=1",
+  {
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    }
+  }
+);
+
+if (!respuestaCriadorLote.ok) {
+  alert("No se pudo obtener la información del criador.");
+  return;
+}
+
+const criadoresLote = await respuestaCriadorLote.json();
+
+if (!criadoresLote.length) {
+  alert("No se encontró el número de criador.");
+  return;
+}
+
+const ultimoLote = Number(criadoresLote[0]["Ultimo Lote"] || 0);
+
+datos["Numero Lote"] = ultimoLote + 1;
+datos["Lote Cerrado"] = false;
+      
   const respuesta = await fetch(
     SUPABASE_URL + "/rest/v1/SolicitudesCaballos",
     {
