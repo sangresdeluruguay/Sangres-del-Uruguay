@@ -2392,6 +2392,10 @@ nuevaAbuelaMaterna: {
     "Bisabuela materna materna": document.getElementById("caballoBAMM").value.trim().toUpperCase(),
     "Estado": "pendiente"
   };
+      if (!datos.Nacimiento) {
+  alert("Completá la fecha de nacimiento.");
+  return;
+}
 
   if (!datos.Nombre || !datos["Numero de Criador"]) {
     alert("Completá el nombre del caballo y el número de criador.");
