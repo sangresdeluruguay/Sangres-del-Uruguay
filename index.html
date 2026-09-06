@@ -2453,8 +2453,41 @@ datos["Lote Cerrado"] = false;
     return;
   }
 
-  alert("Caballo enviado correctamente para revisión.");
-  document.getElementById("caballoNacimiento").value = "";
+document.getElementById("resultado").insertAdjacentHTML("beforeend", `
+  <div style="
+    max-width:520px;
+    margin:25px auto;
+    padding:22px;
+    background:white;
+    border:1px solid #c9a227;
+    border-radius:12px;
+    text-align:center;
+  ">
+    <h3 style="margin-top:0;">✅ Ejemplar enviado para revisión</h3>
+
+    <p>
+      El ejemplar fue agregado correctamente al
+      <strong>Lote ${datos["Numero Lote"]}</strong>.
+    </p>
+
+    <div style="
+      display:flex;
+      gap:12px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top:18px;
+    ">
+      <button type="button" onclick="registrarOtroCaballo()">
+        Registrar otro caballo
+      </button>
+
+      <button type="button"
+        onclick="finalizarRegistros('${datos["Numero de Criador"]}', ${datos["Numero Lote"]})">
+        Finalizar registros
+      </button>
+    </div>
+  </div>
+);  document.getElementById("caballoNacimiento").value = "";
 document.getElementById("caballoSexo").value = "";
 document.getElementById("caballoPelo").value = "";
 document.getElementById("caballoRP").value = "";
@@ -2478,6 +2511,129 @@ document.getElementById("caballoBMM").value = "";
 document.getElementById("caballoBAMM").value = "";
 }
     
+function registrarOtroCaballo() {
+  document.getElementById("resultado").innerHTML = "";
+
+  const campoNombre = document.getElementById("caballoNombre");
+
+  if (campoNombre) {
+    campoNombre.focus();
+    campoNombre.scrollIntoView({
+      behavior: "smooth",
+      block: "center"
+    });
+  }
+}
+    async function finalizarRegistros(numeroCriador, numeroLote) {
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/rpc/finalizar_lote_registro",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        p_numero_criador: numeroCriador,
+        p_numero_lote: Number(numeroLote)
+      })
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    alert("No se pudieron finalizar los registros: " + error);
+    return;
+  }
+
+  const resumen = await respuesta.json();
+
+  const nombreMostrar =
+    resumen.haras ||
+    resumen.criador ||
+    "-";
+
+  const mensajeWhatsApp = encodeURIComponent(
+    "Hola, envío comprobante de pago de Sangres del Uruguay.\n" +
+    "N.º Criador: " + resumen.numero_criador + "\n" +
+    "Criador: " + nombreMostrar + "\n" +
+    "Lote: " + resumen.numero_lote + "\n" +
+    "Ejemplares: " + resumen.cantidad + "\n" +
+    "Total: $" + resumen.total + " UYU"
+  );
+
+  document.getElementById("resultado").innerHTML = `
+    <div style="
+      max-width:650px;
+      margin:25px auto;
+      padding:24px;
+      background:white;
+      border:1px solid #c9a227;
+      border-radius:12px;
+    ">
+
+      <h2 style="text-align:center;">
+        Registros finalizados
+      </h2>
+
+      <p><strong>N.º Criador:</strong> ${resumen.numero_criador}</p>
+      <p><strong>Criador:</strong> ${nombreMostrar}</p>
+      <p><strong>Lote:</strong> ${resumen.numero_lote}</p>
+      <p><strong>Ejemplares registrados:</strong> ${resumen.cantidad}</p>
+      <p><strong>Fecha:</strong> ${resumen.fecha}</p>
+
+      <hr>
+
+      <p>
+        <strong>Valor por ejemplar:</strong> $300 UYU
+      </p>
+
+      <p style="font-size:20px;">
+        <strong>Total a pagar: $${resumen.total} UYU</strong>
+      </p>
+
+      <hr>
+
+      <h3>Métodos de pago</h3>
+
+      <p>
+        <strong>Mercado Pago</strong><br>
+        <a href="https://link.mercadopago.com.uy/sangresdeluruguay"
+           target="_blank">
+          Pagar con Mercado Pago
+        </a>
+      </p>
+
+      <p>
+        <strong>Transferencia dentro de Santander</strong><br>
+        Cuenta: 1208290378<br>
+        Moneda: UYU<br>
+        Sucursal: 02 - 18 De Julio
+      </p>
+
+      <p>
+        <strong>Transferencia desde otros bancos</strong><br>
+        Cuenta: 0002001208290378<br>
+        Moneda: UYU
+      </p>
+
+      <p style="margin-top:20px;">
+        Una vez realizado el pago, enviá el comprobante por WhatsApp.
+      </p>
+
+      <div style="text-align:center; margin-top:20px;">
+        <button
+          type="button"
+          onclick="window.open('https://wa.me/59891909423?text=${mensajeWhatsApp}', '_blank')">
+          Enviar comprobante por WhatsApp
+        </button>
+      </div>
+
+    </div>
+  `;
+}
 function abrirRegistroCriador() {
 
   const resultado = document.getElementById("resultado");
