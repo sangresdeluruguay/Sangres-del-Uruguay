@@ -1298,6 +1298,45 @@ transform: translateX(250px);
     margin-top: 10px !important;
   }
 }
+    @media (max-width: 600px) {
+
+  .ficha-superior-caballo {
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    gap: 18px !important;
+    justify-items: center !important;
+  }
+
+  .ficha-superior-caballo .tabla-ficha {
+    width: calc(100% - 24px) !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+
+    box-sizing: border-box !important;
+  }
+
+  .ficha-superior-caballo .dato-ficha {
+    min-width: 0 !important;
+    width: 100% !important;
+    text-align: center !important;
+    box-sizing: border-box !important;
+    overflow-wrap: anywhere !important;
+    word-break: normal !important;
+  }
+
+  .ficha-superior-caballo .dato-ficha strong,
+  .ficha-superior-caballo .dato-ficha span {
+    display: block !important;
+    width: 100% !important;
+    text-align: center !important;
+  }
+}
+    
   </style>
 </head>
 
