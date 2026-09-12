@@ -1146,6 +1146,58 @@ transform: translateX(250px);
     color: #d5b56b !important;
   }
 }
+    @media (max-width: 600px) {
+
+  header {
+    position: relative !important;
+    height: 145px !important;
+    min-height: 145px !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: #12233f !important;
+  }
+
+  .header-logo-sdu {
+    position: absolute !important;
+    left: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 72px !important;
+    height: auto !important;
+    margin: 0 !important;
+  }
+
+  header h1 {
+    position: absolute !important;
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+
+    width: 190px !important;
+
+    text-align: center !important;
+    font-size: 27px !important;
+    line-height: 1.05 !important;
+  }
+
+  .menu-mobile-sdu {
+    position: absolute !important;
+    right: 18px !important;
+    top: 50% !important;
+    transform: translateY(-50%) !important;
+
+    width: 54px !important;
+    height: 54px !important;
+
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+    
   </style>
 </head>
 
@@ -1168,15 +1220,15 @@ transform: translateX(250px);
 </button>
   <p>Registro y genealogía equina</p>
     <nav class="menu-principal">
-  <button type="button" onclick="mostrarInicio()">Inicio</button>
-  <button type="button" onclick="mostrarBuscadorCaballos()">🔍 Buscar caballo</button>
-  <button type="button" onclick="mostrarBusquedaCriadoresPropietarios()">Criadores / Propietarios</button>
-  <button type="button">Sobre SDU</button>
-  <button type="button">Contacto</button>
+  <button type="button" onclick="mostrarInicio(); cerrarMenuMobile()">Inicio</button>
+  <button type="button" onclick="mostrarBuscadorCaballos(); cerrarMenuMobile()">🔍 Buscar caballo</button>
+  <button type="button" onclick="mostrarBusquedaCriadoresPropietarios(); cerrarMenuMobile()">Criadores / Propietarios</button>
+  <button type="button" onclick="cerrarMenuMobile()">Sobre SDU</button>
+  <button type="button" onclick="cerrarMenuMobile()">Contacto</button>
       <button
   type="button"
   class="login-mobile-sdu"
-  onclick="abrirLogin()"
+  onclick="abrirLogin(); cerrarMenuMobile()
 >
   Ingresar
 </button>
@@ -1603,6 +1655,13 @@ origenFichaCaballo = "criadores";
   if (!menu) return;
 
   menu.classList.toggle("menu-mobile-abierto");
+}
+    function cerrarMenuMobile() {
+  const menu = document.querySelector("header nav");
+
+  if (!menu) return;
+
+  menu.classList.remove("menu-mobile-abierto");
 }
     function abrirRegistroCaballo() {
 
