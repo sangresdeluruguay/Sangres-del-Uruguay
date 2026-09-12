@@ -1244,6 +1244,30 @@ transform: translateX(250px);
     gap: 12px !important;
   }
 }
+    @media (max-width: 900px) {
+
+  html,
+  body {
+    width: 100% !important;
+    max-width: 100% !important;
+    overflow-x: hidden !important;
+    margin: 0 !important;
+  }
+
+  body > *,
+  main,
+  header,
+  .portada-foto {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .portada-foto {
+    width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+}
     
   </style>
 </head>
