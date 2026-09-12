@@ -152,8 +152,13 @@ body:has(.ficha-caballo) .acciones-registro {
     #resultado {
       margin-top: 30px;
     }
-
+.login-mobile-sdu {
+  display: none;
+}
     @media (max-width: 600px) {
+      .login-mobile-sdu {
+  display: block !important;
+}
       .buscar-fila {
         flex-direction: column;
       }
@@ -897,6 +902,206 @@ textarea {
   margin: 1px 0 1px auto;
 transform: translateX(250px);
 }
+    /* =====================================================
+   DISEÑO CELULAR - SANGRES DEL URUGUAY
+   No modifica escritorio
+===================================================== */
+.menu-mobile-sdu {
+  display: none;
+}
+@media (max-width: 600px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  /* ---------- HEADER ---------- */
+
+  header {
+    position: relative;
+    width: 100%;
+    min-height: 145px;
+    padding: 24px 20px !important;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+
+    background: #12233f;
+  }
+
+  /* Logo SDU */
+  .header-logo-sdu {
+    position: static !important;
+    width: 95px !important;
+    height: auto !important;
+    margin: 0 22px 0 0 !important;
+    flex-shrink: 0;
+  }
+
+  /* Título */
+  header h1 {
+    font-size: 30px !important;
+    line-height: 1.05 !important;
+    margin: 0 !important;
+    max-width: 210px;
+    color: white;
+  }
+
+  /* En celular no mostramos el subtítulo */
+  header p {
+    display: none !important;
+  }
+
+  /* ---------- MENÚ HAMBURGUESA ---------- */
+
+  .menu-mobile-sdu {
+    position: absolute;
+    top: 37px;
+    right: 18px;
+
+    width: 58px;
+    height: 58px;
+
+    padding: 0;
+    border: 2px solid #d5b56b;
+    border-radius: 14px;
+
+    background: transparent;
+    color: #d5b56b;
+
+    font-size: 32px;
+    line-height: 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+    z-index: 1001;
+  }
+
+  /* Menú original oculto hasta tocar hamburguesa */
+  header nav {
+    display: none !important;
+
+    position: absolute;
+    top: 125px;
+    right: 16px;
+
+    width: min(310px, calc(100vw - 32px));
+
+    padding: 10px;
+    box-sizing: border-box;
+
+    background: white;
+    border-radius: 14px;
+
+    box-shadow: 0 10px 35px rgba(0, 0, 0, .22);
+
+    z-index: 1000;
+  }
+
+  header nav.menu-mobile-abierto {
+    display: flex !important;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  header nav a,
+  header nav button {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 14px 15px !important;
+
+    text-align: left;
+
+    border-radius: 9px;
+
+    font-size: 17px !important;
+    font-weight: 600;
+
+    color: #12233f;
+    background: transparent;
+    border: none;
+  }
+
+  header nav a:hover,
+  header nav button:hover {
+    background: #f7f3e9;
+  }
+
+  /* Si el botón Ingresar está fuera del nav,
+     en celular lo vamos a manejar después dentro del menú */
+  #btnLogin {
+    display: none !important;
+  }
+
+  /* ---------- BOTONES PRINCIPALES ---------- */
+
+  .acciones-registro {
+    width: 100% !important;
+    max-width: none !important;
+
+    margin: 0 !important;
+    padding: 34px 22px 45px !important;
+
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 18px !important;
+
+    box-sizing: border-box;
+
+    background: white;
+  }
+
+  .tarjeta-registro {
+    width: 100% !important;
+    min-height: 92px;
+
+    margin: 0 !important;
+    padding: 20px 24px !important;
+
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+
+    border: 1.5px solid #d5b56b !important;
+    border-radius: 18px !important;
+
+    background: #0e2747 !important;
+
+    color: white !important;
+
+    font-size: 23px !important;
+    font-weight: 700 !important;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 4px 10px rgba(0,0,0,.12);
+  }
+
+  .tarjeta-registro:hover {
+    background: #173b63 !important;
+  }
+
+  /* Caballito decorativo del inicio:
+     que no genere ancho extra ni corte celular */
+  .caballito-inicio {
+    max-width: 90px !important;
+    height: auto !important;
+    margin: 20px 18px 20px auto !important;
+    display: block;
+  }
+
+}
   </style>
 </head>
 
@@ -910,6 +1115,13 @@ transform: translateX(250px);
   >
 
   <h1>Sangres del Uruguay</h1>
+    <button
+  type="button"
+  class="menu-mobile-sdu"
+  onclick="toggleMenuMobile()"
+>
+  &#9776;
+</button>
   <p>Registro y genealogía equina</p>
     <nav class="menu-principal">
   <button type="button" onclick="mostrarInicio()">Inicio</button>
@@ -917,6 +1129,13 @@ transform: translateX(250px);
   <button type="button" onclick="mostrarBusquedaCriadoresPropietarios()">Criadores / Propietarios</button>
   <button type="button">Sobre SDU</button>
   <button type="button">Contacto</button>
+      <button
+  type="button"
+  class="login-mobile-sdu"
+  onclick="abrirLogin()"
+>
+  Ingresar
+</button>
 </nav>
     <button id="btnLogin" onclick="abrirLogin()">Administrador</button>
     <button id="btnPanelAdmin" onclick="abrirPanelAdmin()" style="display:none;">Panel administrador</button>
@@ -1333,6 +1552,13 @@ origenFichaCaballo = "criadores";
     });
 
   });
+}
+    function toggleMenuMobile() {
+  const menu = document.querySelector("header nav");
+
+  if (!menu) return;
+
+  menu.classList.toggle("menu-mobile-abierto");
 }
     function abrirRegistroCaballo() {
 
