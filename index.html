@@ -1344,15 +1344,19 @@ transform: translateX(250px);
     padding-right: 2mm !important;
   }
 }
+   
     @media (min-width: 601px) {
-  #btnLogin {
-    display: inline-block !important;
+  header #btnLogin {
+    display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
-    z-index: 9999 !important;
+    position: absolute !important;
+    top: 20px !important;
+    right: 24px !important;
+    z-index: 99999 !important;
+    pointer-events: auto !important;
   }
 }
-    
   </style>
 </head>
 
