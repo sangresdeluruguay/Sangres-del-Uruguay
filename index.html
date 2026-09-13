@@ -3346,7 +3346,8 @@ if (btnLogin) btnLogin.textContent = "Ingresar";
     JSON.stringify(nuevaSesion)
   );
 
-  document.getElementById("btnLogin").textContent = "Administrador";
+  const btnLogin = document.getElementById("btnLogin");
+if (btnLogin) btnLogin.textContent = "Administrador";
   document.getElementById("btnPanelAdmin").style.display = "inline-block";
 
   return true;
