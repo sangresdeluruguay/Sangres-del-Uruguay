@@ -3302,7 +3302,8 @@ async function renovarSesionAdmin() {
 
   if (!sesionGuardada) {
     sesionAdmin = null;
-    document.getElementById("btnLogin").textContent = "Ingresar";
+    const btnLogin = document.getElementById("btnLogin");
+if (btnLogin) btnLogin.textContent = "Ingresar";
     return false;
   }
 
@@ -3311,7 +3312,8 @@ async function renovarSesionAdmin() {
   if (!sesionAdmin.refresh_token) {
     localStorage.removeItem("sesionAdminSdU");
     sesionAdmin = null;
-    document.getElementById("btnLogin").textContent = "Ingresar";
+    const btnLogin = document.getElementById("btnLogin");
+if (btnLogin) btnLogin.textContent = "Ingresar";
     return false;
   }
 
