@@ -77,6 +77,42 @@
 .menu-principal button:hover {
   color: #d5b56b;
 }
+    .contacto-menu {
+  position: relative;
+}
+
+.contacto-opciones {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  min-width: 160px;
+  background: #17233b;
+  border: 1px solid #d5b56b;
+  border-radius: 10px;
+  padding: 8px;
+  z-index: 1000;
+}
+
+.contacto-opciones.contacto-abierto {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.contacto-opciones a {
+  color: white;
+  text-decoration: none;
+  padding: 9px 12px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.contacto-opciones a:hover {
+  background: #234f7c;
+  color: #d5b56b;
+}
     main {
       max-width: 950px;
       margin: 0 auto;
