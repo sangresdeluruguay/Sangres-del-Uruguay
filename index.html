@@ -3038,7 +3038,10 @@ datos["Lote Cerrado"] = false;
     alert("No se pudo enviar el caballo: " + error);
     return;
   }
-
+document
+  .querySelectorAll(".btn-finalizar-lote")
+  .forEach(boton => boton.remove());
+      
 document.getElementById("resultado").insertAdjacentHTML("beforeend", `
   <div style="
     max-width:520px;
@@ -3064,11 +3067,8 @@ document.getElementById("resultado").insertAdjacentHTML("beforeend", `
       flex-wrap:wrap;
       margin-top:18px;
     ">
-      <button type="button" onclick="registrarOtroCaballo('${datos["Numero de Criador"]}')">
-        Registrar otro caballo
-      </button>
 
-      <button type="button"
+      <button type="button" class="btn-finalizar-lote"
         onclick="finalizarRegistros('${datos["Numero de Criador"]}', ${datos["Numero Lote"]})">
         Finalizar registros
       </button>
