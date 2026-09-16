@@ -3043,7 +3043,7 @@ document.getElementById("resultado").insertAdjacentHTML("beforeend", `
       flex-wrap:wrap;
       margin-top:18px;
     ">
-      <button type="button" onclick="registrarOtroCaballo()">
+      onclick="registrarOtroCaballo('${datos["Numero de Criador"]}')"
         Registrar otro caballo
       </button>
 
@@ -3078,8 +3078,25 @@ document.getElementById("caballoBMM").value = "";
 document.getElementById("caballoBAMM").value = "";
 }
     
-function registrarOtroCaballo() {
-  document.getElementById("resultado").innerHTML = "";
+async function registrarOtroCaballo(numeroCriador) {
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/Criadores?select=*&Numero%20de%20Criador=eq." + encodeURIComponent(numeroCriador),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const criadores = await respuesta.json();
+
+  if (!respuesta.ok || !criadores.length) {
+    alert("No se pudo recuperar la información del criador.");
+    return;
+  }
+
+  mostrarFormularioCaballo(numeroCriador, criadores[0]);
 
   const campoNombre = document.getElementById("caballoNombre");
 
