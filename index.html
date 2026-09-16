@@ -3049,7 +3049,8 @@ document.getElementById("resultado").insertAdjacentHTML("beforeend", `
     border-radius:12px;
     text-align:center;
   ">
-    <h3 style="margin-top:0;">✅ Ejemplar enviado para revisión</h3>
+    <h3 style="margin-top:0;">✅ ${datos.Nombre}</h3>
+<div style="font-weight:600; margin:8px 0;">${datos.Padre || "-"} × ${datos.Madre || "-"}</div>
 
     <p>
       El ejemplar fue agregado correctamente al
