@@ -3115,8 +3115,9 @@ async function registrarOtroCaballo(numeroCriador) {
     alert("No se pudo recuperar la información del criador.");
     return;
   }
-
+const resumenAnterior = document.getElementById("resultado").innerHTML;
   mostrarFormularioCaballo(numeroCriador, criadores[0]);
+  document.getElementById("resultado").innerHTML = resumenAnterior;
 
   const campoNombre = document.getElementById("caballoNombre");
 
