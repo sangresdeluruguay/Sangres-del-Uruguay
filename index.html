@@ -3069,7 +3069,7 @@ document.getElementById("resultado").insertAdjacentHTML("beforeend", `
     ">
 
       <button type="button" class="btn-finalizar-lote"
-        onclick="finalizarRegistros('${datos["Numero de Criador"]}', ${datos["Numero Lote"]})">
+        onclick="revisarLote('${datos["Numero de Criador"]}', ${datos["Numero Lote"]})"
         Finalizar registros
       </button>
     </div>
@@ -3128,6 +3128,104 @@ const resumenAnterior = document.getElementById("resultado").innerHTML;
       behavior: "smooth",
       block: "center"
     });
+  }
+}
+    async function revisarLote(numeroCriador, numeroLote) {
+  const resultado = document.getElementById("resultado");
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCaballos?select=Nombre,Padre,Madre" +
+    "&Numero%20de%20Criador=eq." + encodeURIComponent(numeroCriador) +
+    "&Numero%20Lote=eq." + encodeURIComponent(numeroLote) +
+    "&Lote%20Cerrado=eq.false" +
+    "&Estado=eq.pendiente",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    alert("No se pudo cargar el lote: " + error);
+    return;
+  }
+
+  const caballos = await respuesta.json();
+
+  if (!caballos.length) {
+    alert("No hay ejemplares para revisar en este lote.");
+    return;
+  }
+
+  window.htmlAntesRevisionLote = resultado.innerHTML;
+
+  const lista = caballos.map((caballo, index) => `
+    <div style="
+      padding:12px 0;
+      border-bottom:1px solid #ddd;
+      text-align:left;
+    ">
+      <strong>${index + 1}. ${escapar(caballo.Nombre || "-")}</strong>
+      <div style="margin-top:4px;">
+        ${escapar(caballo.Padre || "-")} × ${escapar(caballo.Madre || "-")}
+      </div>
+    </div>
+    `).join("");
+
+resultado.innerHTML = `
+  <div style="
+    max-width:650px;
+    margin:25px auto;
+    padding:24px;
+    background:white;
+    border:1px solid #c9a227;
+    border-radius:12px;
+  ">
+    <h2 style="text-align:center;">Revisar Lote ${numeroLote}</h2>
+
+    <p style="text-align:center;">
+      Revisá los ejemplares antes de finalizar el registro.
+    </p>
+
+    <div style="margin-top:20px;">
+      ${lista}
+    </div>
+
+    <p style="text-align:center; margin-top:20px;">
+      <strong>Total de ejemplares: ${caballos.length}</strong>
+    </p>
+
+    <div style="
+      display:flex;
+      justify-content:center;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:20px;
+    ">
+      <button type="button" onclick="volverRevisionLote()">
+        Volver
+      </button>
+
+      <button
+        type="button"
+        onclick="finalizarRegistros('${numeroCriador}', ${Number(numeroLote)})"
+      >
+        Confirmar y finalizar
+      </button>
+    </div>
+  </div>
+`;
+}
+
+function volverRevisionLote() {
+  const resultado = document.getElementById("resultado");
+
+  if (window.htmlAntesRevisionLote) {
+    resultado.innerHTML = window.htmlAntesRevisionLote;
   }
 }
     async function finalizarRegistros(numeroCriador, numeroLote) {
