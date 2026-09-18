@@ -1872,7 +1872,19 @@ resultadoPersona.innerHTML = `
 
     <tbody>
 
-      ${caballosUnicos.map(caballo => `
+${caballosUnicos
+  .slice()
+  .sort((a, b) => {
+    const fechaA = a.Nacimiento ? new Date(a.Nacimiento) : null;
+    const fechaB = b.Nacimiento ? new Date(b.Nacimiento) : null;
+
+    if (!fechaA && !fechaB) return 0;
+    if (!fechaA) return 1;
+    if (!fechaB) return -1;
+
+    return fechaB - fechaA;
+  })
+  .map(caballo => `
         <tr>
 
           <td>
