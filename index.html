@@ -547,6 +547,10 @@ header p {
 .resumen-criador .dato-ficha:last-child {
   border-right: none;
 }
+    .titulo-criador {
+  margin-top: 24px;
+  margin-bottom: 18px;
+}
     .foto-caballo-ficha {
   width: 220px;
   margin: 14px auto 18px;
@@ -1781,8 +1785,7 @@ resultadoPersona.innerHTML = `
   <div class="ficha-caballo">
 
     ${criadorEncontrado ? `
-      <h2>${escapar(criadorEncontrado["Haras - Cabaña"] || criadorEncontrado.Nombre || "CRIADOR")}</h2>
-
+     <h2 class="titulo-criador">${escapar(criadorEncontrado["Haras - Cabaña"] || criadorEncontrado.Nombre || "CRIADOR")}</h2>
 
 
      <div class="resumen-criador">
