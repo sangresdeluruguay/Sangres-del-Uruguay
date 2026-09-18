@@ -527,6 +527,26 @@ header p {
 .ficha-superior-caballo .dato-ficha:nth-last-child(-n+2) {
   border-bottom: none;
 }
+    .resumen-criador {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  max-width: 520px;
+  margin: 18px auto 24px;
+  border: 1px solid #c9a227;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.88);
+}
+
+.resumen-criador .dato-ficha {
+  padding: 16px 12px;
+  text-align: center;
+  border-right: 1px solid #c9a227;
+}
+
+.resumen-criador .dato-ficha:last-child {
+  border-right: none;
+}
     .foto-caballo-ficha {
   width: 220px;
   margin: 14px auto 18px;
@@ -1765,17 +1785,19 @@ resultadoPersona.innerHTML = `
 
 
 
-        <div class="dato-ficha">
-          <strong>N.º Criador</strong>
-          <span>${escapar(criadorEncontrado["Numero de Criador"] || "-")}</span>
-        </div>
+     <div class="resumen-criador">
 
-        
+  <div class="dato-ficha">
+    <strong>N.º Criador</strong>
+    <span>${escapar(criadorEncontrado["Numero de Criador"] || "-")}</span>
+  </div>
 
-        <div class="dato-ficha">
-          <strong>Caballos registrados</strong>
-          <span>${caballosUnicos.length}</span>
-        </div>
+  <div class="dato-ficha">
+    <strong>Caballos registrados</strong>
+    <span>${caballosUnicos.length}</span>
+  </div>
+
+</div>
       </div>
     ` : propietarioEncontrado ? `
       <h2>${escapar(propietarioEncontrado.Nombre || "PROPIETARIO")}</h2>
