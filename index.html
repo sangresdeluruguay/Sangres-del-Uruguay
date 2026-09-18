@@ -527,6 +527,40 @@ header p {
 .ficha-superior-caballo .dato-ficha:nth-last-child(-n+2) {
   border-bottom: none;
 }
+    .tabla-criador-caballos {
+  width: 100%;
+  table-layout: fixed;
+}
+
+.tabla-criador-caballos th:nth-child(1),
+.tabla-criador-caballos td:nth-child(1) {
+  width: 20%;
+}
+
+.tabla-criador-caballos th:nth-child(2),
+.tabla-criador-caballos td:nth-child(2) {
+  width: 15%;
+}
+
+.tabla-criador-caballos th:nth-child(3),
+.tabla-criador-caballos td:nth-child(3) {
+  width: 12%;
+}
+
+.tabla-criador-caballos th:nth-child(4),
+.tabla-criador-caballos td:nth-child(4) {
+  width: 10%;
+}
+
+.tabla-criador-caballos th:nth-child(5),
+.tabla-criador-caballos td:nth-child(5) {
+  width: 21.5%;
+}
+
+.tabla-criador-caballos th:nth-child(6),
+.tabla-criador-caballos td:nth-child(6) {
+  width: 21.5%;
+}
     .resumen-criador {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1823,7 +1857,7 @@ resultadoPersona.innerHTML = `
 
 <div class="tabla-resultados-wrap">
 
-  <table class="tabla-resultados">
+ <table class="tabla-resultados tabla-criador-caballos">
 
     <thead>
       <tr>
