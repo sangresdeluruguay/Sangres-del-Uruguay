@@ -5631,6 +5631,17 @@ const urlHijos =
     );
   }
 
+      const hijosOrdenados = hijos.slice().sort((a, b) => {
+  const fechaA = a.Nacimiento ? new Date(a.Nacimiento) : null;
+  const fechaB = b.Nacimiento ? new Date(b.Nacimiento) : null;
+
+  if (!fechaA && !fechaB) return 0;
+  if (!fechaA) return 1;
+  if (!fechaB) return -1;
+
+  return fechaB - fechaA;
+});
+      
   let htmlHijos = "";
 
   if (hijos.length > 0) {
@@ -5651,19 +5662,7 @@ const urlHijos =
           </thead>
 
           <tbody>
-            ${hijos
-  .slice()
-  .sort((a, b) => {
-    const fechaA = a.Nacimiento ? new Date(a.Nacimiento) : null;
-    const fechaB = b.Nacimiento ? new Date(b.Nacimiento) : null;
-
-    if (!fechaA && !fechaB) return 0;
-    if (!fechaA) return 1;
-    if (!fechaB) return -1;
-
-    return fechaB - fechaA;
-  })
-  .map(h => `
+            ${hijosOrdenados.map(h => `
               <tr>
                 <td>
                   <span
@@ -5674,7 +5673,11 @@ const urlHijos =
                   </span>
                 </td>
 
-                <td>${escapar(h.Nacimiento || "-")}</td>
+                <td>${
+  h.Nacimiento
+    ? h.Nacimiento.split("-").reverse().join("/")
+    : "-"
+}</td>
                 <td>${escapar(h.Sexo || "-")}</td>
                 <td>${escapar(h.Padre || "-")}</td>
                 <td>${escapar(h.Madre || "-")}</td>
