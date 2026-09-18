@@ -5045,7 +5045,7 @@ const urlHijos =
   nombreFiltro +
   ",Madre.eq." +
   nombreFiltro +
-  ")&order=Nombre.asc";
+")&order=Nacimiento.desc.nullslast";
 
   const respuestaHijos = await fetch(urlHijos, {
     headers: {
