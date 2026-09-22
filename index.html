@@ -5859,16 +5859,226 @@ async function guardarCaballoNuevo() {
     alert("El caballo necesita un nombre.");
     return;
   }
+/* =========================================
+   RESOLVER CRIADOR
+   Puede tener número SDU o ser histórico
+========================================= */
 
+const inputCriador =
+  document.getElementById("nuevoCriador");
+
+const inputNumeroCriador =
+  document.getElementById("nuevoNumeroCriador");
+
+const nombreCriador =
+  normalizarTexto(inputCriador.value);
+
+const numeroCriador =
+  normalizarTexto(inputNumeroCriador.value);
+
+let criadorId =
+  inputCriador.dataset.criadorId
+    ? Number(inputCriador.dataset.criadorId)
+    : null;
+
+
+/* Si no viene seleccionado de las sugerencias,
+   buscamos si ya existe */
+if (!criadorId && (nombreCriador || numeroCriador)) {
+
+  const respuestaCriadores = await fetch(
+    SUPABASE_URL + "/rest/v1/Criadores?select=*",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const criadores = await respuestaCriadores.json();
+
+  if (!respuestaCriadores.ok) {
+    alert("No se pudieron consultar los criadores.");
+    return;
+  }
+
+  const criadorExistente = criadores.find(function(c) {
+
+    const nombreExistente =
+      normalizarTexto(c.Nombre);
+
+    const harasExistente =
+      normalizarTexto(c["Haras - Cabaña"]);
+
+    const numeroExistente =
+      normalizarTexto(c["Numero de Criador"]);
+
+    /* Si tiene número, el número manda */
+    if (
+      numeroCriador &&
+      numeroExistente === numeroCriador
+    ) {
+      return true;
+    }
+
+    /* Si no tiene número, buscamos coincidencia exacta
+       por Nombre o Haras / Cabaña */
+    if (
+      nombreCriador &&
+      (
+        nombreExistente === nombreCriador ||
+        harasExistente === nombreCriador
+      )
+    ) {
+      return true;
+    }
+
+    return false;
+  });
+
+
+  if (criadorExistente) {
+
+    criadorId =
+      Number(criadorExistente.id);
+
+  } else {
+
+    /* Si escribió solamente un número desconocido
+       pero ningún nombre, no sabemos a quién pertenece */
+    if (!nombreCriador) {
+      alert(
+        "Ingresá también el nombre del criador o establecimiento."
+      );
+      return;
+    }
+
+    /* Creamos el criador histórico.
+       El número puede quedar vacío perfectamente. */
+    const respuestaNuevoCriador = await fetch(
+      SUPABASE_URL + "/rest/v1/Criadores",
+      {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization:
+            "Bearer " + sesionAdmin.access_token,
+          "Content-Type": "application/json",
+          Prefer: "return=representation"
+        },
+        body: JSON.stringify({
+          Nombre: nombreCriador,
+          "Numero de Criador":
+            numeroCriador || null
+        })
+      }
+    );
+
+    const nuevoCriador =
+      await respuestaNuevoCriador.json();
+
+    if (
+      !respuestaNuevoCriador.ok ||
+      !nuevoCriador.length
+    ) {
+      console.error(nuevoCriador);
+      alert("No se pudo guardar el criador.");
+      return;
+    }
+
+    criadorId =
+      Number(nuevoCriador[0].id);
+  }
+}
+
+
+/* =========================================
+   RESOLVER PROPIETARIO
+========================================= */
+
+const propietarioNombre =
+  normalizarTexto(
+    document
+      .getElementById("nuevoPropietario")
+      .value
+  );
+
+let propietarioId = null;
+
+if (propietarioNombre) {
+
+  const respuestaPropietarios = await fetch(
+    SUPABASE_URL + "/rest/v1/Propietarios?select=*",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const propietarios =
+    await respuestaPropietarios.json();
+
+  if (!respuestaPropietarios.ok) {
+    alert("No se pudieron consultar los propietarios.");
+    return;
+  }
+
+  const propietarioExistente =
+    propietarios.find(function(p) {
+      return (
+        normalizarTexto(p.Nombre) ===
+        propietarioNombre
+      );
+    });
+
+  if (propietarioExistente) {
+
+    propietarioId =
+      Number(propietarioExistente.id);
+
+  } else {
+
+    const respuestaNuevoPropietario =
+      await fetch(
+        SUPABASE_URL + "/rest/v1/Propietarios",
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization:
+              "Bearer " + sesionAdmin.access_token,
+            "Content-Type": "application/json",
+            Prefer: "return=representation"
+          },
+          body: JSON.stringify({
+            Nombre: propietarioNombre
+          })
+        }
+      );
+
+    const nuevoPropietario =
+      await respuestaNuevoPropietario.json();
+
+    if (
+      !respuestaNuevoPropietario.ok ||
+      !nuevoPropietario.length
+    ) {
+      console.error(nuevoPropietario);
+      alert("No se pudo guardar el propietario.");
+      return;
+    }
+
+    propietarioId =
+      Number(nuevoPropietario[0].id);
+  }
+}
   const nuevoCaballo = {
     Nombre: nombre,
-    "Criador ID":
-  document.getElementById("nuevoCriador").dataset.criadorId
-    ? Number(document.getElementById("nuevoCriador").dataset.criadorId)
-    : null,
-
-
-"Propietario ID": null,
+  "Criador ID": criadorId,
+"Propietario ID": propietarioId,
 
     Nacimiento:
       document.getElementById("nuevoNacimiento").value || null,
@@ -6254,50 +6464,61 @@ const urlHijos =
 
       ${botonRegistrar}
 
-      <div class="tabla-ficha tabla-ficha-provisional">
+     <div class="ficha-superior-caballo">
 
-  <div class="dato-ficha">
-    <strong>Criador</strong>
-    <span>-</span>
+  <div class="foto-caballo-ficha">
+
+    <div class="foto-caballo-vacia">
+      Sin foto
+    </div>
+
   </div>
 
-  <div class="dato-ficha">
-    <strong>N.º Criador</strong>
-    <span>-</span>
+  <div class="tabla-ficha">
+
+    <div class="dato-ficha">
+      <strong>Criador</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>N.º Criador</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Propietario</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Nacimiento</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Raza</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Sexo</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>Pelo</strong>
+      <span>-</span>
+    </div>
+
+    <div class="dato-ficha">
+      <strong>RP</strong>
+      <span>-</span>
+    </div>
+
   </div>
 
-  <div class="dato-ficha">
-    <strong>Propietario</strong>
-    <span>-</span>
-  </div>
-
-  <div class="dato-ficha">
-    <strong>Nacimiento</strong>
-    <span>-</span>
-  </div>
-
-  <div class="dato-ficha">
-    <strong>Raza</strong>
-    <span>-</span>
-  </div>
-
-  <div class="dato-ficha">
-    <strong>Sexo</strong>
-    <span>-</span>
-  </div>
-
-  <div class="dato-ficha">
-    <strong>Pelo</strong>
-    <span>-</span>
-  </div>
-
-  <div class="dato-ficha">
-    <strong>RP</strong>
-    <span>-</span>
-  </div>
-
-
-      </div>
+</div>
 
       <div class="pedigree">
 
