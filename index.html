@@ -6316,7 +6316,22 @@ const urlHijos =
   });
 
   const hijos = await respuestaHijos.json();
+      
+const nombreBuscadoDirecto =
+  String(nombre || "").trim().toUpperCase();
 
+const hijosDirectos = hijos.filter(function(h) {
+  const padre =
+    String(h.Padre || "").trim().toUpperCase();
+
+  const madre =
+    String(h.Madre || "").trim().toUpperCase();
+
+  return (
+    padre === nombreBuscadoDirecto ||
+    madre === nombreBuscadoDirecto
+  );
+});
   // Tomamos un hijo registrado como referencia para reconstruir
   // la rama conocida del caballo que todavía no está registrado.
   const hijoReferencia = hijos.length > 0 ? hijos[0] : null;
@@ -6477,7 +6492,7 @@ if (hijoReferencia) {
     );
   }
 
-      const hijosOrdenados = hijos.slice().sort((a, b) => {
+      const hijosOrdenados = hijosDirectos.slice().sort((a, b) => {
   const fechaA = a.Nacimiento ? new Date(a.Nacimiento) : null;
   const fechaB = b.Nacimiento ? new Date(b.Nacimiento) : null;
 
@@ -6490,7 +6505,7 @@ if (hijoReferencia) {
       
   let htmlHijos = "";
 
-  if (hijos.length > 0) {
+  if (hijosDirectos.length > 0) {
 
     htmlHijos = `
       <div class="descendencia">
