@@ -7010,7 +7010,7 @@ onclick="proponerFotoCaballo(this.dataset.nombre, this.dataset.id)"
 
   <div class="dato-ficha">
     <strong>Criador</strong>
-    <span>${criador && criador["Haras - Cabaña"] ? escapar(criador["Haras - Cabaña"]) : "-"}</span>
+    <span>${criador ? escapar(criador["Haras - Cabaña"] || criador.Nombre || "-") : "-"}</span>
   </div>
 
   <div class="dato-ficha">
