@@ -752,7 +752,11 @@ header p {
   transform: scale(1.03);
   box-shadow: 0 3px 10px rgba(23, 59, 108, 0.18);
 }
-    .pedigree-box a,
+  a.pedigree-box,
+a.pedigree-box:visited,
+a.pedigree-box:hover,
+a.pedigree-box:active,
+.pedigree-box a,
 .pedigree-box a:visited,
 .pedigree-box a:hover,
 .pedigree-box a:active {
@@ -760,17 +764,13 @@ header p {
   text-decoration: none !important;
 }
 
-.pedigree-box a {
-  display: flex;
-  width: 100%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
+a.pedigree-box {
+  cursor: pointer;
 }
 
-.pedigree-box:has(a) {
-  cursor: pointer;
+a.pedigree-box:hover {
+  transform: scale(1.03);
+  box-shadow: 0 3px 10px rgba(23, 59, 108, 0.18);
 }
     .boton-pdf {
   margin: 22px auto;
