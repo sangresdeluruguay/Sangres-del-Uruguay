@@ -1584,6 +1584,527 @@ transform: translateX(250px);
     let ultimaBusquedaCaballos = "";
     let abrirCaballoDirecto = false;
     let origenFichaCaballo = "";
+    /* ==========================================================
+   NAVEGACIÓN REAL SDU
+   URLs + historial + flecha atrás + abrir en nueva pestaña
+========================================================== */
+
+let navegacionSDUActiva = false;
+
+function urlCaballoSDU(nombre) {
+  return (
+    window.location.pathname +
+    "?caballo=" +
+    encodeURIComponent(String(nombre || "").trim())
+  );
+}
+
+function urlBusquedaCaballosSDU(nombre) {
+  return (
+    window.location.pathname +
+    "?buscar=" +
+    encodeURIComponent(String(nombre || "").trim())
+  );
+}
+
+function urlPersonaSDU(texto) {
+  return (
+    window.location.pathname +
+    "?persona=" +
+    encodeURIComponent(String(texto || "").trim())
+  );
+}
+
+
+/* ----------------------------------------------------------
+   ABRIR CABALLO
+---------------------------------------------------------- */
+
+function abrirCaballoSDU(nombre, guardarHistorial = true) {
+  nombre = String(nombre || "").trim();
+
+  if (!nombre) return;
+
+  const seccionBuscador =
+    document.getElementById("seccionBuscador");
+
+  const seccionPersonas =
+    document.getElementById("seccionCriadoresPropietarios");
+
+  const input =
+    document.getElementById("nombreCaballo");
+
+  if (seccionPersonas) {
+    seccionPersonas.style.display = "none";
+  }
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "block";
+  }
+
+  if (input) {
+    input.value = nombre;
+  }
+
+  if (guardarHistorial) {
+    const nuevaUrl = urlCaballoSDU(nombre);
+
+    const urlActual =
+      window.location.pathname +
+      window.location.search;
+
+    if (urlActual !== nuevaUrl) {
+      window.history.pushState(
+        {
+          vista: "caballo",
+          caballo: nombre
+        },
+        "",
+        nuevaUrl
+      );
+    }
+  }
+
+  abrirCaballoDirecto = true;
+
+  buscarCaballo();
+}
+
+
+/* ----------------------------------------------------------
+   CONVERTIR ELEMENTOS EXISTENTES EN LINKS REALES
+---------------------------------------------------------- */
+
+function convertirEnlacesCaballosSDU(contenedor = document) {
+
+  /* Nombre / Padre / Madre que ya tienen data-caballo */
+  contenedor
+    .querySelectorAll("[data-caballo]")
+    .forEach(elemento => {
+
+      if (elemento.dataset.linkSdu === "caballo") {
+        return;
+      }
+
+      const nombre =
+        String(elemento.dataset.caballo || "").trim();
+
+      if (!nombre) return;
+
+      convertirElementoEnLinkSDU(
+        elemento,
+        nombre
+      );
+    });
+
+
+  /* Pedigree provisional y descendientes antiguos */
+  contenedor
+    .querySelectorAll("[data-nombre]")
+    .forEach(elemento => {
+
+      if (elemento.dataset.linkSdu === "caballo") {
+        return;
+      }
+
+      let nombre = "";
+
+      try {
+        nombre =
+          decodeURIComponent(
+            elemento.dataset.nombre || ""
+          );
+      } catch (error) {
+        nombre =
+          elemento.dataset.nombre || "";
+      }
+
+      nombre = String(nombre).trim();
+
+      if (!nombre) return;
+
+      convertirElementoEnLinkSDU(
+        elemento,
+        nombre
+      );
+    });
+
+
+  /* Descendencia registrada.
+     Convierte automáticamente la primera columna en link. */
+  contenedor
+    .querySelectorAll(
+      ".descendencia table tbody tr, " +
+      ".descendencia-tabla table tbody tr"
+    )
+    .forEach(fila => {
+
+      const celdaNombre =
+        fila.querySelector("td:first-child");
+
+      if (!celdaNombre) return;
+
+      if (
+        celdaNombre.querySelector(
+          'a[data-link-sdu="caballo"]'
+        )
+      ) {
+        return;
+      }
+
+      const existente =
+        celdaNombre.querySelector(
+          "[data-caballo], [data-nombre]"
+        );
+
+      if (existente) return;
+
+      const nombre =
+        celdaNombre.textContent.trim();
+
+      if (!nombre || nombre === "-") {
+        return;
+      }
+
+      celdaNombre.innerHTML = "";
+
+      const link =
+        document.createElement("a");
+
+      link.href =
+        urlCaballoSDU(nombre);
+
+      link.textContent =
+        nombre;
+
+      link.dataset.caballo =
+        nombre;
+
+      link.dataset.linkSdu =
+        "caballo";
+
+      link.className =
+        "enlace-genealogia";
+
+      celdaNombre.appendChild(link);
+    });
+}
+
+
+/* ----------------------------------------------------------
+   CAMBIA BOTÓN / SPAN / DIV POR UN <a href>
+---------------------------------------------------------- */
+
+function convertirElementoEnLinkSDU(elemento, nombre) {
+
+  if (!elemento || !nombre) return;
+
+  /* Si ya es <a>, solamente completamos el href */
+  if (
+    elemento.tagName.toLowerCase() === "a"
+  ) {
+    elemento.href =
+      urlCaballoSDU(nombre);
+
+    elemento.dataset.caballo =
+      nombre;
+
+    elemento.dataset.linkSdu =
+      "caballo";
+
+    return;
+  }
+
+  const link =
+    document.createElement("a");
+
+  /* Copiamos todas las clases */
+  link.className =
+    elemento.className || "";
+
+  /* Copiamos contenido */
+  link.innerHTML =
+    elemento.innerHTML;
+
+  /* URL real */
+  link.href =
+    urlCaballoSDU(nombre);
+
+  link.dataset.caballo =
+    nombre;
+
+  link.dataset.linkSdu =
+    "caballo";
+
+  /* Mantener tooltip si existiera */
+  if (elemento.title) {
+    link.title = elemento.title;
+  }
+
+  elemento.replaceWith(link);
+}
+
+
+/* ----------------------------------------------------------
+   CLICK NORMAL = MISMA PESTAÑA
+   CTRL / CMD / CLICK CENTRAL = NAVEGADOR NORMAL
+---------------------------------------------------------- */
+
+document.addEventListener(
+  "click",
+  function(evento) {
+
+    const link =
+      evento.target.closest(
+        'a[data-link-sdu="caballo"]'
+      );
+
+    if (!link) return;
+
+    /*
+      Si quiere nueva pestaña,
+      NO interferimos con el navegador.
+    */
+    if (
+      evento.ctrlKey ||
+      evento.metaKey ||
+      evento.shiftKey ||
+      evento.altKey ||
+      evento.button !== 0
+    ) {
+      return;
+    }
+
+    evento.preventDefault();
+
+    const nombre =
+      link.dataset.caballo;
+
+    abrirCaballoSDU(
+      nombre,
+      true
+    );
+  }
+);
+
+
+/* ----------------------------------------------------------
+   OBSERVA RESULTADOS NUEVOS
+   Esto evita tener que repetir código después de cada búsqueda
+---------------------------------------------------------- */
+
+function activarObservadorLinksSDU() {
+
+  if (navegacionSDUActiva) return;
+
+  navegacionSDUActiva = true;
+
+  const observador =
+    new MutationObserver(function() {
+
+      const resultado =
+        document.getElementById("resultado");
+
+      const resultadoPersonas =
+        document.getElementById(
+          "resultadoPersonaCaballos"
+        );
+
+      if (resultado) {
+        convertirEnlacesCaballosSDU(
+          resultado
+        );
+      }
+
+      if (resultadoPersonas) {
+        convertirEnlacesCaballosSDU(
+          resultadoPersonas
+        );
+      }
+    });
+
+  const resultado =
+    document.getElementById("resultado");
+
+  const resultadoPersonas =
+    document.getElementById(
+      "resultadoPersonaCaballos"
+    );
+
+  if (resultado) {
+    observador.observe(
+      resultado,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+
+  if (resultadoPersonas) {
+    observador.observe(
+      resultadoPersonas,
+      {
+        childList: true,
+        subtree: true
+      }
+    );
+  }
+
+  convertirEnlacesCaballosSDU(document);
+}
+
+
+/* ----------------------------------------------------------
+   FLECHA ATRÁS / ADELANTE DEL NAVEGADOR
+---------------------------------------------------------- */
+
+async function cargarRutaSDU() {
+
+  const parametros =
+    new URLSearchParams(
+      window.location.search
+    );
+
+  const caballo =
+    parametros.get("caballo");
+
+  const busqueda =
+    parametros.get("buscar");
+
+  const persona =
+    parametros.get("persona");
+
+
+  /* ---------- CABALLO ---------- */
+
+  if (caballo) {
+
+    const nombre =
+      caballo.trim();
+
+    const seccionBuscador =
+      document.getElementById(
+        "seccionBuscador"
+      );
+
+    const seccionPersonas =
+      document.getElementById(
+        "seccionCriadoresPropietarios"
+      );
+
+    if (seccionPersonas) {
+      seccionPersonas.style.display =
+        "none";
+    }
+
+    if (seccionBuscador) {
+      seccionBuscador.style.display =
+        "block";
+    }
+
+    document.getElementById(
+      "nombreCaballo"
+    ).value = nombre;
+
+    abrirCaballoDirecto = true;
+
+    await buscarCaballo();
+
+    return;
+  }
+
+
+  /* ---------- RESULTADOS DE CABALLOS ---------- */
+
+  if (busqueda) {
+
+    mostrarBuscadorCaballos();
+
+    const input =
+      document.getElementById(
+        "nombreCaballo"
+      );
+
+    input.value =
+      busqueda;
+
+    ultimaBusquedaCaballos =
+      busqueda;
+
+    abrirCaballoDirecto = false;
+
+    await buscarCaballo();
+
+    return;
+  }
+
+
+  /* ---------- CRIADORES / PROPIETARIOS ---------- */
+
+  if (persona) {
+
+    const seccionBuscador =
+      document.getElementById(
+        "seccionBuscador"
+      );
+
+    const seccionPersonas =
+      document.getElementById(
+        "seccionCriadoresPropietarios"
+      );
+
+    if (seccionBuscador) {
+      seccionBuscador.style.display =
+        "none";
+    }
+
+    if (seccionPersonas) {
+      seccionPersonas.style.display =
+        "block";
+    }
+
+    const input =
+      document.getElementById(
+        "buscarPersonaCaballos"
+      );
+
+    input.value =
+      persona;
+
+    await buscarCaballosPorPersona();
+
+    return;
+  }
+
+
+  /* ---------- INICIO ---------- */
+
+  mostrarInicio();
+}
+
+
+/* Flecha atrás / adelante */
+window.addEventListener(
+  "popstate",
+  function() {
+    cargarRutaSDU();
+  }
+);
+
+
+/* Abrir URL directa al entrar al sitio */
+window.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    activarObservadorLinksSDU();
+
+    if (window.location.search) {
+      cargarRutaSDU();
+    }
+  }
+);
     function normalizarTexto(texto) {
   return String(texto || "")
     .trim()
@@ -1706,7 +2227,14 @@ if (seccionCriadoresPropietarios) {
     resultadoPersona.innerHTML = "<p>Ingresá un criador, número de criador, haras o propietario.</p>";
     return;
   }
-
+window.history.replaceState(
+  {
+    vista: "persona",
+    persona: texto
+  },
+  "",
+  urlPersonaSDU(texto)
+);
   resultadoPersona.innerHTML = "<p>Buscando...</p>";
       const respuestaCriadores = await fetch(
   SUPABASE_URL + "/rest/v1/Criadores?select=*",
@@ -5483,8 +6011,27 @@ elemento.classList.add("modo-pdf");
   buscarCaballo();
 }
 async function buscarCaballo() {
-  const nombre = document.getElementById("nombreCaballo").value.trim();
-  if (!abrirCaballoDirecto) ultimaBusquedaCaballos = nombre;
+  const nombre =
+  document
+    .getElementById("nombreCaballo")
+    .value
+    .trim();
+
+if (!abrirCaballoDirecto) {
+
+  ultimaBusquedaCaballos = nombre;
+
+  if (nombre) {
+    window.history.replaceState(
+      {
+        vista: "busqueda",
+        buscar: nombre
+      },
+      "",
+      urlBusquedaCaballosSDU(nombre)
+    );
+  }
+}
   const resultado = document.getElementById("resultado");
 
   if (!nombre) {
@@ -5996,31 +6543,6 @@ if (caballos.length > 0 && !abrirCaballoDirecto) {
 
     </div>
   `;
-
-
-  // Hace clickeables Nombre, Padre y Madre registrados
-  resultado
-    .querySelectorAll(".enlace-genealogia")
-    .forEach(boton => {
-
-      boton.addEventListener("click", function() {
-
-        const nombre = this.dataset.caballo;
-
-abrirCaballoDirecto = true;
-
-document.getElementById("nombreCaballo").value = nombre;
-
-buscarCaballo();
-
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-
-      });
-
-    });
 
 
   return;
