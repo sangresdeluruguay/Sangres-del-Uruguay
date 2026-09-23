@@ -6329,8 +6329,8 @@ if (!abrirCaballoDirecto) {
   SUPABASE_URL +
   "/rest/v1/Caballos?select=&Nombre=ilike." +
   encodeURIComponent("%" + nombre + "%") +
-  "&order=Nombre.asc";
-
+"&order=Nacimiento.desc.nullslast";
+    
     const respuesta = await fetch(url, {
       headers: {
         apikey: SUPABASE_KEY,
