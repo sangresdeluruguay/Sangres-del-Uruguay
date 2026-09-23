@@ -2498,8 +2498,8 @@ ${caballosUnicos
             </button>
           </td>
 
-          <td>${caballo.Nacimiento ? escapar(caballo.Nacimiento.split("-").reverse().join("/")) : "-"}</td>
-
+          <td>${formatearFecha(caballo.Nacimiento)}</td>
+          
           <td>${caballo.Raza ? escapar(caballo.Raza) : "-"}</td>
 
           <td>${caballo.Sexo ? escapar(caballo.Sexo) : "-"}</td>
@@ -4916,6 +4916,14 @@ verCriadoresPendientes();
     .replaceAll("<", "&lt;")
     .replaceAll(">", "&gt;");
 }
+    function formatearFecha(fecha) {
+  if (!fecha) return "-";
+
+  const partes = String(fecha).split("-");
+  if (partes.length !== 3) return fecha;
+
+  return `${partes[2]}/${partes[1]}/${partes[0]}`;
+}
 async function editarCaballo(id) {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -6584,11 +6592,8 @@ if (hijoReferencia) {
                   </span>
                 </td>
 
-                <td>${
-  h.Nacimiento
-    ? h.Nacimiento.split("-").reverse().join("/")
-    : "-"
-}</td>
+                <td>${formatearFecha(h.Nacimiento)}</td>
+              
                 <td>${escapar(h.Sexo || "-")}</td>
                 <td>${escapar(h.Padre || "-")}</td>
                 <td>${escapar(h.Madre || "-")}</td>
@@ -6893,9 +6898,7 @@ if (caballos.length > 0 && !abrirCaballoDirecto) {
                 </button>
               </td>
 
-              <td>
-                ${c.Nacimiento || "-"}
-              </td>
+             <td>${formatearFecha(c.Nacimiento)}</td>
 
               <td>
                 ${c.Sexo || "-"}
@@ -7075,7 +7078,7 @@ onclick="proponerFotoCaballo(this.dataset.nombre, this.dataset.id)"
 
   <div class="dato-ficha">
     <strong>Nacimiento</strong>
-    <span>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</span>
+    <span>${formatearFecha(caballo.Nacimiento)}</span>
   </div>
 
   <div class="dato-ficha">
