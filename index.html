@@ -3822,6 +3822,7 @@ const respuesta = await fetch(
   }
 
   const caballos = await respuesta.json();
+      console.log("CABALLOS DEL LOTE:", caballos);
 
   if (!caballos.length) {
     alert("No hay ejemplares para revisar en este lote.");
