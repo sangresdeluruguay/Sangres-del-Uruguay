@@ -2498,7 +2498,7 @@ ${caballosUnicos
             </button>
           </td>
 
-          <td>${caballo.Nacimiento ? escapar(caballo.Nacimiento) : "-"}</td>
+          <td>${caballo.Nacimiento ? escapar(caballo.Nacimiento.split("-").reverse().join("/")) : "-"}</td>
 
           <td>${caballo.Raza ? escapar(caballo.Raza) : "-"}</td>
 
