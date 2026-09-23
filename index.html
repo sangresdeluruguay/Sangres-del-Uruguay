@@ -7179,7 +7179,7 @@ ${sesionAdmin ? `
   .map(h => `
           <tr>
             <td>${escapar(h.Nombre || "-")}</td>
-            <td>${escapar(h.Nacimiento || "-")}</td>
+            <td>${formatearFecha(h.Nacimiento)}</td>
             <td>${escapar(h.Sexo || "-")}</td>
             <td>${escapar(h.Padre || "-")}</td>
             <td>${escapar(h.Madre || "-")}</td>
