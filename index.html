@@ -1500,7 +1500,7 @@ transform: translateX(250px);
   <button type="button" onclick="mostrarInicio(); cerrarMenuMobile()">Inicio</button>
   <button type="button" onclick="mostrarBuscadorCaballos(); cerrarMenuMobile()">🔍 Buscar caballo</button>
   <button type="button" onclick="mostrarBusquedaCriadoresPropietarios(); cerrarMenuMobile()">Criadores / Propietarios</button>
-  <button type="button" onclick="cerrarMenuMobile()">Sobre SDU</button>
+ <button type="button" onclick="mostrarSobreSDU(); cerrarMenuMobile();">Sobre SDU</button>
   <div class="contacto-menu">
   <button
     type="button"
@@ -2184,6 +2184,57 @@ if (seccionCriadoresPropietarios) {
     behavior: "smooth"
   });
 }
+    function mostrarSobreSDU() {
+  const seccionBuscador = document.getElementById("seccionBuscador");
+  const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
+  const resultado = document.getElementById("resultado");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "none";
+  }
+
+  if (seccionCriadoresPropietarios) {
+    seccionCriadoresPropietarios.style.display = "none";
+  }
+
+  if (resultado) {
+    resultado.innerHTML = `
+      <div class="sobre-sdu">
+        <h2>Sobre SDU</h2>
+
+        <p><strong>Sangres del Uruguay nació de esas charlas entre amigos en las que siempre aparecían las mismas preguntas sobre los caballos:</strong></p>
+
+        <p class="preguntas-sdu">
+          <strong>“¿Qué sangre tendrá?”</strong><br>
+          <strong>“¿De quién será hijo?”</strong>
+        </p>
+
+        <p>A partir de esas preguntas surgió la idea de crear un lugar donde toda esa información pudiera quedar reunida, ordenada y al alcance de todos.</p>
+
+        <p>Muchas veces conocemos el caballo, conocemos al criador o sabemos parte de su historia, pero esa información queda solamente en la memoria de quienes estuvieron vinculados a esos animales.</p>
+
+        <p>Por eso nace <strong>Sangres del Uruguay</strong>, con la intención de organizar genealogías, reconocer el trabajo de los criadores y ayudar a que la historia genética de nuestros caballos no se pierda con el tiempo.</p>
+
+        <p>También queremos dar lugar a los pequeños criadores, a esos establecimientos y personas que muchas veces no tienen gran difusión, pero que durante años han aportado caballos y genética al <strong>Raid y al Endurance uruguayo</strong>.</p>
+
+        <p><strong>Al registrarse como criador, cada establecimiento puede comenzar a construir su propio registro dentro de SDU, permitiendo llevar un seguimiento de su producción y de las generaciones futuras.</strong> Con el paso del tiempo, esto permitirá conocer qué produjo cada criador, qué líneas de sangre continuaron, qué descendencia dejó cada ejemplar y cómo fue evolucionando esa genética generación tras generación.</p>
+
+        <p>La idea es que, dentro de algunos años, podamos mirar hacia atrás y contar con un historial genealógico ordenado de la producción de cada criador y de la evolución de sus líneas de sangre.</p>
+
+        <p>Es nuestro <strong>granito de arena</strong> para poner en valor el trabajo de quienes crían, producen y mantienen viva la genética de nuestros caballos.</p>
+
+        <p><strong>Sangres del Uruguay</strong><br>
+        <em>Registro y genealogía equina.</em></p>
+      </div>
+    `;
+  }
+
+  window.scrollTo({
+    top: 0,
+    behavior: "smooth"
+  });
+}
+
  function mostrarBusquedaCriadoresPropietarios() {
   const seccionBuscador = document.getElementById("seccionBuscador");
   const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
