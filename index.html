@@ -3874,9 +3874,10 @@ const respuesta = await fetch(
 
   const lista = caballos.map((caballo, index) => `
     <div style="
-      padding:12px 0;
-      border-bottom:1px solid #ddd;
-      text-align:left;
+      padding:12px 95px 12px 0;
+border-bottom:1px solid #ddd;
+text-align:left;
+position:relative;
     ">
       <strong>${index + 1}. ${escapar(caballo.Nombre || "-")}</strong>
       <div style="margin-top:4px;">
@@ -3886,14 +3887,17 @@ const respuesta = await fetch(
   type="button"
   onclick="eliminarCaballoLote(${caballo.id}, '${encodeURIComponent(numeroCriador)}', '${encodeURIComponent(numeroLote)}')"
   style="
-    margin-top:8px;
-    padding:6px 12px;
-    border:1px solid #b33;
-    border-radius:6px;
-    background:white;
-    color:#b33;
-    cursor:pointer;
-    font-weight:bold;
+   position:absolute;
+right:0;
+top:50%;
+transform:translateY(-50%);
+padding:6px 12px;
+border:1px solid #b33;
+border-radius:6px;
+background:white;
+color:#b33;
+cursor:pointer;
+font-weight:bold;
   "
 >
   Eliminar
