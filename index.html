@@ -1998,7 +1998,17 @@ async function cargarRutaSDU() {
   const persona =
     parametros.get("persona");
 
+const lote =
+  parametros.get("lote");
 
+const criadorLote =
+  parametros.get("criador");
+  
+  /* ---------- REVISIÓN DE LOTE ---------- */
+if (lote && criadorLote) {
+  await revisarLote(criadorLote, lote);
+  return;
+}
   /* ---------- CABALLO ---------- */
 
   if (caballo) {
@@ -3797,6 +3807,16 @@ const resumenAnterior = document.getElementById("resultado").innerHTML;
   }
 }
     async function revisarLote(numeroCriador, numeroLote) {
+      const urlLote =
+  window.location.pathname +
+  "?lote=" + encodeURIComponent(numeroLote) +
+  "&criador=" + encodeURIComponent(numeroCriador);
+
+window.history.replaceState(
+  { lote: numeroLote, criador: numeroCriador },
+  "",
+  urlLote
+);
   const resultado = document.getElementById("resultado");
 
 const respuesta = await fetch(
