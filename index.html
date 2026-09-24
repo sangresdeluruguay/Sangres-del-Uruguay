@@ -2004,12 +2004,26 @@ const lote =
 const criadorLote =
   parametros.get("criador");
   
-  /* ---------- REVISIÓN DE LOTE ---------- */
+/* ---------- REVISIÓN DE LOTE ---------- */
 if (lote && criadorLote) {
+
+  const seccionBuscador =
+    document.getElementById("seccionBuscador");
+
+  const seccionCriadoresPropietarios =
+    document.getElementById("seccionCriadoresPropietarios");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "block";
+  }
+
+  if (seccionCriadoresPropietarios) {
+    seccionCriadoresPropietarios.style.display = "none";
+  }
+
   await revisarLote(criadorLote, lote);
   return;
-}
-  /* ---------- CABALLO ---------- */
+}  /* ---------- CABALLO ---------- */
 
   if (caballo) {
 
