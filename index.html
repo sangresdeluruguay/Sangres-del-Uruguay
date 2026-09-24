@@ -2003,7 +2003,37 @@ const lote =
 
 const criadorLote =
   parametros.get("criador");
-  
+
+  const registro =
+  parametros.get("registro");
+
+  /* ---------- REGISTRO DE CABALLO ---------- */
+if (registro === "caballo" && criadorLote) {
+
+  const respuestaCriador = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/Criadores?select=*&Numero%20de%20Criador=eq." +
+    encodeURIComponent(criadorLote),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const criadores = await respuestaCriador.json();
+
+  if (respuestaCriador.ok && criadores.length > 0) {
+    mostrarFormularioCaballo(criadorLote, criadores[0]);
+    return;
+  }
+}
+  /* ---------- REGISTRO DE CRIADOR ---------- */
+if (registro === "criador") {
+  abrirRegistroCriador();
+  return;
+}
 /* ---------- REVISIÓN DE LOTE ---------- */
 if (lote && criadorLote) {
 
@@ -2682,6 +2712,23 @@ origenFichaCaballo = "criadores";
   mostrarFormularioCaballo(numero, criadores[0]);
 }
     function mostrarFormularioCaballo(numeroCriador, criador) {
+      const parametrosActuales = new URLSearchParams(window.location.search);
+
+if (
+  parametrosActuales.get("registro") !== "caballo" ||
+  parametrosActuales.get("criador") !== numeroCriador
+) {
+  const urlRegistroCaballo =
+    window.location.pathname +
+    "?registro=caballo&criador=" +
+    encodeURIComponent(numeroCriador);
+
+  window.history.pushState(
+    { registro: "caballo", criador: numeroCriador },
+    "",
+    urlRegistroCaballo
+  );
+}
   const resultado = document.getElementById("resultado");
 
   resultado.innerHTML = `
@@ -4111,7 +4158,19 @@ function volverRevisionLote() {
   `;
 }
 function abrirRegistroCriador() {
+  
+const parametrosActuales = new URLSearchParams(window.location.search);
 
+if (parametrosActuales.get("registro") !== "criador") {
+  const urlRegistroCriador =
+    window.location.pathname + "?registro=criador";
+
+  window.history.pushState(
+    { registro: "criador" },
+    "",
+    urlRegistroCriador
+  );
+}
   const resultado = document.getElementById("resultado");
 
   const seccionBuscador = document.getElementById("seccionBuscador");
