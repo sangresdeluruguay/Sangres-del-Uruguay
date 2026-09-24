@@ -4964,25 +4964,20 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
 }
 
   const respuestaActualizar = await fetch(
-    SUPABASE_URL + "/rest/v1/SolicitudesCriadores?id=eq." + id,
-    {
-      method: "PATCH",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        Estado: "aprobado",
-        "Numero de Criador asignado": numeroCriador
-      })
+  SUPABASE_URL + "/rest/v1/SolicitudesCriadores?id=eq." + id,
+  {
+    method: "DELETE",
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + sesionAdmin.access_token
     }
-  );
+  }
+);
 
   if (!respuestaActualizar.ok) {
-    alert("El criador se guardó, pero no se pudo actualizar la solicitud.");
-    return;
-  }
+  alert("El criador se guardó, pero no se pudo eliminar la solicitud.");
+  return;
+}
 
   const nombreWhatsApp = (solicitud.Nombre || "").toUpperCase();
 
