@@ -3880,8 +3880,24 @@ const respuesta = await fetch(
     ">
       <strong>${index + 1}. ${escapar(caballo.Nombre || "-")}</strong>
       <div style="margin-top:4px;">
-        ${escapar(caballo.Padre || "-")} × ${escapar(caballo.Madre || "-")}
-      </div>
+  ${escapar(caballo.Padre || "-")} × ${escapar(caballo.Madre || "-")}
+</div>
+      <button
+  type="button"
+  onclick="eliminarCaballoLote(${caballo.id}, '${encodeURIComponent(numeroCriador)}', '${encodeURIComponent(numeroLote)}')"
+  style="
+    margin-top:8px;
+    padding:6px 12px;
+    border:1px solid #b33;
+    border-radius:6px;
+    background:white;
+    color:#b33;
+    cursor:pointer;
+    font-weight:bold;
+  "
+>
+  Eliminar
+</button>
     </div>
     `).join("");
 
@@ -3929,7 +3945,50 @@ resultado.innerHTML = `
   </div>
 `;
 }
+async function eliminarCaballoLote(id, numeroCriadorCodificado, numeroLoteCodificado) {
 
+  const numeroCriador = decodeURIComponent(numeroCriadorCodificado);
+  const numeroLote = decodeURIComponent(numeroLoteCodificado);
+
+  const confirmar = confirm(
+    "¿Seguro que querés eliminar este caballo del lote?"
+  );
+
+  if (!confirmar) return;
+
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/rpc/eliminar_caballo_lote",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        p_id: Number(id),
+        p_numero_criador: numeroCriador,
+        p_numero_lote: numeroLote
+      })
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error = await respuesta.text();
+    alert("No se pudo eliminar el caballo: " + error);
+    return;
+  }
+
+  const eliminado = await respuesta.json();
+
+  if (!eliminado) {
+    alert("No se pudo eliminar el caballo del lote.");
+    return;
+  }
+
+  await revisarLote(numeroCriador, numeroLote);
+}
+    
 function volverRevisionLote() {
   const resultado = document.getElementById("resultado");
 
