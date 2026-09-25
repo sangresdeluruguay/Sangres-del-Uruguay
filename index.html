@@ -3887,7 +3887,112 @@ document.getElementById("caballoBAMP").value = "";
 document.getElementById("caballoBMM").value = "";
 document.getElementById("caballoBAMM").value = "";
 }
-    
+
+    async function cargarCaballosLoteEnRegistro(numeroCriador, numeroLote) {
+
+  if (!numeroCriador || !numeroLote) return;
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCaballos?select=*" +
+    "&Numero%20de%20Criador=eq." +
+    encodeURIComponent(numeroCriador) +
+    "&Numero%20Lote=eq." +
+    encodeURIComponent(numeroLote) +
+    "&Lote%20Cerrado=eq.false" +
+    "&order=created_at.asc",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    console.error(
+      "No se pudo reconstruir el lote:",
+      await respuesta.text()
+    );
+    return;
+  }
+
+  const caballos = await respuesta.json();
+
+  if (!caballos.length) return;
+
+  const resultado =
+    document.getElementById("resultado");
+
+  if (!resultado) return;
+
+  resultado
+    .querySelectorAll(".resumen-caballo-lote")
+    .forEach(elemento => elemento.remove());
+
+  const htmlCaballos = caballos.map(function(datos, indice) {
+
+    const esUltimo =
+      indice === caballos.length - 1;
+
+    return `
+      <div
+        class="resumen-caballo-lote"
+        style="
+          max-width:520px;
+          margin:25px auto;
+          padding:22px;
+          background:white;
+          border:1px solid #c9a227;
+          border-radius:12px;
+          text-align:center;
+        "
+      >
+
+        <h3 style="margin-top:0;">
+          ✅ ${escapar(datos.Nombre || "-")}
+        </h3>
+
+        <div style="
+          font-weight:600;
+          margin:8px 0;
+        ">
+          ${escapar(datos.Padre || "-")}
+          ×
+          ${escapar(datos.Madre || "-")}
+        </div>
+
+        <p>
+          El ejemplar fue agregado correctamente al
+          <strong>Lote ${numeroLote}</strong>.
+        </p>
+
+        ${
+          esUltimo
+            ? `
+              <button
+                type="button"
+                class="btn-finalizar-lote"
+                onclick="revisarLote(
+                  '${numeroCriador}',
+                  ${Number(numeroLote)}
+                )"
+              >
+                Finalizar registros
+              </button>
+            `
+            : ""
+        }
+
+      </div>
+    `;
+  }).join("");
+
+  resultado.insertAdjacentHTML(
+    "beforeend",
+    htmlCaballos
+  );
+}
 async function registrarOtroCaballo(numeroCriador) {
   const respuesta = await fetch(
     SUPABASE_URL + "/rest/v1/Criadores?select=*&Numero%20de%20Criador=eq." + encodeURIComponent(numeroCriador),
