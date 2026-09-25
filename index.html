@@ -3827,6 +3827,20 @@ document.getElementById("resultado").insertAdjacentHTML("beforeend", `
     </div>
   </div>
 `);
+      window.history.replaceState(
+  {
+    registro: "caballo",
+    criador: datos["Numero de Criador"],
+    lote: datos["Numero Lote"]
+  },
+  "",
+  window.location.pathname +
+    "?registro=caballo&criador=" +
+    encodeURIComponent(datos["Numero de Criador"]) +
+    "&lote=" +
+    encodeURIComponent(datos["Numero Lote"])
+);
+      
 document.getElementById("caballoNacimiento").value = "";
 document.getElementById("caballoSexo").value = "";
 document.getElementById("caballoPelo").value = "";
