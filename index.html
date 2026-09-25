@@ -2048,7 +2048,13 @@ if (registro === "caballo" && criadorLote) {
   }
 
   mostrarFormularioCaballo(criadorLote, criadores[0]);
-
+   
+if (lote) {
+  await cargarCaballosLoteEnRegistro(
+    criadorLote,
+    lote
+  );
+}
   return;
  }
 }
