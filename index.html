@@ -2708,7 +2708,15 @@ origenFichaCaballo = "criadores";
     alert("El número de criador no está registrado o todavía no fue aprobado.");
     return;
   }
-
+      
+window.history.replaceState(
+  { registro: "caballo", criador: numero },
+  "",
+  window.location.pathname +
+    "?registro=caballo&criador=" +
+    encodeURIComponent(numero)
+);
+      
   mostrarFormularioCaballo(numero, criadores[0]);
 }
     function mostrarFormularioCaballo(numeroCriador, criador) {
