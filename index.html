@@ -2006,7 +2006,29 @@ const criadorLote =
 
   const registro =
   parametros.get("registro");
+  
+const finalizado =
+  parametros.get("finalizado");
+  
+  /* ---------- LOTE FINALIZADO ---------- */
+if (finalizado === "1" && criadorLote && lote) {
 
+  const resumenGuardado =
+    sessionStorage.getItem(
+      "resumenLoteFinalizado_" +
+      criadorLote +
+      "_" +
+      lote
+    );
+
+  if (resumenGuardado) {
+    const resumen =
+      JSON.parse(resumenGuardado);
+
+    mostrarResumenLoteFinalizado(resumen);
+    return;
+  }
+}
   /* ---------- REGISTRO DE CABALLO ---------- */
 if (registro === "caballo" && criadorLote) {
 
@@ -4228,6 +4250,11 @@ function volverRevisionLote() {
 
   const resumen = await respuesta.json();
       
+sessionStorage.setItem(
+  "resumenLoteFinalizado_" + numeroCriador + "_" + numeroLote,
+  JSON.stringify(resumen)
+);
+      
 window.history.replaceState(
   {
     finalizado: true,
@@ -4319,6 +4346,118 @@ window.history.replaceState(
         <button
           type="button"
           onclick="window.open('https://wa.me/59891909423?text=${mensajeWhatsApp}', '_blank')">
+          Enviar comprobante por WhatsApp
+        </button>
+      </div>
+
+    </div>
+  `;
+}
+    function mostrarResumenLoteFinalizado(resumen) {
+
+  const resultado = document.getElementById("resultado");
+
+  const seccionBuscador =
+    document.getElementById("seccionBuscador");
+
+  const seccionCriadoresPropietarios =
+    document.getElementById("seccionCriadoresPropietarios");
+
+  if (seccionBuscador) {
+    seccionBuscador.style.display = "block";
+
+    const filaBuscador =
+      seccionBuscador.querySelector(".buscar-fila");
+
+    if (filaBuscador) {
+      filaBuscador.style.display = "none";
+    }
+  }
+
+  if (seccionCriadoresPropietarios) {
+    seccionCriadoresPropietarios.style.display = "none";
+  }
+
+  const nombreMostrar =
+    resumen.haras ||
+    resumen.criador ||
+    "-";
+
+  const mensajeWhatsApp = encodeURIComponent(
+    "Hola, envío comprobante de pago de Sangres del Uruguay.\n" +
+    "N.º Criador: " + resumen.numero_criador + "\n" +
+    "Criador: " + nombreMostrar + "\n" +
+    "Lote: " + resumen.numero_lote + "\n" +
+    "Ejemplares: " + resumen.cantidad + "\n" +
+    "Total: $" + resumen.total + " UYU"
+  );
+
+  resultado.innerHTML = `
+    <div style="
+      max-width:650px;
+      margin:25px auto;
+      padding:24px;
+      background:white;
+      border:1px solid #c9a227;
+      border-radius:12px;
+    ">
+
+      <h2 style="text-align:center;">
+        Registros finalizados
+      </h2>
+
+      <p><strong>N.º Criador:</strong> ${resumen.numero_criador}</p>
+      <p><strong>Criador:</strong> ${nombreMostrar}</p>
+      <p><strong>Lote:</strong> ${resumen.numero_lote}</p>
+      <p><strong>Ejemplares registrados:</strong> ${resumen.cantidad}</p>
+      <p><strong>Fecha:</strong> ${resumen.fecha}</p>
+
+      <hr>
+
+      <p>
+        <strong>Valor por ejemplar:</strong> $300 UYU
+      </p>
+
+      <p style="font-size:20px;">
+        <strong>Total a pagar: $${resumen.total} UYU</strong>
+      </p>
+
+      <hr>
+
+      <h3>Métodos de pago</h3>
+
+      <p>
+        <strong>Mercado Pago</strong><br>
+        <a
+          href="https://link.mercadopago.com.uy/sangresdeluruguay"
+          target="_blank"
+        >
+          Pagar con Mercado Pago
+        </a>
+      </p>
+
+      <p>
+        <strong>Transferencia dentro de Santander</strong><br>
+        Cuenta: 1208290378<br>
+        Moneda: UYU<br>
+        Sucursal: 02 - 18 De Julio
+      </p>
+
+      <p>
+        <strong>Transferencia desde otros bancos</strong><br>
+        Cuenta: 0002001208290378<br>
+        Moneda: UYU
+      </p>
+
+      <p style="margin-top:20px;">
+        Una vez realizado el pago, enviá el comprobante por WhatsApp.
+      </p>
+
+      <div style="text-align:center; margin-top:20px;">
+        <button
+          type="button"
+          onclick="window.open('https://wa.me/59891909423?text=${mensajeWhatsApp}', '_blank')"
+        >
           Enviar comprobante por WhatsApp
         </button>
       </div>
