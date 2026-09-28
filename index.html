@@ -4227,7 +4227,21 @@ function volverRevisionLote() {
   }
 
   const resumen = await respuesta.json();
-
+      
+window.history.replaceState(
+  {
+    finalizado: true,
+    criador: numeroCriador,
+    lote: numeroLote
+  },
+  "",
+  window.location.pathname +
+    "?finalizado=1&criador=" +
+    encodeURIComponent(numeroCriador) +
+    "&lote=" +
+    encodeURIComponent(numeroLote)
+);
+      
   const nombreMostrar =
     resumen.haras ||
     resumen.criador ||
