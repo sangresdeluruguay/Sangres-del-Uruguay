@@ -6,6 +6,17 @@
   <title>Sangres del Uruguay</title>
 
   <style>
+    
+    #solicitudCriadorDepartamento {
+  width: 100%;
+  min-height: 44px;
+  padding: 10px 12px;
+  font-size: 16px;
+  border: 1px solid #b9b9b9;
+  border-radius: 6px;
+  background: white;
+  box-sizing: border-box;
+}
     body {
       margin: 0;
       font-family: Arial, sans-serif;
@@ -4529,7 +4540,7 @@ if (parametrosActuales.get("registro") !== "criador") {
           <strong>Haras / Cabaña</strong>
           <input id="solicitudCriadorHaras" type="text">
         </div>
-      </div>
+
       <div class="dato-ficha">
   <strong>Departamento</strong>
   <select id="solicitudCriadorDepartamento">
@@ -4560,6 +4571,7 @@ if (parametrosActuales.get("registro") !== "criador") {
   <strong>Localidad</strong>
   <input id="solicitudCriadorLocalidad" type="text">
 </div>
+      </div>
 
       <button type="button" onclick="enviarSolicitudCriador()">
         Enviar solicitud
