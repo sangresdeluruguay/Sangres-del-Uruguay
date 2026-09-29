@@ -5442,13 +5442,24 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
   }
 );
 
-  if (!respuesta.ok) {
-    alert("No se pudo eliminar la solicitud.");
-    return;
-  }
+if (!respuesta.ok) {
 
-  await verCriadoresPendientes();
-  await actualizarContadorCriadoresPendientes();
+  const error = await respuesta.text();
+
+  alert("Error al eliminar: " + error);
+
+  return
+}
+      const eliminado = await respuesta.json();
+
+if (!eliminado) {
+  alert("Supabase respondió, pero no eliminó la solicitud.");
+  return;
+}
+
+await verCriadoresPendientes();
+await actualizarContadorCriadoresPendientes();
+
 }
     async function aprobarCriador(id) {
   const inputNumero = document.getElementById("numeroCriador-" + id);
