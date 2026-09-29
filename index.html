@@ -4813,12 +4813,40 @@ if (seccionCriadoresPropietarios) {
   `;
 
         actualizarContadorCriadoresPendientes();
+        actualizarContadorFotosPendientes();
         actualizarContadorCaballosPendientes();
         
   resultado.scrollIntoView({
     behavior: "smooth",
     block: "start"
   });
+}
+    async function actualizarContadorFotosPendientes() {
+
+  const contador =
+    document.getElementById("contadorFotosPendientes");
+
+  if (!contador || !sesionAdmin || !sesionAdmin.access_token) return;
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesFotosCaballos?select=id&estado=eq.pendiente",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  if (!respuesta.ok) return;
+
+  const solicitudes = await respuesta.json();
+
+  contador.textContent = solicitudes.length;
+
+  contador.style.display =
+    solicitudes.length > 0 ? "inline-flex" : "none";
 }
    async function verFotosPendientes() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
