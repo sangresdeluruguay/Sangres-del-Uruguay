@@ -2035,7 +2035,15 @@ const criadorLote =
   
 const finalizado =
   parametros.get("finalizado");
-  
+
+  const admin =
+  parametros.get("admin");
+
+  /* ---------- PANEL ADMINISTRADOR ---------- */
+if (admin === "panel") {
+  abrirPanelAdmin();
+  return;
+}
   /* ---------- LOTE FINALIZADO ---------- */
 if (finalizado === "1" && criadorLote && lote) {
 
@@ -4753,7 +4761,12 @@ setInterval(() => {
     alert("Tenés que iniciar sesión como administrador.");
     return;
   }
-
+window.history.replaceState(
+  { admin: "panel" },
+  "",
+  window.location.pathname + "?admin=panel"
+);
+        
   const resultado = document.getElementById("resultado");
         const seccionBuscador = document.getElementById("seccionBuscador");
 const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
