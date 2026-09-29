@@ -4624,8 +4624,12 @@ Localidad: localidad,
   }
 
   alert("Solicitud enviada correctamente. Quedará pendiente de aprobación.");
-
-  document.getElementById("resultado").innerHTML = "";
+document.getElementById("resultado").innerHTML = "";
+      
+      window.history.replaceState({}, "", window.location.pathname);
+mostrarInicio();
+return;    
+  
 }
 function abrirLogin() {
   const email = prompt("Email de administrador:");
