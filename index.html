@@ -7,6 +7,21 @@
 
   <style>
     
+    .contador-pendiente {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  margin-left: 8px;
+  background: #d32f2f;
+  color: white;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: bold;
+  line-height: 1;
+}
     #solicitudCriadorDepartamento {
   width: 100%;
   min-height: 44px;
@@ -4775,13 +4790,17 @@ if (seccionCriadoresPropietarios) {
         </button>
         <button onclick="verCriadoresPendientes()">
   Criadores pendientes
+  <span id="contadorCriadoresPendientes" class="contador-pendiente">0</span>
 </button>
+
 <button onclick="verCaballosPendientes()">
   Caballos pendientes
+  <span id="contadorCaballosPendientes" class="contador-pendiente">0</span>
 </button>
 
 <button onclick="verFotosPendientes()">
   Fotos pendientes
+  <span id="contadorFotosPendientes" class="contador-pendiente">0</span>
 </button>
 
         <button onclick="administrarPropietarios()">
@@ -4793,6 +4812,8 @@ if (seccionCriadoresPropietarios) {
     </div>
   `;
 
+        actualizarContadorCriadoresPendientes();
+        
   resultado.scrollIntoView({
     behavior: "smooth",
     block: "start"
@@ -5231,6 +5252,33 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
 
   alert("Caballo aprobado y registrado correctamente.");
   verCaballosPendientes();
+}
+    async function actualizarContadorCriadoresPendientes() {
+
+  const contador =
+    document.getElementById("contadorCriadoresPendientes");
+
+  if (!contador || !sesionAdmin || !sesionAdmin.access_token) return;
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCriadores?select=id&Estado=eq.pendiente",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  if (!respuesta.ok) return;
+
+  const solicitudes = await respuesta.json();
+
+  contador.textContent = solicitudes.length;
+
+  contador.style.display =
+    solicitudes.length > 0 ? "inline-flex" : "none";
 }
     async function verCriadoresPendientes() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
