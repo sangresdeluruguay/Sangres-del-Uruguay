@@ -5394,10 +5394,59 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
 <button onclick="aprobarCriador(${s.id})">
   Aprobar criador
 </button>
+<button
+  type="button"
+  onclick="eliminarSolicitudCriador(${s.id})"
+  style="
+    margin-left:8px;
+    background:#d32f2f;
+    color:white;
+    border:none;
+    border-radius:6px;
+    padding:8px 12px;
+    cursor:pointer;
+  "
+>
+  ✕
+</button>
         </div>
       `).join("")}
     </div>
   `;
+}
+    async function eliminarSolicitudCriador(id) {
+
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const confirmar = confirm(
+    "¿Eliminar esta solicitud de criador?"
+  );
+
+  if (!confirmar) return;
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/SolicitudesCriadores?id=eq." +
+      encodeURIComponent(id),
+    {
+      method: "DELETE",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    alert("No se pudo eliminar la solicitud.");
+    return;
+  }
+
+  await verCriadoresPendientes();
+  await actualizarContadorCriadoresPendientes();
 }
     async function aprobarCriador(id) {
   const inputNumero = document.getElementById("numeroCriador-" + id);
