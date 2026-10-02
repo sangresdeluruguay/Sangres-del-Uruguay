@@ -2324,7 +2324,11 @@ if (seccionCriadoresPropietarios) {
   if (nombreCaballo) {
     nombreCaballo.value = "";
   }
-
+window.history.replaceState(
+  { vista: "inicio" },
+  "",
+  window.location.pathname
+);
   window.scrollTo({
     top: 0,
     behavior: "smooth"
