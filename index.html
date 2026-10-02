@@ -2041,7 +2041,12 @@ const finalizado =
   
 const vista =
   parametros.get("vista");
-
+  
+/* ---------- BUSCAR CABALLO ---------- */
+if (vista === "buscar-caballo") {
+  mostrarBuscadorCaballos();
+  return;
+}
   /* ---------- BUSCAR CRIADORES / PROPIETARIOS ---------- */
 if (vista === "criadores") {
   mostrarBusquedaCriadoresPropietarios();
@@ -2289,6 +2294,11 @@ window.addEventListener(
     .toUpperCase();
 }
     function mostrarBuscadorCaballos() {
+      window.history.replaceState(
+  { vista: "buscar-caballo" },
+  "",
+  window.location.pathname + "?vista=buscar-caballo"
+);
   const seccionBuscador = document.getElementById("seccionBuscador");
 const resultado = document.getElementById("resultado");
       const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
