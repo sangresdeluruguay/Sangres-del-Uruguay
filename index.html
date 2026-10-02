@@ -2038,7 +2038,15 @@ const finalizado =
 
   const admin =
   parametros.get("admin");
+  
+const vista =
+  parametros.get("vista");
 
+  /* ---------- BUSCAR CRIADORES / PROPIETARIOS ---------- */
+if (vista === "criadores") {
+  mostrarBusquedaCriadoresPropietarios();
+  return;
+}
   /* ---------- PANEL ADMINISTRADOR ---------- */
 if (admin === "panel") {
   abrirPanelAdmin();
@@ -2385,6 +2393,11 @@ seccionBuscador.style.display = "block";  }
 }
 
  function mostrarBusquedaCriadoresPropietarios() {
+   window.history.replaceState(
+  { vista: "criadores" },
+  "",
+  window.location.pathname + "?vista=criadores"
+);
   const seccionBuscador = document.getElementById("seccionBuscador");
   const seccionCriadoresPropietarios = document.getElementById("seccionCriadoresPropietarios");
   const resultado = document.getElementById("resultado");
