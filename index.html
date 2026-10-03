@@ -1588,7 +1588,7 @@ transform: translateX(250px);
         >
         <button onclick="buscarCaballo()">Buscar</button>
       </div>
-     <div style="
+     <div id="opcionesBusquedaCaballo" style="
   display:flex;
   gap:18px;
   align-items:center;
@@ -2211,7 +2211,12 @@ if (lote && criadorLote) {
       seccionBuscador.style.display =
         "block";
     }
+    const opcionesBusquedaCaballo =
+  document.getElementById("opcionesBusquedaCaballo");
 
+if (opcionesBusquedaCaballo) {
+  opcionesBusquedaCaballo.style.display = "none";
+}
     document.getElementById(
       "nombreCaballo"
     ).value = nombre;
