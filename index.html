@@ -7055,10 +7055,12 @@ const tipoBusqueda =
   resultado.innerHTML = "<p>Buscando <strong>" + escapar(nombre) + "</strong>...</p>";
 
   try {
-   const patronBusqueda =
-  tipoBusqueda === "comienza"
-    ? nombre + "%"
-    : "%" + nombre + "%";
+const patronBusqueda =
+  abrirCaballoDirecto
+    ? nombre
+    : tipoBusqueda === "comienza"
+      ? nombre + "%"
+      : "%" + nombre + "%";
 
 const url =
   SUPABASE_URL +
