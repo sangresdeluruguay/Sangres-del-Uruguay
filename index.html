@@ -5428,7 +5428,8 @@ encodeURIComponent(normalizarTexto(solicitud.Propietario)) +
 <input
   id="numeroCriador-${s.id}"
   type="text"
-  placeholder="Ej: N0001"
+  value="${escapar(s["Numero de Criador Propuesto"] || "")}"
+  readonly
 >
 <br><br>
 <button onclick="aprobarCriador(${s.id})">
