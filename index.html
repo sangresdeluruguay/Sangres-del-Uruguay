@@ -1588,6 +1588,33 @@ transform: translateX(250px);
         >
         <button onclick="buscarCaballo()">Buscar</button>
       </div>
+     <div style="
+  display:flex;
+  gap:18px;
+  align-items:center;
+  justify-content:center;
+  margin:10px 0 14px 0;
+  flex-wrap:wrap;
+">
+  <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+    <input
+      type="radio"
+      name="tipoBusquedaCaballo"
+      value="coincidencia"
+      checked
+    >
+    Coincidencia
+  </label>
+
+  <label style="display:flex; align-items:center; gap:6px; cursor:pointer;">
+    <input
+      type="radio"
+      name="tipoBusquedaCaballo"
+      value="comienza"
+    >
+    Comienza con
+  </label>
+</div>
 
       <div id="resultado"></div>
       
@@ -7014,7 +7041,12 @@ if (!abrirCaballoDirecto) {
   }
 }
   const resultado = document.getElementById("resultado");
-
+  
+const tipoBusqueda =
+  document.querySelector(
+    'input[name="tipoBusquedaCaballo"]:checked'
+  )?.value || "coincidencia";
+  
   if (!nombre) {
     resultado.innerHTML = "<p>Ingresá el nombre de un caballo.</p>";
     return;
@@ -7023,11 +7055,16 @@ if (!abrirCaballoDirecto) {
   resultado.innerHTML = "<p>Buscando <strong>" + escapar(nombre) + "</strong>...</p>";
 
   try {
-   const url =
+   const patronBusqueda =
+  tipoBusqueda === "comienza"
+    ? nombre + "%"
+    : "%" + nombre + "%";
+
+const url =
   SUPABASE_URL +
-  "/rest/v1/Caballos?select=&Nombre=ilike." +
-  encodeURIComponent("%" + nombre + "%") +
-"&order=Nacimiento.desc.nullslast";
+  "/rest/v1/Caballos?select=*&Nombre=ilike." +
+  encodeURIComponent(patronBusqueda) +
+  "&order=Nacimiento.desc.nullslast";
     
     const respuesta = await fetch(url, {
       headers: {
