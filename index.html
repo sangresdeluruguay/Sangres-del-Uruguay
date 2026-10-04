@@ -5998,8 +5998,9 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     nombrePrincipal.value = nombrePedigree.value;
   });
 }
-    async function buscarSugerenciasPedigree(texto) {
-  const busqueda = texto.trim();
+   
+async function buscarSugerenciasPedigree(texto) {
+  const busqueda = texto.trim().toLowerCase();
 
   if (busqueda.length < 3) {
     return [];
@@ -6009,7 +6010,7 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     SUPABASE_URL +
     "/rest/v1/Caballos?select=*&Nombre=ilike.*" +
     encodeURIComponent(busqueda) +
-    "*&limit=8",
+    "*&limit=100",
     {
       headers: {
         apikey: SUPABASE_KEY,
@@ -6022,8 +6023,44 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     return [];
   }
 
-  return await respuesta.json();
+  const caballos = await respuesta.json();
+
+  const nombresNoPredictivos = new Set([
+    "MESTIZO",
+    "MESTIZA",
+    "CRIOLLO",
+    "CRIOLLA",
+    "SPC"
+  ]);
+
+  return caballos
+    .filter(function(caballo) {
+      const nombre =
+        String(caballo.Nombre || "").trim().toUpperCase();
+
+      return !nombresNoPredictivos.has(nombre);
+    })
+    .sort(function(a, b) {
+      const nombreA =
+        String(a.Nombre || "").trim().toLowerCase();
+
+      const nombreB =
+        String(b.Nombre || "").trim().toLowerCase();
+
+      if (nombreA === busqueda && nombreB !== busqueda) return -1;
+      if (nombreB === busqueda && nombreA !== busqueda) return 1;
+
+      const empiezaA = nombreA.startsWith(busqueda);
+      const empiezaB = nombreB.startsWith(busqueda);
+
+      if (empiezaA && !empiezaB) return -1;
+      if (empiezaB && !empiezaA) return 1;
+
+      return nombreA.localeCompare(nombreB);
+    })
+    .slice(0, 8);
 }
+   
     function activarSugerenciasEditPadre() {
   const input = document.getElementById("editPadre");
   const contenedor = document.getElementById("sugerenciasEditPadre");
