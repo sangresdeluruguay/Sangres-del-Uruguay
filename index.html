@@ -6099,16 +6099,27 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
         event.preventDefault();
 
         input.value = caballo.Nombre || "";
+        
+document.getElementById("editAbueloMaterno").value =
+  caballo.Padre || "";
 
-        document.getElementById("editAbueloMaterno").value =
-          caballo.Padre || "";
+document.getElementById("editAbuelaMaterna").value =
+  caballo.Madre || "";
 
-        document.getElementById("editAbuelaMaterna").value =
-          caballo.Madre || "";
+document.getElementById("editBisabueloMP").value =
+  caballo.abuelo_paterno || "";
 
-        contenedor.innerHTML = "";
-      });
+document.getElementById("editBisabuelaMP").value =
+  caballo.abuela_paterno || "";
 
+document.getElementById("editBisabueloMM").value =
+  caballo.abuelo_materno || "";
+
+document.getElementById("editBisabuelaMM").value =
+  caballo.abuela_materna || "";
+
+contenedor.innerHTML = "";
+});
       contenedor.appendChild(boton);
     });
   });
