@@ -1714,9 +1714,23 @@ function abrirCaballoSDU(nombre, guardarHistorial = true) {
     seccionPersonas.style.display = "none";
   }
 
-  if (seccionBuscador) {
-    seccionBuscador.style.display = "block";
+if (seccionBuscador) {
+  seccionBuscador.style.display = "block";
+
+  const filaBuscador =
+    seccionBuscador.querySelector(".buscar-fila");
+
+  if (filaBuscador) {
+    filaBuscador.style.display = "none";
   }
+
+  const opcionesBusquedaCaballo =
+    document.getElementById("opcionesBusquedaCaballo");
+
+  if (opcionesBusquedaCaballo) {
+    opcionesBusquedaCaballo.style.display = "none";
+  }
+}
 
   if (input) {
     input.value = nombre;
@@ -2341,7 +2355,13 @@ const resultado = document.getElementById("resultado");
     const filaBuscador = seccionBuscador.querySelector(".buscar-fila");
 
 if (filaBuscador) {
-  filaBuscador.style.display = "";
+  filaBuscador.style.display = "flex";
+}
+const opcionesBusquedaCaballo =
+  document.getElementById("opcionesBusquedaCaballo");
+
+if (opcionesBusquedaCaballo) {
+  opcionesBusquedaCaballo.style.display = "flex";
 }
     seccionBuscador.scrollIntoView({
       behavior: "smooth",
@@ -2390,7 +2410,22 @@ window.history.replaceState(
   const resultado = document.getElementById("resultado");
 
   if (seccionBuscador) {
-seccionBuscador.style.display = "block";  }
+  seccionBuscador.style.display = "block";
+
+  const filaBuscador =
+    seccionBuscador.querySelector(".buscar-fila");
+
+  if (filaBuscador) {
+    filaBuscador.style.display = "none";
+  }
+
+  const opcionesBusquedaCaballo =
+    document.getElementById("opcionesBusquedaCaballo");
+
+  if (opcionesBusquedaCaballo) {
+    opcionesBusquedaCaballo.style.display = "none";
+  }
+}
 
   if (seccionCriadoresPropietarios) {
     seccionCriadoresPropietarios.style.display = "none";
