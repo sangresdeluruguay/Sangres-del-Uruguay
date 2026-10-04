@@ -3417,10 +3417,26 @@ pendientes.forEach(function (caballo) {
 
 });
     return Array.from(encontrados.values())
-    .sort(function (a, b) {
-      return a.Nombre.localeCompare(b.Nombre);
-    })
-    .slice(0, 8);
+  .sort(function (a, b) {
+
+    const nombreA = a.Nombre.trim().toLowerCase();
+    const nombreB = b.Nombre.trim().toLowerCase();
+
+    // 1. Coincidencia exacta primero
+    if (nombreA === busqueda && nombreB !== busqueda) return -1;
+    if (nombreB === busqueda && nombreA !== busqueda) return 1;
+
+    // 2. Después los que comienzan con lo escrito
+    const empiezaA = nombreA.startsWith(busqueda);
+    const empiezaB = nombreB.startsWith(busqueda);
+
+    if (empiezaA && !empiezaB) return -1;
+    if (empiezaB && !empiezaA) return 1;
+
+    // 3. Finalmente orden alfabético
+    return a.Nombre.localeCompare(b.Nombre);
+  })
+  .slice(0, 8);
 }
 
 // ==========================================================
