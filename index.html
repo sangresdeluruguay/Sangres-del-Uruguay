@@ -3186,6 +3186,19 @@ const pendientes = datosPedigree.filter(function(caballo) {
     const nombreLimpio = String(nombre).trim();
 
     if (!nombreLimpio) return;
+    const nombreNormalizado = nombreLimpio.toUpperCase();
+
+const nombresNoPredictivos = new Set([
+  "MESTIZO",
+  "MESTIZA",
+  "CRIOLLO",
+  "CRIOLLA",
+  "SPC"
+]);
+
+if (nombresNoPredictivos.has(nombreNormalizado)) {
+  return;
+}
 
     if (!nombreLimpio.toLowerCase().includes(busqueda)) return;
 
