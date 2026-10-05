@@ -162,7 +162,11 @@
 body:has(.ficha-caballo) .acciones-registro {
   margin-top: 30px;
 }
-    
+    /* En todas las vistas con contenido, acercar los botones al final */
+body:has(#seccionBuscador[style*="display: block"]) .acciones-registro,
+body:has(#seccionCriadoresPropietarios[style*="display: block"]) .acciones-registro {
+  margin-top: 24px;
+}
 .tarjeta-registro {
   background: rgba(23, 35, 59, 0.88);
   color: white;
@@ -1044,7 +1048,7 @@ textarea {
   width: 180px;
   height: auto;
   margin: 1px 0 1px auto;
-transform: translateX(250px);
+transform: none;
 }
     /* =====================================================
    DISEÑO CELULAR - SANGRES DEL URUGUAY
@@ -1243,7 +1247,7 @@ transform: translateX(250px);
   .caballito-inicio {
     max-width: 90px !important;
     height: auto !important;
-    margin: 20px 18px 20px auto !important;
+    margin: 10px 18px 14px auto !important;
     display: block;
   }
 
