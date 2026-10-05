@@ -162,10 +162,35 @@
 body:has(.ficha-caballo) .acciones-registro {
   margin-top: 30px;
 }
-    /* En todas las vistas con contenido, acercar los botones al final */
-body:has(#seccionBuscador[style*="display: block"]) .acciones-registro,
-body:has(#seccionCriadoresPropietarios[style*="display: block"]) .acciones-registro {
-  margin-top: 170px;
+  /* BUSCAR CABALLO: buscador visible, todavía sin resultados */
+body:has(#seccionBuscador[style*="display: block"] .buscar-fila[style*="display: flex"])
+     .acciones-registro {
+  margin-top: 110px;
+}
+
+/* BUSCAR CABALLO: cuando ya aparecen resultados */
+body:has(#seccionBuscador[style*="display: block"])
+     :has(#resultado:not(:empty))
+     .acciones-registro {
+  margin-top: 30px;
+}
+
+/* CRIADORES / PROPIETARIOS */
+body:has(#seccionCriadoresPropietarios[style*="display: block"])
+     .acciones-registro {
+  margin-top: 70px;
+}
+
+/* SOBRE SDU */
+body:has(#resultado .sobre-sdu)
+     .acciones-registro {
+  margin-top: 25px;
+}
+
+/* FICHAS, REGISTROS Y FORMULARIOS */
+body:has(#resultado .ficha-caballo)
+     .acciones-registro {
+  margin-top: 25px;
 }
 .tarjeta-registro {
   background: rgba(23, 35, 59, 0.88);
