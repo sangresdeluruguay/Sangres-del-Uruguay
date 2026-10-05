@@ -4917,9 +4917,9 @@ if (seccionCriadoresPropietarios) {
           Nuevo caballo
         </button>
 
-        <button onclick="volverABuscador()">
-          Buscar / editar caballo
-        </button>
+        <button onclick="abrirEdicionPendientes()">
+  Editar caballos pendientes
+</button>
 
         <button onclick="administrarCriadores()">
           Criadores
@@ -5176,6 +5176,16 @@ async function rechazarFotoPendiente(idSolicitud) {
   contador.style.display =
     solicitudes.length > 0 ? "inline-flex" : "none";
 }
+    function abrirEdicionPendientes() {
+  const url = new URL(window.location.href);
+
+  url.search = "";
+  url.searchParams.set("vista", "editar-pendientes");
+
+  history.pushState({}, "", url);
+
+  verCaballosPendientes();
+}
     async function verCaballosPendientes() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -5223,6 +5233,10 @@ async function rechazarFotoPendiente(idSolicitud) {
           Propietario: ${escapar(c.Propietario || "-")}<br>
           Estado: ${escapar(c.Estado || "-")}
           <br><br>
+           
+           <button onclick="abrirCaballoPendienteParaEditar(${c.id})">
+  Editar
+</button>
 
           <button onclick="aprobarCaballoPendiente(${c.id})">
             Aprobar
@@ -5236,6 +5250,7 @@ async function rechazarFotoPendiente(idSolicitud) {
     </div>
   `;
 }
+     
     async function rechazarCaballoPendiente(id) {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -5998,7 +6013,538 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
     nombrePrincipal.value = nombrePedigree.value;
   });
 }
-   
+   async function abrirCaballoPendienteParaEditar(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Tenés que iniciar sesión como administrador.");
+    return;
+  }
+
+  const url = new URL(window.location.href);
+  url.search = "";
+  url.searchParams.set("vista", "editar-pendiente");
+  url.searchParams.set("id", id);
+
+  history.pushState({}, "", url);
+
+  const resultado = document.getElementById("resultado");
+
+  if (!resultado) return;
+
+  resultado.innerHTML = "<p>Cargando caballo pendiente...</p>";
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCaballos?select=*&id=eq." +
+    encodeURIComponent(id),
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + sesionAdmin.access_token
+      }
+    }
+  );
+
+  if (!respuesta.ok) {
+    resultado.innerHTML =
+      "<p>No se pudo cargar el caballo pendiente.</p>";
+    return;
+  }
+
+  const datos = await respuesta.json();
+
+  if (!datos.length) {
+    resultado.innerHTML =
+      "<p>No se encontró el caballo pendiente.</p>";
+    return;
+  }
+
+  const solicitud = datos[0];
+
+  mostrarFormularioCaballoPendiente(id, solicitud);
+}
+
+    function mostrarFormularioCaballoPendiente(id, solicitud) {
+  const resultado = document.getElementById("resultado");
+  if (!resultado) return;
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo modo-edicion">
+
+      <h2>Editar caballo pendiente</h2>
+
+      <div class="tabla-ficha">
+
+        <div class="dato-ficha">
+          <strong>Nombre</strong>
+          <input
+            id="editNombre"
+            type="text"
+            value="${escapar(solicitud.Nombre || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>N.º Criador</strong>
+          <input
+            id="editNumeroCriadorPendiente"
+            type="text"
+            value="${escapar(solicitud["Numero de Criador"] || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Nacimiento</strong>
+          <input
+            id="editNacimiento"
+            type="date"
+            value="${escapar(solicitud.Nacimiento || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Sexo</strong>
+          <input
+            id="editSexo"
+            type="text"
+            value="${escapar(solicitud.Sexo || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Raza</strong>
+          <input
+            id="editRaza"
+            type="text"
+            value="${escapar(solicitud.Raza || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Pelo</strong>
+          <input
+            id="editPelo"
+            type="text"
+            value="${escapar(solicitud.Pelo || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>RP</strong>
+          <input
+            id="editRP"
+            type="text"
+            value="${escapar(solicitud.RP || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Propietario</strong>
+          <input
+            id="editPropietario"
+            type="text"
+            value="${escapar(solicitud.Propietario || "")}"
+          >
+        </div>
+
+        <div class="dato-ficha">
+          <strong>Estado</strong>
+          <span>${escapar(solicitud.Estado || "pendiente")}</span>
+        </div>
+
+      </div>
+
+      <h3>Pedigree</h3>
+
+      <div class="pedigree pedigree-editable">
+
+        <div class="generacion sujeto">
+          <div class="pedigree-box principal">
+            <input
+              id="editNombrePedigree"
+              type="text"
+              value="${escapar(solicitud.Nombre || "")}"
+            >
+          </div>
+        </div>
+
+        <div class="generacion padres">
+
+          <div class="pedigree-box macho">
+            <input
+              id="editPadre"
+              type="text"
+              placeholder="Padre"
+              value="${escapar(solicitud.Padre || "")}"
+            >
+            <div
+              id="sugerenciasEditPadre"
+              class="sugerencias-pedigree">
+            </div>
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editMadre"
+              type="text"
+              placeholder="Madre"
+              value="${escapar(solicitud.Madre || "")}"
+            >
+            <div
+              id="sugerenciasEditMadre"
+              class="sugerencias-pedigree">
+            </div>
+          </div>
+
+        </div>
+
+        <div class="generacion abuelos">
+
+          <div class="pedigree-box macho">
+            <input
+              id="editAbueloPaterno"
+              type="text"
+              placeholder="Abuelo paterno"
+              value="${escapar(solicitud["Abuelo paterno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editAbuelaPaterna"
+              type="text"
+              placeholder="Abuela paterna"
+              value="${escapar(solicitud["Abuela paterna"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box macho">
+            <input
+              id="editAbueloMaterno"
+              type="text"
+              placeholder="Abuelo materno"
+              value="${escapar(solicitud["Abuelo materno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editAbuelaMaterna"
+              type="text"
+              placeholder="Abuela materna"
+              value="${escapar(solicitud["Abuela materna"] || "")}"
+            >
+          </div>
+
+        </div>
+
+        <div class="generacion bisabuelos">
+
+          <div class="pedigree-box macho">
+            <input
+              id="editBisabueloPP"
+              type="text"
+              placeholder="Bisabuelo PP"
+              value="${escapar(solicitud["Bisabuelo paterno paterno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editBisabuelaPP"
+              type="text"
+              placeholder="Bisabuela PP"
+              value="${escapar(solicitud["Bisabuela paterna paterna"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box macho">
+            <input
+              id="editBisabueloPM"
+              type="text"
+              placeholder="Bisabuelo PM"
+              value="${escapar(solicitud["Bisabuelo paterno materno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editBisabuelaPM"
+              type="text"
+              placeholder="Bisabuela PM"
+              value="${escapar(solicitud["Bisabuela paterna materna"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box macho">
+            <input
+              id="editBisabueloMP"
+              type="text"
+              placeholder="Bisabuelo MP"
+              value="${escapar(solicitud["Bisabuelo materno paterno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editBisabuelaMP"
+              type="text"
+              placeholder="Bisabuela MP"
+              value="${escapar(solicitud["Bisabuela materna paterna"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box macho">
+            <input
+              id="editBisabueloMM"
+              type="text"
+              placeholder="Bisabuelo MM"
+              value="${escapar(solicitud["Bisabuelo materno materno"] || "")}"
+            >
+          </div>
+
+          <div class="pedigree-box hembra">
+            <input
+              id="editBisabuelaMM"
+              type="text"
+              placeholder="Bisabuela MM"
+              value="${escapar(solicitud["Bisabuela materna materna"] || "")}"
+            >
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="acciones-edicion">
+
+        <button onclick="guardarCambiosCaballoPendiente(${id})">
+          Guardar cambios
+        </button>
+
+        <button onclick="abrirEdicionPendientes()">
+          Volver a pendientes
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  activarSugerenciasEditPadre();
+  activarSugerenciasEditMadre();
+
+  activarSugerenciasCampoPedigree(
+    "editAbueloPaterno",
+    "M"
+  );
+
+  activarSugerenciasCampoPedigree(
+    "editAbuelaPaterna",
+    "H"
+  );
+
+  activarSugerenciasCampoPedigree(
+    "editAbueloMaterno",
+    "M"
+  );
+
+  activarSugerenciasCampoPedigree(
+    "editAbuelaMaterna",
+    "H"
+  );
+
+  const nombrePrincipal =
+    document.getElementById("editNombre");
+
+  const nombrePedigree =
+    document.getElementById("editNombrePedigree");
+
+  if (nombrePrincipal && nombrePedigree) {
+
+    nombrePrincipal.addEventListener(
+      "input",
+      function () {
+        nombrePedigree.value =
+          nombrePrincipal.value;
+      }
+    );
+
+    nombrePedigree.addEventListener(
+      "input",
+      function () {
+        nombrePrincipal.value =
+          nombrePedigree.value;
+      }
+    );
+  }
+}
+
+
+async function guardarCambiosCaballoPendiente(id) {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("La sesión de administrador no está activa.");
+    return;
+  }
+
+  const valor = function(idCampo) {
+    const campo =
+      document.getElementById(idCampo);
+
+    return campo
+      ? campo.value.trim()
+      : "";
+  };
+
+  const nombre =
+    valor("editNombre").toUpperCase();
+
+  const numeroCriador =
+    valor("editNumeroCriadorPendiente").toUpperCase();
+
+  const nacimiento =
+    valor("editNacimiento");
+
+  const sexo =
+    valor("editSexo").toUpperCase();
+
+  const raza =
+    valor("editRaza").toUpperCase();
+
+  const pelo =
+    valor("editPelo").toUpperCase();
+
+  const rp =
+    valor("editRP").toUpperCase();
+
+  const propietario =
+    valor("editPropietario").toUpperCase();
+
+  if (!nombre) {
+    alert("El caballo necesita un nombre.");
+    return;
+  }
+
+  if (!numeroCriador) {
+    alert("El caballo necesita un número de criador.");
+    return;
+  }
+
+  if (!nacimiento) {
+    alert("Completá la fecha de nacimiento.");
+    return;
+  }
+
+  const datosActualizados = {
+
+    "Nombre":
+      nombre,
+
+    "Numero de Criador":
+      numeroCriador,
+
+    "Nacimiento":
+      nacimiento,
+
+    "Sexo":
+      sexo || null,
+
+    "Raza":
+      raza || null,
+
+    "Pelo":
+      pelo || null,
+
+    "RP":
+      rp || null,
+
+    "Propietario":
+      propietario || null,
+
+    "Padre":
+      valor("editPadre").toUpperCase() || null,
+
+    "Madre":
+      valor("editMadre").toUpperCase() || null,
+
+    "Abuelo paterno":
+      valor("editAbueloPaterno").toUpperCase() || null,
+
+    "Abuela paterna":
+      valor("editAbuelaPaterna").toUpperCase() || null,
+
+    "Abuelo materno":
+      valor("editAbueloMaterno").toUpperCase() || null,
+
+    "Abuela materna":
+      valor("editAbuelaMaterna").toUpperCase() || null,
+
+    "Bisabuelo paterno paterno":
+      valor("editBisabueloPP").toUpperCase() || null,
+
+    "Bisabuela paterna paterna":
+      valor("editBisabuelaPP").toUpperCase() || null,
+
+    "Bisabuelo paterno materno":
+      valor("editBisabueloPM").toUpperCase() || null,
+
+    "Bisabuela paterna materna":
+      valor("editBisabuelaPM").toUpperCase() || null,
+
+    "Bisabuelo materno paterno":
+      valor("editBisabueloMP").toUpperCase() || null,
+
+    "Bisabuela materna paterna":
+      valor("editBisabuelaMP").toUpperCase() || null,
+
+    "Bisabuelo materno materno":
+      valor("editBisabueloMM").toUpperCase() || null,
+
+    "Bisabuela materna materna":
+      valor("editBisabuelaMM").toUpperCase() || null,
+
+    "Estado":
+      "pendiente"
+  };
+
+  const respuesta = await fetch(
+    SUPABASE_URL +
+    "/rest/v1/SolicitudesCaballos?id=eq." +
+    encodeURIComponent(id),
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          "Bearer " + sesionAdmin.access_token,
+        "Content-Type":
+          "application/json",
+        Prefer:
+          "return=minimal"
+      },
+      body:
+        JSON.stringify(datosActualizados)
+    }
+  );
+
+  if (!respuesta.ok) {
+    const error =
+      await respuesta.text();
+
+    alert(
+      "No se pudieron guardar los cambios: " +
+      error
+    );
+
+    return;
+  }
+
+  alert(
+    "Cambios guardados. El caballo sigue pendiente."
+  );
+
+  abrirCaballoPendienteParaEditar(id);
+}
+    
 async function buscarSugerenciasPedigree(texto) {
   const busqueda = texto.trim().toLowerCase();
 
