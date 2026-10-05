@@ -1822,6 +1822,10 @@ function convertirEnlacesCaballosSDU(contenedor = document) {
     .querySelectorAll("[data-nombre]")
     .forEach(elemento => {
 
+      if (elemento.classList.contains("boton-proponer-foto")) {
+  return;
+}
+
       if (elemento.dataset.linkSdu === "caballo") {
         return;
       }
