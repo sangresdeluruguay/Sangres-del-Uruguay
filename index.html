@@ -5764,9 +5764,10 @@ const enlaceWhatsApp =
 
 alert("Criador aprobado correctamente. Se abrirá WhatsApp con el mensaje preparado.");
 
-window.location.href = enlaceWhatsApp;
+await verCriadoresPendientes();
+await actualizarContadorCriadoresPendientes();
 
-verCriadoresPendientes();
+window.location.href = enlaceWhatsApp;
 }
     function nuevoCaballoDesdePanel() {
   registrarCaballoProvisional(encodeURIComponent(" "));
