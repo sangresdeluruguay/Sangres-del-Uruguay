@@ -2082,7 +2082,22 @@ const finalizado =
   
 const vista =
   parametros.get("vista");
-  
+
+  /* -------- EDITAR CABALLOS PENDIENTES -------- */
+if (vista === "editar-pendientes") {
+  abrirEdicionPendientes();
+  return;
+}
+
+/* -------- EDITAR UN CABALLO PENDIENTE -------- */
+if (vista === "editar-pendiente") {
+  const idPendiente = parametros.get("id");
+
+  if (idPendiente) {
+    await abrirCaballoPendienteParaEditar(idPendiente);
+    return;
+  }
+}
 /* ---------- BUSCAR CABALLO ---------- */
 if (vista === "buscar-caballo") {
   mostrarBuscadorCaballos();
