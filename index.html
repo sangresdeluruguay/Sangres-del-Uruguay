@@ -2822,7 +2822,9 @@ origenFichaCaballo = "criadores";
   opciones.classList.toggle("contacto-abierto");
 }
     function abrirRegistroCaballo() {
-
+      
+ocultarOpcionesBusquedaCaballo();
+      
   const resultado = document.getElementById("resultado");
 
   const seccionBuscador = document.getElementById("seccionBuscador");
@@ -4639,6 +4641,8 @@ window.history.replaceState(
 }
 function abrirRegistroCriador() {
   
+  ocultarOpcionesBusquedaCaballo();
+  
 const parametrosActuales = new URLSearchParams(window.location.search);
 
 if (parametrosActuales.get("registro") !== "criador") {
@@ -4893,7 +4897,15 @@ renovarSesionAdmin();
 setInterval(() => {
   renovarSesionAdmin();
 }, 45 * 60 * 1000);
-   
+
+    function ocultarOpcionesBusquedaCaballo() {
+  const opcionesBusquedaCaballo =
+    document.getElementById("opcionesBusquedaCaballo");
+
+  if (opcionesBusquedaCaballo) {
+    opcionesBusquedaCaballo.style.display = "none";
+  }
+}
       function abrirPanelAdmin() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -4904,6 +4916,7 @@ window.history.replaceState(
   "",
   window.location.pathname + "?admin=panel"
 );
+        ocultarOpcionesBusquedaCaballo();
         
   const resultado = document.getElementById("resultado");
         const seccionBuscador = document.getElementById("seccionBuscador");
@@ -5202,6 +5215,9 @@ async function rechazarFotoPendiente(idSolicitud) {
   verCaballosPendientes();
 }
     async function verCaballosPendientes() {
+      
+      ocultarOpcionesBusquedaCaballo();
+      
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
     return;
@@ -6029,6 +6045,7 @@ activarSugerenciasCampoPedigree("editAbuelaMaterna", "H");
   });
 }
    async function abrirCaballoPendienteParaEditar(id) {
+     ocultarOpcionesBusquedaCaballo();
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
     return;
