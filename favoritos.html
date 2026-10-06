@@ -1,32 +1,3 @@
-Skip to content
-sangresdeluruguay
-Sangres-del-Uruguay
-Repository navigation
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security and quality
-Insights
-Settings
-Sangres-del-Uruguay
-/favoritos.html
-Go to file
-t
-T
-sangresdeluruguay
-sangresdeluruguay
-Create favoritos.html
-288d06b
- · 
-10 hours ago
-
-Code
-
-Blame
-2323 lines (1891 loc) · 45.6 KB
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -42,7 +13,7 @@ Blame
   <style>
     :root {
       --azul: #173b72;
-      --azul-2: #245592;
+      --azul2: #245592;
       --dorado: #b89a56;
       --fondo: #f4f5f7;
       --blanco: #ffffff;
@@ -50,526 +21,494 @@ Blame
       --gris: #6b7280;
       --borde: #d9dde5;
       --verde: #21834f;
+      --verde-fondo: #e8f5ed;
+      --amarillo: #946c13;
+      --amarillo-fondo: #fff5d8;
       --rojo: #a43c3c;
+      --rojo-fondo: #f9e8e8;
     }
 
     * {
       box-sizing: border-box;
     }
 
-    html {
-      min-height: 100%;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
     }
 
     body {
-      margin: 0;
       min-height: 100vh;
       background: var(--fondo);
       color: var(--texto);
-      font-family:
-        Arial,
-        Helvetica,
-        sans-serif;
+      font-family: Arial, Helvetica, sans-serif;
     }
 
     a {
       color: inherit;
     }
 
-    button,
-    input {
-      font: inherit;
-    }
-
     button {
+      font: inherit;
       cursor: pointer;
     }
 
     .encabezado {
+      width: 100%;
       background: var(--azul);
       color: white;
+      margin: 0;
       padding:
         max(22px, env(safe-area-inset-top))
-        18px
+        16px
         20px;
-      text-align: center;
     }
 
     .encabezado-contenido {
-      width: min(100%, 1050px);
+      width: min(100%, 1080px);
       margin: 0 auto;
+      text-align: center;
     }
 
     .logo-favoritos {
       display: block;
-      max-width: 125px;
-      max-height: 100px;
+      max-width: 180px;
+      max-height: 90px;
+      margin: 0 auto 8px;
       object-fit: contain;
-      margin: 0 auto 9px;
     }
 
     .encabezado h1 {
       margin: 0;
-      font-size: clamp(29px, 5vw, 43px);
-      line-height: 1.05;
+      font-size: clamp(34px, 6vw, 52px);
     }
 
     .encabezado p {
-      margin: 8px 0 0;
+      margin: 6px 0 0;
       color: #e4d09c;
-      font-size: 15px;
+      font-weight: 700;
     }
 
-    .menu-superior {
+    .menu {
+      margin-top: 20px;
       display: flex;
       justify-content: center;
-      align-items: center;
-      gap: 8px 18px;
       flex-wrap: wrap;
-      margin-top: 18px;
+      gap: 10px 24px;
     }
 
-    .menu-superior a {
+    .menu a {
       color: white;
       text-decoration: none;
       font-weight: 700;
       font-size: 14px;
-      padding: 7px 8px;
-      border-radius: 7px;
-    }
-
-    .menu-superior a:hover {
-      background: rgba(255,255,255,.12);
     }
 
     main {
-      width: min(100%, 1050px);
+      width: min(100%, 1080px);
       margin: 0 auto;
-      padding: 28px 16px 55px;
+      padding: 24px 14px 55px;
     }
 
-    .titulo-pagina {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .titulo-pagina h2 {
-      margin: 0 0 7px;
+    h2,
+    h3 {
       color: var(--azul);
-      font-size: clamp(24px, 4vw, 32px);
     }
 
-    .titulo-pagina p {
-      margin: 0;
+    h2 {
+      margin-top: 0;
+    }
+
+    .titulo-centro {
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .subtitulo {
       color: var(--gris);
       line-height: 1.45;
     }
 
-    .estado-carga,
-    .mensaje {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 24px 18px;
+    .subtitulo-centro {
       text-align: center;
+      margin: 0 0 24px;
+    }
+
+    .tarjeta {
+      background: var(--blanco);
+      border: 1px solid var(--borde);
+      border-radius: 14px;
+      padding: 20px;
+      margin-bottom: 18px;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
+    }
+
+    .mensaje {
+      padding: 15px;
+      border-radius: 10px;
+      background: #eef2f7;
       color: var(--gris);
+      margin: 12px 0;
+    }
+
+    .mensaje-exito {
+      background: var(--verde-fondo);
+      color: var(--verde);
     }
 
     .mensaje-error {
+      background: var(--rojo-fondo);
       color: var(--rojo);
     }
 
-    .lista-raids {
+    .lista-competencias {
       display: grid;
       grid-template-columns:
-        repeat(auto-fit, minmax(250px, 1fr));
+        repeat(2, minmax(0, 1fr));
       gap: 16px;
     }
 
-    .tarjeta-raid {
+    .competencia {
+      display: block;
       background: white;
       border: 1px solid var(--borde);
       border-radius: 14px;
-      padding: 19px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.05);
+      padding: 20px;
       text-decoration: none;
+      box-shadow: 0 3px 12px rgba(0,0,0,.04);
       transition:
         transform .15s ease,
         box-shadow .15s ease;
     }
 
-    .tarjeta-raid:hover {
+    .competencia:hover {
       transform: translateY(-2px);
-      box-shadow: 0 7px 20px rgba(0,0,0,.09);
+      box-shadow: 0 7px 18px rgba(0,0,0,.07);
     }
 
-    .tarjeta-raid h3 {
-      margin: 0 0 10px;
-      color: var(--azul);
+    .competencia h3 {
+      margin: 0 0 9px;
       font-size: 20px;
     }
 
-    .dato-raid {
-      margin: 5px 0;
-      color: #4b5563;
-      font-size: 14px;
+    .meta {
+      color: var(--gris);
+      font-size: 13px;
+      line-height: 1.55;
     }
 
-    .estado-votacion {
+    .estado {
       display: inline-block;
       margin-top: 12px;
-      padding: 6px 10px;
+      padding: 5px 10px;
       border-radius: 999px;
-      background: #e8f5ed;
-      color: var(--verde);
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
     }
 
+    .estado-verde {
+      background: var(--verde-fondo);
+      color: var(--verde);
+    }
+
+    .estado-amarillo {
+      background: var(--amarillo-fondo);
+      color: var(--amarillo);
+    }
+
+    .estado-rojo {
+      background: var(--rojo-fondo);
+      color: var(--rojo);
+    }
+
+    .separador-titulo {
+      margin-top: 34px;
+      margin-bottom: 14px;
+    }
+
     .cabecera-raid {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 20px;
-      margin-bottom: 18px;
       text-align: center;
     }
 
     .cabecera-raid h2 {
-      color: var(--azul);
-      margin: 0 0 8px;
+      margin-bottom: 8px;
+      font-size: clamp(26px, 5vw, 38px);
     }
 
-    .cabecera-raid .meta {
-      color: var(--gris);
-      line-height: 1.6;
+    .top4 {
+      border: 2px solid var(--dorado);
+      background: #fffdf7;
     }
 
-    .lista-participantes {
+    .top4 h3 {
+      text-align: center;
+      margin: 0 0 16px;
+      font-size: 23px;
+    }
+
+    .ranking-lista {
       display: grid;
       gap: 10px;
     }
 
-    .participante {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 13px 14px;
+    .ranking-fila {
       display: grid;
-      grid-template-columns: auto 1fr;
+      grid-template-columns:
+        42px
+        minmax(0,1fr)
+        80px;
+      gap: 10px;
+      align-items: center;
+      background: white;
+      border: 1px solid #ece6d8;
+      border-radius: 10px;
+      padding: 12px 13px;
+    }
+
+    .ranking-puesto {
+      text-align: center;
+      color: var(--dorado);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .ranking-nombre {
+      color: var(--azul);
+      font-weight: 800;
+      text-decoration: none;
+    }
+
+    .ranking-porcentaje {
+      text-align: right;
+      color: var(--azul);
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    .nomina {
+      display: grid;
+      gap: 10px;
+    }
+
+    .caballo-voto {
+      display: grid;
+      grid-template-columns:
+        58px
+        minmax(0,1fr)
+        auto;
       gap: 12px;
       align-items: center;
-    }
-
-    .participante.seleccionado {
-      border-color: var(--dorado);
-      box-shadow: 0 0 0 2px rgba(184,154,86,.18);
-    }
-
-    .selector-voto {
-      width: 21px;
-      height: 21px;
-      accent-color: var(--azul);
-    }
-
-    .nombre-participante {
-      color: var(--azul);
-      text-decoration: none;
-      font-size: 17px;
-      font-weight: 700;
-    }
-
-    .nombre-participante:hover {
-      text-decoration: underline;
-    }
-
-    .alias-participante {
-      display: block;
-      color: var(--gris);
-      font-size: 13px;
-      margin-top: 3px;
-      font-style: italic;
-    }
-
-    .datos-participante {
-      color: var(--gris);
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .zona-voto {
-      position: sticky;
-      bottom: 12px;
-      z-index: 20;
-      margin-top: 20px;
-      background: rgba(255,255,255,.96);
-      backdrop-filter: blur(8px);
+      background: white;
       border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 13px;
-      box-shadow: 0 5px 22px rgba(0,0,0,.12);
+      border-radius: 11px;
+      padding: 14px;
     }
 
-    .boton-principal {
-      display: block;
-      width: 100%;
-      border: 0;
-      border-radius: 10px;
-      padding: 13px 15px;
-      background: var(--azul);
-      color: white;
-      font-weight: 700;
+    .numero-marcacion {
+      text-align: center;
+      color: var(--azul);
+      font-size: 20px;
+      font-weight: 800;
+    }
+
+    .caballo-info {
+      min-width: 0;
+    }
+
+    .caballo-nombre {
+      display: inline-block;
+      color: var(--azul);
+      font-weight: 800;
+      text-decoration: none;
       font-size: 16px;
     }
 
-    .boton-principal:hover {
-      background: var(--azul-2);
+    .caballo-nombre:hover {
+      text-decoration: underline;
     }
 
-    .boton-principal:disabled {
+    .caballo-detalle {
+      margin-top: 4px;
+      color: var(--gris);
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .boton-votar {
+      border: 0;
+      border-radius: 8px;
+      background: var(--azul);
+      color: white;
+      padding: 10px 16px;
+      font-weight: 700;
+      min-width: 82px;
+    }
+
+    .boton-votar:hover {
+      background: var(--azul2);
+    }
+
+    .boton-votar:disabled {
       opacity: .5;
       cursor: default;
     }
 
-    .seleccion-actual {
-      text-align: center;
-      font-size: 13px;
-      color: var(--gris);
-      margin-bottom: 9px;
-    }
-
-    .resultados-votacion {
-      margin-top: 28px;
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 19px;
-    }
-
-    .resultados-votacion h3 {
-      margin: 0 0 16px;
+    .porcentaje-publico {
+      min-width: 70px;
+      text-align: right;
       color: var(--azul);
-      text-align: center;
-    }
-
-    .resultado-voto {
-      margin-bottom: 15px;
-    }
-
-    .resultado-voto:last-child {
-      margin-bottom: 0;
-    }
-
-    .fila-resultado {
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 5px;
-      font-size: 14px;
+      font-size: 17px;
+      font-weight: 800;
     }
 
     .barra {
-      height: 9px;
-      background: #e7e9ed;
+      width: 100%;
+      height: 7px;
+      margin-top: 8px;
       border-radius: 999px;
+      background: #e7eaf0;
       overflow: hidden;
     }
 
-    .barra > span {
+    .barra span {
       display: block;
       height: 100%;
-      background: var(--azul);
-      border-radius: inherit;
-    }
-
-    .ficha-deportiva {
-      display: grid;
-      gap: 18px;
-    }
-
-    .cabecera-caballo {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 22px;
-      text-align: center;
-    }
-
-    .cabecera-caballo h2 {
-      margin: 0;
-      color: var(--azul);
-      font-size: 31px;
-    }
-
-    .alias-caballo {
-      margin-top: 7px;
-      color: var(--gris);
-      font-style: italic;
-    }
-
-    .insignia {
-      display: inline-block;
-      margin-top: 12px;
-      padding: 6px 10px;
       border-radius: 999px;
-      background: #f3eee2;
-      color: #806a37;
-      font-size: 12px;
-      font-weight: 700;
+      background: var(--dorado);
+    }
+
+    .ficha-caballo h2 {
+      margin-bottom: 6px;
+      font-size: clamp(28px,5vw,40px);
     }
 
     .datos-caballo {
       display: grid;
       grid-template-columns:
-        repeat(3, minmax(0, 1fr));
-      background: white;
+        repeat(3,minmax(0,1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+
+    .dato {
       border: 1px solid var(--borde);
-      border-radius: 14px;
-      overflow: hidden;
+      border-radius: 9px;
+      padding: 12px;
+      background: #fafbfc;
     }
 
-    .dato-caballo {
-      padding: 15px;
-      text-align: center;
-      border-right: 1px solid var(--borde);
-    }
-
-    .dato-caballo:last-child {
-      border-right: 0;
-    }
-
-    .dato-caballo strong {
+    .dato strong {
       display: block;
-      font-size: 12px;
       color: var(--gris);
+      font-size: 11px;
       margin-bottom: 5px;
     }
 
-    .resumen-campana {
+    .resumen-deportivo {
       display: grid;
       grid-template-columns:
-        repeat(5, minmax(0, 1fr));
-      gap: 10px;
+        repeat(5,minmax(0,1fr));
+      gap: 9px;
+      margin: 18px 0;
     }
 
-    .estadistica {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 12px;
-      padding: 16px 8px;
+    .resumen-item {
       text-align: center;
+      padding: 13px 8px;
+      border: 1px solid var(--borde);
+      border-radius: 9px;
+      background: white;
     }
 
-    .estadistica .icono {
-      font-size: 24px;
-      display: block;
-      margin-bottom: 5px;
-    }
-
-    .estadistica strong {
+    .resumen-item strong {
       display: block;
       color: var(--azul);
       font-size: 22px;
     }
 
-    .estadistica small {
+    .resumen-item small {
       color: var(--gris);
-      font-size: 11px;
     }
 
     .tabla-contenedor {
+      width: 100%;
       overflow-x: auto;
-      background: white;
       border: 1px solid var(--borde);
-      border-radius: 14px;
+      border-radius: 11px;
+      background: white;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      min-width: 760px;
+      min-width: 850px;
     }
 
     th,
     td {
-      padding: 12px 11px;
-      border-bottom: 1px solid #e5e7eb;
+      padding: 10px 9px;
+      border-bottom: 1px solid #e7e9ed;
       text-align: left;
-      font-size: 13px;
+      font-size: 12px;
+      vertical-align: middle;
     }
 
     th {
-      background: #f2f4f7;
+      background: #f1f3f6;
       color: var(--azul);
+      white-space: nowrap;
     }
 
-    tbody tr:last-child td {
+    tr:last-child td {
       border-bottom: 0;
     }
 
-    .link-raid {
-      color: var(--azul);
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .link-raid:hover {
-      text-decoration: underline;
-    }
-
-    .enlace-pedigree {
-      display: inline-block;
-      margin-top: 14px;
-      color: var(--azul);
-      font-weight: 700;
-      text-decoration: underline;
-    }
-
-    .nota-pedigree {
-      color: var(--gris);
-      margin-top: 14px;
-      font-size: 13px;
+    .premio-feu {
+      font-weight: 800;
+      white-space: nowrap;
     }
 
     footer {
       text-align: center;
       color: var(--gris);
       font-size: 12px;
-      padding: 10px 15px 28px;
+      padding: 0 16px 30px;
     }
 
     @media (max-width: 760px) {
-      main {
-        padding-left: 12px;
-        padding-right: 12px;
+
+      .lista-competencias {
+        grid-template-columns: 1fr;
+      }
+
+      .caballo-voto {
+        grid-template-columns:
+          44px
+          minmax(0,1fr);
+      }
+
+      .accion-voto,
+      .porcentaje-publico {
+        grid-column: 2;
+        justify-self: start;
+        text-align: left;
       }
 
       .datos-caballo {
         grid-template-columns: 1fr;
       }
 
-      .dato-caballo {
-        border-right: 0;
-        border-bottom: 1px solid var(--borde);
-      }
-
-      .dato-caballo:last-child {
-        border-bottom: 0;
-      }
-
-      .resumen-campana {
+      .resumen-deportivo {
         grid-template-columns:
-          repeat(2, minmax(0, 1fr));
+          repeat(2,minmax(0,1fr));
       }
 
-      .estadistica:last-child {
-        grid-column: 1 / -1;
-      }
-    }
-
-    @media (min-width: 761px) and (max-width: 1180px) {
-      main {
-        width: min(94%, 980px);
+      .ranking-fila {
+        grid-template-columns:
+          34px
+          minmax(0,1fr)
+          62px;
       }
     }
   </style>
@@ -577,47 +516,60 @@ Blame
 
 <body>
 
-  <header class="encabezado">
-    <div class="encabezado-contenido">
+<header class="encabezado">
 
-      <!--
-        Cuando subamos el logo real de Favoritos al repositorio,
-        lo nombramos logo-favoritos.png.
-        Si todavía no existe, simplemente no se mostrará.
-      -->
-      <img
-        src="logo-favoritos.png"
-        alt="Favoritos"
-        class="logo-favoritos"
-        onerror="this.style.display='none'"
-      >
+  <div class="encabezado-contenido">
 
-      <h1>Favoritos</h1>
-      <p>Sangres del Uruguay</p>
+    <img
+      src="logo-favoritos.png"
+      alt="Favoritos"
+      class="logo-favoritos"
+      onerror="this.style.display='none'"
+    >
 
-      <nav class="menu-superior">
-        <a href="index.html">Sangres del Uruguay</a>
-        <a href="favoritos.html">Favoritos</a>
-      </nav>
+    <h1>
+      Favoritos
+    </h1>
 
-    </div>
-  </header>
+    <p>
+      Sangres del Uruguay
+    </p>
 
-  <main id="app">
-    <div class="estado-carga">
-      Cargando...
-    </div>
-  </main>
+    <nav class="menu">
 
-  <footer>
-    Favoritos · Sangres del Uruguay
-  </footer>
+      <a href="index.html">
+        Sangres del Uruguay
+      </a>
+
+      <a href="favoritos.html">
+        Favoritos
+      </a>
+
+    </nav>
+
+  </div>
+
+</header>
+
+
+<main id="app">
+
+  <div class="mensaje">
+    Cargando...
+  </div>
+
+</main>
+
+
+<footer>
+  Favoritos · Sangres del Uruguay
+</footer>
 
 
 <script>
+
 /* ==========================================================
-   FAVORITOS - SANGRES DEL URUGUAY
-   PAGINA PUBLICA
+   CONFIGURACIÓN
 ========================================================== */
 
 const SUPABASE_URL =
@@ -627,7 +579,9 @@ const SUPABASE_KEY =
   "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
 
 const app =
-  document.getElementById("app");
+  document.getElementById(
+    "app"
+  );
 
 
 /* ==========================================================
@@ -635,23 +589,55 @@ const app =
 ========================================================== */
 
 function escapar(valor) {
-  return String(valor ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
+
+  return String(
+    valor ?? ""
+  )
+    .replaceAll(
+      "&",
+      "&amp;"
+    )
+    .replaceAll(
+      "<",
+      "&lt;"
+    )
+    .replaceAll(
+      ">",
+      "&gt;"
+    )
+    .replaceAll(
+      '"',
+      "&quot;"
+    )
+    .replaceAll(
+      "'",
+      "&#039;"
+    );
+
 }
 
-function fechaUruguay(fecha) {
-  if (!fecha) return "-";
+
+function fechaUY(fecha) {
+
+  if (!fecha) {
+    return "-";
+  }
+
 
   const partes =
-    String(fecha).split("-");
+    String(fecha)
+      .split("-");
 
-  if (partes.length !== 3) {
-    return escapar(fecha);
+
+  if (
+    partes.length !==
+    3
+  ) {
+    return escapar(
+      fecha
+    );
   }
+
 
   return (
     partes[2] +
@@ -660,952 +646,775 @@ function fechaUruguay(fecha) {
     "/" +
     partes[0]
   );
+
 }
 
-function valorOguion(valor) {
-  if (
-    valor === null ||
-    valor === undefined ||
-    valor === ""
-  ) {
-    return "-";
-  }
 
-  return escapar(valor);
-}
+function nombreEstado(
+  estado
+) {
 
-function formatearDistancia(valor) {
-  if (
-    valor === null ||
-    valor === undefined ||
-    valor === ""
-  ) {
-    return "-";
-  }
+  const mapa = {
 
-  const numero = Number(valor);
+    borrador:
+      "Borrador",
 
-  if (Number.isNaN(numero)) {
-    return escapar(valor);
-  }
+    votacion_abierta:
+      "Votación abierta",
+
+    votacion_cerrada:
+      "Votación cerrada",
+
+    resultado_provisorio:
+      "Resultado provisorio",
+
+    resultado_definitivo:
+      "Resultado definitivo"
+
+  };
+
 
   return (
-    Number.isInteger(numero)
-      ? numero
-      : numero.toFixed(1)
-  ) + " km";
+    mapa[estado] ||
+    estado
+  );
+
 }
 
-function headersPublicos(extra = {}) {
+
+function claseEstado(
+  estado
+) {
+
+  if (
+    estado ===
+      "votacion_abierta" ||
+    estado ===
+      "resultado_definitivo"
+  ) {
+    return "estado-verde";
+  }
+
+
+  if (
+    estado ===
+    "votacion_cerrada"
+  ) {
+    return "estado-rojo";
+  }
+
+
+  return "estado-amarillo";
+
+}
+
+
+function numeroOrden(
+  valor
+) {
+
+  const numero =
+    Number(
+      String(
+        valor ?? ""
+      )
+        .replace(
+          /[^0-9.-]/g,
+          ""
+        )
+    );
+
+
+  return Number.isFinite(
+    numero
+  )
+    ? numero
+    : 999999;
+
+}
+
+
+function porcentaje(
+  cantidad,
+  total
+) {
+
+  if (!total) {
+    return 0;
+  }
+
+
+  return Math.round(
+    (
+      Number(
+        cantidad
+      ) /
+      Number(
+        total
+      )
+    ) *
+    100
+  );
+
+}
+
+
+function generarUUID() {
+
+  if (
+    window.crypto &&
+    crypto.randomUUID
+  ) {
+
+    return crypto.randomUUID();
+
+  }
+
+
+  return (
+    Date.now()
+      .toString(36) +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2) +
+    "-" +
+    Math.random()
+      .toString(36)
+      .slice(2)
+  );
+
+}
+
+
+function obtenerVoterKey() {
+
+  let key =
+    localStorage.getItem(
+      "favoritosVoterKey"
+    );
+
+
+  if (!key) {
+
+    key =
+      generarUUID();
+
+
+    localStorage.setItem(
+      "favoritosVoterKey",
+      key
+    );
+
+  }
+
+
+  return key;
+
+}
+
+
+function votoLocal(
+  competenciaId
+) {
+
+  return localStorage.getItem(
+    "favoritosVotoRaid_" +
+    competenciaId
+  );
+
+}
+
+
+/* ==========================================================
+   SUPABASE
+========================================================== */
+
+function headersPublicos(
+  extra = {}
+) {
+
   return {
-    apikey: SUPABASE_KEY,
+
+    apikey:
+      SUPABASE_KEY,
+
     Authorization:
-      "Bearer " + SUPABASE_KEY,
+      "Bearer " +
+      SUPABASE_KEY,
+
     "Content-Type":
       "application/json",
+
     ...extra
+
   };
+
 }
 
-async function supabaseGet(ruta) {
+
+async function apiGet(
+  ruta
+) {
+
   const respuesta =
     await fetch(
       SUPABASE_URL +
       "/rest/v1/" +
       ruta,
       {
-        headers: headersPublicos()
+        headers:
+          headersPublicos()
       }
     );
 
-  if (!respuesta.ok) {
-    const texto =
-      await respuesta.text();
+
+  if (
+    !respuesta.ok
+  ) {
 
     throw new Error(
-      texto ||
-      "Error consultando Supabase."
+      await respuesta.text()
     );
+
   }
 
+
   return respuesta.json();
+
 }
 
-async function supabaseInsert(
+
+async function apiPost(
   tabla,
   datos
 ) {
+
   const respuesta =
     await fetch(
       SUPABASE_URL +
       "/rest/v1/" +
       tabla,
       {
-        method: "POST",
+
+        method:
+          "POST",
 
         headers:
           headersPublicos({
             Prefer:
-              "return=representation"
+              "return=minimal"
           }),
 
         body:
-          JSON.stringify(datos)
+          JSON.stringify(
+            datos
+          )
+
       }
     );
 
-  const texto =
-    await respuesta.text();
-
-  if (!respuesta.ok) {
-    throw new Error(texto);
-  }
-
-  return texto
-    ? JSON.parse(texto)
-    : [];
-}
-
-
-/* ==========================================================
-   IDENTIFICADOR ANONIMO DEL VOTANTE
-========================================================== */
-
-function obtenerVoterKey() {
-  let clave =
-    localStorage.getItem(
-      "favoritosVoterKey"
-    );
-
-  if (clave) {
-    return clave;
-  }
 
   if (
-    window.crypto &&
-    typeof crypto.randomUUID ===
-      "function"
+    !respuesta.ok
   ) {
-    clave =
-      crypto.randomUUID();
-  } else {
-    clave =
-      "v_" +
-      Date.now() +
-      "_" +
-      Math.random()
-        .toString(36)
-        .slice(2);
+
+    throw new Error(
+      await respuesta.text()
+    );
+
   }
 
-  localStorage.setItem(
-    "favoritosVoterKey",
-    clave
-  );
 
-  return clave;
+  return true;
+
 }
 
 
 /* ==========================================================
-   URLS REALES
-   Las flechas del navegador manejan VOLVER.
+   LINKS DE CABALLO
 ========================================================== */
 
-function irFavoritos() {
-  history.pushState(
-    {},
-    "",
-    "favoritos.html"
-  );
+function urlCaballo(
+  participante,
+  deportivo
+) {
 
-  cargarRuta();
-}
+  if (
+    deportivo &&
+    deportivo.caballo_id
+  ) {
 
-function irRaid(id) {
-  const url =
-    "favoritos.html?raid=" +
-    encodeURIComponent(id);
+    return (
+      "index.html?caballo=" +
+      encodeURIComponent(
+        deportivo
+          .nombre_principal ||
+        participante
+          .nombre_nomina ||
+        ""
+      )
+    );
 
-  history.pushState(
-    { raid: id },
-    "",
-    url
-  );
+  }
 
-  cargarRuta();
-}
 
-function irCaballoDeportivo(id) {
-  const url =
+  return (
     "favoritos.html?caballo=" +
-    encodeURIComponent(id);
-
-  history.pushState(
-    { caballo: id },
-    "",
-    url
+    encodeURIComponent(
+      participante
+        .caballo_deportivo_id
+    )
   );
 
-  cargarRuta();
 }
 
-window.addEventListener(
-  "popstate",
-  cargarRuta
-);
 
+function enlaceCaballo(
+  participante,
+  deportivo,
+  clase = "caballo-nombre"
+) {
 
-/* ==========================================================
-   HOME - RAIDS ABIERTOS
-========================================================== */
+  return `
 
-async function mostrarRaids() {
-  app.innerHTML = `
-    <div class="estado-carga">
-      Cargando Raids...
-    </div>
+    <a
+      href="${urlCaballo(
+        participante,
+        deportivo
+      )}"
+      class="${clase}"
+    >
+      ${escapar(
+        participante
+          .nombre_nomina ||
+        deportivo
+          ?.nombre_principal ||
+        "-"
+      )}
+    </a>
+
   `;
 
+}
+
+
+/* ==========================================================
+   PORTADA
+========================================================== */
+
+async function mostrarInicio() {
+
+  app.innerHTML = `
+
+    <div class="mensaje">
+      Cargando competencias...
+    </div>
+
+  `;
+
+
   try {
+
     const competencias =
-      await supabaseGet(
+      await apiGet(
         "competencias" +
         "?select=*" +
-        "&estado=eq.votacion_abierta" +
-        "&order=fecha.asc"
+        "&order=fecha.desc"
       );
 
-    if (!competencias.length) {
-      app.innerHTML = `
-        <div class="titulo-pagina">
-          <h2>Favoritos</h2>
-          <p>
-            Votá tus favoritos
-            en los Raids habilitados.
-          </p>
-        </div>
 
-        <div class="mensaje">
-          En este momento no hay
-          votaciones abiertas.
-        </div>
-      `;
+    const abiertas =
+      competencias.filter(
+        competencia =>
+          competencia.estado ===
+          "votacion_abierta"
+      );
 
-      return;
-    }
+
+    const anteriores =
+      competencias.filter(
+        competencia =>
+          competencia.estado !==
+            "votacion_abierta" &&
+          competencia.estado !==
+            "borrador"
+      );
+
 
     app.innerHTML = `
-      <div class="titulo-pagina">
-        <h2>Favoritos</h2>
 
-        <p>
+      <section>
+
+        <h2
+          class="titulo-centro"
+        >
+          Favoritos
+        </h2>
+
+
+        <p
+          class="
+            subtitulo
+            subtitulo-centro
+          "
+        >
           Elegí un Raid para ver
           la nómina y votar.
         </p>
-      </div>
 
-      <div class="lista-raids">
 
-        ${competencias.map(c => `
-          <a
-            class="tarjeta-raid"
-            href="favoritos.html?raid=${encodeURIComponent(c.id)}"
-            data-raid-id="${escapar(c.id)}"
-          >
+        ${
+          abiertas.length
+            ? `
 
-            <h3>
-              ${escapar(c.nombre)}
-            </h3>
+              <div
+                class="lista-competencias"
+              >
 
-            ${
-              c.edicion
-                ? `
-                  <div class="dato-raid">
-                    ${escapar(c.edicion)}
-                  </div>
-                `
-                : ""
-            }
+                ${
+                  abiertas
+                    .map(
+                      competencia =>
+                        tarjetaCompetencia(
+                          competencia
+                        )
+                    )
+                    .join("")
+                }
 
-            <div class="dato-raid">
-              ${fechaUruguay(c.fecha)}
-            </div>
+              </div>
 
-            <div class="dato-raid">
-              ${formatearDistancia(c.distancia_km)}
-            </div>
+            `
+            : `
 
-            ${
-              c.localidad
-                ? `
-                  <div class="dato-raid">
-                    ${escapar(c.localidad)}
-                  </div>
-                `
-                : ""
-            }
+              <div
+                class="mensaje"
+              >
+                En este momento no hay
+                votaciones abiertas.
+              </div>
 
-            <span class="estado-votacion">
-              Votación abierta
-            </span>
+            `
+        }
 
-          </a>
-        `).join("")}
 
-      </div>
+        ${
+          anteriores.length
+            ? `
+
+              <h2
+                class="separador-titulo"
+              >
+                Raids anteriores
+              </h2>
+
+
+              <div
+                class="lista-competencias"
+              >
+
+                ${
+                  anteriores
+                    .map(
+                      competencia =>
+                        tarjetaCompetencia(
+                          competencia
+                        )
+                    )
+                    .join("")
+                }
+
+              </div>
+
+            `
+            : ""
+        }
+
+      </section>
+
     `;
 
-    app
-      .querySelectorAll(
-        "[data-raid-id]"
-      )
-      .forEach(enlace => {
-
-        enlace.addEventListener(
-          "click",
-          evento => {
-
-            evento.preventDefault();
-
-            irRaid(
-              enlace.dataset.raidId
-            );
-          }
-        );
-
-      });
-
-  } catch (error) {
-    app.innerHTML = `
-      <div class="mensaje mensaje-error">
-        No se pudieron cargar
-        los Raids.
-      </div>
-    `;
-
-    console.error(error);
-  }
-}
-
-
-/* ==========================================================
-   CARGAR DATOS AUXILIARES DE CABALLOS
-========================================================== */
-
-async function cargarCaballosDeportivos(
-  participantes
-) {
-  const ids = [
-    ...new Set(
-      participantes
-        .map(
-          p =>
-            p.caballo_deportivo_id
-        )
-        .filter(Boolean)
-    )
-  ];
-
-  if (!ids.length) {
-    return {
-      caballos: new Map(),
-      alias: new Map()
-    };
   }
 
-  const listaIds =
-    "(" +
-    ids.join(",") +
-    ")";
+  catch (error) {
 
-  const [
-    caballos,
-    alias
-  ] =
-    await Promise.all([
-
-      supabaseGet(
-        "caballos_deportivos" +
-        "?select=*" +
-        "&id=in." +
-        listaIds
-      ),
-
-      supabaseGet(
-        "alias_caballos" +
-        "?select=*" +
-        "&caballo_deportivo_id=in." +
-        listaIds
-      )
-
-    ]);
-
-  const mapaCaballos =
-    new Map();
-
-  caballos.forEach(c => {
-    mapaCaballos.set(
-      Number(c.id),
-      c
+    console.error(
+      error
     );
-  });
 
-  const mapaAlias =
-    new Map();
 
-  alias.forEach(a => {
+    app.innerHTML = `
 
-    const id =
-      Number(
-        a.caballo_deportivo_id
-      );
+      <div
+        class="
+          mensaje
+          mensaje-error
+        "
+      >
+        No se pudieron cargar
+        las competencias.
+      </div>
 
-    if (!mapaAlias.has(id)) {
-      mapaAlias.set(id, []);
-    }
+    `;
 
-    mapaAlias.get(id).push(a);
-  });
+  }
 
-  return {
-    caballos: mapaCaballos,
-    alias: mapaAlias
-  };
 }
 
 
-/* ==========================================================
-   RAID - NOMINA Y VOTACION
-========================================================== */
+function tarjetaCompetencia(
+  competencia
+) {
 
-async function mostrarRaid(id) {
-  app.innerHTML = `
-    <div class="estado-carga">
-      Cargando nómina...
-    </div>
+  return `
+
+    <a
+      class="competencia"
+      href="favoritos.html?raid=${encodeURIComponent(
+        competencia.id
+      )}"
+    >
+
+      <h3>
+        ${escapar(
+          competencia.nombre
+        )}
+      </h3>
+
+
+      <div
+        class="meta"
+      >
+
+        ${
+          competencia.edicion
+            ? escapar(
+                competencia.edicion
+              ) +
+              "<br>"
+            : ""
+        }
+
+        ${fechaUY(
+          competencia.fecha
+        )}
+
+        <br>
+
+        ${
+          competencia.distancia_km
+            ? escapar(
+                competencia.distancia_km
+              ) +
+              " km"
+            : "-"
+        }
+
+        ${
+          competencia.localidad
+            ? "<br>" +
+              escapar(
+                competencia.localidad
+              )
+            : ""
+        }
+
+      </div>
+
+
+      <span
+        class="
+          estado
+          ${claseEstado(
+            competencia.estado
+          )}
+        "
+      >
+        ${escapar(
+          nombreEstado(
+            competencia.estado
+          )
+        )}
+      </span>
+
+    </a>
+
   `;
 
+}
+
+
+/* ==========================================================
+   RAID
+========================================================== */
+
+async function mostrarRaid(
+  competenciaId
+) {
+
+  app.innerHTML = `
+
+    <div class="mensaje">
+      Cargando Raid...
+    </div>
+
+  `;
+
+
   try {
+
     const competencias =
-      await supabaseGet(
+      await apiGet(
         "competencias" +
         "?select=*" +
         "&id=eq." +
-        encodeURIComponent(id) +
+        encodeURIComponent(
+          competenciaId
+        ) +
         "&limit=1"
       );
 
-    if (!competencias.length) {
-      app.innerHTML = `
-        <div class="mensaje">
-          No se encontró
-          esta competencia.
-        </div>
-      `;
-
-      return;
-    }
 
     const competencia =
       competencias[0];
 
+
+    if (!competencia) {
+
+      app.innerHTML = `
+
+        <div class="mensaje">
+          Raid no encontrado.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
     const participantes =
-      await supabaseGet(
+      await apiGet(
         "participantes_competencia" +
         "?select=*" +
         "&competencia_id=eq." +
-        encodeURIComponent(id) +
-        "&order=id.asc"
+        encodeURIComponent(
+          competenciaId
+        )
       );
 
-    const auxiliares =
-      await cargarCaballosDeportivos(
-        participantes
-      );
 
-    const voterKey =
-      obtenerVoterKey();
+    participantes.sort(
+      (
+        a,
+        b
+      ) => {
 
-    const votosMios =
-      await supabaseGet(
-        "votos_favoritos" +
-        "?select=*" +
-        "&competencia_id=eq." +
-        encodeURIComponent(id) +
-        "&voter_key=eq." +
-        encodeURIComponent(voterKey) +
-        "&limit=1"
-      );
+        const numeroA =
+          numeroOrden(
+            a.numero_marcacion
+          );
 
-    const yaVoto =
-      votosMios.length > 0;
 
-    app.innerHTML = `
-      <div class="cabecera-raid">
+        const numeroB =
+          numeroOrden(
+            b.numero_marcacion
+          );
 
-        <h2>
-          ${escapar(competencia.nombre)}
-        </h2>
 
-        <div class="meta">
+        if (
+          numeroA !==
+          numeroB
+        ) {
 
-          ${
-            competencia.edicion
-              ? escapar(
-                  competencia.edicion
-                ) + "<br>"
-              : ""
-          }
+          return (
+            numeroA -
+            numeroB
+          );
 
-          ${fechaUruguay(
-            competencia.fecha
-          )}
+        }
 
-          ·
 
-          ${formatearDistancia(
-            competencia.distancia_km
-          )}
+        return String(
+          a.nombre_nomina ||
+          ""
+        )
+          .localeCompare(
+            String(
+              b.nombre_nomina ||
+              ""
+            ),
+            "es"
+          );
 
-          ${
-            competencia.localidad
-              ? `
-                <br>
-                ${escapar(
-                  competencia.localidad
-                )}
-              `
-              : ""
-          }
-
-        </div>
-
-      </div>
-
-      ${
-        !participantes.length
-          ? `
-            <div class="mensaje">
-              Todavía no hay
-              participantes cargados.
-            </div>
-          `
-          : `
-            <div
-              class="lista-participantes"
-              id="listaParticipantes"
-            >
-
-              ${participantes.map(p => {
-
-                const caballo =
-                  auxiliares.caballos.get(
-                    Number(
-                      p.caballo_deportivo_id
-                    )
-                  );
-
-                const aliases =
-                  auxiliares.alias.get(
-                    Number(
-                      p.caballo_deportivo_id
-                    )
-                  ) || [];
-
-                const aliasActual =
-                  aliases.find(
-                    a => a.es_actual
-                  );
-
-                const nombrePrincipal =
-                  caballo?.nombre_principal ||
-                  p.nombre_nomina;
-
-                const hrefCaballo =
-                  caballo
-                    ? (
-                        caballo.caballo_id
-                          ? (
-                              "index.html?caballo=" +
-                              encodeURIComponent(
-                                nombrePrincipal
-                              )
-                            )
-                          : (
-                              "favoritos.html?caballo=" +
-                              encodeURIComponent(
-                                caballo.id
-                              )
-                            )
-                      )
-                    : "#";
-
-                return `
-                  <label
-                    class="participante"
-                    data-participante-id="${escapar(p.id)}"
-                  >
-
-                    ${
-                      yaVoto ||
-                      competencia.estado !==
-                        "votacion_abierta"
-                        ? ""
-                        : `
-                          <input
-                            class="selector-voto"
-                            type="radio"
-                            name="favorito"
-                            value="${escapar(p.id)}"
-                          >
-                        `
-                    }
-
-                    <div>
-
-                      ${
-                        caballo
-                          ? `
-                            <a
-                              href="${hrefCaballo}"
-                              class="nombre-participante"
-                              data-caballo-deportivo="${caballo.caballo_id ? "" : escapar(caballo.id)}"
-                            >
-                              ${escapar(nombrePrincipal)}
-                            </a>
-                          `
-                          : `
-                            <span class="nombre-participante">
-                              ${escapar(nombrePrincipal)}
-                            </span>
-                          `
-                      }
-
-                      ${
-                        aliasActual &&
-                        aliasActual.alias !==
-                          nombrePrincipal
-                          ? `
-                            <span class="alias-participante">
-                              ${escapar(aliasActual.alias)}
-                            </span>
-                          `
-                          : ""
-                      }
-
-                      <div class="datos-participante">
-
-                        ${
-                          p.jinete
-                            ? `
-                              Jinete:
-                              ${escapar(p.jinete)}
-                            `
-                            : ""
-                        }
-
-                      </div>
-
-                    </div>
-
-                  </label>
-                `;
-              }).join("")}
-
-            </div>
-
-            ${
-              competencia.estado ===
-              "votacion_abierta"
-                ? (
-                    yaVoto
-                      ? `
-                        <div class="mensaje" style="margin-top:20px;">
-                          Tu voto ya fue registrado
-                          para este Raid.
-                        </div>
-                      `
-                      : `
-                        <div
-                          class="zona-voto"
-                          id="zonaVoto"
-                        >
-
-                          <div
-                            class="seleccion-actual"
-                            id="seleccionActual"
-                          >
-                            Elegí un caballo.
-                          </div>
-
-                          <button
-                            type="button"
-                            class="boton-principal"
-                            id="btnVotar"
-                            disabled
-                          >
-                            Votar
-                          </button>
-
-                        </div>
-                      `
-                  )
-                : `
-                  <div class="mensaje" style="margin-top:20px;">
-                    La votación está cerrada.
-                  </div>
-                `
-            }
-
-            <div id="zonaResultados"></div>
-          `
       }
-    `;
-
-
-    /* ------------------------------------------
-       LINKS DE CABALLOS DEPORTIVOS
-    ------------------------------------------ */
-
-    app
-      .querySelectorAll(
-        "[data-caballo-deportivo]"
-      )
-      .forEach(enlace => {
-
-        const idCaballo =
-          enlace.dataset
-            .caballoDeportivo;
-
-        if (!idCaballo) {
-          return;
-        }
-
-        enlace.addEventListener(
-          "click",
-          evento => {
-
-            evento.preventDefault();
-
-            irCaballoDeportivo(
-              idCaballo
-            );
-          }
-        );
-
-      });
-
-
-    /* ------------------------------------------
-       VOTACION
-    ------------------------------------------ */
-
-    if (
-      !yaVoto &&
-      competencia.estado ===
-        "votacion_abierta"
-    ) {
-
-      const radios =
-        app.querySelectorAll(
-          'input[name="favorito"]'
-        );
-
-      const boton =
-        document.getElementById(
-          "btnVotar"
-        );
-
-      const seleccionActual =
-        document.getElementById(
-          "seleccionActual"
-        );
-
-      let participanteElegido =
-        null;
-
-      radios.forEach(radio => {
-
-        radio.addEventListener(
-          "change",
-          () => {
-
-            participanteElegido =
-              Number(radio.value);
-
-            const tarjeta =
-              radio.closest(
-                ".participante"
-              );
-
-            app
-              .querySelectorAll(
-                ".participante"
-              )
-              .forEach(x =>
-                x.classList.remove(
-                  "seleccionado"
-                )
-              );
-
-            tarjeta.classList.add(
-              "seleccionado"
-            );
-
-            const nombre =
-              tarjeta
-                .querySelector(
-                  ".nombre-participante"
-                )
-                ?.textContent
-                ?.trim() ||
-              "caballo";
-
-            seleccionActual.textContent =
-              "Vas a votar por " +
-              nombre;
-
-            boton.disabled =
-              false;
-          }
-        );
-
-      });
-
-      boton.addEventListener(
-        "click",
-        async () => {
-
-          if (!participanteElegido) {
-            return;
-          }
-
-          boton.disabled =
-            true;
-
-          boton.textContent =
-            "Registrando voto...";
-
-          try {
-
-            await supabaseInsert(
-              "votos_favoritos",
-              {
-                competencia_id:
-                  Number(id),
-
-                participante_id:
-                  participanteElegido,
-
-                voter_key:
-                  voterKey
-              }
-            );
-
-            localStorage.setItem(
-              "favoritosVotoRaid_" +
-              id,
-              String(
-                participanteElegido
-              )
-            );
-
-            await mostrarRaid(id);
-
-          } catch (error) {
-
-            console.error(error);
-
-            const mensaje =
-              String(
-                error.message || ""
-              );
-
-            if (
-              mensaje.includes(
-                "duplicate"
-              ) ||
-              mensaje.includes(
-                "unique"
-              )
-            ) {
-              alert(
-                "Ya registraste un voto en este Raid."
-              );
-
-              await mostrarRaid(id);
-
-              return;
-            }
-
-            alert(
-              "No se pudo registrar el voto."
-            );
-
-            boton.disabled =
-              false;
-
-            boton.textContent =
-              "Votar";
-          }
-
-        }
-      );
-
-    }
-
-
-    /* ------------------------------------------
-       RESULTADOS DE FAVORITOS
-       Los mostramos después de votar
-       o si la votación ya está cerrada.
-    ------------------------------------------ */
-
-    if (
-      yaVoto ||
-      competencia.estado !==
-        "votacion_abierta"
-    ) {
-      await mostrarResultadosVotacion(
-        id,
-        participantes,
-        auxiliares
-      );
-    }
-
-  } catch (error) {
-    console.error(error);
-
-    app.innerHTML = `
-      <div class="mensaje mensaje-error">
-        No se pudo cargar
-        esta competencia.
-      </div>
-    `;
-  }
-}
-
-
-/* ==========================================================
-   RESULTADOS DE LA VOTACION
-========================================================== */
-
-async function mostrarResultadosVotacion(
-  competenciaId,
-  participantes,
-  auxiliares
-) {
-  const zona =
-    document.getElementById(
-      "zonaResultados"
     );
 
-  if (!zona) return;
 
-  try {
+    const idsDeportivos =
+      [
+        ...new Set(
+          participantes
+            .map(
+              participante =>
+                participante
+                  .caballo_deportivo_id
+            )
+            .filter(
+              Boolean
+            )
+        )
+      ];
+
+
+    let deportivos =
+      [];
+
+
+    if (
+      idsDeportivos.length
+    ) {
+
+      deportivos =
+        await apiGet(
+          "caballos_deportivos" +
+          "?select=*" +
+          "&id=in.(" +
+          idsDeportivos.join(",") +
+          ")"
+        );
+
+    }
+
+
+    const mapaDeportivos =
+      new Map();
+
+
+    deportivos.forEach(
+      deportivo => {
+
+        mapaDeportivos.set(
+          Number(
+            deportivo.id
+          ),
+          deportivo
+        );
+
+      }
+    );
+
+
+    /*
+      No pedimos voter_key.
+      Solo necesitamos participante_id
+      para calcular porcentajes.
+    */
+
     const votos =
-      await supabaseGet(
+      await apiGet(
         "votos_favoritos" +
         "?select=participante_id" +
         "&competencia_id=eq." +
@@ -1614,137 +1423,775 @@ async function mostrarResultadosVotacion(
         )
       );
 
-    const total =
-      votos.length;
 
-    const conteo =
+    const yaVoto =
+      Boolean(
+        votoLocal(
+          competenciaId
+        )
+      );
+
+
+    const conteos =
       new Map();
 
-    votos.forEach(v => {
 
-      const id =
-        Number(
-          v.participante_id
+    participantes.forEach(
+      participante => {
+
+        conteos.set(
+          Number(
+            participante.id
+          ),
+          0
         );
 
-      conteo.set(
-        id,
-        (conteo.get(id) || 0) + 1
-      );
+      }
+    );
 
-    });
 
-    const filas =
-      participantes.map(p => {
+    votos.forEach(
+      voto => {
 
-        const caballo =
-          auxiliares.caballos.get(
-            Number(
-              p.caballo_deportivo_id
-            )
+        const participanteId =
+          Number(
+            voto.participante_id
           );
 
-        const nombre =
-          caballo?.nombre_principal ||
-          p.nombre_nomina;
 
-        const votosCaballo =
-          conteo.get(
-            Number(p.id)
-          ) || 0;
+        conteos.set(
+          participanteId,
+          (
+            conteos.get(
+              participanteId
+            ) ||
+            0
+          ) +
+          1
+        );
 
-        const porcentaje =
-          total > 0
-            ? (
-                votosCaballo /
-                total *
-                100
-              )
-            : 0;
+      }
+    );
 
-        return {
-          nombre,
-          votos: votosCaballo,
-          porcentaje
-        };
 
-      })
-      .sort(
-        (a, b) =>
-          b.votos - a.votos
+    const totalVotos =
+      votos.length;
+
+
+    const mostrarPorcentajes =
+      yaVoto ||
+      competencia.estado !==
+        "votacion_abierta";
+
+
+    const ranking =
+      participantes
+        .map(
+          participante => {
+
+            const cantidad =
+              conteos.get(
+                Number(
+                  participante.id
+                )
+              ) ||
+              0;
+
+
+            return {
+
+              participante,
+
+              votos:
+                cantidad,
+
+              porcentaje:
+                porcentaje(
+                  cantidad,
+                  totalVotos
+                )
+
+            };
+
+          }
+        )
+        .sort(
+          (
+            a,
+            b
+          ) => {
+
+            if (
+              b.votos !==
+              a.votos
+            ) {
+
+              return (
+                b.votos -
+                a.votos
+              );
+
+            }
+
+
+            const numeroA =
+              numeroOrden(
+                a.participante
+                  .numero_marcacion
+              );
+
+
+            const numeroB =
+              numeroOrden(
+                b.participante
+                  .numero_marcacion
+              );
+
+
+            if (
+              numeroA !==
+              numeroB
+            ) {
+
+              return (
+                numeroA -
+                numeroB
+              );
+
+            }
+
+
+            return String(
+              a.participante
+                .nombre_nomina ||
+              ""
+            )
+              .localeCompare(
+                String(
+                  b.participante
+                    .nombre_nomina ||
+                  ""
+                ),
+                "es"
+              );
+
+          }
+        );
+
+
+    const top4 =
+      ranking.slice(
+        0,
+        4
       );
 
-    zona.innerHTML = `
-      <div class="resultados-votacion">
+
+    app.innerHTML = `
+
+      <section
+        class="
+          tarjeta
+          cabecera-raid
+        "
+      >
+
+        <h2>
+          ${escapar(
+            competencia.nombre
+          )}
+        </h2>
+
+
+        <div
+          class="meta"
+        >
+
+          ${
+            competencia.edicion
+              ? escapar(
+                  competencia.edicion
+                ) +
+                "<br>"
+              : ""
+          }
+
+          ${fechaUY(
+            competencia.fecha
+          )}
+
+          ·
+
+          ${
+            competencia.distancia_km
+              ? escapar(
+                  competencia.distancia_km
+                ) +
+                " km"
+              : "-"
+          }
+
+          ${
+            competencia.localidad
+              ? "<br>" +
+                escapar(
+                  competencia.localidad
+                )
+              : ""
+          }
+
+        </div>
+
+
+        <span
+          class="
+            estado
+            ${claseEstado(
+              competencia.estado
+            )}
+          "
+        >
+          ${escapar(
+            nombreEstado(
+              competencia.estado
+            )
+          )}
+        </span>
+
+      </section>
+
+
+      ${
+        mostrarPorcentajes &&
+        participantes.length
+          ? renderTop4(
+              top4,
+              mapaDeportivos
+            )
+          : ""
+      }
+
+
+      ${
+        yaVoto
+          ? `
+
+            <div
+              class="
+                mensaje
+                mensaje-exito
+              "
+            >
+              Tu voto ya fue registrado
+              para este Raid.
+            </div>
+
+          `
+          : ""
+      }
+
+
+      ${
+        competencia.estado ===
+          "votacion_abierta" &&
+        !yaVoto
+          ? `
+
+            <div
+              class="mensaje"
+            >
+              Elegí tu favorito.
+              Podés votar una sola vez
+              en este Raid.
+            </div>
+
+          `
+          : ""
+      }
+
+
+      <div
+        class="tarjeta"
+      >
 
         <h3>
-          Favoritos del público
+          Nómina
         </h3>
 
+
         ${
-          total === 0
+          participantes.length
             ? `
-              <div class="mensaje">
-                Todavía no hay votos.
+
+              <div
+                class="nomina"
+              >
+
+                ${
+                  participantes
+                    .map(
+                      participante =>
+                        renderParticipante(
+                          participante,
+
+                          mapaDeportivos.get(
+                            Number(
+                              participante
+                                .caballo_deportivo_id
+                            )
+                          ),
+
+                          competencia,
+
+                          yaVoto,
+
+                          mostrarPorcentajes,
+
+                          conteos,
+
+                          totalVotos
+                        )
+                    )
+                    .join("")
+                }
+
               </div>
+
             `
-            : filas.map(f => `
+            : `
 
-                <div class="resultado-voto">
+              <div class="mensaje">
+                Todavía no hay
+                participantes cargados.
+              </div>
 
-                  <div class="fila-resultado">
-
-                    <span>
-                      ${escapar(f.nombre)}
-                    </span>
-
-                    <strong>
-                      ${f.porcentaje.toFixed(1)}%
-                      ·
-                      ${f.votos}
-                      ${f.votos === 1
-                        ? "voto"
-                        : "votos"
-                      }
-                    </strong>
-
-                  </div>
-
-                  <div class="barra">
-                    <span
-                      style="width:${Math.max(0, Math.min(100, f.porcentaje))}%"
-                    ></span>
-                  </div>
-
-                </div>
-
-              `).join("")
+            `
         }
 
+      </div>
+
+    `;
+
+
+    document
+      .querySelectorAll(
+        "[data-votar]"
+      )
+      .forEach(
+        boton => {
+
+          boton.onclick =
+            () => {
+
+              const participanteId =
+                Number(
+                  boton
+                    .dataset
+                    .votar
+                );
+
+
+              registrarVoto(
+                competencia.id,
+                participanteId
+              );
+
+            };
+
+        }
+      );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    app.innerHTML = `
+
+      <div
+        class="
+          mensaje
+          mensaje-error
+        "
+      >
+        No se pudo cargar el Raid.
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* ==========================================================
+   TOP 4
+========================================================== */
+
+function renderTop4(
+  top4,
+  mapaDeportivos
+) {
+
+  return `
+
+    <div
+      class="
+        tarjeta
+        top4
+      "
+    >
+
+      <h3>
+        Los 4 favoritos del público
+      </h3>
+
+
+      <div
+        class="ranking-lista"
+      >
+
         ${
-          total > 0
+          top4
+            .map(
+              (
+                item,
+                indice
+              ) => {
+
+                const participante =
+                  item.participante;
+
+
+                const deportivo =
+                  mapaDeportivos.get(
+                    Number(
+                      participante
+                        .caballo_deportivo_id
+                    )
+                  );
+
+
+                return `
+
+                  <div
+                    class="ranking-fila"
+                  >
+
+                    <div
+                      class="ranking-puesto"
+                    >
+                      ${indice + 1}
+                    </div>
+
+
+                    <div>
+
+                      ${enlaceCaballo(
+                        participante,
+                        deportivo,
+                        "ranking-nombre"
+                      )}
+
+                    </div>
+
+
+                    <div
+                      class="
+                        ranking-porcentaje
+                      "
+                    >
+                      ${item.porcentaje}%
+                    </div>
+
+                  </div>
+
+                `;
+
+              }
+            )
+            .join("")
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+/* ==========================================================
+   FILA DE CABALLO
+========================================================== */
+
+function renderParticipante(
+  participante,
+  deportivo,
+  competencia,
+  yaVoto,
+  mostrarPorcentajes,
+  conteos,
+  totalVotos
+) {
+
+  const cantidad =
+    conteos.get(
+      Number(
+        participante.id
+      )
+    ) ||
+    0;
+
+
+  const porc =
+    porcentaje(
+      cantidad,
+      totalVotos
+    );
+
+
+  const puedeVotar =
+    competencia.estado ===
+      "votacion_abierta" &&
+    !yaVoto;
+
+
+  return `
+
+    <div
+      class="caballo-voto"
+    >
+
+      <div
+        class="
+          numero-marcacion
+        "
+      >
+        ${escapar(
+          participante
+            .numero_marcacion ||
+          "-"
+        )}
+      </div>
+
+
+      <div
+        class="caballo-info"
+      >
+
+        ${enlaceCaballo(
+          participante,
+          deportivo
+        )}
+
+
+        <div
+          class="caballo-detalle"
+        >
+
+          ${
+            participante.jinete
+              ? "Jinete: " +
+                escapar(
+                  participante.jinete
+                )
+              : ""
+          }
+
+          ${
+            participante
+              .propietario_nomina
+              ? (
+                  participante.jinete
+                    ? " · "
+                    : ""
+                ) +
+                "Propietario: " +
+                escapar(
+                  participante
+                    .propietario_nomina
+                )
+              : ""
+          }
+
+        </div>
+
+
+        ${
+          mostrarPorcentajes
             ? `
+
               <div
-                style="
-                  text-align:center;
-                  margin-top:18px;
-                  color:#6b7280;
-                  font-size:12px;
-                "
+                class="barra"
               >
-                Total de votos:
-                ${total}
+                <span
+                  style="
+                    width:${porc}%;
+                  "
+                ></span>
               </div>
+
             `
             : ""
         }
 
       </div>
-    `;
 
-  } catch (error) {
-    console.error(error);
+
+      ${
+        puedeVotar
+          ? `
+
+            <div
+              class="accion-voto"
+            >
+
+              <button
+                class="boton-votar"
+                data-votar="${participante.id}"
+              >
+                Votar
+              </button>
+
+            </div>
+
+          `
+          : (
+
+              mostrarPorcentajes
+                ? `
+
+                  <div
+                    class="
+                      porcentaje-publico
+                    "
+                  >
+                    ${porc}%
+                  </div>
+
+                `
+                : ""
+
+            )
+      }
+
+    </div>
+
+  `;
+
+}
+
+
+/* ==========================================================
+   REGISTRAR VOTO
+========================================================== */
+
+async function registrarVoto(
+  competenciaId,
+  participanteId
+) {
+
+  const voterKey =
+    obtenerVoterKey();
+
+
+  const confirmar =
+    confirm(
+      "¿Confirmás tu voto por este caballo?"
+    );
+
+
+  if (!confirmar) {
+    return;
   }
+
+
+  document
+    .querySelectorAll(
+      "[data-votar]"
+    )
+    .forEach(
+      boton => {
+
+        boton.disabled =
+          true;
+
+      }
+    );
+
+
+  try {
+
+    await apiPost(
+      "votos_favoritos",
+      {
+
+        competencia_id:
+          Number(
+            competenciaId
+          ),
+
+        participante_id:
+          Number(
+            participanteId
+          ),
+
+        voter_key:
+          voterKey
+
+      }
+    );
+
+
+    localStorage.setItem(
+      "favoritosVotoRaid_" +
+      competenciaId,
+
+      String(
+        participanteId
+      )
+    );
+
+
+    await mostrarRaid(
+      competenciaId
+    );
+
+  }
+
+  catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    /*
+      Si Supabase informa que ya
+      existe un voto de este voter_key,
+      marcamos localmente este Raid
+      como votado y recargamos.
+    */
+
+    localStorage.setItem(
+      "favoritosVotoRaid_" +
+      competenciaId,
+
+      "registrado"
+    );
+
+
+    await mostrarRaid(
+      competenciaId
+    );
+
+  }
+
 }
 
 
@@ -1752,70 +2199,135 @@ async function mostrarResultadosVotacion(
    FICHA DEPORTIVA
 ========================================================== */
 
-async function mostrarCaballoDeportivo(id) {
+async function mostrarCaballo(
+  caballoDeportivoId
+) {
+
   app.innerHTML = `
-    <div class="estado-carga">
-      Cargando campaña deportiva...
+
+    <div class="mensaje">
+      Cargando caballo...
     </div>
+
   `;
 
+
   try {
-    const caballos =
-      await supabaseGet(
+
+    const datos =
+      await apiGet(
         "caballos_deportivos" +
         "?select=*" +
         "&id=eq." +
-        encodeURIComponent(id) +
+        encodeURIComponent(
+          caballoDeportivoId
+        ) +
         "&limit=1"
       );
 
-    if (!caballos.length) {
+
+    const caballo =
+      datos[0];
+
+
+    if (!caballo) {
+
       app.innerHTML = `
+
         <div class="mensaje">
-          No se encontró
-          este caballo.
+          Caballo no encontrado.
         </div>
+
       `;
 
       return;
+
     }
 
-    const caballo =
-      caballos[0];
 
-    const aliases =
-      await supabaseGet(
-        "alias_caballos" +
-        "?select=*" +
-        "&caballo_deportivo_id=eq." +
-        encodeURIComponent(id) +
-        "&order=created_at.asc"
-      );
+    /*
+      SI ESTÁ REGISTRADO EN SDU
+      VA A LA FICHA GENEALÓGICA.
+    */
 
-    const aliasActual =
-      aliases.find(
-        a => a.es_actual
-      );
+    if (
+      caballo.caballo_id
+    ) {
 
-    const participantes =
-      await supabaseGet(
-        "participantes_competencia" +
-        "?select=*" +
-        "&caballo_deportivo_id=eq." +
-        encodeURIComponent(id) +
-        "&order=id.desc"
-      );
+      window.location.href =
+        "index.html?caballo=" +
+        encodeURIComponent(
+          caballo.nombre_principal
+        );
+
+
+      return;
+
+    }
+
+
+    const [
+      aliases,
+      participantes
+    ] =
+      await Promise.all([
+
+        apiGet(
+          "alias_caballos" +
+          "?select=*" +
+          "&caballo_deportivo_id=eq." +
+          encodeURIComponent(
+            caballo.id
+          ) +
+          "&order=id.asc"
+        ),
+
+        apiGet(
+          "participantes_competencia" +
+          "?select=*" +
+          "&caballo_deportivo_id=eq." +
+          encodeURIComponent(
+            caballo.id
+          )
+        )
+
+      ]);
+
 
     const participanteIds =
-      participantes
-        .map(p => p.id);
+      participantes.map(
+        participante =>
+          participante.id
+      );
 
-    let resultados = [];
 
-    if (participanteIds.length) {
+    const competenciaIds =
+      [
+        ...new Set(
+          participantes
+            .map(
+              participante =>
+                participante
+                  .competencia_id
+            )
+        )
+      ];
+
+
+    let resultados =
+      [];
+
+
+    let competencias =
+      [];
+
+
+    if (
+      participanteIds.length
+    ) {
 
       resultados =
-        await supabaseGet(
+        await apiGet(
           "resultados_competencia" +
           "?select=*" +
           "&participante_id=in.(" +
@@ -1825,20 +2337,13 @@ async function mostrarCaballoDeportivo(id) {
 
     }
 
-    const competenciaIds = [
-      ...new Set(
-        participantes.map(
-          p => p.competencia_id
-        )
-      )
-    ];
 
-    let competencias = [];
-
-    if (competenciaIds.length) {
+    if (
+      competenciaIds.length
+    ) {
 
       competencias =
-        await supabaseGet(
+        await apiGet(
           "competencias" +
           "?select=*" +
           "&id=in.(" +
@@ -1848,456 +2353,695 @@ async function mostrarCaballoDeportivo(id) {
 
     }
 
-    const mapaParticipantes =
-      new Map();
-
-    participantes.forEach(p => {
-      mapaParticipantes.set(
-        Number(p.id),
-        p
-      );
-    });
 
     const mapaCompetencias =
       new Map();
 
-    competencias.forEach(c => {
-      mapaCompetencias.set(
-        Number(c.id),
-        c
-      );
-    });
 
-    const campaña =
-      resultados.map(r => {
+    competencias.forEach(
+      competencia => {
 
-        const participante =
-          mapaParticipantes.get(
-            Number(
-              r.participante_id
-            )
-          );
+        mapaCompetencias.set(
+          Number(
+            competencia.id
+          ),
+          competencia
+        );
 
-        const competencia =
-          participante
-            ? mapaCompetencias.get(
+      }
+    );
+
+
+    const mapaResultados =
+      new Map();
+
+
+    resultados.forEach(
+      resultado => {
+
+        mapaResultados.set(
+          Number(
+            resultado
+              .participante_id
+          ),
+          resultado
+        );
+
+      }
+    );
+
+
+    /*
+      ORDEN POR FECHA REAL DEL RAID:
+      MÁS RECIENTE PRIMERO.
+    */
+
+    const campana =
+      participantes
+        .map(
+          participante => ({
+
+            participante,
+
+            competencia:
+              mapaCompetencias.get(
                 Number(
                   participante
                     .competencia_id
                 )
+              ),
+
+            resultado:
+              mapaResultados.get(
+                Number(
+                  participante.id
+                )
               )
-            : null;
 
-        return {
-          resultado: r,
-          participante,
-          competencia
-        };
+          })
+        )
+        .filter(
+          item =>
+            item.competencia
+        )
+        .sort(
+          (
+            a,
+            b
+          ) => {
 
-      })
-      .sort((a, b) => {
+            const fechaA =
+              a.competencia.fecha ||
+              "";
 
-        const fechaA =
-          a.competencia?.fecha ||
-          "";
 
-        const fechaB =
-          b.competencia?.fecha ||
-          "";
+            const fechaB =
+              b.competencia.fecha ||
+              "";
 
-        return fechaB.localeCompare(
-          fechaA
+
+            if (
+              fechaA !==
+              fechaB
+            ) {
+
+              return fechaB
+                .localeCompare(
+                  fechaA
+                );
+
+            }
+
+
+            return (
+              Number(
+                b.competencia.id
+              ) -
+              Number(
+                a.competencia.id
+              )
+            );
+
+          }
         );
 
-      });
+
+    const conResultado =
+      campana.filter(
+        item =>
+          item.resultado
+      );
 
 
-    /* ------------------------------------------
-       RESUMEN
-    ------------------------------------------ */
-
-    const competenciasCorridas =
-      campaña.length;
-
-    const victorias =
-      campaña.filter(
-        x =>
-          x.resultado
+    const triunfos =
+      conResultado.filter(
+        item =>
+          item.resultado
             .estado_resultado ===
             "clasificado" &&
           Number(
-            x.resultado.puesto
-          ) === 1
+            item.resultado.puesto
+          ) ===
+          1
       ).length;
+
 
     const segundos =
-      campaña.filter(
-        x =>
-          x.resultado
+      conResultado.filter(
+        item =>
+          item.resultado
             .estado_resultado ===
             "clasificado" &&
           Number(
-            x.resultado.puesto
-          ) === 2
+            item.resultado.puesto
+          ) ===
+          2
       ).length;
+
 
     const terceros =
-      campaña.filter(
-        x =>
-          x.resultado
+      conResultado.filter(
+        item =>
+          item.resultado
             .estado_resultado ===
             "clasificado" &&
           Number(
-            x.resultado.puesto
-          ) === 3
+            item.resultado.puesto
+          ) ===
+          3
       ).length;
 
-    const premiosFEU =
-      campaña.filter(
-        x =>
-          x.resultado
-            .premio_feu === true
+
+    const premiosFeu =
+      conResultado.filter(
+        item =>
+          item.resultado
+            .premio_feu
       ).length;
 
 
     app.innerHTML = `
-      <div class="ficha-deportiva">
 
-        <section class="cabecera-caballo">
+      <div
+        class="
+          tarjeta
+          ficha-caballo
+        "
+      >
 
-          <h2>
-            ${escapar(
-              caballo.nombre_principal
-            )}
-          </h2>
-
-          ${
-            aliasActual
-              ? `
-                <div class="alias-caballo">
-                  ${escapar(
-                    aliasActual.alias
-                  )}
-                </div>
-              `
-              : ""
-          }
-
-          <span class="insignia">
-            ${
-              caballo.caballo_id
-                ? "Registrado en SDU"
-                : "Registro deportivo"
-            }
-          </span>
-
-          ${
-            caballo.caballo_id
-              ? `
-                <br>
-
-                <a
-                  class="enlace-pedigree"
-                  href="index.html?caballo=${encodeURIComponent(
-                    caballo.nombre_principal
-                  )}"
-                >
-                  Ver pedigree
-                </a>
-              `
-              : `
-                <div class="nota-pedigree">
-                  Pedigree no registrado
-                  en Sangres del Uruguay.
-                </div>
-              `
-          }
-
-        </section>
+        <h2>
+          ${escapar(
+            caballo.nombre_principal
+          )}
+        </h2>
 
 
-        <section class="datos-caballo">
+        <p
+          class="subtitulo"
+        >
+          Ficha deportiva ·
+          Sangres del Uruguay
+        </p>
 
-          <div class="dato-caballo">
+
+        <div
+          class="datos-caballo"
+        >
+
+          <div
+            class="dato"
+          >
+
             <strong>
-              Propietario
+              Propietario actual
             </strong>
 
-            ${valorOguion(
-              caballo.propietario_actual
+            ${escapar(
+              caballo
+                .propietario_actual ||
+              "-"
             )}
+
           </div>
 
-          <div class="dato-caballo">
+
+          <div
+            class="dato"
+          >
+
             <strong>
               Chip
             </strong>
 
-            ${valorOguion(
-              caballo.chip
+            ${escapar(
+              caballo.chip ||
+              "-"
             )}
+
           </div>
 
-          <div class="dato-caballo">
+
+          <div
+            class="dato"
+          >
+
             <strong>
               Pasaporte FEU
             </strong>
 
-            ${valorOguion(
-              caballo.pasaporte_feu
+            ${escapar(
+              caballo
+                .pasaporte_feu ||
+              "-"
             )}
+
           </div>
 
-        </section>
+        </div>
 
 
-        <section class="resumen-campana">
+        ${
+          aliases.length
+            ? `
 
-          <div class="estadistica">
-            <span class="icono">🏇</span>
+              <div
+                style="
+                  margin-top:15px;
+                "
+              >
+
+                <strong>
+                  Alias:
+                </strong>
+
+                ${
+                  aliases
+                    .map(
+                      alias =>
+                        escapar(
+                          alias.alias
+                        )
+                    )
+                    .join(", ")
+                }
+
+              </div>
+
+            `
+            : ""
+        }
+
+
+        <div
+          class="
+            resumen-deportivo
+          "
+        >
+
+          <div
+            class="resumen-item"
+          >
+
             <strong>
-              ${competenciasCorridas}
+              ${conResultado.length}
             </strong>
+
             <small>
               Competencias
             </small>
+
           </div>
 
-          <div class="estadistica">
-            <span class="icono">🏆</span>
+
+          <div
+            class="resumen-item"
+          >
+
             <strong>
-              ${victorias}
+              ${triunfos}
             </strong>
+
             <small>
-              Victorias
+              Triunfos
             </small>
+
           </div>
 
-          <div class="estadistica">
-            <span class="icono">🥈</span>
+
+          <div
+            class="resumen-item"
+          >
+
             <strong>
               ${segundos}
             </strong>
+
             <small>
               Segundos
             </small>
+
           </div>
 
-          <div class="estadistica">
-            <span class="icono">🥉</span>
+
+          <div
+            class="resumen-item"
+          >
+
             <strong>
               ${terceros}
             </strong>
+
             <small>
               Terceros
             </small>
+
           </div>
 
-          <div class="estadistica">
-            <span class="icono">❤️🐴</span>
+
+          <div
+            class="resumen-item"
+          >
+
             <strong>
-              ${premiosFEU}
+              ${premiosFeu}
             </strong>
+
             <small>
-              Premios FEU
+              ❤️🐴 FEU
             </small>
+
           </div>
 
-        </section>
-
-
-        <section>
-
-          <div class="titulo-pagina">
-            <h2>
-              Campaña deportiva
-            </h2>
-          </div>
-
-          ${
-            campaña.length === 0
-              ? `
-                <div class="mensaje">
-                  Todavía no hay
-                  resultados registrados.
-                </div>
-              `
-              : `
-                <div class="tabla-contenedor">
-
-                  <table>
-
-                    <thead>
-                      <tr>
-                        <th>Fecha</th>
-                        <th>Raid</th>
-                        <th>Distancia</th>
-                        <th>Puesto</th>
-                        <th>Promedio</th>
-                        <th>Premio</th>
-                        <th>Observaciones</th>
-                      </tr>
-                    </thead>
-
-                    <tbody>
-
-                      ${campaña.map(x => {
-
-                        const r =
-                          x.resultado;
-
-                        const c =
-                          x.competencia;
-
-                        let puesto = "-";
-
-                        if (
-                          r.estado_resultado ===
-                          "clasificado"
-                        ) {
-                          puesto =
-                            r.puesto
-                              ? r.puesto + "º"
-                              : "-";
-                        } else {
-                          puesto =
-                            escapar(
-                              String(
-                                r.estado_resultado ||
-                                "-"
-                              ).toUpperCase()
-                            );
-                        }
-
-                        let premio =
-                          "-";
-
-                        if (
-                          r.premio_feu
-                        ) {
-                          premio =
-                            "🏆 Premio FEU";
-
-                          if (
-                            r.premio_feu_ppm
-                          ) {
-                            premio +=
-                              " · " +
-                              r.premio_feu_ppm +
-                              " ppm";
-                          }
-                        }
-
-                        return `
-                          <tr>
-
-                            <td>
-                              ${fechaUruguay(
-                                c?.fecha
-                              )}
-                            </td>
-
-                            <td>
-
-                              ${
-                                c
-                                  ? `
-                                    <a
-                                      class="link-raid"
-                                      href="favoritos.html?raid=${encodeURIComponent(c.id)}"
-                                      data-link-raid="${escapar(c.id)}"
-                                    >
-                                      ${escapar(c.nombre)}
-                                    </a>
-                                  `
-                                  : "-"
-                              }
-
-                            </td>
-
-                            <td>
-                              ${formatearDistancia(
-                                c?.distancia_km
-                              )}
-                            </td>
-
-                            <td>
-                              ${puesto}
-                            </td>
-
-                            <td>
-                              ${
-                                r.promedio_kmh
-                                  ? (
-                                      escapar(
-                                        r.promedio_kmh
-                                      ) +
-                                      " km/h"
-                                    )
-                                  : "-"
-                              }
-                            </td>
-
-                            <td>
-                              ${premio}
-                            </td>
-
-                            <td>
-                              ${valorOguion(
-                                r.observaciones
-                              )}
-                            </td>
-
-                          </tr>
-                        `;
-
-                      }).join("")}
-
-                    </tbody>
-
-                  </table>
-
-                </div>
-              `
-          }
-
-        </section>
+        </div>
 
       </div>
+
+
+      <div
+        class="tarjeta"
+      >
+
+        <h3>
+          Campaña deportiva
+        </h3>
+
+
+        ${
+          campana.length
+            ? `
+
+              <div
+                class="
+                  tabla-contenedor
+                "
+              >
+
+                <table>
+
+                  <thead>
+
+                    <tr>
+
+                      <th>
+                        Fecha
+                      </th>
+
+                      <th>
+                        Raid
+                      </th>
+
+                      <th>
+                        Distancia
+                      </th>
+
+                      <th>
+                        Puesto
+                      </th>
+
+                      <th>
+                        Estado
+                      </th>
+
+                      <th>
+                        Promedio
+                      </th>
+
+                      <th>
+                        Premio FEU
+                      </th>
+
+                      <th>
+                        Observaciones
+                      </th>
+
+                    </tr>
+
+                  </thead>
+
+
+                  <tbody>
+
+                    ${
+                      campana
+                        .map(
+                          item =>
+                            filaCampana(
+                              item
+                            )
+                        )
+                        .join("")
+                    }
+
+                  </tbody>
+
+                </table>
+
+              </div>
+
+            `
+            : `
+
+              <div
+                class="mensaje"
+              >
+                Todavía no hay
+                resultados deportivos
+                cargados.
+              </div>
+
+            `
+        }
+
+      </div>
+
     `;
 
+  }
 
-    app
-      .querySelectorAll(
-        "[data-link-raid]"
-      )
-      .forEach(enlace => {
+  catch (error) {
 
-        enlace.addEventListener(
-          "click",
-          evento => {
+    console.error(
+      error
+    );
 
-            evento.preventDefault();
-
-            irRaid(
-              enlace.dataset
-                .linkRaid
-            );
-          }
-        );
-
-      });
-
-  } catch (error) {
-    console.error(error);
 
     app.innerHTML = `
-      <div class="mensaje mensaje-error">
+
+      <div
+        class="
+          mensaje
+          mensaje-error
+        "
+      >
         No se pudo cargar
         la ficha deportiva.
       </div>
+
     `;
+
   }
+
+}
+
+
+/* ==========================================================
+   FILA DE CAMPAÑA
+========================================================== */
+
+function filaCampana(
+  item
+) {
+
+  const competencia =
+    item.competencia;
+
+
+  const resultado =
+    item.resultado;
+
+
+  let puesto =
+    "-";
+
+
+  let estado =
+    "-";
+
+
+  let promedio =
+    "-";
+
+
+  let premio =
+    "-";
+
+
+  let observaciones =
+    "-";
+
+
+  if (resultado) {
+
+    estado =
+      resultado
+        .estado_resultado ||
+      "-";
+
+
+    if (
+      resultado
+        .estado_resultado ===
+        "clasificado" &&
+      resultado.puesto !==
+        null &&
+      resultado.puesto !==
+        undefined
+    ) {
+
+      puesto =
+        resultado.puesto;
+
+    }
+
+
+    if (
+      resultado
+        .promedio_kmh !==
+        null &&
+      resultado
+        .promedio_kmh !==
+        undefined
+    ) {
+
+      promedio =
+        resultado
+          .promedio_kmh +
+        " km/h";
+
+    }
+
+
+    if (
+      resultado
+        .premio_feu
+    ) {
+
+      premio =
+        "❤️🐴";
+
+
+      if (
+        resultado
+          .premio_feu_ppm !==
+          null &&
+        resultado
+          .premio_feu_ppm !==
+          undefined
+      ) {
+
+        premio +=
+          " " +
+          resultado
+            .premio_feu_ppm +
+          " ppm";
+
+      }
+
+    }
+
+
+    observaciones =
+      resultado
+        .observaciones ||
+      "-";
+
+  }
+
+
+  return `
+
+    <tr>
+
+      <td>
+        ${fechaUY(
+          competencia.fecha
+        )}
+      </td>
+
+
+      <td>
+
+        <a
+          href="favoritos.html?raid=${encodeURIComponent(
+            competencia.id
+          )}"
+          style="
+            color:var(--azul);
+            font-weight:700;
+            text-decoration:none;
+          "
+        >
+          ${escapar(
+            competencia.nombre
+          )}
+        </a>
+
+      </td>
+
+
+      <td>
+
+        ${
+          competencia.distancia_km
+            ? escapar(
+                competencia
+                  .distancia_km
+              ) +
+              " km"
+            : "-"
+        }
+
+      </td>
+
+
+      <td>
+        ${escapar(
+          puesto
+        )}
+      </td>
+
+
+      <td>
+        ${escapar(
+          estado
+        )}
+      </td>
+
+
+      <td>
+        ${escapar(
+          promedio
+        )}
+      </td>
+
+
+      <td
+        class="premio-feu"
+      >
+        ${premio}
+      </td>
+
+
+      <td>
+        ${escapar(
+          observaciones
+        )}
+      </td>
+
+    </tr>
+
+  `;
+
 }
 
 
@@ -2306,37 +3050,55 @@ async function mostrarCaballoDeportivo(id) {
 ========================================================== */
 
 async function cargarRuta() {
-  const parametros =
+
+  const params =
     new URLSearchParams(
       window.location.search
     );
 
+
   const raid =
-    parametros.get("raid");
+    params.get(
+      "raid"
+    );
+
 
   const caballo =
-    parametros.get("caballo");
+    params.get(
+      "caballo"
+    );
+
 
   window.scrollTo({
     top: 0,
     behavior: "instant"
   });
 
+
   if (caballo) {
-    await mostrarCaballoDeportivo(
+
+    await mostrarCaballo(
       caballo
     );
 
     return;
+
   }
+
 
   if (raid) {
-    await mostrarRaid(raid);
+
+    await mostrarRaid(
+      raid
+    );
 
     return;
+
   }
 
-  await mostrarRaids();
+
+  await mostrarInicio();
+
 }
 
 
