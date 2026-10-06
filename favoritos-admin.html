@@ -1983,10 +1983,81 @@ async function leerExcel(
         nombreHoja
       ];
 
+    /*
+      Primero leemos la hoja como matriz,
+      sin asumir dónde están los encabezados.
+    */
+    const matriz =
+      XLSX.utils.sheet_to_json(
+        hoja,
+        {
+          header: 1,
+          defval: "",
+          raw: false
+        }
+      );
+
+    if (!matriz.length) {
+      continue;
+    }
+
+    /*
+      Buscamos automáticamente la fila
+      que contiene el encabezado EQUINO.
+      Esto permite que arriba haya títulos,
+      datos del Raid, fechas, etc.
+    */
+    let filaEncabezado = -1;
+
+    const limite =
+      Math.min(
+        matriz.length,
+        40
+      );
+
+    for (
+      let i = 0;
+      i < limite;
+      i++
+    ) {
+      const fila =
+        matriz[i];
+
+      const normalizados =
+        fila.map(
+          celda =>
+            normalizarCabecera(
+              celda
+            )
+        );
+
+      const tieneEquino =
+        normalizados.some(
+          x =>
+            x === "EQUINO" ||
+            x === "CABALLO" ||
+            x === "NOMBREEQUINO"
+        );
+
+      if (tieneEquino) {
+        filaEncabezado = i;
+        break;
+      }
+    }
+
+    if (filaEncabezado === -1) {
+      continue;
+    }
+
+    /*
+      Ahora convertimos a objetos empezando
+      exactamente desde la fila correcta.
+    */
     const filas =
       XLSX.utils.sheet_to_json(
         hoja,
         {
+          range: filaEncabezado,
           defval: "",
           raw: false
         }
@@ -2003,16 +2074,28 @@ async function leerExcel(
             ? extraerNomina
             : extraerResultado
         )
-        .filter(x => x.equino);
+        .filter(
+          x =>
+            x.equino &&
+            normalizar(
+              x.equino
+            ) !== "EQUINO"
+        );
 
     if (
       !mejor ||
       procesadas.length >
-      mejor.filas.length
+        mejor.filas.length
     ) {
       mejor = {
-        hoja: nombreHoja,
-        filas: procesadas
+        hoja:
+          nombreHoja,
+
+        filaEncabezado:
+          filaEncabezado + 1,
+
+        filas:
+          procesadas
       };
     }
   }
@@ -2022,14 +2105,12 @@ async function leerExcel(
     !mejor.filas.length
   ) {
     throw new Error(
-      "No encontré caballos en el Excel."
+      "No encontré la tabla de caballos en el Excel."
     );
   }
 
   return mejor;
 }
-
-
 /* ==========================================================
    CARGAR BASE PARA COINCIDENCIAS
 ========================================================== */
