@@ -2,15 +2,10 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
   <title>Administrador Favoritos | Sangres del Uruguay</title>
 
-  <!-- LECTOR DE EXCEL -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
@@ -61,10 +56,7 @@
     .encabezado {
       background: var(--azul);
       color: white;
-      padding:
-        max(20px, env(safe-area-inset-top))
-        16px
-        18px;
+      padding: max(20px, env(safe-area-inset-top)) 16px 18px;
     }
 
     .encabezado-contenido {
@@ -129,8 +121,7 @@
 
     .grid-form {
       display: grid;
-      grid-template-columns:
-        repeat(2, minmax(0, 1fr));
+      grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 14px;
     }
 
@@ -268,16 +259,6 @@
       line-height: 1.5;
     }
 
-    .enlace {
-      color: var(--azul);
-      font-weight: 700;
-      text-decoration: none;
-    }
-
-    .enlace:hover {
-      text-decoration: underline;
-    }
-
     .tabs {
       display: flex;
       flex-wrap: wrap;
@@ -369,14 +350,9 @@
       margin: 60px auto;
     }
 
-    .oculto {
-      display: none !important;
-    }
-
     .resumen-preview {
       display: grid;
-      grid-template-columns:
-        repeat(3, minmax(0,1fr));
+      grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 9px;
       margin-bottom: 15px;
     }
@@ -436,19 +412,16 @@
   </div>
 </header>
 
-
 <main id="app">
   <div class="mensaje">
     Cargando administrador...
   </div>
 </main>
 
-
 <script>
 
 /* ==========================================================
    FAVORITOS ADMIN
-   SANGRES DEL URUGUAY
 ========================================================== */
 
 const SUPABASE_URL =
@@ -461,11 +434,8 @@ const app =
   document.getElementById("app");
 
 let sesionAdmin = null;
-
 let competenciaActual = null;
-
 let previewNomina = [];
-
 let previewResultados = [];
 
 
@@ -1458,7 +1428,8 @@ async function mostrarCompetencia(
 
       <button
         class="tab ${
-          seccion === "editar-resultados"
+          seccion ===
+          "editar-resultados"
             ? "activo"
             : ""
         }"
@@ -1729,13 +1700,22 @@ function extraerNomina(fila) {
         buscarCampo(
           fila,
           [
+            "#",
+            "NUM",
             "NUMERO",
             "NÚMERO",
             "NRO",
             "N°",
             "Nº",
+            "N° CABALLO",
+            "Nº CABALLO",
+            "NRO CABALLO",
+            "NUMERO CABALLO",
+            "NÚMERO CABALLO",
             "NUMERO MARCACION",
             "NÚMERO MARCACIÓN",
+            "NUMERO DE MARCACION",
+            "NÚMERO DE MARCACIÓN",
             "NRO MARCACION",
             "NRO MARCACIÓN",
             "MARCA",
@@ -1823,6 +1803,7 @@ function extraerNomina(fila) {
       )
   };
 }
+
 
 function extraerResultado(fila) {
   const puestoBruto =
@@ -2004,10 +1985,6 @@ async function leerExcel(
         nombreHoja
       ];
 
-    /*
-      Primero leemos la hoja como matriz,
-      sin asumir dónde están los encabezados.
-    */
     const matriz =
       XLSX.utils.sheet_to_json(
         hoja,
@@ -2022,12 +1999,6 @@ async function leerExcel(
       continue;
     }
 
-    /*
-      Buscamos automáticamente la fila
-      que contiene el encabezado EQUINO.
-      Esto permite que arriba haya títulos,
-      datos del Raid, fechas, etc.
-    */
     let filaEncabezado = -1;
 
     const limite =
@@ -2066,19 +2037,18 @@ async function leerExcel(
       }
     }
 
-    if (filaEncabezado === -1) {
+    if (
+      filaEncabezado === -1
+    ) {
       continue;
     }
 
-    /*
-      Ahora convertimos a objetos empezando
-      exactamente desde la fila correcta.
-    */
     const filas =
       XLSX.utils.sheet_to_json(
         hoja,
         {
-          range: filaEncabezado,
+          range:
+            filaEncabezado,
           defval: "",
           raw: false
         }
@@ -2132,8 +2102,10 @@ async function leerExcel(
 
   return mejor;
 }
+
+
 /* ==========================================================
-   CARGAR BASE PARA COINCIDENCIAS
+   BASE CABALLOS
 ========================================================== */
 
 async function cargarBaseCaballos() {
@@ -2170,7 +2142,7 @@ async function cargarBaseCaballos() {
 
 
 /* ==========================================================
-   RESOLVER CABALLO DE NOMINA
+   COINCIDENCIAS
 ========================================================== */
 
 function candidatosCaballo(
@@ -2180,7 +2152,9 @@ function candidatosCaballo(
   const candidatos = [];
 
   const chip =
-    textoLimpio(fila.chip);
+    textoLimpio(
+      fila.chip
+    );
 
   const pasaporte =
     textoLimpio(
@@ -2192,23 +2166,35 @@ function candidatosCaballo(
       fila.equino
     );
 
+
   if (chip) {
     base.deportivos
       .filter(
         x =>
-          textoLimpio(x.chip) ===
+          textoLimpio(
+            x.chip
+          ) ===
           chip
       )
       .forEach(x => {
+
         candidatos.push({
-          tipo: "deportivo",
-          id: x.id,
+          tipo:
+            "deportivo",
+
+          id:
+            x.id,
+
           nombre:
             x.nombre_principal,
-          prioridad: 1
+
+          prioridad:
+            1
         });
+
       });
   }
+
 
   if (pasaporte) {
     base.deportivos
@@ -2220,15 +2206,24 @@ function candidatosCaballo(
           pasaporte
       )
       .forEach(x => {
+
         candidatos.push({
-          tipo: "deportivo",
-          id: x.id,
+          tipo:
+            "deportivo",
+
+          id:
+            x.id,
+
           nombre:
             x.nombre_principal,
-          prioridad: 2
+
+          prioridad:
+            2
         });
+
       });
   }
+
 
   base.deportivos
     .filter(
@@ -2239,14 +2234,23 @@ function candidatosCaballo(
         nombreNorm
     )
     .forEach(x => {
+
       candidatos.push({
-        tipo: "deportivo",
-        id: x.id,
+        tipo:
+          "deportivo",
+
+        id:
+          x.id,
+
         nombre:
           x.nombre_principal,
-        prioridad: 3
+
+        prioridad:
+          3
       });
+
     });
+
 
   base.aliases
     .filter(
@@ -2261,25 +2265,36 @@ function candidatosCaballo(
       const dep =
         base.deportivos.find(
           d =>
-            Number(d.id) ===
+            Number(
+              d.id
+            ) ===
             Number(
               a.caballo_deportivo_id
             )
         );
 
       if (dep) {
+
         candidatos.push({
-          tipo: "deportivo",
-          id: dep.id,
+          tipo:
+            "deportivo",
+
+          id:
+            dep.id,
+
           nombre:
             dep.nombre_principal +
             " (" +
             a.alias +
             ")",
-          prioridad: 4
+
+          prioridad:
+            4
         });
+
       }
     });
+
 
   base.registrados
     .filter(
@@ -2290,12 +2305,21 @@ function candidatosCaballo(
         nombreNorm
     )
     .forEach(x => {
+
       candidatos.push({
-        tipo: "registrado",
-        id: x.id,
-        nombre: x.Nombre,
-        prioridad: 5
+        tipo:
+          "registrado",
+
+        id:
+          x.id,
+
+        nombre:
+          x.Nombre,
+
+        prioridad:
+          5
       });
+
     });
 
 
@@ -2303,6 +2327,7 @@ function candidatosCaballo(
 
   const claves =
     new Set();
+
 
   candidatos
     .sort(
@@ -2318,19 +2343,28 @@ function candidatosCaballo(
         c.id;
 
       if (
-        !claves.has(clave)
+        !claves.has(
+          clave
+        )
       ) {
-        claves.add(clave);
-        unicos.push(c);
+        claves.add(
+          clave
+        );
+
+        unicos.push(
+          c
+        );
       }
+
     });
+
 
   return unicos;
 }
 
 
 /* ==========================================================
-   NOMINA
+   NÓMINA
 ========================================================== */
 
 async function mostrarNomina(id) {
@@ -2343,7 +2377,9 @@ async function mostrarNomina(id) {
 
     <div class="tarjeta">
 
-      <h3>Importar nómina</h3>
+      <h3>
+        Importar nómina
+      </h3>
 
       <p class="subtitulo">
         Subí el Excel original.
@@ -2371,14 +2407,20 @@ async function mostrarNomina(id) {
         Participantes guardados
       </h3>
 
-      <div id="participantesActuales">
+      <div
+        id="participantesActuales"
+      >
         Cargando...
       </div>
 
     </div>
   `;
 
-  await listarParticipantes(id);
+
+  await listarParticipantes(
+    id
+  );
+
 
   document
     .getElementById(
@@ -2388,9 +2430,13 @@ async function mostrarNomina(id) {
       async evento => {
 
         const archivo =
-          evento.target.files[0];
+          evento.target
+            .files[0];
 
-        if (!archivo) return;
+        if (!archivo) {
+          return;
+        }
+
 
         const zona =
           document
@@ -2398,25 +2444,33 @@ async function mostrarNomina(id) {
               "zonaPreviewNomina"
             );
 
+
         zona.innerHTML = `
           <div class="mensaje">
             Leyendo Excel...
           </div>
         `;
 
+
         try {
+
           const lectura =
             await leerExcel(
               archivo,
               "nomina"
             );
 
+
           const base =
             await cargarBaseCaballos();
 
+
           previewNomina =
             lectura.filas.map(
-              (fila, indice) => {
+              (
+                fila,
+                indice
+              ) => {
 
                 const candidatos =
                   candidatosCaballo(
@@ -2424,35 +2478,51 @@ async function mostrarNomina(id) {
                     base
                   );
 
+
                 let seleccion =
                   "nuevo";
 
+
                 if (
-                  candidatos.length === 1
+                  candidatos.length ===
+                  1
                 ) {
+
                   seleccion =
                     candidatos[0]
                       .tipo +
                     ":" +
-                    candidatos[0].id;
+                    candidatos[0]
+                      .id;
+
                 }
+
 
                 return {
                   ...fila,
+
                   fila_origen:
                     indice + 2,
+
                   candidatos,
+
                   seleccion
                 };
+
               }
             );
+
 
           renderPreviewNomina(
             archivo.name
           );
 
         } catch (error) {
-          console.error(error);
+
+          console.error(
+            error
+          );
+
 
           zona.innerHTML = `
             <div
@@ -2464,28 +2534,34 @@ async function mostrarNomina(id) {
               )}
             </div>
           `;
+
         }
+
       };
 }
 
 
 /* ==========================================================
-   PREVIEW NOMINA
+   PREVIEW NÓMINA
 ========================================================== */
 
 function renderPreviewNomina(
   nombreArchivo
 ) {
+
   const zona =
     document.getElementById(
       "zonaPreviewNomina"
     );
 
+
   const reconocidos =
     previewNomina.filter(
       x =>
-        x.candidatos.length === 1
+        x.candidatos.length ===
+        1
     ).length;
+
 
   const nuevos =
     previewNomina.filter(
@@ -2493,40 +2569,60 @@ function renderPreviewNomina(
         !x.candidatos.length
     ).length;
 
+
   const dudosos =
     previewNomina.filter(
       x =>
-        x.candidatos.length > 1
+        x.candidatos.length >
+        1
     ).length;
+
 
   zona.innerHTML = `
 
-    <div style="margin-top:20px;">
+    <div
+      style="
+        margin-top:20px;
+      "
+    >
 
-      <div class="resumen-preview">
+      <div
+        class="resumen-preview"
+      >
 
-        <div class="resumen-item">
+        <div
+          class="resumen-item"
+        >
           <strong>
             ${previewNomina.length}
           </strong>
+
           <small>
             Caballos encontrados
           </small>
         </div>
 
-        <div class="resumen-item">
+
+        <div
+          class="resumen-item"
+        >
           <strong>
             ${reconocidos}
           </strong>
+
           <small>
             Relacionados
           </small>
         </div>
 
-        <div class="resumen-item">
+
+        <div
+          class="resumen-item"
+        >
           <strong>
             ${nuevos + dudosos}
           </strong>
+
           <small>
             Para revisar
           </small>
@@ -2535,154 +2631,221 @@ function renderPreviewNomina(
       </div>
 
 
-      <div class="tabla-contenedor">
+      <div
+        class="tabla-contenedor"
+      >
 
         <table>
 
           <thead>
-           <thead>
-  <tr>
-    <th>N.º</th>
-    <th>Equino</th>
-    <th>Propietario</th>
-    <th>Jinete</th>
-    <th>Chip</th>
-    <th>Pasaporte</th>
-    <th>Relación SDU</th>
-  </tr>
-</thead>
+            <tr>
+
+              <th>
+                N.º
+              </th>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Propietario
+              </th>
+
+              <th>
+                Jinete
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+              <th>
+                Relación SDU
+              </th>
+
+            </tr>
+          </thead>
+
+
           <tbody>
 
-            ${previewNomina.map(
-              (fila, indice) => {
+            ${
+              previewNomina
+                .map(
+                  (
+                    fila,
+                    indice
+                  ) => {
 
-                let clase =
-                  "preview-nuevo";
+                    let clase =
+                      "preview-nuevo";
 
-                if (
-                  fila.candidatos
-                    .length === 1
-                ) {
-                  clase =
-                    "preview-ok";
-                }
 
-                if (
-                  fila.candidatos
-                    .length > 1
-                ) {
-                  clase =
-                    "preview-dudoso";
-                }
+                    if (
+                      fila
+                        .candidatos
+                        .length ===
+                      1
+                    ) {
 
-                return `
-                 <tr class="${clase}">
+                      clase =
+                        "preview-ok";
 
-  <td>
-    ${escapar(
-      fila.numero_marcacion ||
-      "-"
-    )}
-  </td>
+                    }
 
-  <td>
-    <strong>
-      ${escapar(
-        fila.equino
-      )}
-    </strong>
-  </td>
 
-                    <td>
-                      ${escapar(
-                        fila.propietario ||
-                        "-"
-                      )}
-                    </td>
+                    if (
+                      fila
+                        .candidatos
+                        .length >
+                      1
+                    ) {
 
-                    <td>
-                      ${escapar(
-                        fila.jinete ||
-                        "-"
-                      )}
-                    </td>
+                      clase =
+                        "preview-dudoso";
 
-                    <td>
-                      ${escapar(
-                        fila.chip ||
-                        "-"
-                      )}
-                    </td>
+                    }
 
-                    <td>
-                      ${escapar(
-                        fila.pasaporte ||
-                        "-"
-                      )}
-                    </td>
 
-                    <td>
+                    return `
 
-                      <select
-                        class="selector-relacion"
-                        data-preview-index="${indice}"
+                      <tr
+                        class="${clase}"
                       >
 
-                        <option
-                          value="nuevo"
-                          ${
-                            fila.seleccion ===
-                            "nuevo"
-                              ? "selected"
-                              : ""
-                          }
-                        >
-                          Crear registro deportivo
-                        </option>
+                        <td>
+                          ${escapar(
+                            fila
+                              .numero_marcacion ||
+                            "-"
+                          )}
+                        </td>
 
-                        ${
-                          fila.candidatos
-                            .map(c => {
 
-                              const valor =
-                                c.tipo +
-                                ":" +
-                                c.id;
+                        <td>
+                          <strong>
+                            ${escapar(
+                              fila.equino
+                            )}
+                          </strong>
+                        </td>
 
-                              return `
-                                <option
-                                  value="${valor}"
-                                  ${
-                                    fila.seleccion ===
-                                    valor
-                                      ? "selected"
-                                      : ""
+
+                        <td>
+                          ${escapar(
+                            fila.propietario ||
+                            "-"
+                          )}
+                        </td>
+
+
+                        <td>
+                          ${escapar(
+                            fila.jinete ||
+                            "-"
+                          )}
+                        </td>
+
+
+                        <td>
+                          ${escapar(
+                            fila.chip ||
+                            "-"
+                          )}
+                        </td>
+
+
+                        <td>
+                          ${escapar(
+                            fila.pasaporte ||
+                            "-"
+                          )}
+                        </td>
+
+
+                        <td>
+
+                          <select
+                            class="
+                              selector-relacion
+                            "
+                            data-preview-index="${indice}"
+                          >
+
+                            <option
+                              value="nuevo"
+                              ${
+                                fila.seleccion ===
+                                "nuevo"
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+                              Crear registro deportivo
+                            </option>
+
+
+                            ${
+                              fila
+                                .candidatos
+                                .map(
+                                  c => {
+
+                                    const valor =
+                                      c.tipo +
+                                      ":" +
+                                      c.id;
+
+
+                                    return `
+
+                                      <option
+                                        value="${valor}"
+                                        ${
+                                          fila.seleccion ===
+                                          valor
+                                            ? "selected"
+                                            : ""
+                                        }
+                                      >
+
+                                        ${
+                                          c.tipo ===
+                                          "registrado"
+                                            ? "SDU: "
+                                            : "Deportivo: "
+                                        }
+
+                                        ${escapar(
+                                          c.nombre
+                                        )}
+
+                                      </option>
+
+                                    `;
+
                                   }
-                                >
-                                  ${
-                                    c.tipo ===
-                                    "registrado"
-                                      ? "SDU: "
-                                      : "Deportivo: "
-                                  }
+                                )
+                                .join("")
+                            }
 
-                                  ${escapar(
-                                    c.nombre
-                                  )}
-                                </option>
-                              `;
+                          </select>
 
-                            }).join("")
-                        }
+                        </td>
 
-                      </select>
+                      </tr>
 
-                    </td>
+                    `;
 
-                  </tr>
-                `;
-              }
-            ).join("")}
+                  }
+                )
+                .join("")
+            }
 
           </tbody>
 
@@ -2691,19 +2854,26 @@ function renderPreviewNomina(
       </div>
 
 
-      <div class="acciones">
+      <div
+        class="acciones"
+      >
 
         <button
           id="btnGuardarNomina"
-          class="boton
-          boton-principal"
+          class="
+            boton
+            boton-principal
+          "
         >
           Guardar nómina
         </button>
 
       </div>
 
-      <div id="mensajeGuardarNomina"></div>
+
+      <div
+        id="mensajeGuardarNomina"
+      ></div>
 
     </div>
   `;
@@ -2713,20 +2883,25 @@ function renderPreviewNomina(
     .querySelectorAll(
       "[data-preview-index]"
     )
-    .forEach(select => {
+    .forEach(
+      select => {
 
-      select.onchange =
-        () => {
+        select.onchange =
+          () => {
 
-          previewNomina[
-            Number(
-              select.dataset
-                .previewIndex
-            )
-          ].seleccion =
-            select.value;
-        };
-    });
+            previewNomina[
+              Number(
+                select
+                  .dataset
+                  .previewIndex
+              )
+            ].seleccion =
+              select.value;
+
+          };
+
+      }
+    );
 
 
   document
@@ -2748,18 +2923,23 @@ function renderPreviewNomina(
 async function obtenerOCrearDeportivo(
   fila
 ) {
+
   const seleccion =
     fila.seleccion;
+
 
   if (
     seleccion.startsWith(
       "deportivo:"
     )
   ) {
+
     const id =
       Number(
-        seleccion.split(":")[1]
+        seleccion
+          .split(":")[1]
       );
+
 
     const actuales =
       await apiGet(
@@ -2770,11 +2950,15 @@ async function obtenerOCrearDeportivo(
         "&limit=1"
       );
 
+
     const actual =
       actuales[0];
 
+
     if (actual) {
+
       const cambios = {};
+
 
       if (
         !actual.chip &&
@@ -2784,6 +2968,7 @@ async function obtenerOCrearDeportivo(
           fila.chip;
       }
 
+
       if (
         !actual.pasaporte_feu &&
         fila.pasaporte
@@ -2791,6 +2976,7 @@ async function obtenerOCrearDeportivo(
         cambios.pasaporte_feu =
           fila.pasaporte;
       }
+
 
       if (
         !actual.propietario_actual &&
@@ -2800,21 +2986,31 @@ async function obtenerOCrearDeportivo(
           fila.propietario;
       }
 
+
       if (
-        Object.keys(cambios)
+        Object
+          .keys(
+            cambios
+          )
           .length
       ) {
+
         cambios.updated_at =
           new Date()
             .toISOString();
 
+
         await apiPatch(
           "caballos_deportivos",
-          "id=eq." + id,
+          "id=eq." +
+            id,
           cambios
         );
+
       }
+
     }
+
 
     return id;
   }
@@ -2825,10 +3021,13 @@ async function obtenerOCrearDeportivo(
       "registrado:"
     )
   ) {
+
     const caballoId =
       Number(
-        seleccion.split(":")[1]
+        seleccion
+          .split(":")[1]
       );
+
 
     const existentes =
       await apiGet(
@@ -2839,11 +3038,16 @@ async function obtenerOCrearDeportivo(
         "&limit=1"
       );
 
+
     if (
       existentes.length
     ) {
-      return existentes[0].id;
+
+      return existentes[0]
+        .id;
+
     }
+
 
     const creado =
       await apiPost(
@@ -2874,7 +3078,9 @@ async function obtenerOCrearDeportivo(
         }
       );
 
-    return creado[0].id;
+
+    return creado[0]
+      .id;
   }
 
 
@@ -2882,7 +3088,8 @@ async function obtenerOCrearDeportivo(
     await apiPost(
       "caballos_deportivos",
       {
-        caballo_id: null,
+        caballo_id:
+          null,
 
         nombre_principal:
           fila.equino,
@@ -2906,36 +3113,47 @@ async function obtenerOCrearDeportivo(
       }
     );
 
-  return creado[0].id;
+
+  return creado[0]
+    .id;
 }
 
 
 /* ==========================================================
-   GUARDAR NOMINA
+   GUARDAR NÓMINA
 ========================================================== */
 
 async function guardarNomina(
   nombreArchivo
 ) {
+
   const boton =
     document.getElementById(
       "btnGuardarNomina"
     );
+
 
   const mensaje =
     document.getElementById(
       "mensajeGuardarNomina"
     );
 
-  boton.disabled = true;
+
+  boton.disabled =
+    true;
+
 
   mensaje.innerHTML = `
-    <div class="mensaje">
+    <div
+      class="mensaje"
+    >
       Guardando nómina...
     </div>
   `;
 
+
   try {
+
     const participantesActuales =
       await apiGet(
         "participantes_competencia" +
@@ -2944,14 +3162,17 @@ async function guardarNomina(
         competenciaActual.id
       );
 
+
     for (
       const fila
       of previewNomina
     ) {
+
       const depId =
         await obtenerOCrearDeportivo(
           fila
         );
+
 
       const duplicado =
         participantesActuales.find(
@@ -2960,13 +3181,15 @@ async function guardarNomina(
               fila.chip &&
               textoLimpio(
                 p.chip
-              ) === fila.chip
+              ) ===
+              fila.chip
             ) ||
             (
               fila.pasaporte &&
               textoLimpio(
                 p.pasaporte_feu
-              ) === fila.pasaporte
+              ) ===
+              fila.pasaporte
             ) ||
             (
               normalizar(
@@ -2978,65 +3201,221 @@ async function guardarNomina(
             )
         );
 
+
+      /*
+        SI YA ESTÁ GUARDADO,
+        ACTUALIZAMOS EL REGISTRO.
+      */
+
       if (duplicado) {
+
+        await apiPatch(
+          "participantes_competencia",
+
+          "id=eq." +
+            duplicado.id,
+
+          {
+            caballo_deportivo_id:
+              depId,
+
+            numero_marcacion:
+              fila.numero_marcacion ||
+              duplicado.numero_marcacion ||
+              null,
+
+            nombre_nomina:
+              fila.equino,
+
+            nombre_normalizado:
+              normalizar(
+                fila.equino
+              ),
+
+            propietario_nomina:
+              fila.propietario ||
+              duplicado.propietario_nomina ||
+              null,
+
+            jinete:
+              fila.jinete ||
+              duplicado.jinete ||
+              null,
+
+            club:
+              fila.club ||
+              duplicado.club ||
+              null,
+
+            chip:
+              fila.chip ||
+              duplicado.chip ||
+              null,
+
+            pasaporte_feu:
+              fila.pasaporte ||
+              duplicado.pasaporte_feu ||
+              null,
+
+            genero:
+              fila.genero ||
+              duplicado.genero ||
+              null,
+
+            fila_origen:
+              fila.fila_origen
+          }
+        );
+
+
+        /*
+          Actualizamos también
+          el objeto local.
+        */
+
+        duplicado
+          .caballo_deportivo_id =
+          depId;
+
+        duplicado
+          .numero_marcacion =
+          fila.numero_marcacion ||
+          duplicado.numero_marcacion ||
+          null;
+
+        duplicado
+          .nombre_nomina =
+          fila.equino;
+
+        duplicado
+          .nombre_normalizado =
+          normalizar(
+            fila.equino
+          );
+
+        duplicado
+          .propietario_nomina =
+          fila.propietario ||
+          duplicado.propietario_nomina ||
+          null;
+
+        duplicado
+          .jinete =
+          fila.jinete ||
+          duplicado.jinete ||
+          null;
+
+        duplicado
+          .club =
+          fila.club ||
+          duplicado.club ||
+          null;
+
+        duplicado
+          .chip =
+          fila.chip ||
+          duplicado.chip ||
+          null;
+
+        duplicado
+          .pasaporte_feu =
+          fila.pasaporte ||
+          duplicado.pasaporte_feu ||
+          null;
+
+        duplicado
+          .genero =
+          fila.genero ||
+          duplicado.genero ||
+          null;
+
+
         continue;
       }
 
-      await apiPost(
-        "participantes_competencia",
-        {
-          competencia_id:
-  competenciaActual.id,
 
-caballo_deportivo_id:
-  depId,
+      /*
+        SI NO EXISTE,
+        CREAMOS PARTICIPANTE.
+      */
 
-numero_marcacion:
-  fila.numero_marcacion ||
-  null,
+      const creado =
+        await apiPost(
+          "participantes_competencia",
+          {
+            competencia_id:
+              competenciaActual.id,
 
-nombre_nomina:
-  fila.equino,
+            caballo_deportivo_id:
+              depId,
 
-          nombre_normalizado:
-            normalizar(
-              fila.equino
-            ),
+            numero_marcacion:
+              fila.numero_marcacion ||
+              null,
 
-          propietario_nomina:
-            fila.propietario ||
-            null,
+            nombre_nomina:
+              fila.equino,
 
-          jinete:
-            fila.jinete ||
-            null,
+            nombre_normalizado:
+              normalizar(
+                fila.equino
+              ),
 
-          club:
-            fila.club ||
-            null,
+            propietario_nomina:
+              fila.propietario ||
+              null,
 
-          chip:
-            fila.chip ||
-            null,
+            jinete:
+              fila.jinete ||
+              null,
 
-          pasaporte_feu:
-            fila.pasaporte ||
-            null,
+            club:
+              fila.club ||
+              null,
 
-          genero:
-            fila.genero ||
-            null,
+            chip:
+              fila.chip ||
+              null,
 
-          fila_origen:
-            fila.fila_origen
-        }
-      );
+            pasaporte_feu:
+              fila.pasaporte ||
+              null,
+
+            genero:
+              fila.genero ||
+              null,
+
+            fila_origen:
+              fila.fila_origen
+          }
+        );
+
+
+      /*
+        EVITA DUPLICADOS
+        DENTRO DEL MISMO EXCEL.
+      */
+
+      if (
+        creado &&
+        creado[0]
+      ) {
+
+        participantesActuales.push(
+          creado[0]
+        );
+
+      }
+
     }
+
 
     await apiPatch(
       "competencias",
+
       "id=eq." +
         competenciaActual.id,
+
       {
         archivo_origen:
           nombreArchivo,
@@ -3047,26 +3426,36 @@ nombre_nomina:
       }
     );
 
+
     mensaje.innerHTML = `
       <div
-        class="mensaje
-        mensaje-exito"
+        class="
+          mensaje
+          mensaje-exito
+        "
       >
         Nómina guardada correctamente.
       </div>
     `;
+
 
     await listarParticipantes(
       competenciaActual.id
     );
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
 
     mensaje.innerHTML = `
       <div
-        class="mensaje
-        mensaje-error"
+        class="
+          mensaje
+          mensaje-error
+        "
       >
         No se pudo guardar la nómina.
         <br><br>
@@ -3075,9 +3464,12 @@ nombre_nomina:
         )}
       </div>
     `;
+
   }
 
-  boton.disabled = false;
+
+  boton.disabled =
+    false;
 }
 
 
@@ -3086,14 +3478,20 @@ nombre_nomina:
 ========================================================== */
 
 async function listarParticipantes(id) {
+
   const zona =
     document.getElementById(
       "participantesActuales"
     );
 
-  if (!zona) return;
+
+  if (!zona) {
+    return;
+  }
+
 
   try {
+
     const participantes =
       await apiGet(
         "participantes_competencia" +
@@ -3103,9 +3501,15 @@ async function listarParticipantes(id) {
         "&order=id.asc"
       );
 
-    if (!participantes.length) {
+
+    if (
+      !participantes.length
+    ) {
+
       zona.innerHTML = `
-        <div class="mensaje">
+        <div
+          class="mensaje"
+        >
           No hay participantes.
         </div>
       `;
@@ -3113,71 +3517,106 @@ async function listarParticipantes(id) {
       return;
     }
 
+
     zona.innerHTML = `
-      <div class="tabla-contenedor">
+      <div
+        class="tabla-contenedor"
+      >
 
         <table>
 
           <thead>
-  <tr>
-    <th>N.º</th>
-    <th>Equino</th>
-    <th>Propietario</th>
-    <th>Jinete</th>
-    <th>Chip</th>
-    <th>Pasaporte</th>
-  </tr>
-</thead>
+            <tr>
+
+              <th>
+                N.º
+              </th>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Propietario
+              </th>
+
+              <th>
+                Jinete
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+            </tr>
+          </thead>
+
 
           <tbody>
 
-            ${participantes.map(p => `
+            ${
+              participantes
+                .map(
+                  p => `
 
-              <tr>
+                    <tr>
 
-              <td>
-  ${escapar(
-    p.numero_marcacion ||
-    "-"
-  )}
-</td>
-                <td>
-                  ${escapar(
-                    p.nombre_nomina
-                  )}
-                </td>
+                      <td>
+                        ${escapar(
+                          p.numero_marcacion ||
+                          "-"
+                        )}
+                      </td>
 
-                <td>
-                  ${escapar(
-                    p.propietario_nomina ||
-                    "-"
-                  )}
-                </td>
 
-                <td>
-                  ${escapar(
-                    p.jinete ||
-                    "-"
-                  )}
-                </td>
+                      <td>
+                        ${escapar(
+                          p.nombre_nomina
+                        )}
+                      </td>
 
-                <td>
-                  ${escapar(
-                    p.chip ||
-                    "-"
-                  )}
-                </td>
 
-                <td>
-                  ${escapar(
-                    p.pasaporte_feu ||
-                    "-"
-                  )}
-                </td>
+                      <td>
+                        ${escapar(
+                          p.propietario_nomina ||
+                          "-"
+                        )}
+                      </td>
 
-              </tr>
 
-            `).join("")}
+                      <td>
+                        ${escapar(
+                          p.jinete ||
+                          "-"
+                        )}
+                      </td>
+
+
+                      <td>
+                        ${escapar(
+                          p.chip ||
+                          "-"
+                        )}
+                      </td>
+
+
+                      <td>
+                        ${escapar(
+                          p.pasaporte_feu ||
+                          "-"
+                        )}
+                      </td>
+
+                    </tr>
+
+                  `
+                )
+                .join("")
+            }
 
           </tbody>
 
@@ -3187,7 +3626,24 @@ async function listarParticipantes(id) {
     `;
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
+
+    zona.innerHTML = `
+      <div
+        class="
+          mensaje
+          mensaje-error
+        "
+      >
+        No se pudieron cargar
+        los participantes.
+      </div>
+    `;
+
   }
 }
 
@@ -3199,24 +3655,32 @@ async function listarParticipantes(id) {
 async function mostrarImportarResultados(
   id
 ) {
+
   const contenedor =
     document.getElementById(
       "contenidoCompetencia"
     );
 
+
   contenedor.innerHTML = `
 
-    <div class="tarjeta">
+    <div
+      class="tarjeta"
+    >
 
       <h3>
         Importar resultados
       </h3>
 
-      <p class="subtitulo">
+
+      <p
+        class="subtitulo"
+      >
         Subí el Excel de resultados.
         Se relacionará con la nómina
         usando chip, pasaporte y nombre.
       </p>
+
 
       <input
         id="archivoResultados"
@@ -3224,7 +3688,10 @@ async function mostrarImportarResultados(
         accept=".xlsx,.xls,.xlsm"
       >
 
-      <div id="previewResultados"></div>
+
+      <div
+        id="previewResultados"
+      ></div>
 
     </div>
   `;
@@ -3238,9 +3705,14 @@ async function mostrarImportarResultados(
       async evento => {
 
         const archivo =
-          evento.target.files[0];
+          evento.target
+            .files[0];
 
-        if (!archivo) return;
+
+        if (!archivo) {
+          return;
+        }
+
 
         const zona =
           document
@@ -3248,18 +3720,24 @@ async function mostrarImportarResultados(
               "previewResultados"
             );
 
+
         zona.innerHTML = `
-          <div class="mensaje">
+          <div
+            class="mensaje"
+          >
             Leyendo resultados...
           </div>
         `;
 
+
         try {
+
           const lectura =
             await leerExcel(
               archivo,
               "resultados"
             );
+
 
           const participantes =
             await apiGet(
@@ -3269,9 +3747,10 @@ async function mostrarImportarResultados(
               id
             );
 
+
           previewResultados =
             lectura.filas.map(
-              (fila, indice) => {
+              fila => {
 
                 const candidatos =
                   participantes.filter(
@@ -3300,16 +3779,23 @@ async function mostrarImportarResultados(
                       )
                   );
 
+
                 return {
                   ...fila,
+
                   candidatos,
+
                   participante_id:
-                    candidatos.length === 1
-                      ? candidatos[0].id
+                    candidatos.length ===
+                    1
+                      ? candidatos[0]
+                          .id
                       : null
                 };
+
               }
             );
+
 
           renderPreviewResultados(
             archivo.name,
@@ -3317,19 +3803,27 @@ async function mostrarImportarResultados(
           );
 
         } catch (error) {
-          console.error(error);
+
+          console.error(
+            error
+          );
+
 
           zona.innerHTML = `
             <div
-              class="mensaje
-              mensaje-error"
+              class="
+                mensaje
+                mensaje-error
+              "
             >
               ${escapar(
                 error.message
               )}
             </div>
           `;
+
         }
+
       };
 }
 
@@ -3339,105 +3833,159 @@ async function mostrarImportarResultados(
 ========================================================== */
 
 function renderPreviewResultados(
-  archivo,
+  nombreArchivo,
   participantes
 ) {
+
   const zona =
     document.getElementById(
       "previewResultados"
     );
 
+
   zona.innerHTML = `
 
-    <div style="margin-top:20px;">
+    <div
+      style="
+        margin-top:20px;
+      "
+    >
 
-      <div class="tabla-contenedor">
+      <div
+        class="tabla-contenedor"
+      >
 
         <table>
 
           <thead>
             <tr>
-              <th>Equino</th>
-              <th>Puesto</th>
-              <th>Estado</th>
-              <th>Promedio</th>
-              <th>Participante</th>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Puesto
+              </th>
+
+              <th>
+                Estado
+              </th>
+
+              <th>
+                Promedio
+              </th>
+
+              <th>
+                Participante
+              </th>
+
             </tr>
           </thead>
 
+
           <tbody>
 
-            ${previewResultados.map(
-              (fila, indice) => `
+            ${
+              previewResultados
+                .map(
+                  (
+                    fila,
+                    indice
+                  ) => `
 
-                <tr
-                  class="${
-                    fila.participante_id
-                      ? "preview-ok"
-                      : "preview-dudoso"
-                  }"
-                >
-
-                  <td>
-                    ${escapar(
-                      fila.equino
-                    )}
-                  </td>
-
-                  <td>
-                    ${fila.puesto ?? "-"}
-                  </td>
-
-                  <td>
-                    ${escapar(
-                      fila.estado
-                    )}
-                  </td>
-
-                  <td>
-                    ${
-                      fila.promedio ??
-                      "-"
-                    }
-                  </td>
-
-                  <td>
-
-                    <select
-                      class="selector-relacion"
-                      data-resultado-index="${indice}"
+                    <tr
+                      class="${
+                        fila.participante_id
+                          ? "preview-ok"
+                          : "preview-dudoso"
+                      }"
                     >
 
-                      <option value="">
-                        Seleccionar participante
-                      </option>
+                      <td>
+                        ${escapar(
+                          fila.equino
+                        )}
+                      </td>
 
-                      ${participantes.map(p => `
-                        <option
-                          value="${p.id}"
-                          ${
-                            Number(
-                              fila.participante_id
-                            ) ===
-                            Number(p.id)
-                              ? "selected"
-                              : ""
-                          }
+
+                      <td>
+                        ${
+                          fila.puesto ??
+                          "-"
+                        }
+                      </td>
+
+
+                      <td>
+                        ${escapar(
+                          fila.estado
+                        )}
+                      </td>
+
+
+                      <td>
+                        ${
+                          fila.promedio ??
+                          "-"
+                        }
+                      </td>
+
+
+                      <td>
+
+                        <select
+                          class="
+                            selector-relacion
+                          "
+                          data-resultado-index="${indice}"
                         >
-                          ${escapar(
-                            p.nombre_nomina
-                          )}
-                        </option>
-                      `).join("")}
 
-                    </select>
+                          <option
+                            value=""
+                          >
+                            Seleccionar participante
+                          </option>
 
-                  </td>
 
-                </tr>
+                          ${
+                            participantes
+                              .map(
+                                p => `
 
-              `
-            ).join("")}
+                                  <option
+                                    value="${p.id}"
+                                    ${
+                                      Number(
+                                        fila.participante_id
+                                      ) ===
+                                      Number(
+                                        p.id
+                                      )
+                                        ? "selected"
+                                        : ""
+                                    }
+                                  >
+                                    ${escapar(
+                                      p.nombre_nomina
+                                    )}
+                                  </option>
+
+                                `
+                              )
+                              .join("")
+                          }
+
+                        </select>
+
+                      </td>
+
+                    </tr>
+
+                  `
+                )
+                .join("")
+            }
 
           </tbody>
 
@@ -3445,11 +3993,16 @@ function renderPreviewResultados(
 
       </div>
 
-      <div class="acciones">
+
+      <div
+        class="acciones"
+      >
 
         <button
-          class="boton
-          boton-principal"
+          class="
+            boton
+            boton-principal
+          "
           id="btnGuardarResultados"
         >
           Guardar resultados
@@ -3457,7 +4010,10 @@ function renderPreviewResultados(
 
       </div>
 
-      <div id="mensajeResultados"></div>
+
+      <div
+        id="mensajeResultados"
+      ></div>
 
     </div>
   `;
@@ -3467,27 +4023,33 @@ function renderPreviewResultados(
     .querySelectorAll(
       "[data-resultado-index]"
     )
-    .forEach(select => {
+    .forEach(
+      select => {
 
-      select.onchange =
-        () => {
+        select.onchange =
+          () => {
 
-          const fila =
-            previewResultados[
-              Number(
-                select.dataset
-                  .resultadoIndex
-              )
-            ];
-
-          fila.participante_id =
-            select.value
-              ? Number(
-                  select.value
+            const fila =
+              previewResultados[
+                Number(
+                  select
+                    .dataset
+                    .resultadoIndex
                 )
-              : null;
-        };
-    });
+              ];
+
+
+            fila.participante_id =
+              select.value
+                ? Number(
+                    select.value
+                  )
+                : null;
+
+          };
+
+      }
+    );
 
 
   document
@@ -3497,7 +4059,7 @@ function renderPreviewResultados(
     .onclick =
       () =>
         guardarResultados(
-          archivo
+          nombreArchivo
         );
 }
 
@@ -3507,12 +4069,14 @@ function renderPreviewResultados(
 ========================================================== */
 
 async function guardarResultados(
-  archivo
+  nombreArchivo
 ) {
+
   const mensaje =
     document.getElementById(
       "mensajeResultados"
     );
+
 
   const sinRelacion =
     previewResultados.filter(
@@ -3520,7 +4084,11 @@ async function guardarResultados(
         !x.participante_id
     );
 
-  if (sinRelacion.length) {
+
+  if (
+    sinRelacion.length
+  ) {
+
     alert(
       "Hay resultados sin participante relacionado."
     );
@@ -3528,17 +4096,23 @@ async function guardarResultados(
     return;
   }
 
+
   mensaje.innerHTML = `
-    <div class="mensaje">
+    <div
+      class="mensaje"
+    >
       Guardando resultados...
     </div>
   `;
 
+
   try {
+
     for (
       const fila
       of previewResultados
     ) {
+
       const existentes =
         await apiGet(
           "resultados_competencia" +
@@ -3548,7 +4122,9 @@ async function guardarResultados(
           "&limit=1"
         );
 
+
       const datos = {
+
         puesto:
           fila.estado ===
           "clasificado"
@@ -3574,16 +4150,24 @@ async function guardarResultados(
             .toISOString()
       };
 
-      if (existentes.length) {
+
+      if (
+        existentes.length
+      ) {
+
         await apiPatch(
           "resultados_competencia",
+
           "participante_id=eq." +
             fila.participante_id,
+
           datos
         );
+
       }
 
       else {
+
         await apiPost(
           "resultados_competencia",
           {
@@ -3602,19 +4186,24 @@ async function guardarResultados(
               fila.estado
           }
         );
+
       }
+
     }
+
 
     await apiPatch(
       "competencias",
+
       "id=eq." +
         competenciaActual.id,
+
       {
         estado:
           "resultado_provisorio",
 
         archivo_origen:
-          archivo,
+          nombreArchivo,
 
         updated_at:
           new Date()
@@ -3622,10 +4211,17 @@ async function guardarResultados(
       }
     );
 
+
+    competenciaActual.estado =
+      "resultado_provisorio";
+
+
     mensaje.innerHTML = `
       <div
-        class="mensaje
-        mensaje-exito"
+        class="
+          mensaje
+          mensaje-exito
+        "
       >
         Resultados guardados.
         Estado cambiado a
@@ -3634,18 +4230,25 @@ async function guardarResultados(
     `;
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
 
     mensaje.innerHTML = `
       <div
-        class="mensaje
-        mensaje-error"
+        class="
+          mensaje
+          mensaje-error
+        "
       >
         ${escapar(
           error.message
         )}
       </div>
     `;
+
   }
 }
 
@@ -3657,18 +4260,24 @@ async function guardarResultados(
 async function mostrarEditorResultados(
   id
 ) {
+
   const contenedor =
     document.getElementById(
       "contenidoCompetencia"
     );
 
+
   contenedor.innerHTML = `
-    <div class="tarjeta">
+    <div
+      class="tarjeta"
+    >
       Cargando resultados...
     </div>
   `;
 
+
   try {
+
     const participantes =
       await apiGet(
         "participantes_competencia" +
@@ -3678,199 +4287,312 @@ async function mostrarEditorResultados(
         "&order=id.asc"
       );
 
-    const resultados =
-      await apiGet(
-        "resultados_competencia" +
-        "?select=*"
+
+    const ids =
+      participantes.map(
+        p =>
+          p.id
       );
+
+
+    let resultados =
+      [];
+
+
+    if (
+      ids.length
+    ) {
+
+      resultados =
+        await apiGet(
+          "resultados_competencia" +
+          "?select=*" +
+          "&participante_id=in.(" +
+          ids.join(",") +
+          ")"
+        );
+
+    }
+
 
     const mapa =
       new Map();
 
-    resultados.forEach(r => {
-      mapa.set(
-        Number(
-          r.participante_id
-        ),
-        r
+
+    resultados
+      .forEach(
+        r => {
+
+          mapa.set(
+            Number(
+              r.participante_id
+            ),
+            r
+          );
+
+        }
       );
-    });
+
 
     contenedor.innerHTML = `
 
-      <div class="tarjeta">
+      <div
+        class="tarjeta"
+      >
 
         <h3>
           Editar resultados
         </h3>
 
-        <p class="subtitulo">
+
+        <p
+          class="subtitulo"
+        >
           Acá podés corregir puestos,
           NC, DQ, Premio FEU,
           pulsaciones y observaciones.
         </p>
 
-        <div class="tabla-contenedor">
+
+        <div
+          class="tabla-contenedor"
+        >
 
           <table>
 
             <thead>
               <tr>
-                <th>Caballo</th>
-                <th>Estado</th>
-                <th>Puesto</th>
-                <th>Promedio</th>
-                <th>Premio FEU</th>
-                <th>PPM</th>
-                <th>Observaciones</th>
-                <th>Guardar</th>
+
+                <th>
+                  Caballo
+                </th>
+
+                <th>
+                  Estado
+                </th>
+
+                <th>
+                  Puesto
+                </th>
+
+                <th>
+                  Promedio
+                </th>
+
+                <th>
+                  Premio FEU
+                </th>
+
+                <th>
+                  PPM
+                </th>
+
+                <th>
+                  Observaciones
+                </th>
+
+                <th>
+                  Guardar
+                </th>
+
               </tr>
             </thead>
 
+
             <tbody>
 
-              ${participantes.map(p => {
+              ${
+                participantes
+                  .map(
+                    p => {
 
-                const r =
-                  mapa.get(
-                    Number(p.id)
-                  ) || {};
+                      const r =
+                        mapa.get(
+                          Number(
+                            p.id
+                          )
+                        ) ||
+                        {};
 
-                return `
 
-                  <tr
-                    class="resultado-fila"
-                    data-fila-participante="${p.id}"
-                  >
+                      return `
 
-                    <td>
-                      <strong>
-                        ${escapar(
-                          p.nombre_nomina
-                        )}
-                      </strong>
-                    </td>
-
-                    <td>
-
-                      <select
-                        data-campo="estado"
-                      >
-                        <option
-                          value="clasificado"
-                          ${
-                            (r.estado_resultado ||
-                            "clasificado") ===
-                            "clasificado"
-                              ? "selected"
-                              : ""
-                          }
+                        <tr
+                          class="
+                            resultado-fila
+                          "
+                          data-fila-participante="${p.id}"
                         >
-                          Clasificado
-                        </option>
 
-                        <option
-                          value="NC"
-                          ${
-                            r.estado_resultado ===
-                            "NC"
-                              ? "selected"
-                              : ""
-                          }
-                        >
-                          NC
-                        </option>
+                          <td>
+                            <strong>
+                              ${escapar(
+                                p.nombre_nomina
+                              )}
+                            </strong>
+                          </td>
 
-                        <option
-                          value="DQ"
-                          ${
-                            r.estado_resultado ===
-                            "DQ"
-                              ? "selected"
-                              : ""
-                          }
-                        >
-                          DQ
-                        </option>
 
-                        <option
-                          value="retirado"
-                          ${
-                            r.estado_resultado ===
-                            "retirado"
-                              ? "selected"
-                              : ""
-                          }
-                        >
-                          Retirado
-                        </option>
-                      </select>
+                          <td>
 
-                    </td>
+                            <select
+                              data-campo="estado"
+                            >
 
-                    <td>
-                      <input
-                        data-campo="puesto"
-                        type="number"
-                        value="${r.puesto ?? ""}"
-                      >
-                    </td>
+                              <option
+                                value="clasificado"
+                                ${
+                                  (
+                                    r.estado_resultado ||
+                                    "clasificado"
+                                  ) ===
+                                  "clasificado"
+                                    ? "selected"
+                                    : ""
+                                }
+                              >
+                                Clasificado
+                              </option>
 
-                    <td>
-                      <input
-                        data-campo="promedio"
-                        type="number"
-                        step="0.01"
-                        value="${r.promedio_kmh ?? ""}"
-                      >
-                    </td>
 
-                    <td>
-                      <input
-                        data-campo="premio"
-                        type="checkbox"
-                        ${
-                          r.premio_feu
-                            ? "checked"
-                            : ""
-                        }
-                      >
-                    </td>
+                              <option
+                                value="NC"
+                                ${
+                                  r.estado_resultado ===
+                                  "NC"
+                                    ? "selected"
+                                    : ""
+                                }
+                              >
+                                NC
+                              </option>
 
-                    <td>
-                      <input
-                        data-campo="ppm"
-                        type="number"
-                        value="${r.premio_feu_ppm ?? ""}"
-                      >
-                    </td>
 
-                    <td>
-                      <input
-                        class="observaciones"
-                        data-campo="observaciones"
-                        type="text"
-                        value="${escapar(
-                          r.observaciones ||
-                          ""
-                        )}"
-                      >
-                    </td>
+                              <option
+                                value="DQ"
+                                ${
+                                  r.estado_resultado ===
+                                  "DQ"
+                                    ? "selected"
+                                    : ""
+                                }
+                              >
+                                DQ
+                              </option>
 
-                    <td>
-                      <button
-                        class="boton
-                        boton-principal"
-                        data-guardar-resultado="${p.id}"
-                      >
-                        Guardar
-                      </button>
-                    </td>
 
-                  </tr>
-                `;
+                              <option
+                                value="retirado"
+                                ${
+                                  r.estado_resultado ===
+                                  "retirado"
+                                    ? "selected"
+                                    : ""
+                                }
+                              >
+                                Retirado
+                              </option>
 
-              }).join("")}
+                            </select>
+
+                          </td>
+
+
+                          <td>
+
+                            <input
+                              data-campo="puesto"
+                              type="number"
+                              value="${
+                                r.puesto ??
+                                ""
+                              }"
+                            >
+
+                          </td>
+
+
+                          <td>
+
+                            <input
+                              data-campo="promedio"
+                              type="number"
+                              step="0.01"
+                              value="${
+                                r.promedio_kmh ??
+                                ""
+                              }"
+                            >
+
+                          </td>
+
+
+                          <td>
+
+                            <input
+                              data-campo="premio"
+                              type="checkbox"
+                              ${
+                                r.premio_feu
+                                  ? "checked"
+                                  : ""
+                              }
+                            >
+
+                          </td>
+
+
+                          <td>
+
+                            <input
+                              data-campo="ppm"
+                              type="number"
+                              value="${
+                                r.premio_feu_ppm ??
+                                ""
+                              }"
+                            >
+
+                          </td>
+
+
+                          <td>
+
+                            <input
+                              class="observaciones"
+                              data-campo="observaciones"
+                              type="text"
+                              value="${escapar(
+                                r.observaciones ||
+                                ""
+                              )}"
+                            >
+
+                          </td>
+
+
+                          <td>
+
+                            <button
+                              class="
+                                boton
+                                boton-principal
+                              "
+                              data-guardar-resultado="${p.id}"
+                            >
+                              Guardar
+                            </button>
+
+                          </td>
+
+                        </tr>
+
+                      `;
+
+                    }
+                  )
+                  .join("")
+              }
 
             </tbody>
 
@@ -3879,19 +4601,26 @@ async function mostrarEditorResultados(
         </div>
 
 
-        <div class="acciones">
+        <div
+          class="acciones"
+        >
 
           <button
             id="btnRecalcular"
-            class="boton
-            boton-dorado"
+            class="
+              boton
+              boton-dorado
+            "
           >
             Recalcular posiciones vigentes
           </button>
 
         </div>
 
-        <div id="mensajeEditor"></div>
+
+        <div
+          id="mensajeEditor"
+        ></div>
 
       </div>
     `;
@@ -3901,15 +4630,19 @@ async function mostrarEditorResultados(
       .querySelectorAll(
         "[data-guardar-resultado]"
       )
-      .forEach(boton => {
+      .forEach(
+        boton => {
 
-        boton.onclick =
-          () =>
-            guardarResultadoManual(
-              boton.dataset
-                .guardarResultado
-            );
-      });
+          boton.onclick =
+            () =>
+              guardarResultadoManual(
+                boton
+                  .dataset
+                  .guardarResultado
+              );
+
+        }
+      );
 
 
     document
@@ -3923,7 +4656,24 @@ async function mostrarEditorResultados(
           );
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
+
+    contenedor.innerHTML = `
+      <div
+        class="
+          mensaje
+          mensaje-error
+        "
+      >
+        No se pudieron cargar
+        los resultados.
+      </div>
+    `;
+
   }
 }
 
@@ -3935,6 +4685,7 @@ async function mostrarEditorResultados(
 async function guardarResultadoManual(
   participanteId
 ) {
+
   const fila =
     document.querySelector(
       '[data-fila-participante="' +
@@ -3942,37 +4693,60 @@ async function guardarResultadoManual(
       '"]'
     );
 
-  if (!fila) return;
+
+  if (!fila) {
+    return;
+  }
+
 
   const estado =
-    fila.querySelector(
-      '[data-campo="estado"]'
-    ).value;
+    fila
+      .querySelector(
+        '[data-campo="estado"]'
+      )
+      .value;
+
 
   const puestoTexto =
-    fila.querySelector(
-      '[data-campo="puesto"]'
-    ).value;
+    fila
+      .querySelector(
+        '[data-campo="puesto"]'
+      )
+      .value;
+
 
   const promedioTexto =
-    fila.querySelector(
-      '[data-campo="promedio"]'
-    ).value;
+    fila
+      .querySelector(
+        '[data-campo="promedio"]'
+      )
+      .value;
+
 
   const premio =
-    fila.querySelector(
-      '[data-campo="premio"]'
-    ).checked;
+    fila
+      .querySelector(
+        '[data-campo="premio"]'
+      )
+      .checked;
+
 
   const ppmTexto =
-    fila.querySelector(
-      '[data-campo="ppm"]'
-    ).value;
+    fila
+      .querySelector(
+        '[data-campo="ppm"]'
+      )
+      .value;
+
 
   const observaciones =
-    fila.querySelector(
-      '[data-campo="observaciones"]'
-    ).value.trim();
+    fila
+      .querySelector(
+        '[data-campo="observaciones"]'
+      )
+      .value
+      .trim();
+
 
   const existentes =
     await apiGet(
@@ -3983,11 +4757,16 @@ async function guardarResultadoManual(
       "&limit=1"
     );
 
+
   const datos = {
+
     puesto:
-      estado === "clasificado" &&
+      estado ===
+      "clasificado" &&
       puestoTexto
-        ? Number(puestoTexto)
+        ? Number(
+            puestoTexto
+          )
         : null,
 
     estado_resultado:
@@ -3995,15 +4774,20 @@ async function guardarResultadoManual(
 
     promedio_kmh:
       promedioTexto
-        ? Number(promedioTexto)
+        ? Number(
+            promedioTexto
+          )
         : null,
 
     premio_feu:
       premio,
 
     premio_feu_ppm:
-      premio && ppmTexto
-        ? Number(ppmTexto)
+      premio &&
+      ppmTexto
+        ? Number(
+            ppmTexto
+          )
         : null,
 
     observaciones:
@@ -4016,16 +4800,23 @@ async function guardarResultadoManual(
   };
 
 
-  if (existentes.length) {
+  if (
+    existentes.length
+  ) {
+
     await apiPatch(
       "resultados_competencia",
+
       "participante_id=eq." +
         participanteId,
+
       datos
     );
+
   }
 
   else {
+
     await apiPost(
       "resultados_competencia",
       {
@@ -4043,7 +4834,9 @@ async function guardarResultadoManual(
           datos.estado_resultado
       }
     );
+
   }
+
 
   document
     .getElementById(
@@ -4051,8 +4844,10 @@ async function guardarResultadoManual(
     )
     .innerHTML = `
       <div
-        class="mensaje
-        mensaje-exito"
+        class="
+          mensaje
+          mensaje-exito
+        "
       >
         Resultado actualizado.
       </div>
@@ -4062,22 +4857,25 @@ async function guardarResultadoManual(
 
 /* ==========================================================
    RECALCULAR PUESTOS
-   Para descalificaciones posteriores.
 ========================================================== */
 
 async function recalcularPosiciones(
   competenciaId
 ) {
+
   const confirmar =
     confirm(
       "¿Querés recalcular los puestos vigentes de los clasificados? Los NC, DQ y retirados quedan sin puesto."
     );
 
+
   if (!confirmar) {
     return;
   }
 
+
   try {
+
     const participantes =
       await apiGet(
         "participantes_competencia" +
@@ -4086,13 +4884,21 @@ async function recalcularPosiciones(
         competenciaId
       );
 
+
     const ids =
       participantes
-        .map(p => p.id);
+        .map(
+          p =>
+            p.id
+        );
 
-    if (!ids.length) {
+
+    if (
+      !ids.length
+    ) {
       return;
     }
+
 
     const resultados =
       await apiGet(
@@ -4103,6 +4909,7 @@ async function recalcularPosiciones(
         ")"
       );
 
+
     const clasificados =
       resultados
         .filter(
@@ -4111,7 +4918,10 @@ async function recalcularPosiciones(
             "clasificado"
         )
         .sort(
-          (a,b) => {
+          (
+            a,
+            b
+          ) => {
 
             const pa =
               a.puesto_original ??
@@ -4124,18 +4934,26 @@ async function recalcularPosiciones(
               9999;
 
             return pa - pb;
+
           }
         );
 
-    let posicion = 1;
+
+    let posicion =
+      1;
+
 
     for (
       const r
       of clasificados
     ) {
+
       await apiPatch(
         "resultados_competencia",
-        "id=eq." + r.id,
+
+        "id=eq." +
+          r.id,
+
         {
           puesto:
             posicion++,
@@ -4145,6 +4963,7 @@ async function recalcularPosiciones(
               .toISOString()
         }
       );
+
     }
 
 
@@ -4155,26 +4974,35 @@ async function recalcularPosiciones(
           "clasificado"
       );
 
+
     for (
       const r
       of noClasificados
     ) {
+
       await apiPatch(
         "resultados_competencia",
-        "id=eq." + r.id,
+
+        "id=eq." +
+          r.id,
+
         {
-          puesto: null,
+          puesto:
+            null,
 
           updated_at:
             new Date()
               .toISOString()
         }
       );
+
     }
+
 
     await mostrarEditorResultados(
       competenciaId
     );
+
 
     document
       .getElementById(
@@ -4182,8 +5010,10 @@ async function recalcularPosiciones(
       )
       .innerHTML = `
         <div
-          class="mensaje
-          mensaje-exito"
+          class="
+            mensaje
+            mensaje-exito
+          "
         >
           Posiciones vigentes
           recalculadas.
@@ -4191,11 +5021,16 @@ async function recalcularPosiciones(
       `;
 
   } catch (error) {
-    console.error(error);
+
+    console.error(
+      error
+    );
+
 
     alert(
       "No se pudieron recalcular las posiciones."
     );
+
   }
 }
 
@@ -4205,48 +5040,71 @@ async function recalcularPosiciones(
 ========================================================== */
 
 async function cargarRuta() {
+
   const haySesion =
     sesionAdmin &&
     sesionAdmin.access_token
       ? true
       : await renovarSesion();
 
+
   if (!haySesion) {
+
     mostrarLogin();
+
     return;
   }
+
 
   const params =
     new URLSearchParams(
       window.location.search
     );
 
+
   const competencia =
     params.get(
       "competencia"
     );
+
 
   const vista =
     params.get(
       "vista"
     );
 
+
   const seccion =
     params.get(
       "seccion"
-    ) || "general";
+    ) ||
+    "general";
+
 
   window.scrollTo({
-    top: 0,
-    behavior: "instant"
+    top:
+      0,
+
+    behavior:
+      "instant"
   });
 
-  if (vista === "nueva") {
+
+  if (
+    vista ===
+    "nueva"
+  ) {
+
     mostrarNuevaCompetencia();
+
     return;
   }
 
-  if (competencia) {
+
+  if (
+    competencia
+  ) {
+
     await mostrarCompetencia(
       competencia,
       seccion
@@ -4254,6 +5112,7 @@ async function cargarRuta() {
 
     return;
   }
+
 
   await mostrarPanel();
 }
@@ -4265,9 +5124,12 @@ async function cargarRuta() {
 
 cargarRuta();
 
+
 setInterval(
   renovarSesion,
-  45 * 60 * 1000
+  45 *
+  60 *
+  1000
 );
 
 </script>
