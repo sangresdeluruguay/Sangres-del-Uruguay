@@ -1,343 +1,383 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Administrador Favoritos | Sangres del Uruguay</title>
-<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Administrador Favoritos | Sangres del Uruguay</title>
 
-<style>
-:root {
---azul: #173b72;
---azul2: #245592;
---dorado: #b89a56;
---fondo: #f4f5f7;
---blanco: #ffffff;
---texto: #20242a;
---gris: #6b7280;
---borde: #d9dde5;
---verde: #21834f;
---verde-fondo: #e8f5ed;
---rojo: #a43c3c;
---rojo-fondo: #f9e8e8;
---amarillo: #946c13;
---amarillo-fondo: #fff5d8;
-}
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
-* { box-sizing: border-box; }
+  <style>
+    :root{
+      --azul:#173b72;
+      --dorado:#b89a56;
+      --fondo:#f4f5f7;
+      --texto:#20242a;
+      --gris:#6b7280;
+      --borde:#d9dde5;
+      --verde:#21834f;
+      --verde-fondo:#e8f5ed;
+      --rojo:#a43c3c;
+      --rojo-fondo:#f9e8e8;
+      --amarillo:#946c13;
+      --amarillo-fondo:#fff5d8;
+    }
 
-body {
-margin: 0;
-min-height: 100vh;
-background: var(--fondo);
-color: var(--texto);
-font-family: Arial, Helvetica, sans-serif;
-}
+    *{box-sizing:border-box}
 
-button, input, select, textarea { font: inherit; }
-button { cursor: pointer; }
-a { color: inherit; }
+    body{
+      margin:0;
+      min-height:100vh;
+      background:var(--fondo);
+      color:var(--texto);
+      font-family:Arial,Helvetica,sans-serif;
+    }
 
-.encabezado {
-background: var(--azul);
-color: white;
-padding: max(20px, env(safe-area-inset-top)) 16px 18px;
-}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit}
 
-.encabezado-contenido {
-width: min(100%, 1180px);
-margin: 0 auto;
-}
+    .encabezado{
+      background:var(--azul);
+      color:#fff;
+      padding:max(20px,env(safe-area-inset-top)) 16px 18px;
+    }
 
-.encabezado h1 {
-margin: 0;
-font-size: clamp(26px, 4vw, 38px);
-}
+    .encabezado-contenido{
+      width:min(100%,1180px);
+      margin:0 auto;
+    }
 
-.encabezado p {
-margin: 6px 0 0;
-color: #e4d09c;
-}
+    .encabezado h1{
+      margin:0;
+      font-size:clamp(26px,4vw,38px);
+    }
 
-.menu {
-margin-top: 16px;
-display: flex;
-flex-wrap: wrap;
-gap: 8px 17px;
-}
+    .encabezado p{
+      margin:6px 0 0;
+      color:#e4d09c;
+    }
 
-.menu a {
-color: white;
-text-decoration: none;
-font-weight: 700;
-font-size: 14px;
-}
+    .menu{
+      margin-top:16px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 17px;
+    }
 
-main {
-width: min(100%, 1180px);
-margin: 0 auto;
-padding: 24px 14px 55px;
-}
+    .menu a{
+      color:#fff;
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+    }
 
-.tarjeta {
-background: white;
-border: 1px solid var(--borde);
-border-radius: 14px;
-padding: 20px;
-margin-bottom: 18px;
-box-shadow: 0 3px 12px rgba(0,0,0,.04);
-}
+    main{
+      width:min(100%,1180px);
+      margin:0 auto;
+      padding:24px 14px 55px;
+    }
 
-h2, h3 { color: var(--azul); }
-h2 { margin-top: 0; }
+    .tarjeta{
+      background:#fff;
+      border:1px solid var(--borde);
+      border-radius:14px;
+      padding:20px;
+      margin-bottom:18px;
+      box-shadow:0 3px 12px rgba(0,0,0,.04);
+    }
 
-.subtitulo {
-color: var(--gris);
-margin-top: -5px;
-margin-bottom: 20px;
-line-height: 1.45;
-}
+    h2,h3{color:var(--azul)}
+    h2{margin-top:0}
 
-.grid-form {
-display: grid;
-grid-template-columns: repeat(2, minmax(0, 1fr));
-gap: 14px;
-}
+    .subtitulo{
+      color:var(--gris);
+      margin-top:-5px;
+      margin-bottom:20px;
+      line-height:1.45;
+    }
 
-.campo {
-display: flex;
-flex-direction: column;
-gap: 6px;
-}
+    .grid-form{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:14px;
+    }
 
-.campo label {
-font-size: 12px;
-font-weight: 700;
-color: var(--gris);
-}
+    .campo{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
 
-.campo input,
-.campo select,
-.campo textarea {
-width: 100%;
-padding: 10px 11px;
-border: 1px solid var(--borde);
-border-radius: 8px;
-background: white;
-}
+    .campo label{
+      font-size:12px;
+      font-weight:700;
+      color:var(--gris);
+    }
 
-.campo textarea {
-min-height: 75px;
-resize: vertical;
-}
+    .campo input,
+    .campo select,
+    .campo textarea{
+      width:100%;
+      padding:10px 11px;
+      border:1px solid var(--borde);
+      border-radius:8px;
+      background:#fff;
+    }
 
-.acciones {
-margin-top: 18px;
-display: flex;
-flex-wrap: wrap;
-gap: 9px;
-}
+    .acciones{
+      margin-top:18px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:9px;
+    }
 
-.boton {
-border: 0;
-border-radius: 9px;
-padding: 10px 15px;
-font-weight: 700;
-}
+    .boton{
+      border:0;
+      border-radius:9px;
+      padding:10px 15px;
+      font-weight:700;
+      text-decoration:none;
+      display:inline-block;
+    }
 
-.boton-principal { background: var(--azul); color: white; }
-.boton-secundario { background: #e9edf3; color: var(--azul); }
-.boton-verde { background: var(--verde); color: white; }
-.boton-rojo { background: var(--rojo); color: white; }
-.boton-dorado { background: var(--dorado); color: #111; }
+    .boton-principal{background:var(--azul);color:#fff}
+    .boton-secundario{background:#e9edf3;color:var(--azul)}
+    .boton-dorado{background:var(--dorado);color:#111}
+    .boton-verde{background:var(--verde);color:#fff}
 
-.boton:disabled {
-opacity: .5;
-cursor: default;
-}
+    .boton:disabled{
+      opacity:.5;
+      cursor:default;
+    }
 
-.mensaje {
-padding: 15px;
-border-radius: 10px;
-background: #eef2f7;
-color: var(--gris);
-margin: 12px 0;
-}
+    .mensaje{
+      padding:15px;
+      border-radius:10px;
+      background:#eef2f7;
+      color:var(--gris);
+      margin:12px 0;
+      line-height:1.45;
+    }
 
-.mensaje-error { background: var(--rojo-fondo); color: var(--rojo); }
-.mensaje-exito { background: var(--verde-fondo); color: var(--verde); }
+    .mensaje-error{
+      background:var(--rojo-fondo);
+      color:var(--rojo);
+    }
 
-.estado {
-display: inline-block;
-padding: 5px 9px;
-border-radius: 999px;
-font-size: 11px;
-font-weight: 700;
-}
+    .mensaje-exito{
+      background:var(--verde-fondo);
+      color:var(--verde);
+    }
 
-.estado-verde { background: var(--verde-fondo); color: var(--verde); }
-.estado-amarillo { background: var(--amarillo-fondo); color: var(--amarillo); }
-.estado-rojo { background: var(--rojo-fondo); color: var(--rojo); }
+    .mensaje-alerta{
+      background:var(--amarillo-fondo);
+      color:var(--amarillo);
+    }
 
-.lista-competencias {
-display: grid;
-gap: 12px;
-}
+    .estado{
+      display:inline-block;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:11px;
+      font-weight:700;
+    }
 
-.competencia {
-background: white;
-border: 1px solid var(--borde);
-border-radius: 12px;
-padding: 16px;
-}
+    .estado-verde{
+      background:var(--verde-fondo);
+      color:var(--verde);
+    }
 
-.competencia h3 { margin: 0 0 8px; }
+    .estado-amarillo{
+      background:var(--amarillo-fondo);
+      color:var(--amarillo);
+    }
 
-.meta {
-color: var(--gris);
-font-size: 13px;
-line-height: 1.5;
-}
+    .lista-competencias{
+      display:grid;
+      gap:12px;
+    }
 
-.tabs {
-display: flex;
-flex-wrap: wrap;
-gap: 7px;
-margin-bottom: 18px;
-}
+    .competencia{
+      background:#fff;
+      border:1px solid var(--borde);
+      border-radius:12px;
+      padding:16px;
+    }
 
-.tab {
-border: 1px solid var(--borde);
-background: white;
-color: var(--azul);
-border-radius: 8px;
-padding: 9px 12px;
-font-weight: 700;
-}
+    .competencia h3{
+      margin:0 0 8px;
+    }
 
-.tab.activo {
-background: var(--azul);
-color: white;
-border-color: var(--azul);
-}
+    .meta{
+      color:var(--gris);
+      font-size:13px;
+      line-height:1.5;
+    }
 
-.tabla-contenedor {
-width: 100%;
-overflow-x: auto;
-border: 1px solid var(--borde);
-border-radius: 11px;
-background: white;
-}
+    .tabs{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin-bottom:18px;
+    }
 
-table {
-width: 100%;
-border-collapse: collapse;
-min-width: 900px;
-}
+    .tab{
+      border:1px solid var(--borde);
+      background:#fff;
+      color:var(--azul);
+      border-radius:8px;
+      padding:9px 12px;
+      font-weight:700;
+    }
 
-th, td {
-padding: 10px 9px;
-border-bottom: 1px solid #e7e9ed;
-text-align: left;
-font-size: 12px;
-vertical-align: middle;
-}
+    .tab.activo{
+      background:var(--azul);
+      color:#fff;
+      border-color:var(--azul);
+    }
 
-th {
-background: #f1f3f6;
-color: var(--azul);
-white-space: nowrap;
-}
+    .tabla-contenedor{
+      width:100%;
+      overflow-x:auto;
+      border:1px solid var(--borde);
+      border-radius:11px;
+      background:#fff;
+    }
 
-tr:last-child td { border-bottom: 0; }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:900px;
+    }
 
-.preview-ok { background: #f4fbf6; }
-.preview-nuevo { background: #fffaf0; }
-.preview-dudoso { background: #fff1f1; }
+    th,td{
+      padding:10px 9px;
+      border-bottom:1px solid #e7e9ed;
+      text-align:left;
+      font-size:12px;
+      vertical-align:middle;
+    }
 
-.selector-relacion {
-min-width: 210px;
-padding: 7px;
-border: 1px solid var(--borde);
-border-radius: 7px;
-}
+    th{
+      background:#f1f3f6;
+      color:var(--azul);
+      white-space:nowrap;
+    }
 
-.resultado-fila input,
-.resultado-fila select {
-padding: 6px;
-border: 1px solid var(--borde);
-border-radius: 6px;
-min-width: 70px;
-}
+    tr:last-child td{
+      border-bottom:0;
+    }
 
-.resultado-fila .observaciones { min-width: 190px; }
+    .preview-ok{background:#f4fbf6}
+    .preview-nuevo{background:#fffaf0}
+    .preview-dudoso{background:#fff1f1}
 
-.login {
-width: min(100%, 430px);
-margin: 60px auto;
-}
+    .selector-relacion{
+      min-width:220px;
+      padding:7px;
+      border:1px solid var(--borde);
+      border-radius:7px;
+    }
 
-.resumen-preview {
-display: grid;
-grid-template-columns: repeat(3, minmax(0,1fr));
-gap: 9px;
-margin-bottom: 15px;
-}
+    .resultado-fila input,
+    .resultado-fila select{
+      padding:6px;
+      border:1px solid var(--borde);
+      border-radius:6px;
+      min-width:70px;
+    }
 
-.resumen-item {
-padding: 13px;
-border: 1px solid var(--borde);
-border-radius: 9px;
-text-align: center;
-background: white;
-}
+    .resultado-fila .observaciones{
+      min-width:190px;
+    }
 
-.resumen-item strong {
-display: block;
-font-size: 21px;
-color: var(--azul);
-}
+    .login{
+      width:min(100%,430px);
+      margin:60px auto;
+    }
 
-.resumen-item small { color: var(--gris); }
+    .resumen-preview{
+      display:grid;
+      grid-template-columns:repeat(4,minmax(0,1fr));
+      gap:9px;
+      margin-bottom:15px;
+    }
 
-@media (max-width: 750px) {
-.grid-form { grid-template-columns: 1fr; }
-.resumen-preview { grid-template-columns: 1fr; }
-}
-</style>
+    .resumen-item{
+      padding:13px;
+      border:1px solid var(--borde);
+      border-radius:9px;
+      text-align:center;
+      background:#fff;
+    }
+
+    .resumen-item strong{
+      display:block;
+      font-size:21px;
+      color:var(--azul);
+    }
+
+    .resumen-item small{
+      color:var(--gris);
+    }
+
+    .archivo-resultado{
+      border:1px solid var(--borde);
+      border-radius:10px;
+      padding:12px;
+      margin:9px 0;
+      background:#fff;
+    }
+
+    @media(max-width:750px){
+      .grid-form{
+        grid-template-columns:1fr;
+      }
+
+      .resumen-preview{
+        grid-template-columns:repeat(2,minmax(0,1fr));
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header class="encabezado">
-<div class="encabezado-contenido">
+  <div class="encabezado-contenido">
 
-<h1>Administrador Favoritos</h1>
-<p>Sangres del Uruguay</p>
+    <h1>Administrador Favoritos</h1>
+    <p>Sangres del Uruguay</p>
 
-<nav class="menu">
-<a href="favoritos-admin.html">Panel Favoritos</a>
-<a href="favoritos.html">Favoritos público</a>
-<a href="index.html">Sangres del Uruguay</a>
-</nav>
+    <nav class="menu">
+      <a href="favoritos-admin.html">Panel Favoritos</a>
+      <a href="favoritos-admin.html?vista=historicos">Resultados históricos</a>
+      <a href="favoritos.html">Favoritos público</a>
+      <a href="index.html">Sangres del Uruguay</a>
+    </nav>
 
-</div>
+  </div>
 </header>
 
 <main id="app">
-<div class="mensaje">Cargando administrador...</div>
+
+  <div class="mensaje">
+    Cargando administrador...
+  </div>
+
 </main>
 
 <script>
 
 const SUPABASE_URL =
-"https://arsjvaueyjwntefogmqz.supabase.co";
+  "https://arsjvaueyjwntefogmqz.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
 
 const app =
-document.getElementById("app");
+  document.getElementById("app");
 
 let sesionAdmin = null;
 let competenciaActual = null;
@@ -345,7795 +385,6715 @@ let previewNomina = [];
 let previewResultados = [];
 
 
-/* ==========================================================
+/* =========================================================
    UTILIDADES
-========================================================== */
+========================================================= */
 
-function escapar(valor) {
+function escapar(valor){
 
-return String(valor ?? "")
-.replaceAll("&", "&amp;")
-.replaceAll("<", "&lt;")
-.replaceAll(">", "&gt;")
-.replaceAll('"', "&quot;")
-.replaceAll("'", "&#039;");
-
+  return String(valor ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
 
-function normalizar(texto) {
+function textoLimpio(valor){
 
-return String(texto ?? "")
-.normalize("NFD")
-.replace(/[\u0300-\u036f]/g, "")
-.toUpperCase()
-.replace(/[^A-Z0-9]/g, "");
+  if(
+    valor === null ||
+    valor === undefined
+  ){
+    return "";
+  }
 
+  return String(valor).trim();
 }
 
 
-function textoLimpio(valor) {
+function normalizar(texto){
 
-if (
-valor === null ||
-valor === undefined
-) {
-return "";
-}
-
-return String(valor).trim();
-
+  return String(texto ?? "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g,"");
 }
 
 
-function numeroSeguro(valor) {
+function numeroSeguro(valor){
 
-let texto =
-textoLimpio(valor)
-.replace(/\s/g, "");
+  let texto =
+    textoLimpio(valor)
+      .replace(/\s/g,"");
 
-if (!texto) {
-return null;
-}
+  if(!texto){
+    return null;
+  }
 
-/*
-Si trae coma decimal:
-31,78 -> 31.78
+  /*
+    FEU normalmente usa:
+    31,78
 
-Si trae punto decimal:
-31.78 -> 31.78
-*/
-if (texto.includes(",")) {
+    Si existe coma:
+    - sacamos puntos de miles
+    - convertimos coma decimal a punto.
 
-texto =
-texto
-.replace(/\./g, "")
-.replace(",", ".");
+    Si viene 31.78:
+    dejamos ese punto decimal.
+  */
+  if(texto.includes(",")){
 
-}
+    texto =
+      texto
+        .replace(/\./g,"")
+        .replace(",",".");
 
-const numero =
-Number(texto);
+  }
 
-return Number.isNaN(numero)
-? null
-: numero;
+  const numero =
+    Number(texto);
 
-}
-
-
-function fechaUY(fecha) {
-
-if (!fecha) {
-return "-";
-}
-
-const partes =
-String(fecha).split("-");
-
-if (partes.length !== 3) {
-return escapar(fecha);
-}
-
-return (
-partes[2] +
-"/" +
-partes[1] +
-"/" +
-partes[0]
-);
-
+  return Number.isNaN(numero)
+    ? null
+    : numero;
 }
 
 
-function nombreEstado(estado) {
+function fechaUY(fecha){
 
-const mapa = {
+  if(!fecha){
+    return "-";
+  }
 
-borrador:
-"Borrador",
+  const partes =
+    String(fecha).split("-");
 
-votacion_abierta:
-"Votación abierta",
+  if(partes.length !== 3){
+    return escapar(fecha);
+  }
 
-votacion_cerrada:
-"Votación cerrada",
-
-resultado_provisorio:
-"Resultado provisorio",
-
-resultado_definitivo:
-"Resultado definitivo"
-
-};
-
-return mapa[estado] || estado;
-
+  return (
+    partes[2] +
+    "/" +
+    partes[1] +
+    "/" +
+    partes[0]
+  );
 }
 
 
-function headersAdmin(extra = {}) {
+function nombreEstado(estado){
 
-return {
+  const mapa = {
 
-apikey:
-SUPABASE_KEY,
+    borrador:
+      "Borrador",
 
-Authorization:
-"Bearer " +
-sesionAdmin.access_token,
+    votacion_abierta:
+      "Votación abierta",
 
-"Content-Type":
-"application/json",
+    votacion_cerrada:
+      "Votación cerrada",
 
-...extra
+    resultado_provisorio:
+      "Resultado provisorio",
 
-};
+    resultado_definitivo:
+      "Resultado definitivo"
 
+  };
+
+  return mapa[estado] || estado;
 }
 
 
-/* ==========================================================
+function headersAdmin(extra={}){
+
+  return {
+
+    apikey:
+      SUPABASE_KEY,
+
+    Authorization:
+      "Bearer " +
+      sesionAdmin.access_token,
+
+    "Content-Type":
+      "application/json",
+
+    ...extra
+
+  };
+}
+
+
+/* =========================================================
    SUPABASE
-========================================================== */
+========================================================= */
 
-async function apiGet(ruta) {
+async function apiGet(ruta){
 
-const respuesta =
-await fetch(
+  const respuesta =
+    await fetch(
 
-SUPABASE_URL +
-"/rest/v1/" +
-ruta,
+      SUPABASE_URL +
+      "/rest/v1/" +
+      ruta,
 
-{
-headers:
-headersAdmin()
-}
+      {
+        headers:
+          headersAdmin()
+      }
 
-);
+    );
 
-if (!respuesta.ok) {
+  if(!respuesta.ok){
 
-throw new Error(
-await respuesta.text()
-);
+    throw new Error(
+      await respuesta.text()
+    );
 
-}
+  }
 
-return respuesta.json();
-
-}
-
-
-async function apiPost(tabla, datos) {
-
-const respuesta =
-await fetch(
-
-SUPABASE_URL +
-"/rest/v1/" +
-tabla,
-
-{
-
-method:
-"POST",
-
-headers:
-headersAdmin({
-
-Prefer:
-"return=representation"
-
-}),
-
-body:
-JSON.stringify(datos)
-
-}
-
-);
-
-const texto =
-await respuesta.text();
-
-if (!respuesta.ok) {
-
-throw new Error(texto);
-
-}
-
-return texto
-? JSON.parse(texto)
-: [];
-
+  return respuesta.json();
 }
 
 
-async function apiPatch(tabla, filtro, datos) {
+async function apiPost(tabla,datos){
 
-const respuesta =
-await fetch(
+  const respuesta =
+    await fetch(
 
-SUPABASE_URL +
-"/rest/v1/" +
-tabla +
-"?" +
-filtro,
+      SUPABASE_URL +
+      "/rest/v1/" +
+      tabla,
 
-{
+      {
 
-method:
-"PATCH",
+        method:
+          "POST",
 
-headers:
-headersAdmin({
+        headers:
+          headersAdmin({
+            Prefer:
+              "return=representation"
+          }),
 
-Prefer:
-"return=representation"
+        body:
+          JSON.stringify(datos)
 
-}),
+      }
 
-body:
-JSON.stringify(datos)
+    );
 
-}
+  const texto =
+    await respuesta.text();
 
-);
+  if(!respuesta.ok){
 
-const texto =
-await respuesta.text();
+    throw new Error(texto);
 
-if (!respuesta.ok) {
+  }
 
-throw new Error(texto);
-
-}
-
-return texto
-? JSON.parse(texto)
-: [];
-
+  return texto
+    ? JSON.parse(texto)
+    : [];
 }
 
 
-/* ==========================================================
+async function apiPatch(tabla,filtro,datos){
+
+  const respuesta =
+    await fetch(
+
+      SUPABASE_URL +
+      "/rest/v1/" +
+      tabla +
+      "?" +
+      filtro,
+
+      {
+
+        method:
+          "PATCH",
+
+        headers:
+          headersAdmin({
+            Prefer:
+              "return=representation"
+          }),
+
+        body:
+          JSON.stringify(datos)
+
+      }
+
+    );
+
+  const texto =
+    await respuesta.text();
+
+  if(!respuesta.ok){
+
+    throw new Error(texto);
+
+  }
+
+  return texto
+    ? JSON.parse(texto)
+    : [];
+}
+
+
+/* =========================================================
    SESIÓN ADMIN
-========================================================== */
+========================================================= */
 
-async function iniciarSesion(email, password) {
+async function iniciarSesion(email,password){
 
-const respuesta =
-await fetch(
+  const respuesta =
+    await fetch(
 
-SUPABASE_URL +
-"/auth/v1/token?grant_type=password",
+      SUPABASE_URL +
+      "/auth/v1/token?grant_type=password",
 
-{
+      {
 
-method:
-"POST",
+        method:
+          "POST",
 
-headers: {
+        headers:{
 
-apikey:
-SUPABASE_KEY,
+          apikey:
+            SUPABASE_KEY,
 
-"Content-Type":
-"application/json"
+          "Content-Type":
+            "application/json"
 
-},
+        },
 
-body:
-JSON.stringify({
-email,
-password
-})
+        body:
+          JSON.stringify({
+            email,
+            password
+          })
 
-}
+      }
 
-);
+    );
 
-const datos =
-await respuesta.json();
+  const datos =
+    await respuesta.json();
 
-if (!respuesta.ok) {
+  if(!respuesta.ok){
 
-throw new Error(
-"Email o contraseña incorrectos."
-);
+    throw new Error(
+      "Email o contraseña incorrectos."
+    );
 
-}
+  }
 
-sesionAdmin =
-datos;
+  sesionAdmin =
+    datos;
 
-localStorage.setItem(
-
-"sesionAdminSdU",
-
-JSON.stringify(datos)
-
-);
-
-return true;
+  localStorage.setItem(
+    "sesionAdminSdU",
+    JSON.stringify(datos)
+  );
 
 }
 
 
-async function renovarSesion() {
+async function renovarSesion(){
 
-const guardada =
-localStorage.getItem(
-"sesionAdminSdU"
-);
+  const guardada =
+    localStorage.getItem(
+      "sesionAdminSdU"
+    );
 
-if (!guardada) {
-return false;
-}
+  if(!guardada){
+    return false;
+  }
 
-try {
+  try{
 
-const anterior =
-JSON.parse(guardada);
+    const anterior =
+      JSON.parse(guardada);
 
-if (!anterior.refresh_token) {
-return false;
-}
+    if(!anterior.refresh_token){
+      return false;
+    }
 
-const respuesta =
-await fetch(
+    const respuesta =
+      await fetch(
 
-SUPABASE_URL +
-"/auth/v1/token?grant_type=refresh_token",
+        SUPABASE_URL +
+        "/auth/v1/token?grant_type=refresh_token",
 
-{
+        {
 
-method:
-"POST",
+          method:
+            "POST",
 
-headers: {
+          headers:{
 
-apikey:
-SUPABASE_KEY,
+            apikey:
+              SUPABASE_KEY,
 
-"Content-Type":
-"application/json"
+            "Content-Type":
+              "application/json"
 
-},
+          },
 
-body:
-JSON.stringify({
+          body:
+            JSON.stringify({
 
-refresh_token:
-anterior.refresh_token
+              refresh_token:
+                anterior.refresh_token
 
-})
+            })
 
-}
+        }
 
-);
+      );
 
-if (!respuesta.ok) {
-return false;
-}
+    if(!respuesta.ok){
+      return false;
+    }
 
-sesionAdmin =
-await respuesta.json();
+    sesionAdmin =
+      await respuesta.json();
 
-localStorage.setItem(
+    localStorage.setItem(
+      "sesionAdminSdU",
+      JSON.stringify(sesionAdmin)
+    );
 
-"sesionAdminSdU",
+    return true;
 
-JSON.stringify(
-sesionAdmin
-)
+  }catch{
 
-);
+    return false;
 
-return true;
-
-} catch {
-
-return false;
-
-}
-
+  }
 }
 
 
-function mostrarLogin() {
+function mostrarLogin(){
 
-app.innerHTML = `
+  app.innerHTML = `
 
-<div
-class="login tarjeta"
->
+    <div class="login tarjeta">
 
-<h2>
-Ingresar como administrador
-</h2>
+      <h2>
+        Ingresar como administrador
+      </h2>
 
-<div class="campo">
+      <div class="campo">
 
-<label>
-Email
-</label>
+        <label>
+          Email
+        </label>
 
-<input
-id="loginEmail"
-type="email"
->
+        <input
+          id="loginEmail"
+          type="email"
+        >
 
-</div>
+      </div>
 
-<br>
+      <br>
 
-<div class="campo">
+      <div class="campo">
 
-<label>
-Contraseña
-</label>
+        <label>
+          Contraseña
+        </label>
 
-<input
-id="loginPassword"
-type="password"
->
+        <input
+          id="loginPassword"
+          type="password"
+        >
 
-</div>
+      </div>
 
-<div class="acciones">
+      <div class="acciones">
 
-<button
-class="boton boton-principal"
-id="btnLoginAdmin"
->
-Ingresar
-</button>
+        <button
+          class="boton boton-principal"
+          id="btnLoginAdmin"
+        >
+          Ingresar
+        </button>
 
-</div>
+      </div>
 
-<div id="loginMensaje"></div>
+      <div id="loginMensaje"></div>
 
-</div>
+    </div>
 
-`;
+  `;
 
 
-document
-.getElementById(
-"btnLoginAdmin"
-)
-.onclick =
-async () => {
+  document
+    .getElementById(
+      "btnLoginAdmin"
+    )
+    .onclick =
+      async () => {
 
-const email =
-document
-.getElementById(
-"loginEmail"
-)
-.value
-.trim();
+        try{
 
-const password =
-document
-.getElementById(
-"loginPassword"
-)
-.value;
+          await iniciarSesion(
 
-try {
+            document
+              .getElementById(
+                "loginEmail"
+              )
+              .value
+              .trim(),
 
-await iniciarSesion(
-email,
-password
-);
+            document
+              .getElementById(
+                "loginPassword"
+              )
+              .value
 
-await cargarRuta();
+          );
 
-} catch (error) {
+          await cargarRuta();
 
-document
-.getElementById(
-"loginMensaje"
-)
-.innerHTML = `
+        }catch(error){
 
-<div
-class="mensaje mensaje-error"
->
-${escapar(error.message)}
-</div>
+          document
+            .getElementById(
+              "loginMensaje"
+            )
+            .innerHTML = `
 
-`;
+              <div
+                class="mensaje mensaje-error"
+              >
+                ${escapar(error.message)}
+              </div>
 
-}
+            `;
 
-};
+        }
+
+      };
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    NAVEGACIÓN
-========================================================== */
+========================================================= */
 
-function navegar(url) {
+function navegar(url){
 
-history.pushState(
-{},
-"",
-url
-);
+  history.pushState(
+    {},
+    "",
+    url
+  );
 
-cargarRuta();
-
+  cargarRuta();
 }
 
 
 window.addEventListener(
-"popstate",
-cargarRuta
+  "popstate",
+  cargarRuta
 );
 
 
-/* ==========================================================
-   PANEL GENERAL
-========================================================== */
+/* =========================================================
+   PANEL
+========================================================= */
 
-async function mostrarPanel() {
+async function mostrarPanel(){
 
-app.innerHTML = `
+  app.innerHTML = `
 
-<div class="tarjeta">
-Cargando competencias...
-</div>
+    <div class="tarjeta">
+      Cargando competencias...
+    </div>
 
-`;
-
-try {
-
-const competencias =
-await apiGet(
-
-"competencias" +
-"?select=*" +
-"&order=fecha.desc"
-
-);
+  `;
 
 
-app.innerHTML = `
+  try{
 
-<div class="tarjeta">
+    const competencias =
+      await apiGet(
 
-<h2>
-Favoritos · Administración
-</h2>
+        "competencias" +
+        "?select=*" +
+        "&order=fecha.desc.nullslast,numero_raid.desc"
 
-<p class="subtitulo">
-
-Crear Raids,
-importar nóminas,
-abrir votaciones
-y cargar resultados.
-
-</p>
-
-<div class="acciones">
-
-<button
-class="boton boton-principal"
-id="btnNuevaCompetencia"
->
-+ Nueva competencia
-</button>
-
-<button
-class="boton boton-dorado"
-id="btnImportarHistoricos"
->
-Importar resultados históricos en lote
-</button>
-
-</div>
-
-</div>
+      );
 
 
-<div class="tarjeta">
+    app.innerHTML = `
 
-<h2>
-Competencias
-</h2>
+      <div class="tarjeta">
 
-${
-competencias.length
+        <h2>
+          Favoritos · Administración
+        </h2>
 
-? `
+        <p class="subtitulo">
 
-<div
-class="lista-competencias"
->
+          Crear Raids,
+          importar marcaciones,
+          abrir votaciones
+          y cargar resultados.
 
-${competencias.map(
-c => `
+        </p>
 
-<div
-class="competencia"
->
+        <div class="acciones">
 
-<h3>
-${escapar(c.nombre)}
-</h3>
+          <button
+            class="boton boton-principal"
+            id="btnNuevaCompetencia"
+          >
+            + Nueva competencia
+          </button>
 
-<div class="meta">
+          <button
+            class="boton boton-dorado"
+            id="btnHistoricos"
+          >
+            Importar resultados históricos
+          </button>
 
-${
-c.edicion
-? escapar(c.edicion) +
-"<br>"
-: ""
+        </div>
+
+      </div>
+
+
+      <div class="tarjeta">
+
+        <h2>
+          Competencias
+        </h2>
+
+        ${
+          competencias.length
+
+            ? `
+
+              <div
+                class="lista-competencias"
+              >
+
+                ${competencias.map(
+                  c => `
+
+                    <div
+                      class="competencia"
+                    >
+
+                      <h3>
+
+                        ${
+                          c.numero_raid
+                            ? escapar(c.numero_raid) +
+                              " · "
+                            : ""
+                        }
+
+                        ${escapar(c.nombre)}
+
+                      </h3>
+
+                      <div class="meta">
+
+                        ${
+                          c.edicion
+                            ? escapar(c.edicion) +
+                              "<br>"
+                            : ""
+                        }
+
+                        ${fechaUY(c.fecha)}
+
+                        ${
+                          c.distancia_km
+                            ? " · " +
+                              escapar(c.distancia_km) +
+                              " km"
+                            : ""
+                        }
+
+                        ${
+                          c.localidad
+                            ? "<br>" +
+                              escapar(c.localidad)
+                            : ""
+                        }
+
+                      </div>
+
+                      <div
+                        style="margin-top:10px"
+                      >
+
+                        <span
+                          class="estado ${
+                            c.estado ===
+                            "votacion_abierta"
+
+                              ? "estado-verde"
+
+                              : "estado-amarillo"
+                          }"
+                        >
+
+                          ${escapar(
+                            nombreEstado(
+                              c.estado
+                            )
+                          )}
+
+                        </span>
+
+                      </div>
+
+                      <div class="acciones">
+
+                        <button
+                          class="boton boton-secundario"
+                          data-abrir-competencia="${c.id}"
+                        >
+                          Administrar
+                        </button>
+
+                        <a
+                          class="boton boton-dorado"
+                          href="favoritos.html?raid=${encodeURIComponent(
+                            c.id
+                          )}"
+                        >
+                          Ver página pública
+                        </a>
+
+                      </div>
+
+                    </div>
+
+                  `
+                ).join("")}
+
+              </div>
+
+            `
+
+            : `
+
+              <div class="mensaje">
+                Todavía no hay competencias.
+              </div>
+
+            `
+        }
+
+      </div>
+
+    `;
+
+
+    document
+      .getElementById(
+        "btnNuevaCompetencia"
+      )
+      .onclick =
+        () => {
+
+          navegar(
+            "favoritos-admin.html?vista=nueva"
+          );
+
+        };
+
+
+    document
+      .getElementById(
+        "btnHistoricos"
+      )
+      .onclick =
+        () => {
+
+          navegar(
+            "favoritos-admin.html?vista=historicos"
+          );
+
+        };
+
+
+    document
+      .querySelectorAll(
+        "[data-abrir-competencia]"
+      )
+      .forEach(
+        boton => {
+
+          boton.onclick =
+            () => {
+
+              navegar(
+
+                "favoritos-admin.html?competencia=" +
+                boton.dataset
+                  .abrirCompetencia
+
+              );
+
+            };
+
+        }
+      );
+
+
+  }catch(error){
+
+    console.error(error);
+
+    app.innerHTML = `
+
+      <div
+        class="mensaje mensaje-error"
+      >
+        No se pudieron cargar las competencias.
+      </div>
+
+    `;
+
+  }
+
 }
 
-${fechaUY(c.fecha)}
 
-·
-
-${
-c.distancia_km
-? escapar(
-c.distancia_km
-) +
-" km"
-: "-"
-}
-
-${
-c.localidad
-? `
-<br>
-${escapar(c.localidad)}
-`
-: ""
-}
-
-</div>
-
-<div
-style="margin-top:10px;"
->
-
-<span
-class="estado ${
-c.estado ===
-"votacion_abierta"
-? "estado-verde"
-: "estado-amarillo"
-}"
->
-
-${escapar(
-nombreEstado(c.estado)
-)}
-
-</span>
-
-</div>
-
-<div class="acciones">
-
-<button
-class="boton boton-secundario"
-data-abrir-competencia="${c.id}"
->
-Administrar
-</button>
-
-<a
-class="boton boton-dorado"
-href="favoritos.html?raid=${encodeURIComponent(c.id)}"
-style="
-text-decoration:none;
-display:inline-block;
-"
->
-Ver página pública
-</a>
-
-</div>
-
-</div>
-
-`
-).join("")}
-
-</div>
-
-`
-
-: `
-
-<div class="mensaje">
-Todavía no hay competencias.
-</div>
-
-`
-}
-
-</div>
-
-`;
-
-
-document
-.getElementById(
-"btnNuevaCompetencia"
-)
-.onclick =
-() => {
-
-navegar(
-"favoritos-admin.html?vista=nueva"
-);
-
-};
-
-
-document
-.getElementById(
-"btnImportarHistoricos"
-)
-.onclick =
-() => {
-
-navegar(
-"favoritos-admin.html?vista=historicos"
-);
-
-};
-
-
-document
-.querySelectorAll(
-"[data-abrir-competencia]"
-)
-.forEach(
-boton => {
-
-boton.onclick =
-() => {
-
-navegar(
-
-"favoritos-admin.html?competencia=" +
-boton.dataset
-.abrirCompetencia
-
-);
-
-};
-
-}
-);
-
-} catch (error) {
-
-console.error(error);
-
-app.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-No se pudieron cargar las competencias.
-</div>
-
-`;
-
-}
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    CREAR COMPETENCIA
-========================================================== */
+========================================================= */
 
-function mostrarNuevaCompetencia() {
+function mostrarNuevaCompetencia(){
 
-app.innerHTML = `
+  app.innerHTML = `
 
-<div class="tarjeta">
+    <div class="tarjeta">
 
-<h2>
-Nueva competencia
-</h2>
+      <h2>
+        Nueva competencia
+      </h2>
 
-<div class="grid-form">
+      <div class="grid-form">
 
-<div class="campo">
+        <div class="campo">
 
-<label>
-N.º Raid
-</label>
+          <label>
+            N.º Raid
+          </label>
 
-<input
-id="nuevoNumero"
-type="number"
->
+          <input
+            id="nuevoNumero"
+            type="number"
+          >
 
-</div>
-
-
-<div class="campo">
-
-<label>
-Nombre del Raid
-</label>
-
-<input
-id="nuevoNombre"
-type="text"
->
-
-</div>
+        </div>
 
 
-<div class="campo">
+        <div class="campo">
 
-<label>
-Edición
-</label>
+          <label>
+            Nombre del Raid
+          </label>
 
-<input
-id="nuevaEdicion"
-type="text"
-placeholder="Ej.: 33ª Edición"
->
+          <input
+            id="nuevoNombre"
+            type="text"
+          >
 
-</div>
-
-
-<div class="campo">
-
-<label>
-Fecha
-</label>
-
-<input
-id="nuevaFecha"
-type="date"
->
-
-</div>
+        </div>
 
 
-<div class="campo">
+        <div class="campo">
 
-<label>
-Distancia km
-</label>
+          <label>
+            Edición
+          </label>
 
-<input
-id="nuevaDistancia"
-type="number"
-step="0.01"
->
+          <input
+            id="nuevaEdicion"
+            type="text"
+            placeholder="Ej.: 38ª Edición"
+          >
 
-</div>
-
-
-<div class="campo">
-
-<label>
-Club
-</label>
-
-<input
-id="nuevoClub"
-type="text"
->
-
-</div>
+        </div>
 
 
-<div class="campo">
+        <div class="campo">
 
-<label>
-Localidad
-</label>
+          <label>
+            Fecha
+          </label>
 
-<input
-id="nuevaLocalidad"
-type="text"
->
+          <input
+            id="nuevaFecha"
+            type="date"
+          >
 
-</div>
-
-
-<div class="campo">
-
-<label>
-Estado inicial
-</label>
-
-<select
-id="nuevoEstado"
->
-
-<option value="borrador">
-Borrador
-</option>
-
-<option value="votacion_abierta">
-Votación abierta
-</option>
-
-</select>
-
-</div>
-
-</div>
+        </div>
 
 
-<div class="acciones">
+        <div class="campo">
 
-<button
-class="boton boton-principal"
-id="btnCrearCompetencia"
->
-Crear competencia
-</button>
+          <label>
+            Distancia km
+          </label>
 
-</div>
+          <input
+            id="nuevaDistancia"
+            type="number"
+            step="0.01"
+          >
 
-<div
-id="mensajeNueva"
-></div>
-
-</div>
-
-`;
+        </div>
 
 
-document
-.getElementById(
-"btnCrearCompetencia"
-)
-.onclick =
-async () => {
+        <div class="campo">
 
-const nombre =
-document
-.getElementById(
-"nuevoNombre"
-)
-.value
-.trim();
+          <label>
+            Club
+          </label>
 
-if (!nombre) {
+          <input
+            id="nuevoClub"
+            type="text"
+          >
 
-alert(
-"Ingresá el nombre del Raid."
-);
+        </div>
 
-return;
+
+        <div class="campo">
+
+          <label>
+            Localidad
+          </label>
+
+          <input
+            id="nuevaLocalidad"
+            type="text"
+          >
+
+        </div>
+
+
+        <div class="campo">
+
+          <label>
+            Estado inicial
+          </label>
+
+          <select
+            id="nuevoEstado"
+          >
+
+            <option
+              value="borrador"
+            >
+              Borrador
+            </option>
+
+            <option
+              value="votacion_abierta"
+            >
+              Votación abierta
+            </option>
+
+          </select>
+
+        </div>
+
+      </div>
+
+
+      <div class="acciones">
+
+        <button
+          class="boton boton-principal"
+          id="btnCrearCompetencia"
+        >
+          Crear competencia
+        </button>
+
+      </div>
+
+
+      <div
+        id="mensajeNueva"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById(
+      "btnCrearCompetencia"
+    )
+    .onclick =
+      async () => {
+
+        const nombre =
+          document
+            .getElementById(
+              "nuevoNombre"
+            )
+            .value
+            .trim();
+
+
+        if(!nombre){
+
+          alert(
+            "Ingresá el nombre del Raid."
+          );
+
+          return;
+
+        }
+
+
+        const datos = {
+
+          numero_raid:
+            document
+              .getElementById(
+                "nuevoNumero"
+              )
+              .value
+
+              ? Number(
+                  document
+                    .getElementById(
+                      "nuevoNumero"
+                    )
+                    .value
+                )
+
+              : null,
+
+
+          nombre,
+
+
+          edicion:
+            document
+              .getElementById(
+                "nuevaEdicion"
+              )
+              .value
+              .trim() ||
+            null,
+
+
+          fecha:
+            document
+              .getElementById(
+                "nuevaFecha"
+              )
+              .value ||
+            null,
+
+
+          distancia_km:
+            document
+              .getElementById(
+                "nuevaDistancia"
+              )
+              .value
+
+              ? Number(
+                  document
+                    .getElementById(
+                      "nuevaDistancia"
+                    )
+                    .value
+                )
+
+              : null,
+
+
+          club:
+            document
+              .getElementById(
+                "nuevoClub"
+              )
+              .value
+              .trim() ||
+            null,
+
+
+          localidad:
+            document
+              .getElementById(
+                "nuevaLocalidad"
+              )
+              .value
+              .trim() ||
+            null,
+
+
+          estado:
+            document
+              .getElementById(
+                "nuevoEstado"
+              )
+              .value
+
+        };
+
+
+        try{
+
+          const creada =
+            await apiPost(
+
+              "competencias",
+              datos
+
+            );
+
+
+          navegar(
+
+            "favoritos-admin.html?competencia=" +
+            creada[0].id
+
+          );
+
+
+        }catch(error){
+
+          console.error(error);
+
+          document
+            .getElementById(
+              "mensajeNueva"
+            )
+            .innerHTML = `
+
+              <div
+                class="mensaje mensaje-error"
+              >
+                ${escapar(error.message)}
+              </div>
+
+            `;
+
+        }
+
+      };
 
 }
 
 
-const datos = {
+/* =========================================================
+   COMPETENCIA
+========================================================= */
 
-numero_raid:
-document
-.getElementById(
-"nuevoNumero"
-)
-.value
+async function obtenerCompetencia(id){
 
-? Number(
-document
-.getElementById(
-"nuevoNumero"
-)
-.value
-)
+  const datos =
+    await apiGet(
 
-: null,
+      "competencias" +
+      "?select=*" +
+      "&id=eq." +
+      encodeURIComponent(id) +
+      "&limit=1"
 
+    );
 
-nombre,
-
-
-edicion:
-document
-.getElementById(
-"nuevaEdicion"
-)
-.value
-.trim() ||
-null,
-
-
-fecha:
-document
-.getElementById(
-"nuevaFecha"
-)
-.value ||
-null,
-
-
-distancia_km:
-document
-.getElementById(
-"nuevaDistancia"
-)
-.value
-
-? Number(
-document
-.getElementById(
-"nuevaDistancia"
-)
-.value
-)
-
-: null,
-
-
-club:
-document
-.getElementById(
-"nuevoClub"
-)
-.value
-.trim() ||
-null,
-
-
-localidad:
-document
-.getElementById(
-"nuevaLocalidad"
-)
-.value
-.trim() ||
-null,
-
-
-estado:
-document
-.getElementById(
-"nuevoEstado"
-)
-.value
-
-};
-
-
-try {
-
-const creada =
-await apiPost(
-"competencias",
-datos
-);
-
-navegar(
-
-"favoritos-admin.html?competencia=" +
-creada[0].id
-
-);
-
-} catch (error) {
-
-console.error(error);
-
-document
-.getElementById(
-"mensajeNueva"
-)
-.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-No se pudo crear la competencia.
-</div>
-
-`;
-
-}
-
-};
-
-}
-
-
-/* ==========================================================
-   CARGAR COMPETENCIA
-========================================================== */
-
-async function obtenerCompetencia(id) {
-
-const datos =
-await apiGet(
-
-"competencias" +
-"?select=*" +
-"&id=eq." +
-encodeURIComponent(id) +
-"&limit=1"
-
-);
-
-return datos[0] || null;
-
+  return datos[0] || null;
 }
 
 
 async function mostrarCompetencia(
-id,
-seccion = "general"
-) {
+  id,
+  seccion="general"
+){
 
-competenciaActual =
-await obtenerCompetencia(id);
+  competenciaActual =
+    await obtenerCompetencia(id);
 
-if (!competenciaActual) {
 
-app.innerHTML = `
+  if(!competenciaActual){
 
-<div class="mensaje">
-Competencia no encontrada.
-</div>
+    app.innerHTML = `
 
-`;
+      <div class="mensaje">
+        Competencia no encontrada.
+      </div>
 
-return;
+    `;
+
+    return;
+
+  }
+
+
+  app.innerHTML = `
+
+    <div class="tarjeta">
+
+      <h2>
+
+        ${
+          competenciaActual.numero_raid
+            ? escapar(
+                competenciaActual.numero_raid
+              ) +
+              " · "
+            : ""
+        }
+
+        ${escapar(
+          competenciaActual.nombre
+        )}
+
+      </h2>
+
+      <div class="meta">
+
+        ${
+          competenciaActual.edicion
+            ? escapar(
+                competenciaActual.edicion
+              ) +
+              "<br>"
+            : ""
+        }
+
+        ${fechaUY(
+          competenciaActual.fecha
+        )}
+
+        ${
+          competenciaActual.distancia_km
+            ? " · " +
+              escapar(
+                competenciaActual.distancia_km
+              ) +
+              " km"
+            : ""
+        }
+
+      </div>
+
+
+      <div class="acciones">
+
+        <a
+          class="boton boton-dorado"
+          href="favoritos.html?raid=${encodeURIComponent(
+            id
+          )}"
+        >
+          Ver página pública
+        </a>
+
+      </div>
+
+    </div>
+
+
+    <div class="tabs">
+
+      <button
+        class="tab ${
+          seccion === "general"
+            ? "activo"
+            : ""
+        }"
+        data-tab="general"
+      >
+        General
+      </button>
+
+
+      <button
+        class="tab ${
+          seccion === "nomina"
+            ? "activo"
+            : ""
+        }"
+        data-tab="nomina"
+      >
+        Nómina
+      </button>
+
+
+      <button
+        class="tab ${
+          seccion === "resultados"
+            ? "activo"
+            : ""
+        }"
+        data-tab="resultados"
+      >
+        Resultados
+      </button>
+
+
+      <button
+        class="tab ${
+          seccion ===
+          "editar-resultados"
+
+            ? "activo"
+
+            : ""
+        }"
+        data-tab="editar-resultados"
+      >
+        Editar resultados
+      </button>
+
+    </div>
+
+
+    <div
+      id="contenidoCompetencia"
+    ></div>
+
+  `;
+
+
+  document
+    .querySelectorAll(
+      "[data-tab]"
+    )
+    .forEach(
+      boton => {
+
+        boton.onclick =
+          () => {
+
+            navegar(
+
+              "favoritos-admin.html?competencia=" +
+              id +
+              "&seccion=" +
+              boton.dataset.tab
+
+            );
+
+          };
+
+      }
+    );
+
+
+  if(seccion === "nomina"){
+
+    await mostrarNomina(id);
+
+  }else if(
+    seccion === "resultados"
+  ){
+
+    await mostrarImportarResultados(id);
+
+  }else if(
+    seccion === "editar-resultados"
+  ){
+
+    await mostrarEditorResultados(id);
+
+  }else{
+
+    mostrarGeneralCompetencia(id);
+
+  }
 
 }
 
 
-app.innerHTML = `
-
-<div class="tarjeta">
-
-<h2>
-${escapar(
-competenciaActual.nombre
-)}
-</h2>
-
-<div class="meta">
-
-${
-competenciaActual.edicion
-? escapar(
-competenciaActual.edicion
-) +
-"<br>"
-: ""
-}
-
-${fechaUY(
-competenciaActual.fecha
-)}
-
-·
-
-${
-competenciaActual.distancia_km
-? escapar(
-competenciaActual.distancia_km
-) +
-" km"
-: "-"
-}
-
-</div>
-
-<div class="acciones">
-
-<a
-class="boton boton-dorado"
-style="text-decoration:none;"
-href="favoritos.html?raid=${encodeURIComponent(id)}"
->
-Ver página pública
-</a>
-
-</div>
-
-</div>
-
-
-<div class="tabs">
-
-<button
-class="tab ${
-seccion ===
-"general"
-? "activo"
-: ""
-}"
-data-tab="general"
->
-General
-</button>
-
-
-<button
-class="tab ${
-seccion ===
-"nomina"
-? "activo"
-: ""
-}"
-data-tab="nomina"
->
-Nómina
-</button>
-
-
-<button
-class="tab ${
-seccion ===
-"resultados"
-? "activo"
-: ""
-}"
-data-tab="resultados"
->
-Resultados
-</button>
-
-
-<button
-class="tab ${
-seccion ===
-"editar-resultados"
-? "activo"
-: ""
-}"
-data-tab="editar-resultados"
->
-Editar resultados
-</button>
-
-</div>
-
-
-<div
-id="contenidoCompetencia"
-></div>
-
-`;
-
-
-document
-.querySelectorAll(
-"[data-tab]"
-)
-.forEach(
-boton => {
-
-boton.onclick =
-() => {
-
-navegar(
-
-"favoritos-admin.html?competencia=" +
-id +
-"&seccion=" +
-boton.dataset.tab
-
-);
-
-};
-
-}
-);
-
-
-if (
-seccion ===
-"nomina"
-) {
-
-await mostrarNomina(id);
-
-}
-
-else if (
-seccion ===
-"resultados"
-) {
-
-await mostrarImportarResultados(id);
-
-}
-
-else if (
-seccion ===
-"editar-resultados"
-) {
-
-await mostrarEditorResultados(id);
-
-}
-
-else {
-
-mostrarGeneralCompetencia(id);
-
-}
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    ESTADO COMPETENCIA
-========================================================== */
+========================================================= */
 
-function mostrarGeneralCompetencia(id) {
+function mostrarGeneralCompetencia(id){
 
-const contenedor =
-document
-.getElementById(
-"contenidoCompetencia"
-);
-
-
-contenedor.innerHTML = `
-
-<div class="tarjeta">
-
-<h3>
-Estado de la competencia
-</h3>
+  const contenedor =
+    document.getElementById(
+      "contenidoCompetencia"
+    );
 
 
-<div class="campo">
+  contenedor.innerHTML = `
 
-<label>
-Estado
-</label>
+    <div class="tarjeta">
+
+      <h3>
+        Estado de la competencia
+      </h3>
+
+      <div class="campo">
+
+        <label>
+          Estado
+        </label>
+
+        <select
+          id="estadoCompetencia"
+        >
+
+          <option
+            value="borrador"
+            ${
+              competenciaActual.estado ===
+              "borrador"
+
+                ? "selected"
+                : ""
+            }
+          >
+            Borrador
+          </option>
+
+          <option
+            value="votacion_abierta"
+            ${
+              competenciaActual.estado ===
+              "votacion_abierta"
+
+                ? "selected"
+                : ""
+            }
+          >
+            Votación abierta
+          </option>
+
+          <option
+            value="votacion_cerrada"
+            ${
+              competenciaActual.estado ===
+              "votacion_cerrada"
+
+                ? "selected"
+                : ""
+            }
+          >
+            Votación cerrada
+          </option>
+
+          <option
+            value="resultado_provisorio"
+            ${
+              competenciaActual.estado ===
+              "resultado_provisorio"
+
+                ? "selected"
+                : ""
+            }
+          >
+            Resultado provisorio
+          </option>
+
+          <option
+            value="resultado_definitivo"
+            ${
+              competenciaActual.estado ===
+              "resultado_definitivo"
+
+                ? "selected"
+                : ""
+            }
+          >
+            Resultado definitivo
+          </option>
+
+        </select>
+
+      </div>
 
 
-<select
-id="estadoCompetencia"
->
+      <div class="acciones">
 
-<option
-value="borrador"
-${
-competenciaActual.estado ===
-"borrador"
-? "selected"
-: ""
+        <button
+          id="btnGuardarEstado"
+          class="boton boton-principal"
+        >
+          Guardar estado
+        </button>
+
+      </div>
+
+
+      <div
+        id="mensajeEstado"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById(
+      "btnGuardarEstado"
+    )
+    .onclick =
+      async () => {
+
+        const estado =
+          document
+            .getElementById(
+              "estadoCompetencia"
+            )
+            .value;
+
+
+        try{
+
+          await apiPatch(
+
+            "competencias",
+
+            "id=eq." +
+            encodeURIComponent(id),
+
+            {
+
+              estado,
+
+              updated_at:
+                new Date()
+                  .toISOString()
+
+            }
+
+          );
+
+
+          competenciaActual.estado =
+            estado;
+
+
+          document
+            .getElementById(
+              "mensajeEstado"
+            )
+            .innerHTML = `
+
+              <div
+                class="mensaje mensaje-exito"
+              >
+                Estado actualizado.
+              </div>
+
+            `;
+
+
+        }catch(error){
+
+          console.error(error);
+
+          alert(
+            "No se pudo actualizar."
+          );
+
+        }
+
+      };
+
 }
->
-Borrador
-</option>
 
 
-<option
-value="votacion_abierta"
-${
-competenciaActual.estado ===
-"votacion_abierta"
-? "selected"
-: ""
-}
->
-Votación abierta
-</option>
-
-
-<option
-value="votacion_cerrada"
-${
-competenciaActual.estado ===
-"votacion_cerrada"
-? "selected"
-: ""
-}
->
-Votación cerrada
-</option>
-
-
-<option
-value="resultado_provisorio"
-${
-competenciaActual.estado ===
-"resultado_provisorio"
-? "selected"
-: ""
-}
->
-Resultado provisorio
-</option>
-
-
-<option
-value="resultado_definitivo"
-${
-competenciaActual.estado ===
-"resultado_definitivo"
-? "selected"
-: ""
-}
->
-Resultado definitivo
-</option>
-
-</select>
-
-</div>
-
-
-<div class="acciones">
-
-<button
-id="btnGuardarEstado"
-class="boton boton-principal"
->
-Guardar estado
-</button>
-
-</div>
-
-<div
-id="mensajeEstado"
-></div>
-
-</div>
-
-`;
-
-
-document
-.getElementById(
-"btnGuardarEstado"
-)
-.onclick =
-async () => {
-
-const estado =
-document
-.getElementById(
-"estadoCompetencia"
-)
-.value;
-
-
-try {
-
-await apiPatch(
-
-"competencias",
-
-"id=eq." +
-encodeURIComponent(id),
-
-{
-
-estado,
-
-updated_at:
-new Date()
-.toISOString()
-
-}
-
-);
-
-
-competenciaActual.estado =
-estado;
-
-
-document
-.getElementById(
-"mensajeEstado"
-)
-.innerHTML = `
-
-<div
-class="mensaje mensaje-exito"
->
-Estado actualizado.
-</div>
-
-`;
-
-} catch (error) {
-
-console.error(error);
-
-alert(
-"No se pudo actualizar."
-);
-
-}
-
-};
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    EXCEL
-========================================================== */
-
-function normalizarCabecera(texto) {
-
-return normalizar(texto);
-
-}
-
+========================================================= */
 
 function buscarCampo(
-fila,
-candidatos
-) {
+  fila,
+  candidatos
+){
 
-const claves =
-Object.keys(fila);
+  const claves =
+    Object.keys(fila);
 
-for (
-const candidato
-of candidatos
-) {
 
-const objetivo =
-normalizarCabecera(
-candidato
-);
+  for(
+    const candidato
+    of candidatos
+  ){
 
-const clave =
-claves.find(
+    const objetivo =
+      normalizar(candidato);
 
-k =>
-normalizarCabecera(k) ===
-objetivo
 
-);
+    const clave =
+      claves.find(
 
-if (
-clave !== undefined
-) {
+        k =>
+          normalizar(k) ===
+          objetivo
 
-return fila[clave];
+      );
 
-}
 
-}
+    if(clave !== undefined){
 
-return "";
+      return fila[clave];
 
-}
+    }
 
+  }
 
-/* ==========================================================
-   EXTRAER NÓMINA
-========================================================== */
 
-function extraerNomina(fila) {
-
-return {
-
-numero_marcacion:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"#",
-"NUM",
-"NUMERO",
-"NÚMERO",
-"NRO",
-"N°",
-"Nº",
-"N° CABALLO",
-"Nº CABALLO",
-"NRO CABALLO",
-"NUMERO CABALLO",
-"NÚMERO CABALLO",
-"NUMERO MARCACION",
-"NÚMERO MARCACIÓN",
-"NUMERO DE MARCACION",
-"NÚMERO DE MARCACIÓN",
-"NRO MARCACION",
-"NRO MARCACIÓN",
-"MARCA",
-"MARCACION",
-"MARCACIÓN"
-]
-
-)
-
-),
-
-
-equino:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"EQUINO",
-"CABALLO",
-"NOMBRE EQUINO",
-"NOMBRE"
-]
-
-)
-
-),
-
-
-propietario:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"PROPIETARIO",
-"DUEÑO",
-"DUENO"
-]
-
-)
-
-),
-
-
-jinete:
-textoLimpio(
-
-buscarCampo(
-fila,
-[
-"JINETE"
-]
-)
-
-),
-
-
-club:
-textoLimpio(
-
-buscarCampo(
-fila,
-[
-"CLUB"
-]
-)
-
-),
-
-
-chip:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"CHIP",
-"MICROCHIP"
-]
-
-)
-
-),
-
-
-pasaporte:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"PASAPORTE",
-"PASAPORTE FEU",
-"PAS",
-"Nº PASAPORTE",
-"NRO PASAPORTE"
-]
-
-)
-
-),
-
-
-genero:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"GENERO",
-"GÉNERO"
-]
-
-)
-
-)
-
-};
-
+  return "";
 }
 
 
-/* ==========================================================
-   EXTRAER RESULTADO
-========================================================== */
-
-function extraerResultado(fila) {
-
-const puestoBruto =
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"#",
-"PUESTO",
-"POSICION",
-"POSICIÓN",
-"RESULTADO",
-"CLASIFICACION",
-"CLASIFICACIÓN"
-]
-
-)
-
-);
-
-
-let estado =
-"clasificado";
-
-let puesto =
-null;
-
-const puestoNorm =
-normalizar(puestoBruto);
-
-
-if (
-
-puestoNorm === "NC" ||
-
-puestoNorm.includes(
-"NOCLASIFIC"
-)
-
-) {
-
-estado =
-"NC";
-
-}
-
-else if (
-
-puestoNorm === "DQ" ||
-
-puestoNorm.includes(
-"DESCALIFIC"
-)
-
-) {
-
-estado =
-"DQ";
-
-}
-
-else if (
-
-puestoNorm.includes(
-"RETIR"
-)
-
-) {
-
-estado =
-"retirado";
-
-}
-
-else {
-
-const n =
-parseInt(
-puestoBruto,
-10
-);
-
-puesto =
-Number.isNaN(n)
-? null
-: n;
-
-}
-
-
-return {
-
-equino:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"EQUINO",
-"CABALLO",
-"NOMBRE EQUINO",
-"NOMBRE"
-]
-
-)
-
-),
-
-
-chip:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"CHIP",
-"MICROCHIP"
-]
-
-)
-
-),
-
-
-pasaporte:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"PASAPORTE",
-"PASAPORTE FEU",
-"PAS",
-"Nº PASAPORTE",
-"NRO PASAPORTE"
-]
-
-)
-
-),
-
-
-jinete:
-textoLimpio(
-
-buscarCampo(
-fila,
-[
-"JINETE"
-]
-)
-
-),
-
-
-club:
-textoLimpio(
-
-buscarCampo(
-fila,
-[
-"CLUB"
-]
-)
-
-),
-
-
-puesto,
-
-
-estado,
-
-
-promedio:
-numeroSeguro(
-
-buscarCampo(
-
-fila,
-
-[
-"VEL. KM/H",
-"VEL KM/H",
-"VEL KMH",
-"VELOCIDAD",
-"VELOCIDAD KM/H",
-"PROMEDIO",
-"PROMEDIO KMH",
-"PROMEDIO KM/H"
-]
-
-)
-
-),
-
-
-tiempo:
-textoLimpio(
-
-buscarCampo(
-fila,
-[
-"TIEMPO"
-]
-)
-
-),
-
-
-observaciones:
-textoLimpio(
-
-buscarCampo(
-
-fila,
-
-[
-"OBSERVACIONES",
-"OBSERVACION",
-"OBSERVACIÓN"
-]
-
-)
-
-)
-
-};
-
+function extraerNomina(fila){
+
+  return {
+
+    numero_marcacion:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "#",
+            "NUM",
+            "NUMERO",
+            "NÚMERO",
+            "NRO",
+            "N°",
+            "Nº",
+            "N° CABALLO",
+            "Nº CABALLO",
+            "NRO CABALLO",
+            "NUMERO CABALLO",
+            "NUMERO MARCACION",
+            "NÚMERO MARCACIÓN",
+            "NUMERO DE MARCACION",
+            "NÚMERO DE MARCACIÓN",
+            "NRO MARCACION",
+            "NRO MARCACIÓN",
+            "MARCA",
+            "MARCACION",
+            "MARCACIÓN"
+          ]
+        )
+      ),
+
+
+    equino:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "EQUINO",
+            "CABALLO",
+            "NOMBRE EQUINO",
+            "NOMBRE"
+          ]
+        )
+      ),
+
+
+    propietario:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "PROPIETARIO",
+            "DUEÑO",
+            "DUENO"
+          ]
+        )
+      ),
+
+
+    jinete:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          ["JINETE"]
+        )
+      ),
+
+
+    club:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          ["CLUB"]
+        )
+      ),
+
+
+    chip:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "CHIP",
+            "MICROCHIP"
+          ]
+        )
+      ),
+
+
+    pasaporte:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "PASAPORTE",
+            "PASAPORTE FEU",
+            "PAS",
+            "Nº PASAPORTE",
+            "NRO PASAPORTE"
+          ]
+        )
+      ),
+
+
+    genero:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "GENERO",
+            "GÉNERO"
+          ]
+        )
+      )
+
+  };
 }
 
 
-/* ==========================================================
-   LEER EXCEL
-========================================================== */
+function extraerResultado(fila){
+
+  const puestoBruto =
+    textoLimpio(
+      buscarCampo(
+        fila,
+        [
+          "#",
+          "PUESTO",
+          "POSICION",
+          "POSICIÓN",
+          "RESULTADO",
+          "CLASIFICACION",
+          "CLASIFICACIÓN"
+        ]
+      )
+    );
+
+
+  const puestoNormalizado =
+    normalizar(
+      puestoBruto
+    );
+
+
+  let estado =
+    "clasificado";
+
+  let puesto =
+    null;
+
+
+  if(
+    puestoNormalizado === "NC" ||
+    puestoNormalizado.includes(
+      "NOCLASIFIC"
+    )
+  ){
+
+    estado =
+      "NC";
+
+  }else if(
+    puestoNormalizado === "DQ" ||
+    puestoNormalizado.includes(
+      "DESCALIFIC"
+    )
+  ){
+
+    estado =
+      "DQ";
+
+  }else if(
+    puestoNormalizado.includes(
+      "RETIR"
+    )
+  ){
+
+    estado =
+      "retirado";
+
+  }else{
+
+    const numero =
+      parseInt(
+        puestoBruto,
+        10
+      );
+
+    puesto =
+      Number.isNaN(numero)
+        ? null
+        : numero;
+
+  }
+
+
+  return {
+
+    equino:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "EQUINO",
+            "CABALLO",
+            "NOMBRE EQUINO",
+            "NOMBRE"
+          ]
+        )
+      ),
+
+
+    chip:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "CHIP",
+            "MICROCHIP"
+          ]
+        )
+      ),
+
+
+    pasaporte:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "PASAPORTE",
+            "PASAPORTE FEU",
+            "PAS",
+            "Nº PASAPORTE",
+            "NRO PASAPORTE"
+          ]
+        )
+      ),
+
+
+    jinete:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          ["JINETE"]
+        )
+      ),
+
+
+    club:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          ["CLUB"]
+        )
+      ),
+
+
+    puesto,
+
+    estado,
+
+
+    promedio:
+      numeroSeguro(
+        buscarCampo(
+          fila,
+          [
+            "VEL. KM/H",
+            "VEL KM/H",
+            "VEL KMH",
+            "VELOCIDAD",
+            "VELOCIDAD KM/H",
+            "PROMEDIO",
+            "PROMEDIO KMH",
+            "PROMEDIO KM/H"
+          ]
+        )
+      ),
+
+
+    tiempo:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          ["TIEMPO"]
+        )
+      ),
+
+
+    observaciones:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "OBSERVACIONES",
+            "OBSERVACION",
+            "OBSERVACIÓN"
+          ]
+        )
+      )
+
+  };
+}
+
+
+/* =========================================================
+   LECTOR EXCEL
+========================================================= */
 
 async function leerExcel(
-archivo,
-tipo
-) {
+  archivo,
+  tipo
+){
 
-const buffer =
-await archivo.arrayBuffer();
+  const buffer =
+    await archivo.arrayBuffer();
 
-const libro =
-XLSX.read(
 
-buffer,
+  const libro =
+    XLSX.read(
+      buffer,
+      {
+        type:
+          "array"
+      }
+    );
 
-{
-type:
-"array"
-}
 
-);
+  let mejor =
+    null;
 
-let mejor =
-null;
 
+  for(
+    const nombreHoja
+    of libro.SheetNames
+  ){
 
-for (
-const nombreHoja
-of libro.SheetNames
-) {
+    const hoja =
+      libro.Sheets[
+        nombreHoja
+      ];
 
-const hoja =
-libro.Sheets[
-nombreHoja
-];
 
-const matriz =
-XLSX.utils
-.sheet_to_json(
+    const matriz =
+      XLSX.utils
+        .sheet_to_json(
+          hoja,
+          {
+            header:
+              1,
+            defval:
+              "",
+            raw:
+              false
+          }
+        );
 
-hoja,
 
-{
+    if(!matriz.length){
+      continue;
+    }
 
-header:
-1,
 
-defval:
-"",
+    let filaEncabezado =
+      -1;
 
-raw:
-false
 
-}
+    const limite =
+      Math.min(
+        matriz.length,
+        40
+      );
 
-);
 
+    for(
+      let i=0;
+      i<limite;
+      i++
+    ){
 
-if (!matriz.length) {
-continue;
-}
+      const normalizados =
+        matriz[i]
+          .map(
+            celda =>
+              normalizar(celda)
+          );
 
 
-let filaEncabezado =
--1;
+      const tieneEquino =
+        normalizados.some(
+          x =>
+            x === "EQUINO" ||
+            x === "CABALLO" ||
+            x === "NOMBREEQUINO"
+        );
 
-const limite =
-Math.min(
-matriz.length,
-40
-);
 
+      if(tieneEquino){
 
-for (
-let i = 0;
-i < limite;
-i++
-) {
+        filaEncabezado =
+          i;
 
-const fila =
-matriz[i];
+        break;
 
-const normalizados =
-fila.map(
+      }
 
-celda =>
-normalizarCabecera(
-celda
-)
+    }
 
-);
 
-const tieneEquino =
-normalizados.some(
+    if(
+      filaEncabezado === -1
+    ){
+      continue;
+    }
 
-x =>
-x ===
-"EQUINO" ||
 
-x ===
-"CABALLO" ||
+    const filas =
+      XLSX.utils
+        .sheet_to_json(
+          hoja,
+          {
+            range:
+              filaEncabezado,
+            defval:
+              "",
+            raw:
+              false
+          }
+        );
 
-x ===
-"NOMBREEQUINO"
 
-);
+    const procesadas =
+      filas
+        .map(
+          tipo === "nomina"
+            ? extraerNomina
+            : extraerResultado
+        )
+        .filter(
+          fila =>
+            fila.equino &&
+            normalizar(
+              fila.equino
+            ) !==
+              "EQUINO"
+        );
 
-if (
-tieneEquino
-) {
 
-filaEncabezado =
-i;
+    if(
+      !mejor ||
+      procesadas.length >
+      mejor.filas.length
+    ){
 
-break;
+      mejor = {
 
-}
+        hoja:
+          nombreHoja,
 
-}
+        filaEncabezado:
+          filaEncabezado +
+          1,
 
+        filas:
+          procesadas,
 
-if (
-filaEncabezado ===
--1
-) {
+        matriz
 
-continue;
+      };
 
-}
+    }
 
+  }
 
-const filas =
-XLSX.utils
-.sheet_to_json(
 
-hoja,
+  if(
+    !mejor ||
+    !mejor.filas.length
+  ){
 
-{
+    throw new Error(
+      "No encontré la tabla de caballos en el Excel."
+    );
 
-range:
-filaEncabezado,
+  }
 
-defval:
-"",
 
-raw:
-false
-
-}
-
-);
-
-
-if (!filas.length) {
-continue;
-}
-
-
-const procesadas =
-filas
-
-.map(
-
-tipo ===
-"nomina"
-
-? extraerNomina
-
-: extraerResultado
-
-)
-
-.filter(
-
-x =>
-x.equino &&
-
-normalizar(
-x.equino
-) !==
-"EQUINO"
-
-);
-
-
-if (
-
-!mejor ||
-
-procesadas.length >
-mejor.filas.length
-
-) {
-
-mejor = {
-
-hoja:
-nombreHoja,
-
-filaEncabezado:
-filaEncabezado +
-1,
-
-filas:
-procesadas
-
-};
-
-}
-
+  return mejor;
 }
 
 
-if (
+/* =========================================================
+   METADATOS DEL RESULTADO FEU
+========================================================= */
 
-!mejor ||
+function extraerMetadataResultado(
+  matriz,
+  nombreArchivo=""
+){
 
-!mejor.filas.length
+  const lineas =
+    matriz
+      .slice(0,15)
+      .map(
+        fila =>
+          fila
+            .map(
+              valor =>
+                textoLimpio(valor)
+            )
+            .filter(Boolean)
+            .join(" ")
+      )
+      .filter(Boolean);
 
-) {
 
-throw new Error(
-"No encontré la tabla de caballos en el Excel."
-);
+  const texto =
+    lineas.join("\n");
 
+
+  let numeroRaid =
+    null;
+
+  let nombre =
+    "";
+
+  let edicion =
+    "";
+
+  let fecha =
+    null;
+
+  let distanciaKm =
+    null;
+
+
+  /*
+    Ejemplo:
+
+    Resultado Oficial — 03 - 38ª Edición “Patria Libre”
+  */
+  let coincidencia =
+    texto.match(
+      /Resultado\s+Oficial\s*[—–-]\s*0*(\d+)\s*-\s*([^“”"\n]*?Edici[oó]n)\s*[“"]([^”"]+)[”"]/i
+    );
+
+
+  if(!coincidencia){
+
+    coincidencia =
+      texto.match(
+        /Resultado\s+Oficial\s*[—–-]\s*0*(\d+)\s*-\s*([^"“”\n]+?)\s*[“"]([^”"]+)[”"]/i
+      );
+
+  }
+
+
+  if(coincidencia){
+
+    numeroRaid =
+      Number(
+        coincidencia[1]
+      );
+
+    edicion =
+      textoLimpio(
+        coincidencia[2]
+      );
+
+    nombre =
+      textoLimpio(
+        coincidencia[3]
+      );
+
+  }
+
+
+  /*
+    Si por alguna razón no encuentra
+    el número arriba, intenta obtenerlo
+    del nombre del archivo.
+  */
+  if(!numeroRaid){
+
+    const archivo =
+      nombreArchivo.match(
+        /raid[_\s-]*0*(\d+)/i
+      );
+
+    if(archivo){
+
+      numeroRaid =
+        Number(
+          archivo[1]
+        );
+
+    }
+
+  }
+
+
+  /*
+    Fecha: 15/03/2026
+  */
+  const fechaEncontrada =
+    texto.match(
+      /Fecha\s*:\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})/i
+    );
+
+
+  if(fechaEncontrada){
+
+    const dia =
+      String(
+        fechaEncontrada[1]
+      ).padStart(
+        2,
+        "0"
+      );
+
+    const mes =
+      String(
+        fechaEncontrada[2]
+      ).padStart(
+        2,
+        "0"
+      );
+
+    fecha =
+      fechaEncontrada[3] +
+      "-" +
+      mes +
+      "-" +
+      dia;
+
+  }
+
+
+  /*
+    Distancia: 80 km
+  */
+  const distanciaEncontrada =
+    texto.match(
+      /Distancia\s*:\s*([\d.,]+)\s*km/i
+    );
+
+
+  if(distanciaEncontrada){
+
+    distanciaKm =
+      numeroSeguro(
+        distanciaEncontrada[1]
+      );
+
+  }
+
+
+  return {
+
+    numero_raid:
+      numeroRaid,
+
+    nombre,
+
+    edicion,
+
+    fecha,
+
+    distancia_km:
+      distanciaKm
+
+  };
 }
 
 
-return mejor;
+/* =========================================================
+   BASE DE CABALLOS
+========================================================= */
 
+async function cargarBaseCaballos(){
+
+  const [
+    deportivos,
+    aliases,
+    registrados
+  ] =
+    await Promise.all([
+
+      apiGet(
+        "caballos_deportivos?select=*"
+      ),
+
+      apiGet(
+        "alias_caballos?select=*"
+      ),
+
+      apiGet(
+        "Caballos?select=id,Nombre"
+      )
+
+    ]);
+
+
+  return {
+
+    deportivos,
+    aliases,
+    registrados
+
+  };
 }
 
 
-/* ==========================================================
-   BASE CABALLOS
-========================================================== */
+/* =========================================================
+   BUSCAR CABALLO
+   PRIORIDAD:
+   1 CHIP
+   2 PASAPORTE
+   3 NOMBRE DEPORTIVO
+   4 ALIAS
+   5 CABALLO REGISTRADO SDU
+========================================================= */
 
-async function cargarBaseCaballos() {
+function resolverCaballo(
+  fila,
+  base
+){
 
-const [
+  const chip =
+    textoLimpio(
+      fila.chip
+    );
 
-deportivos,
-aliases,
-registrados
+  const pasaporte =
+    textoLimpio(
+      fila.pasaporte
+    );
 
-] =
-await Promise.all([
-
-apiGet(
-
-"caballos_deportivos" +
-"?select=*"
-
-),
-
-apiGet(
-
-"alias_caballos" +
-"?select=*"
-
-),
-
-apiGet(
-
-"Caballos" +
-"?select=id,Nombre"
-
-)
-
-]);
+  const nombre =
+    normalizar(
+      fila.equino
+    );
 
 
-return {
+  function resolverLista(
+    tipo,
+    lista
+  ){
 
-deportivos,
-aliases,
-registrados
+    const unicos =
+      [];
 
-};
+    const usados =
+      new Set();
 
+
+    for(
+      const elemento
+      of lista
+    ){
+
+      const clave =
+        String(
+          elemento.id
+        );
+
+
+      if(
+        !usados.has(
+          clave
+        )
+      ){
+
+        usados.add(
+          clave
+        );
+
+        unicos.push(
+          elemento
+        );
+
+      }
+
+    }
+
+
+    if(
+      !unicos.length
+    ){
+
+      return null;
+
+    }
+
+
+    return {
+
+      tipo,
+
+      candidatos:
+        unicos,
+
+      ambiguo:
+        unicos.length > 1
+
+    };
+
+  }
+
+
+  if(chip){
+
+    const resultado =
+      resolverLista(
+
+        "deportivo",
+
+        base.deportivos
+          .filter(
+            caballo =>
+              textoLimpio(
+                caballo.chip
+              ) ===
+              chip
+          )
+
+      );
+
+
+    if(resultado){
+      return resultado;
+    }
+
+  }
+
+
+  if(pasaporte){
+
+    const resultado =
+      resolverLista(
+
+        "deportivo",
+
+        base.deportivos
+          .filter(
+            caballo =>
+              textoLimpio(
+                caballo.pasaporte_feu
+              ) ===
+              pasaporte
+          )
+
+      );
+
+
+    if(resultado){
+      return resultado;
+    }
+
+  }
+
+
+  const deportivosNombre =
+    resolverLista(
+
+      "deportivo",
+
+      base.deportivos
+        .filter(
+          caballo =>
+            normalizar(
+              caballo.nombre_principal
+            ) ===
+            nombre
+        )
+
+    );
+
+
+  if(deportivosNombre){
+    return deportivosNombre;
+  }
+
+
+  const idsAlias =
+    [
+      ...new Set(
+
+        base.aliases
+          .filter(
+            alias =>
+              normalizar(
+                alias.alias
+              ) ===
+              nombre
+          )
+          .map(
+            alias =>
+              Number(
+                alias.caballo_deportivo_id
+              )
+          )
+
+      )
+    ];
+
+
+  const porAlias =
+    resolverLista(
+
+      "deportivo",
+
+      base.deportivos
+        .filter(
+          caballo =>
+            idsAlias.includes(
+              Number(
+                caballo.id
+              )
+            )
+        )
+
+    );
+
+
+  if(porAlias){
+    return porAlias;
+  }
+
+
+  const registrados =
+    resolverLista(
+
+      "registrado",
+
+      base.registrados
+        .filter(
+          caballo =>
+            normalizar(
+              caballo.Nombre
+            ) ===
+            nombre
+        )
+
+    );
+
+
+  if(registrados){
+    return registrados;
+  }
+
+
+  return {
+
+    tipo:
+      "nuevo",
+
+    candidatos:
+      [],
+
+    ambiguo:
+      false
+
+  };
 }
 
 
-/* ==========================================================
-   COINCIDENCIAS
-========================================================== */
-
-function candidatosCaballo(
-fila,
-base
-) {
-
-const candidatos =
-[];
-
-const chip =
-textoLimpio(
-fila.chip
-);
-
-const pasaporte =
-textoLimpio(
-fila.pasaporte
-);
-
-const nombreNorm =
-normalizar(
-fila.equino
-);
-
-
-if (chip) {
-
-base.deportivos
-
-.filter(
-
-x =>
-textoLimpio(
-x.chip
-) ===
-chip
-
-)
-
-.forEach(
-
-x => {
-
-candidatos.push({
-
-tipo:
-"deportivo",
-
-id:
-x.id,
-
-nombre:
-x.nombre_principal,
-
-prioridad:
-1
-
-});
-
-}
-
-);
-
-}
-
-
-if (pasaporte) {
-
-base.deportivos
-
-.filter(
-
-x =>
-textoLimpio(
-x.pasaporte_feu
-) ===
-pasaporte
-
-)
-
-.forEach(
-
-x => {
-
-candidatos.push({
-
-tipo:
-"deportivo",
-
-id:
-x.id,
-
-nombre:
-x.nombre_principal,
-
-prioridad:
-2
-
-});
-
-}
-
-);
-
-}
-
-
-base.deportivos
-
-.filter(
-
-x =>
-normalizar(
-x.nombre_principal
-) ===
-nombreNorm
-
-)
-
-.forEach(
-
-x => {
-
-candidatos.push({
-
-tipo:
-"deportivo",
-
-id:
-x.id,
-
-nombre:
-x.nombre_principal,
-
-prioridad:
-3
-
-});
-
-}
-
-);
-
-
-base.aliases
-
-.filter(
-
-a =>
-normalizar(
-a.alias
-) ===
-nombreNorm
-
-)
-
-.forEach(
-
-a => {
-
-const dep =
-base.deportivos
-.find(
-
-d =>
-Number(d.id) ===
-Number(
-a.caballo_deportivo_id
-)
-
-);
-
-
-if (dep) {
-
-candidatos.push({
-
-tipo:
-"deportivo",
-
-id:
-dep.id,
-
-nombre:
-dep.nombre_principal +
-" (" +
-a.alias +
-")",
-
-prioridad:
-4
-
-});
-
-}
-
-}
-
-);
-
-
-base.registrados
-
-.filter(
-
-x =>
-normalizar(
-x.Nombre
-) ===
-nombreNorm
-
-)
-
-.forEach(
-
-x => {
-
-candidatos.push({
-
-tipo:
-"registrado",
-
-id:
-x.id,
-
-nombre:
-x.Nombre,
-
-prioridad:
-5
-
-});
-
-}
-
-);
-
-
-const unicos =
-[];
-
-const claves =
-new Set();
-
-
-candidatos
-
-.sort(
-
-(a,b) =>
-a.prioridad -
-b.prioridad
-
-)
-
-.forEach(
-
-c => {
-
-const clave =
-c.tipo +
-":" +
-c.id;
-
-if (
-!claves.has(clave)
-) {
-
-claves.add(clave);
-
-unicos.push(c);
-
-}
-
-}
-
-);
-
-
-return unicos;
-
-}
-
-
-/* ==========================================================
-   NÓMINA
-========================================================== */
-
-async function mostrarNomina(id) {
-
-const contenedor =
-document
-.getElementById(
-"contenidoCompetencia"
-);
-
-
-contenedor.innerHTML = `
-
-<div class="tarjeta">
-
-<h3>
-Importar nómina
-</h3>
-
-<p class="subtitulo">
-
-Subí el Excel original.
-
-Primero se muestra una vista previa.
-
-No se guarda nada hasta confirmar.
-
-</p>
-
-<input
-id="archivoNomina"
-type="file"
-accept=".xlsx,.xls,.xlsm"
->
-
-<div
-id="zonaPreviewNomina"
-></div>
-
-</div>
-
-
-<div class="tarjeta">
-
-<h3>
-Participantes guardados
-</h3>
-
-<div
-id="participantesActuales"
->
-Cargando...
-</div>
-
-</div>
-
-`;
-
-
-await listarParticipantes(id);
-
-
-document
-.getElementById(
-"archivoNomina"
-)
-.onchange =
-async evento => {
-
-const archivo =
-evento
-.target
-.files[0];
-
-
-if (!archivo) {
-return;
-}
-
-
-const zona =
-document
-.getElementById(
-"zonaPreviewNomina"
-);
-
-
-zona.innerHTML = `
-
-<div class="mensaje">
-Leyendo Excel...
-</div>
-
-`;
-
-
-try {
-
-const lectura =
-await leerExcel(
-
-archivo,
-"nomina"
-
-);
-
-
-const base =
-await cargarBaseCaballos();
-
-
-previewNomina =
-lectura.filas.map(
-
-(
-fila,
-indice
-) => {
-
-const candidatos =
-candidatosCaballo(
-fila,
-base
-);
-
-let seleccion =
-"nuevo";
-
-
-if (
-candidatos.length ===
-1
-) {
-
-seleccion =
-candidatos[0].tipo +
-":" +
-candidatos[0].id;
-
-}
-
-
-return {
-
-...fila,
-
-fila_origen:
-indice +
-2,
-
-candidatos,
-
-seleccion
-
-};
-
-}
-
-);
-
-
-renderPreviewNomina(
-archivo.name
-);
-
-} catch (error) {
-
-console.error(error);
-
-
-zona.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-${escapar(
-error.message
-)}
-
-</div>
-
-`;
-
-}
-
-};
-
-}
-
-
-/* ==========================================================
-   PREVIEW NÓMINA
-========================================================== */
-
-function renderPreviewNomina(
-nombreArchivo
-) {
-
-const zona =
-document
-.getElementById(
-"zonaPreviewNomina"
-);
-
-
-const reconocidos =
-previewNomina.filter(
-
-x =>
-x.candidatos.length ===
-1
-
-).length;
-
-
-const nuevos =
-previewNomina.filter(
-
-x =>
-!x.candidatos.length
-
-).length;
-
-
-const dudosos =
-previewNomina.filter(
-
-x =>
-x.candidatos.length >
-1
-
-).length;
-
-
-zona.innerHTML = `
-
-<div
-style="margin-top:20px;"
->
-
-
-<div
-class="resumen-preview"
->
-
-
-<div
-class="resumen-item"
->
-
-<strong>
-${previewNomina.length}
-</strong>
-
-<small>
-Caballos encontrados
-</small>
-
-</div>
-
-
-<div
-class="resumen-item"
->
-
-<strong>
-${reconocidos}
-</strong>
-
-<small>
-Relacionados
-</small>
-
-</div>
-
-
-<div
-class="resumen-item"
->
-
-<strong>
-${nuevos + dudosos}
-</strong>
-
-<small>
-Para revisar
-</small>
-
-</div>
-
-</div>
-
-
-<div
-class="tabla-contenedor"
->
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-N.º
-</th>
-
-<th>
-Equino
-</th>
-
-<th>
-Propietario
-</th>
-
-<th>
-Jinete
-</th>
-
-<th>
-Chip
-</th>
-
-<th>
-Pasaporte
-</th>
-
-<th>
-Relación SDU
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-${previewNomina.map(
-
-(
-fila,
-indice
-) => {
-
-
-let clase =
-"preview-nuevo";
-
-
-if (
-fila.candidatos.length ===
-1
-) {
-
-clase =
-"preview-ok";
-
-}
-
-
-if (
-fila.candidatos.length >
-1
-) {
-
-clase =
-"preview-dudoso";
-
-}
-
-
-return `
-
-<tr
-class="${clase}"
->
-
-
-<td>
-
-${escapar(
-
-fila.numero_marcacion ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-<strong>
-
-${escapar(
-fila.equino
-)}
-
-</strong>
-
-</td>
-
-
-<td>
-
-${escapar(
-
-fila.propietario ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-fila.jinete ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-fila.chip ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-fila.pasaporte ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-
-<select
-
-class="selector-relacion"
-
-data-preview-index="${indice}"
-
->
-
-
-<option
-
-value="nuevo"
-
-${
-fila.seleccion ===
-"nuevo"
-? "selected"
-: ""
-}
-
->
-
-Crear registro deportivo
-
-</option>
-
-
-${fila.candidatos.map(
-
-c => {
-
-
-const valor =
-c.tipo +
-":" +
-c.id;
-
-
-return `
-
-<option
-
-value="${valor}"
-
-${
-fila.seleccion ===
-valor
-? "selected"
-: ""
-}
-
->
-
-${
-c.tipo ===
-"registrado"
-? "SDU: "
-: "Deportivo: "
-}
-
-${escapar(
-c.nombre
-)}
-
-</option>
-
-`;
-
-}
-
-).join("")}
-
-
-</select>
-
-
-</td>
-
-
-</tr>
-
-`;
-
-}
-
-).join("")}
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-<div
-class="acciones"
->
-
-<button
-
-id="btnGuardarNomina"
-
-class="boton boton-principal"
-
->
-
-Guardar nómina
-
-</button>
-
-</div>
-
-
-<div
-id="mensajeGuardarNomina"
-></div>
-
-
-</div>
-
-`;
-
-
-document
-.querySelectorAll(
-"[data-preview-index]"
-)
-.forEach(
-
-select => {
-
-select.onchange =
-() => {
-
-previewNomina[
-
-Number(
-select.dataset
-.previewIndex
-)
-
-].seleccion =
-select.value;
-
-};
-
-}
-
-);
-
-
-document
-.getElementById(
-"btnGuardarNomina"
-)
-.onclick =
-() => {
-
-guardarNomina(
-nombreArchivo
-);
-
-};
-
-}
-
-
-/* ==========================================================
-   CREAR / OBTENER CABALLO DEPORTIVO
-========================================================== */
+/* =========================================================
+   OBTENER / CREAR CABALLO DEPORTIVO
+========================================================= */
 
 async function obtenerOCrearDeportivo(
-fila
-) {
+  fila
+){
 
-const seleccion =
-fila.seleccion;
-
-
-if (
-seleccion.startsWith(
-"deportivo:"
-)
-) {
-
-const id =
-Number(
-
-seleccion
-.split(
-":"
-)[1]
-
-);
+  const seleccion =
+    fila.seleccion ||
+    "nuevo";
 
 
-const actuales =
-await apiGet(
+  /*
+    Ya es deportivo.
+  */
+  if(
+    seleccion.startsWith(
+      "deportivo:"
+    )
+  ){
 
-"caballos_deportivos" +
-"?select=*" +
-"&id=eq." +
-id +
-"&limit=1"
-
-);
-
-
-const actual =
-actuales[0];
-
-
-if (actual) {
-
-const cambios =
-{};
+    const id =
+      Number(
+        seleccion.split(":")[1]
+      );
 
 
-if (
-!actual.chip &&
-fila.chip
-) {
+    const existentes =
+      await apiGet(
 
-cambios.chip =
-fila.chip;
+        "caballos_deportivos" +
+        "?select=*" +
+        "&id=eq." +
+        id +
+        "&limit=1"
+
+      );
+
+
+    const actual =
+      existentes[0];
+
+
+    if(actual){
+
+      const cambios =
+        {};
+
+
+      if(
+        !actual.chip &&
+        fila.chip
+      ){
+
+        cambios.chip =
+          fila.chip;
+
+      }
+
+
+      if(
+        !actual.pasaporte_feu &&
+        fila.pasaporte
+      ){
+
+        cambios.pasaporte_feu =
+          fila.pasaporte;
+
+      }
+
+
+      if(
+        !actual.propietario_actual &&
+        fila.propietario
+      ){
+
+        cambios.propietario_actual =
+          fila.propietario;
+
+      }
+
+
+      if(
+        Object.keys(
+          cambios
+        ).length
+      ){
+
+        cambios.updated_at =
+          new Date()
+            .toISOString();
+
+
+        await apiPatch(
+
+          "caballos_deportivos",
+
+          "id=eq." +
+          id,
+
+          cambios
+
+        );
+
+      }
+
+    }
+
+
+    return id;
+
+  }
+
+
+  /*
+    Existe en genealogía SDU
+    pero todavía no tiene ficha deportiva.
+  */
+  if(
+    seleccion.startsWith(
+      "registrado:"
+    )
+  ){
+
+    const caballoId =
+      Number(
+        seleccion.split(":")[1]
+      );
+
+
+    const deportivosExistentes =
+      await apiGet(
+
+        "caballos_deportivos" +
+        "?select=*" +
+        "&caballo_id=eq." +
+        caballoId +
+        "&limit=1"
+
+      );
+
+
+    if(
+      deportivosExistentes.length
+    ){
+
+      return (
+        deportivosExistentes[0].id
+      );
+
+    }
+
+
+    const creado =
+      await apiPost(
+
+        "caballos_deportivos",
+
+        {
+
+          caballo_id:
+            caballoId,
+
+          nombre_principal:
+            fila.equino,
+
+          nombre_normalizado:
+            normalizar(
+              fila.equino
+            ),
+
+          chip:
+            fila.chip ||
+            null,
+
+          pasaporte_feu:
+            fila.pasaporte ||
+            null,
+
+          propietario_actual:
+            fila.propietario ||
+            null
+
+        }
+
+      );
+
+
+    return creado[0].id;
+
+  }
+
+
+  /*
+    Caballo completamente nuevo.
+  */
+  const creado =
+    await apiPost(
+
+      "caballos_deportivos",
+
+      {
+
+        caballo_id:
+          null,
+
+        nombre_principal:
+          fila.equino,
+
+        nombre_normalizado:
+          normalizar(
+            fila.equino
+          ),
+
+        chip:
+          fila.chip ||
+          null,
+
+        pasaporte_feu:
+          fila.pasaporte ||
+          null,
+
+        propietario_actual:
+          fila.propietario ||
+          null
+
+      }
+
+    );
+
+
+  return creado[0].id;
+}
+
+
+/* =========================================================
+   NÓMINA / MARCACIÓN
+========================================================= */
+
+async function mostrarNomina(id){
+
+  const contenedor =
+    document.getElementById(
+      "contenidoCompetencia"
+    );
+
+
+  contenedor.innerHTML = `
+
+    <div class="tarjeta">
+
+      <h3>
+        Importar nómina / marcación
+      </h3>
+
+      <p class="subtitulo">
+
+        Subí el Excel de marcación.
+        SDU buscará cada caballo
+        por chip, pasaporte, ficha deportiva,
+        alias y genealogía.
+
+      </p>
+
+      <input
+        id="archivoNomina"
+        type="file"
+        accept=".xlsx,.xls,.xlsm"
+      >
+
+      <div
+        id="zonaPreviewNomina"
+      ></div>
+
+    </div>
+
+
+    <div class="tarjeta">
+
+      <h3>
+        Participantes guardados
+      </h3>
+
+      <div
+        id="participantesActuales"
+      >
+        Cargando...
+      </div>
+
+    </div>
+
+  `;
+
+
+  await listarParticipantes(id);
+
+
+  document
+    .getElementById(
+      "archivoNomina"
+    )
+    .onchange =
+      async evento => {
+
+        const archivo =
+          evento.target.files[0];
+
+
+        if(!archivo){
+          return;
+        }
+
+
+        const zona =
+          document.getElementById(
+            "zonaPreviewNomina"
+          );
+
+
+        zona.innerHTML = `
+
+          <div class="mensaje">
+            Leyendo Excel...
+          </div>
+
+        `;
+
+
+        try{
+
+          const lectura =
+            await leerExcel(
+              archivo,
+              "nomina"
+            );
+
+
+          const base =
+            await cargarBaseCaballos();
+
+
+          previewNomina =
+            lectura.filas.map(
+              (
+                fila,
+                indice
+              ) => {
+
+                const resultado =
+                  resolverCaballo(
+                    fila,
+                    base
+                  );
+
+
+                let seleccion =
+                  "nuevo";
+
+
+                let candidatos =
+                  [];
+
+
+                if(
+                  resultado.tipo !==
+                  "nuevo"
+                ){
+
+                  candidatos =
+                    resultado.candidatos
+                      .map(
+                        candidato => ({
+
+                          tipo:
+                            resultado.tipo,
+
+                          id:
+                            candidato.id,
+
+                          nombre:
+                            resultado.tipo ===
+                            "deportivo"
+
+                              ? candidato.nombre_principal
+
+                              : candidato.Nombre
+
+                        })
+                      );
+
+
+                  if(
+                    !resultado.ambiguo
+                  ){
+
+                    seleccion =
+                      resultado.tipo +
+                      ":" +
+                      candidatos[0].id;
+
+                  }else{
+
+                    seleccion =
+                      "";
+
+                  }
+
+                }
+
+
+                return {
+
+                  ...fila,
+
+                  fila_origen:
+                    indice +
+                    1,
+
+                  candidatos,
+
+                  seleccion
+
+                };
+
+              }
+            );
+
+
+          renderPreviewNomina(
+            archivo.name
+          );
+
+
+        }catch(error){
+
+          console.error(error);
+
+          zona.innerHTML = `
+
+            <div
+              class="mensaje mensaje-error"
+            >
+              ${escapar(error.message)}
+            </div>
+
+          `;
+
+        }
+
+      };
 
 }
 
 
-if (
-!actual.pasaporte_feu &&
-fila.pasaporte
-) {
+function renderPreviewNomina(
+  nombreArchivo
+){
 
-cambios.pasaporte_feu =
-fila.pasaporte;
+  const zona =
+    document.getElementById(
+      "zonaPreviewNomina"
+    );
+
+
+  zona.innerHTML = `
+
+    <div
+      style="margin-top:20px"
+    >
+
+      <div
+        class="tabla-contenedor"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                N.º
+              </th>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Propietario
+              </th>
+
+              <th>
+                Jinete
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+              <th>
+                Relación SDU
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            ${previewNomina.map(
+              (
+                fila,
+                indice
+              ) => `
+
+                <tr
+                  class="${
+                    fila.seleccion
+
+                      ? "preview-ok"
+
+                      : "preview-dudoso"
+                  }"
+                >
+
+                  <td>
+                    ${escapar(
+                      fila.numero_marcacion ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    <strong>
+                      ${escapar(
+                        fila.equino
+                      )}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.propietario ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.jinete ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.chip ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.pasaporte ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+
+                    <select
+                      class="selector-relacion"
+                      data-nomina="${indice}"
+                    >
+
+                      <option
+                        value=""
+                        ${
+                          !fila.seleccion
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        Seleccionar coincidencia
+                      </option>
+
+                      <option
+                        value="nuevo"
+                        ${
+                          fila.seleccion ===
+                          "nuevo"
+
+                            ? "selected"
+                            : ""
+                        }
+                      >
+                        Crear caballo deportivo
+                      </option>
+
+                      ${fila.candidatos.map(
+                        candidato => {
+
+                          const valor =
+                            candidato.tipo +
+                            ":" +
+                            candidato.id;
+
+
+                          return `
+
+                            <option
+                              value="${valor}"
+                              ${
+                                fila.seleccion ===
+                                valor
+
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+
+                              ${
+                                candidato.tipo ===
+                                "registrado"
+
+                                  ? "SDU: "
+
+                                  : "Deportivo: "
+                              }
+
+                              ${escapar(
+                                candidato.nombre
+                              )}
+
+                            </option>
+
+                          `;
+
+                        }
+                      ).join("")}
+
+                    </select>
+
+                  </td>
+
+                </tr>
+
+              `
+            ).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="acciones">
+
+        <button
+          id="btnGuardarNomina"
+          class="boton boton-principal"
+        >
+          Guardar nómina
+        </button>
+
+      </div>
+
+
+      <div
+        id="mensajeGuardarNomina"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  document
+    .querySelectorAll(
+      "[data-nomina]"
+    )
+    .forEach(
+      selector => {
+
+        selector.onchange =
+          () => {
+
+            previewNomina[
+              Number(
+                selector.dataset.nomina
+              )
+            ].seleccion =
+              selector.value;
+
+          };
+
+      }
+    );
+
+
+  document
+    .getElementById(
+      "btnGuardarNomina"
+    )
+    .onclick =
+      () => {
+
+        guardarNomina(
+          nombreArchivo
+        );
+
+      };
 
 }
 
-
-if (
-!actual.propietario_actual &&
-fila.propietario
-) {
-
-cambios.propietario_actual =
-fila.propietario;
-
-}
-
-
-if (
-Object.keys(
-cambios
-).length
-) {
-
-cambios.updated_at =
-new Date()
-.toISOString();
-
-
-await apiPatch(
-
-"caballos_deportivos",
-
-"id=eq." +
-id,
-
-cambios
-
-);
-
-}
-
-}
-
-
-return id;
-
-}
-
-
-if (
-seleccion.startsWith(
-"registrado:"
-)
-) {
-
-const caballoId =
-Number(
-
-seleccion
-.split(
-":"
-)[1]
-
-);
-
-
-const existentes =
-await apiGet(
-
-"caballos_deportivos" +
-"?select=*" +
-"&caballo_id=eq." +
-caballoId +
-"&limit=1"
-
-);
-
-
-if (
-existentes.length
-) {
-
-return (
-existentes[0].id
-);
-
-}
-
-
-const creado =
-await apiPost(
-
-"caballos_deportivos",
-
-{
-
-caballo_id:
-caballoId,
-
-nombre_principal:
-fila.equino,
-
-nombre_normalizado:
-normalizar(
-fila.equino
-),
-
-chip:
-fila.chip ||
-null,
-
-pasaporte_feu:
-fila.pasaporte ||
-null,
-
-propietario_actual:
-fila.propietario ||
-null
-
-}
-
-);
-
-
-return creado[0].id;
-
-}
-
-
-const creado =
-await apiPost(
-
-"caballos_deportivos",
-
-{
-
-caballo_id:
-null,
-
-nombre_principal:
-fila.equino,
-
-nombre_normalizado:
-normalizar(
-fila.equino
-),
-
-chip:
-fila.chip ||
-null,
-
-pasaporte_feu:
-fila.pasaporte ||
-null,
-
-propietario_actual:
-fila.propietario ||
-null
-
-}
-
-);
-
-
-return creado[0].id;
-
-}
-
-
-/* ==========================================================
-   GUARDAR NÓMINA
-========================================================== */
 
 async function guardarNomina(
-nombreArchivo
-) {
+  nombreArchivo
+){
 
-const boton =
-document
-.getElementById(
-"btnGuardarNomina"
-);
+  const boton =
+    document.getElementById(
+      "btnGuardarNomina"
+    );
 
 
-const mensaje =
-document
-.getElementById(
-"mensajeGuardarNomina"
-);
+  const mensaje =
+    document.getElementById(
+      "mensajeGuardarNomina"
+    );
 
 
-boton.disabled =
-true;
+  const sinRelacion =
+    previewNomina.filter(
+      fila =>
+        !fila.seleccion
+    );
 
 
-mensaje.innerHTML = `
+  if(
+    sinRelacion.length
+  ){
 
-<div class="mensaje">
+    alert(
+      "Hay caballos con coincidencias sin resolver."
+    );
 
-Guardando nómina...
+    return;
 
-</div>
+  }
 
-`;
 
+  boton.disabled =
+    true;
 
-try {
 
+  mensaje.innerHTML = `
 
-const participantesActuales =
-await apiGet(
+    <div class="mensaje">
+      Guardando nómina...
+    </div>
 
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-competenciaActual.id
+  `;
 
-);
 
+  try{
 
-for (
-const fila
-of previewNomina
-) {
+    const participantes =
+      await apiGet(
 
+        "participantes_competencia" +
+        "?select=*" +
+        "&competencia_id=eq." +
+        competenciaActual.id
 
-const depId =
-await obtenerOCrearDeportivo(
-fila
-);
+      );
 
 
-const duplicado =
-participantesActuales.find(
+    for(
+      const fila
+      of previewNomina
+    ){
 
-p =>
+      const deportivoId =
+        await obtenerOCrearDeportivo(
+          fila
+        );
 
-(
 
-fila.chip &&
+      const existente =
+        participantes.find(
+          participante =>
 
-textoLimpio(
-p.chip
-) ===
-fila.chip
+            (
+              fila.chip &&
+              textoLimpio(
+                participante.chip
+              ) ===
+              textoLimpio(
+                fila.chip
+              )
+            )
 
-)
+            ||
 
-||
+            (
+              fila.pasaporte &&
+              textoLimpio(
+                participante.pasaporte_feu
+              ) ===
+              textoLimpio(
+                fila.pasaporte
+              )
+            )
 
-(
+            ||
 
-fila.pasaporte &&
+            (
+              normalizar(
+                participante.nombre_nomina
+              ) ===
+              normalizar(
+                fila.equino
+              )
+            )
+        );
 
-textoLimpio(
-p.pasaporte_feu
-) ===
-fila.pasaporte
 
-)
+      const datos = {
 
-||
+        caballo_deportivo_id:
+          deportivoId,
 
-(
+        numero_marcacion:
+          fila.numero_marcacion ||
+          null,
 
-normalizar(
-p.nombre_nomina
-) ===
+        nombre_nomina:
+          fila.equino,
 
-normalizar(
-fila.equino
-)
+        nombre_normalizado:
+          normalizar(
+            fila.equino
+          ),
 
-)
+        propietario_nomina:
+          fila.propietario ||
+          null,
 
-);
+        jinete:
+          fila.jinete ||
+          null,
 
+        club:
+          fila.club ||
+          null,
 
-if (
-duplicado
-) {
+        chip:
+          fila.chip ||
+          null,
 
+        pasaporte_feu:
+          fila.pasaporte ||
+          null,
 
-await apiPatch(
+        genero:
+          fila.genero ||
+          null,
 
-"participantes_competencia",
+        fila_origen:
+          fila.fila_origen ||
+          null
 
-"id=eq." +
-duplicado.id,
+      };
 
-{
 
-caballo_deportivo_id:
-depId,
+      if(existente){
 
+        await apiPatch(
 
-numero_marcacion:
-fila.numero_marcacion ||
-duplicado.numero_marcacion ||
-null,
+          "participantes_competencia",
 
+          "id=eq." +
+          existente.id,
 
-nombre_nomina:
-fila.equino,
+          {
 
+            ...datos,
 
-nombre_normalizado:
-normalizar(
-fila.equino
-),
+            numero_marcacion:
+              fila.numero_marcacion ||
+              existente.numero_marcacion ||
+              null,
 
+            propietario_nomina:
+              fila.propietario ||
+              existente.propietario_nomina ||
+              null,
 
-propietario_nomina:
-fila.propietario ||
-duplicado.propietario_nomina ||
-null,
+            jinete:
+              fila.jinete ||
+              existente.jinete ||
+              null,
 
+            club:
+              fila.club ||
+              existente.club ||
+              null,
 
-jinete:
-fila.jinete ||
-duplicado.jinete ||
-null,
+            chip:
+              fila.chip ||
+              existente.chip ||
+              null,
 
+            pasaporte_feu:
+              fila.pasaporte ||
+              existente.pasaporte_feu ||
+              null,
 
-club:
-fila.club ||
-duplicado.club ||
-null,
+            genero:
+              fila.genero ||
+              existente.genero ||
+              null
 
+          }
 
-chip:
-fila.chip ||
-duplicado.chip ||
-null,
+        );
 
+      }else{
 
-pasaporte_feu:
-fila.pasaporte ||
-duplicado.pasaporte_feu ||
-null,
+        const creado =
+          await apiPost(
 
+            "participantes_competencia",
 
-genero:
-fila.genero ||
-duplicado.genero ||
-null,
+            {
 
+              competencia_id:
+                competenciaActual.id,
 
-fila_origen:
-fila.fila_origen
+              ...datos
 
-}
+            }
 
-);
+          );
 
 
-continue;
+        if(creado[0]){
 
-}
+          participantes.push(
+            creado[0]
+          );
 
+        }
 
-const creado =
-await apiPost(
+      }
 
-"participantes_competencia",
+    }
 
-{
 
-competencia_id:
-competenciaActual.id,
+    await apiPatch(
 
+      "competencias",
 
-caballo_deportivo_id:
-depId,
+      "id=eq." +
+      competenciaActual.id,
 
+      {
 
-numero_marcacion:
-fila.numero_marcacion ||
-null,
+        archivo_origen:
+          nombreArchivo,
 
+        updated_at:
+          new Date()
+            .toISOString()
 
-nombre_nomina:
-fila.equino,
+      }
 
+    );
 
-nombre_normalizado:
-normalizar(
-fila.equino
-),
 
+    mensaje.innerHTML = `
 
-propietario_nomina:
-fila.propietario ||
-null,
+      <div
+        class="mensaje mensaje-exito"
+      >
+        Nómina guardada correctamente.
+      </div>
 
+    `;
 
-jinete:
-fila.jinete ||
-null,
 
+    await listarParticipantes(
+      competenciaActual.id
+    );
 
-club:
-fila.club ||
-null,
 
+  }catch(error){
 
-chip:
-fila.chip ||
-null,
+    console.error(error);
 
+    mensaje.innerHTML = `
 
-pasaporte_feu:
-fila.pasaporte ||
-null,
+      <div
+        class="mensaje mensaje-error"
+      >
+        ${escapar(error.message)}
+      </div>
 
+    `;
 
-genero:
-fila.genero ||
-null,
+  }
 
 
-fila_origen:
-fila.fila_origen
-
-}
-
-);
-
-
-if (
-creado &&
-creado[0]
-) {
-
-participantesActuales.push(
-creado[0]
-);
-
-}
-
-}
-
-
-await apiPatch(
-
-"competencias",
-
-"id=eq." +
-competenciaActual.id,
-
-{
-
-archivo_origen:
-nombreArchivo,
-
-updated_at:
-new Date()
-.toISOString()
-
-}
-
-);
-
-
-mensaje.innerHTML = `
-
-<div
-class="mensaje mensaje-exito"
->
-
-Nómina guardada correctamente.
-
-</div>
-
-`;
-
-
-await listarParticipantes(
-competenciaActual.id
-);
-
-
-} catch (error) {
-
-
-console.error(error);
-
-
-mensaje.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-No se pudo guardar
-la nómina.
-
-<br><br>
-
-${escapar(
-error.message
-)}
-
-</div>
-
-`;
+  boton.disabled =
+    false;
 
 }
 
 
-boton.disabled =
-false;
+async function listarParticipantes(id){
+
+  const zona =
+    document.getElementById(
+      "participantesActuales"
+    );
+
+
+  if(!zona){
+    return;
+  }
+
+
+  try{
+
+    const participantes =
+      await apiGet(
+
+        "participantes_competencia" +
+        "?select=*" +
+        "&competencia_id=eq." +
+        id +
+        "&order=id.asc"
+
+      );
+
+
+    if(
+      !participantes.length
+    ){
+
+      zona.innerHTML = `
+
+        <div class="mensaje">
+          No hay participantes.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    zona.innerHTML = `
+
+      <div
+        class="tabla-contenedor"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                N.º
+              </th>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Propietario
+              </th>
+
+              <th>
+                Jinete
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            ${participantes.map(
+              participante => `
+
+                <tr>
+
+                  <td>
+                    ${escapar(
+                      participante.numero_marcacion ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      participante.nombre_nomina
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      participante.propietario_nomina ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      participante.jinete ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      participante.chip ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      participante.pasaporte_feu ||
+                      "-"
+                    )}
+                  </td>
+
+                </tr>
+
+              `
+            ).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+    `;
+
+
+  }catch(error){
+
+    console.error(error);
+
+    zona.innerHTML = `
+
+      <div
+        class="mensaje mensaje-error"
+      >
+        No se pudieron cargar los participantes.
+      </div>
+
+    `;
+
+  }
 
 }
 
 
-/* ==========================================================
-   PARTICIPANTES
-========================================================== */
+/* =========================================================
+   PARTICIPANTE DESDE RESULTADO
+========================================================= */
 
-async function listarParticipantes(
-id
-) {
+async function buscarParticipante(
+  competenciaId,
+  fila
+){
 
-const zona =
-document
-.getElementById(
-"participantesActuales"
-);
+  const participantes =
+    await apiGet(
+
+      "participantes_competencia" +
+      "?select=*" +
+      "&competencia_id=eq." +
+      competenciaId
+
+    );
 
 
-if (!zona) {
-return;
+  return (
+    participantes.find(
+      participante =>
+
+        (
+          fila.chip &&
+          textoLimpio(
+            participante.chip
+          ) ===
+          textoLimpio(
+            fila.chip
+          )
+        )
+
+        ||
+
+        (
+          fila.pasaporte &&
+          textoLimpio(
+            participante.pasaporte_feu
+          ) ===
+          textoLimpio(
+            fila.pasaporte
+          )
+        )
+
+        ||
+
+        (
+          normalizar(
+            participante.nombre_nomina
+          ) ===
+          normalizar(
+            fila.equino
+          )
+        )
+    )
+    ||
+    null
+  );
 }
 
-
-try {
-
-
-const participantes =
-await apiGet(
-
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-id +
-"&order=id.asc"
-
-);
-
-
-if (
-!participantes.length
-) {
-
-
-zona.innerHTML = `
-
-<div class="mensaje">
-
-No hay participantes.
-
-</div>
-
-`;
-
-
-return;
-
-}
-
-
-zona.innerHTML = `
-
-<div
-class="tabla-contenedor"
->
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-N.º
-</th>
-
-<th>
-Equino
-</th>
-
-<th>
-Propietario
-</th>
-
-<th>
-Jinete
-</th>
-
-<th>
-Chip
-</th>
-
-<th>
-Pasaporte
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-${participantes.map(
-
-p => `
-
-
-<tr>
-
-
-<td>
-
-${escapar(
-
-p.numero_marcacion ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-p.nombre_nomina
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-p.propietario_nomina ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-p.jinete ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-p.chip ||
-"-"
-
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-
-p.pasaporte_feu ||
-"-"
-
-)}
-
-</td>
-
-
-</tr>
-
-
-`
-
-).join("")}
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-`;
-
-
-} catch (error) {
-
-
-console.error(error);
-
-
-zona.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-No se pudieron cargar
-los participantes.
-
-</div>
-
-`;
-
-}
-
-}
-
-
-/* ==========================================================
-   IMPORTAR RESULTADOS INDIVIDUAL
-   TAMBIÉN FUNCIONA SIN NÓMINA PREVIA
-========================================================== */
-
-async function mostrarImportarResultados(id) {
-
-const contenedor =
-document
-.getElementById(
-"contenidoCompetencia"
-);
-
-
-contenedor.innerHTML = `
-
-<div class="tarjeta">
-
-<h3>
-Importar resultados FEU
-</h3>
-
-<p class="subtitulo">
-
-Podés cargar el resultado aunque esa carrera
-no tenga una nómina histórica cargada.
-
-El sistema intenta relacionar los caballos con
-participantes, deportivos, alias y caballos SDU.
-
-</p>
-
-<input
-id="archivoResultados"
-type="file"
-accept=".xlsx,.xls,.xlsm"
->
-
-<div
-id="previewResultados"
-></div>
-
-</div>
-
-`;
-
-
-document
-.getElementById(
-"archivoResultados"
-)
-.onchange =
-async evento => {
-
-
-const archivo =
-evento
-.target
-.files[0];
-
-
-if (!archivo) {
-return;
-}
-
-
-const zona =
-document
-.getElementById(
-"previewResultados"
-);
-
-
-zona.innerHTML = `
-
-<div class="mensaje">
-
-Leyendo resultados...
-
-</div>
-
-`;
-
-
-try {
-
-
-const lectura =
-await leerExcel(
-
-archivo,
-"resultados"
-
-);
-
-
-const participantes =
-await apiGet(
-
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-id
-
-);
-
-
-const base =
-await cargarBaseCaballos();
-
-
-previewResultados =
-lectura.filas.map(
-
-(fila, indice) => {
-
-
-const participantesCoincidentes =
-participantes.filter(
-
-p =>
-
-(
-
-fila.chip &&
-
-textoLimpio(
-p.chip
-) ===
-textoLimpio(
-fila.chip
-)
-
-)
-
-||
-
-(
-
-fila.pasaporte &&
-
-textoLimpio(
-p.pasaporte_feu
-) ===
-textoLimpio(
-fila.pasaporte
-)
-
-)
-
-||
-
-(
-
-normalizar(
-p.nombre_nomina
-) ===
-
-normalizar(
-fila.equino
-)
-
-)
-
-);
-
-
-let participante_id =
-null;
-
-
-if (
-participantesCoincidentes.length ===
-1
-) {
-
-participante_id =
-participantesCoincidentes[0].id;
-
-}
-
-
-const candidatos =
-candidatosCaballo(
-fila,
-base
-);
-
-
-let seleccion =
-"";
-
-
-if (
-participante_id
-) {
-
-const participante =
-participantesCoincidentes[0];
-
-if (
-participante.caballo_deportivo_id
-) {
-
-seleccion =
-"deportivo:" +
-participante.caballo_deportivo_id;
-
-}
-
-}
-
-
-if (
-!seleccion &&
-candidatos.length ===
-1
-) {
-
-seleccion =
-candidatos[0].tipo +
-":" +
-candidatos[0].id;
-
-}
-
-
-if (
-!seleccion &&
-candidatos.length ===
-0
-) {
-
-seleccion =
-"nuevo";
-
-}
-
-
-if (
-candidatos.length >
-1 &&
-!participante_id
-) {
-
-const resolucion =
-mejorCandidatoAutomatico(
-candidatos
-);
-
-if (
-resolucion.estado ===
-"unico"
-) {
-
-seleccion =
-resolucion.candidato.tipo +
-":" +
-resolucion.candidato.id;
-
-} else {
-
-seleccion =
-"";
-
-}
-
-}
-
-
-return {
-
-...fila,
-
-fila_origen:
-indice +
-1,
-
-participante_id,
-
-candidatos,
-
-seleccion
-
-};
-
-}
-
-);
-
-
-renderPreviewResultados(
-archivo.name,
-participantes
-);
-
-
-} catch (error) {
-
-
-console.error(error);
-
-
-zona.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-${escapar(
-error.message
-)}
-
-</div>
-
-`;
-
-}
-
-};
-
-}
-
-
-/* ==========================================================
-   PREVIEW RESULTADOS
-========================================================== */
-
-function renderPreviewResultados(
-nombreArchivo,
-participantes
-) {
-
-const zona =
-document
-.getElementById(
-"previewResultados"
-);
-
-
-const existentes =
-previewResultados.filter(
-x => x.participante_id
-).length;
-
-
-const automaticos =
-previewResultados.filter(
-
-x =>
-!x.participante_id &&
-x.seleccion &&
-x.seleccion !==
-"nuevo"
-
-).length;
-
-
-const nuevos =
-previewResultados.filter(
-
-x =>
-!x.participante_id &&
-x.seleccion ===
-"nuevo"
-
-).length;
-
-
-const revisar =
-previewResultados.filter(
-
-x =>
-!x.participante_id &&
-!x.seleccion
-
-).length;
-
-
-zona.innerHTML = `
-
-<div
-style="margin-top:20px;"
->
-
-
-<div
-class="resumen-preview"
->
-
-<div
-class="resumen-item"
->
-
-<strong>
-${previewResultados.length}
-</strong>
-
-<small>
-Resultados
-</small>
-
-</div>
-
-
-<div
-class="resumen-item"
->
-
-<strong>
-${existentes + automaticos}
-</strong>
-
-<small>
-Relacionados
-</small>
-
-</div>
-
-
-<div
-class="resumen-item"
->
-
-<strong>
-${nuevos}
-</strong>
-
-<small>
-Nuevos deportivos
-</small>
-
-</div>
-
-</div>
-
-
-${
-revisar
-? `
-
-<div
-class="mensaje mensaje-error"
->
-
-Hay ${revisar}
-caballo(s) que necesitan que elijas
-la relación correcta antes de guardar.
-
-</div>
-
-`
-: ""
-}
-
-
-<div
-class="tabla-contenedor"
->
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Equino
-</th>
-
-<th>
-Chip
-</th>
-
-<th>
-Pasaporte
-</th>
-
-<th>
-Puesto
-</th>
-
-<th>
-Estado
-</th>
-
-<th>
-Tiempo
-</th>
-
-<th>
-Vel. km/h
-</th>
-
-<th>
-Relación SDU
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-${previewResultados.map(
-
-(
-fila,
-indice
-) => {
-
-
-let clase =
-"preview-nuevo";
-
-
-if (
-fila.participante_id ||
-fila.seleccion
-) {
-
-clase =
-"preview-ok";
-
-}
-
-
-if (
-!fila.participante_id &&
-!fila.seleccion
-) {
-
-clase =
-"preview-dudoso";
-
-}
-
-
-return `
-
-<tr
-class="${clase}"
->
-
-
-<td>
-
-<strong>
-${escapar(
-fila.equino
-)}
-</strong>
-
-</td>
-
-
-<td>
-
-${escapar(
-fila.chip ||
-"-"
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-fila.pasaporte ||
-"-"
-)}
-
-</td>
-
-
-<td>
-
-${
-fila.puesto ??
-"-"
-}
-
-</td>
-
-
-<td>
-
-${escapar(
-fila.estado
-)}
-
-</td>
-
-
-<td>
-
-${escapar(
-fila.tiempo ||
-"-"
-)}
-
-</td>
-
-
-<td>
-
-${
-fila.promedio ??
-"-"
-}
-
-</td>
-
-
-<td>
-
-
-<select
-
-class="selector-relacion"
-
-data-resultado-relacion="${indice}"
-
->
-
-
-<option
-value=""
-${
-!fila.seleccion
-? "selected"
-: ""
-}
->
-
-Seleccionar coincidencia
-
-</option>
-
-
-<option
-value="nuevo"
-${
-fila.seleccion ===
-"nuevo"
-? "selected"
-: ""
-}
->
-
-Crear caballo deportivo nuevo
-
-</option>
-
-
-${fila.candidatos.map(
-
-candidato => {
-
-const valor =
-candidato.tipo +
-":" +
-candidato.id;
-
-
-return `
-
-<option
-
-value="${valor}"
-
-${
-fila.seleccion ===
-valor
-? "selected"
-: ""
-}
-
->
-
-${
-candidato.tipo ===
-"registrado"
-? "SDU: "
-: "Deportivo: "
-}
-
-${escapar(
-candidato.nombre
-)}
-
-</option>
-
-`;
-
-}
-
-).join("")}
-
-
-</select>
-
-
-</td>
-
-
-</tr>
-
-`;
-
-}
-
-).join("")}
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-<div class="acciones">
-
-<button
-
-class="boton boton-principal"
-
-id="btnGuardarResultados"
-
->
-
-Guardar resultados
-
-</button>
-
-</div>
-
-
-<div
-id="mensajeResultados"
-></div>
-
-
-</div>
-
-`;
-
-
-document
-.querySelectorAll(
-"[data-resultado-relacion]"
-)
-.forEach(
-
-select => {
-
-select.onchange =
-() => {
-
-const indice =
-Number(
-select.dataset
-.resultadoRelacion
-);
-
-
-previewResultados[
-indice
-].seleccion =
-select.value;
-
-};
-
-}
-
-);
-
-
-document
-.getElementById(
-"btnGuardarResultados"
-)
-.onclick =
-() => {
-
-guardarResultados(
-nombreArchivo
-);
-
-};
-
-}
-
-
-/* ==========================================================
-   OBTENER / CREAR PARTICIPANTE DESDE RESULTADO
-========================================================== */
 
 async function obtenerOCrearParticipanteResultado(
-fila
-) {
+  competenciaId,
+  fila,
+  base
+){
 
-if (
-fila.participante_id
-) {
+  const existente =
+    await buscarParticipante(
+      competenciaId,
+      fila
+    );
 
-return fila.participante_id;
+
+  if(existente){
+
+    return existente.id;
+
+  }
+
+
+  if(!fila.seleccion){
+
+    const resultado =
+      resolverCaballo(
+        fila,
+        base
+      );
+
+
+    if(resultado.ambiguo){
+
+      throw new Error(
+        "Hay más de una coincidencia para " +
+        fila.equino +
+        "."
+      );
+
+    }
+
+
+    fila.seleccion =
+      resultado.tipo ===
+      "nuevo"
+
+        ? "nuevo"
+
+        : resultado.tipo +
+          ":" +
+          resultado.candidatos[0].id;
+
+  }
+
+
+  const deportivoId =
+    await obtenerOCrearDeportivo(
+      {
+
+        equino:
+          fila.equino,
+
+        chip:
+          fila.chip,
+
+        pasaporte:
+          fila.pasaporte,
+
+        propietario:
+          "",
+
+        seleccion:
+          fila.seleccion
+
+      }
+    );
+
+
+  const creado =
+    await apiPost(
+
+      "participantes_competencia",
+
+      {
+
+        competencia_id:
+          competenciaId,
+
+        caballo_deportivo_id:
+          deportivoId,
+
+        numero_marcacion:
+          null,
+
+        nombre_nomina:
+          fila.equino,
+
+        nombre_normalizado:
+          normalizar(
+            fila.equino
+          ),
+
+        propietario_nomina:
+          null,
+
+        jinete:
+          fila.jinete ||
+          null,
+
+        club:
+          fila.club ||
+          null,
+
+        chip:
+          fila.chip ||
+          null,
+
+        pasaporte_feu:
+          fila.pasaporte ||
+          null,
+
+        genero:
+          null,
+
+        fila_origen:
+          fila.fila_origen ||
+          null
+
+      }
+
+    );
+
+
+  return creado[0].id;
+}
+
+
+/* =========================================================
+   GUARDAR UNA FILA DE RESULTADO
+========================================================= */
+
+async function guardarFilaResultado(
+  participanteId,
+  fila
+){
+
+  const existentes =
+    await apiGet(
+
+      "resultados_competencia" +
+      "?select=*" +
+      "&participante_id=eq." +
+      participanteId +
+      "&limit=1"
+
+    );
+
+
+  const datos = {
+
+    puesto:
+      fila.estado ===
+      "clasificado"
+
+        ? fila.puesto
+
+        : null,
+
+
+    estado_resultado:
+      fila.estado,
+
+
+    promedio_kmh:
+      fila.promedio,
+
+
+    tiempo:
+      fila.tiempo ||
+      null,
+
+
+    observaciones:
+      fila.observaciones ||
+      null,
+
+
+    updated_at:
+      new Date()
+        .toISOString()
+
+  };
+
+
+  if(existentes.length){
+
+    const existente =
+      existentes[0];
+
+
+    const cambios = {
+      ...datos
+    };
+
+
+    /*
+      El puesto original nunca se pisa.
+      Solo lo completamos si estaba vacío.
+    */
+    if(
+      existente.puesto_original ===
+      null
+
+      ||
+
+      existente.puesto_original ===
+      undefined
+    ){
+
+      cambios.puesto_original =
+        fila.estado ===
+        "clasificado"
+
+          ? fila.puesto
+
+          : null;
+
+    }
+
+
+    if(
+      !existente.estado_original
+    ){
+
+      cambios.estado_original =
+        fila.estado;
+
+    }
+
+
+    await apiPatch(
+
+      "resultados_competencia",
+
+      "participante_id=eq." +
+      participanteId,
+
+      cambios
+
+    );
+
+
+  }else{
+
+    await apiPost(
+
+      "resultados_competencia",
+
+      {
+
+        participante_id:
+          participanteId,
+
+        ...datos,
+
+        puesto_original:
+          fila.estado ===
+          "clasificado"
+
+            ? fila.puesto
+
+            : null,
+
+        estado_original:
+          fila.estado
+
+      }
+
+    );
+
+  }
 
 }
 
 
-const datosCaballo = {
+/* =========================================================
+   IMPORTAR RESULTADO INDIVIDUAL
+========================================================= */
 
-equino:
-fila.equino,
+async function mostrarImportarResultados(id){
 
-chip:
-fila.chip,
+  const contenedor =
+    document.getElementById(
+      "contenidoCompetencia"
+    );
 
-pasaporte:
-fila.pasaporte,
 
-propietario:
-"",
+  contenedor.innerHTML = `
 
-seleccion:
-fila.seleccion
+    <div class="tarjeta">
 
-};
+      <h3>
+        Importar resultado FEU
+      </h3>
 
+      <p class="subtitulo">
 
-const caballoDeportivoId =
-await obtenerOCrearDeportivo(
-datosCaballo
-);
+        Si ya existe una marcación,
+        SDU utilizará los participantes existentes.
 
+        Si no existe,
+        creará automáticamente
+        los participantes desde el resultado.
 
-const existentes =
-await apiGet(
+      </p>
 
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-competenciaActual.id
+      <input
+        id="archivoResultados"
+        type="file"
+        accept=".xlsx,.xls,.xlsm"
+      >
 
-);
+      <div
+        id="previewResultados"
+      ></div>
 
+    </div>
 
-const existente =
-existentes.find(
+  `;
 
-p =>
 
-(
+  document
+    .getElementById(
+      "archivoResultados"
+    )
+    .onchange =
+      async evento => {
 
-fila.chip &&
+        const archivo =
+          evento.target.files[0];
 
-textoLimpio(
-p.chip
-) ===
-textoLimpio(
-fila.chip
-)
 
-)
+        if(!archivo){
+          return;
+        }
 
-||
 
-(
+        const zona =
+          document.getElementById(
+            "previewResultados"
+          );
 
-fila.pasaporte &&
 
-textoLimpio(
-p.pasaporte_feu
-) ===
-textoLimpio(
-fila.pasaporte
-)
+        zona.innerHTML = `
 
-)
+          <div class="mensaje">
+            Leyendo resultado...
+          </div>
 
-||
+        `;
 
-(
 
-normalizar(
-p.nombre_nomina
-) ===
-normalizar(
-fila.equino
-)
+        try{
 
-)
+          const lectura =
+            await leerExcel(
+              archivo,
+              "resultados"
+            );
 
-);
 
+          const base =
+            await cargarBaseCaballos();
 
-if (
-existente
-) {
 
-await apiPatch(
+          const participantes =
+            await apiGet(
 
-"participantes_competencia",
+              "participantes_competencia" +
+              "?select=*" +
+              "&competencia_id=eq." +
+              id
 
-"id=eq." +
-existente.id,
+            );
 
-{
 
-caballo_deportivo_id:
-caballoDeportivoId,
+          previewResultados =
+            lectura.filas.map(
+              (
+                fila,
+                indice
+              ) => {
 
-nombre_nomina:
-fila.equino,
+                const participante =
+                  participantes.find(
+                    p =>
 
-nombre_normalizado:
-normalizar(
-fila.equino
-),
+                      (
+                        fila.chip &&
+                        textoLimpio(
+                          p.chip
+                        ) ===
+                        textoLimpio(
+                          fila.chip
+                        )
+                      )
 
-jinete:
-fila.jinete ||
-existente.jinete ||
-null,
+                      ||
 
-chip:
-fila.chip ||
-existente.chip ||
-null,
+                      (
+                        fila.pasaporte &&
+                        textoLimpio(
+                          p.pasaporte_feu
+                        ) ===
+                        textoLimpio(
+                          fila.pasaporte
+                        )
+                      )
 
-pasaporte_feu:
-fila.pasaporte ||
-existente.pasaporte_feu ||
-null
+                      ||
 
-}
+                      (
+                        normalizar(
+                          p.nombre_nomina
+                        ) ===
+                        normalizar(
+                          fila.equino
+                        )
+                      )
+                  );
 
-);
 
+                if(participante){
 
-return existente.id;
+                  return {
 
-}
+                    ...fila,
 
+                    fila_origen:
+                      indice +
+                      1,
 
-const creado =
-await apiPost(
+                    participante_id:
+                      participante.id,
 
-"participantes_competencia",
+                    seleccion:
+                      participante.caballo_deportivo_id
 
-{
+                        ? "deportivo:" +
+                          participante.caballo_deportivo_id
 
-competencia_id:
-competenciaActual.id,
+                        : "",
 
-caballo_deportivo_id:
-caballoDeportivoId,
+                    candidatos:
+                      []
 
-numero_marcacion:
-null,
+                  };
 
-nombre_nomina:
-fila.equino,
+                }
 
-nombre_normalizado:
-normalizar(
-fila.equino
-),
 
-propietario_nomina:
-null,
+                const resultado =
+                  resolverCaballo(
+                    fila,
+                    base
+                  );
 
-jinete:
-fila.jinete ||
-null,
 
-club:
-fila.club ||
-null,
+                if(
+                  resultado.tipo ===
+                  "nuevo"
+                ){
 
-chip:
-fila.chip ||
-null,
+                  return {
 
-pasaporte_feu:
-fila.pasaporte ||
-null,
+                    ...fila,
 
-genero:
-null,
+                    fila_origen:
+                      indice +
+                      1,
 
-fila_origen:
-fila.fila_origen ||
-null
+                    participante_id:
+                      null,
 
-}
+                    seleccion:
+                      "nuevo",
 
-);
+                    candidatos:
+                      []
 
+                  };
 
-return creado[0].id;
+                }
 
-}
 
+                const candidatos =
+                  resultado.candidatos
+                    .map(
+                      candidato => ({
 
-/* ==========================================================
-   GUARDAR RESULTADOS
-========================================================== */
+                        tipo:
+                          resultado.tipo,
 
-async function guardarResultados(
-nombreArchivo
-) {
+                        id:
+                          candidato.id,
 
-const mensaje =
-document
-.getElementById(
-"mensajeResultados"
-);
+                        nombre:
+                          resultado.tipo ===
+                          "deportivo"
 
+                            ? candidato.nombre_principal
 
-const sinRelacion =
-previewResultados.filter(
+                            : candidato.Nombre
 
-fila =>
-!fila.participante_id &&
-!fila.seleccion
+                      })
+                    );
 
-);
 
+                return {
 
-if (
-sinRelacion.length
-) {
+                  ...fila,
 
-alert(
+                  fila_origen:
+                    indice +
+                    1,
 
-"Hay " +
-sinRelacion.length +
-" caballo(s) sin relacionar. Revisá las filas antes de guardar."
+                  participante_id:
+                    null,
 
-);
+                  seleccion:
+                    resultado.ambiguo
 
-return;
+                      ? ""
 
-}
+                      : resultado.tipo +
+                        ":" +
+                        candidatos[0].id,
 
+                  candidatos
 
-const boton =
-document
-.getElementById(
-"btnGuardarResultados"
-);
+                };
 
+              }
+            );
 
-if (boton) {
-boton.disabled = true;
-}
 
+          renderPreviewResultados(
+            archivo.name
+          );
 
-mensaje.innerHTML = `
 
-<div class="mensaje">
+        }catch(error){
 
-Guardando resultados
-y creando participantes...
+          console.error(error);
 
-</div>
+          zona.innerHTML = `
 
-`;
+            <div
+              class="mensaje mensaje-error"
+            >
+              ${escapar(error.message)}
+            </div>
 
+          `;
 
-try {
+        }
 
-let creados =
-0;
-
-let relacionados =
-0;
-
-
-for (
-const fila
-of previewResultados
-) {
-
-const teniaParticipante =
-Boolean(
-fila.participante_id
-);
-
-
-const participanteId =
-await obtenerOCrearParticipanteResultado(
-fila
-);
-
-
-fila.participante_id =
-participanteId;
-
-
-if (
-teniaParticipante
-) {
-
-relacionados++;
-
-} else {
-
-creados++;
+      };
 
 }
 
 
-const existentes =
-await apiGet(
+function renderPreviewResultados(
+  nombreArchivo
+){
 
-"resultados_competencia" +
-"?select=*" +
-"&participante_id=eq." +
-participanteId +
-"&limit=1"
-
-);
+  const zona =
+    document.getElementById(
+      "previewResultados"
+    );
 
 
-const datos = {
-
-puesto:
-
-fila.estado ===
-"clasificado"
-
-? fila.puesto
-
-: null,
+  const ambiguos =
+    previewResultados.filter(
+      fila =>
+        !fila.participante_id &&
+        !fila.seleccion
+    ).length;
 
 
-estado_resultado:
-fila.estado,
+  zona.innerHTML = `
+
+    <div
+      style="margin-top:20px"
+    >
+
+      ${
+        ambiguos
+
+          ? `
+
+            <div
+              class="mensaje mensaje-error"
+            >
+
+              Hay ${ambiguos}
+              caballo(s) con más de una coincidencia.
+              Elegí la ficha correcta antes de guardar.
+
+            </div>
+
+          `
+
+          : ""
+      }
 
 
-promedio_kmh:
-fila.promedio,
+      <div
+        class="tabla-contenedor"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+              <th>
+                Puesto
+              </th>
+
+              <th>
+                Estado
+              </th>
+
+              <th>
+                Tiempo
+              </th>
+
+              <th>
+                Vel. km/h
+              </th>
+
+              <th>
+                Relación SDU
+              </th>
+
+            </tr>
+
+          </thead>
 
 
-tiempo:
-fila.tiempo ||
-null,
+          <tbody>
+
+            ${previewResultados.map(
+              (
+                fila,
+                indice
+              ) => `
+
+                <tr
+                  class="${
+                    fila.participante_id ||
+                    fila.seleccion
+
+                      ? "preview-ok"
+
+                      : "preview-dudoso"
+                  }"
+                >
+
+                  <td>
+                    <strong>
+                      ${escapar(
+                        fila.equino
+                      )}
+                    </strong>
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.chip ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.pasaporte ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${fila.puesto ?? "-"}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.estado
+                    )}
+                  </td>
+
+                  <td>
+                    ${escapar(
+                      fila.tiempo ||
+                      "-"
+                    )}
+                  </td>
+
+                  <td>
+                    ${fila.promedio ?? "-"}
+                  </td>
+
+                  <td>
+
+                    ${
+                      fila.participante_id
+
+                        ? "Participante existente"
+
+                        : `
+
+                          <select
+                            class="selector-relacion"
+                            data-resultado="${indice}"
+                          >
+
+                            <option
+                              value=""
+                              ${
+                                !fila.seleccion
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+                              Seleccionar coincidencia
+                            </option>
+
+                            <option
+                              value="nuevo"
+                              ${
+                                fila.seleccion ===
+                                "nuevo"
+
+                                  ? "selected"
+                                  : ""
+                              }
+                            >
+                              Crear caballo deportivo
+                            </option>
+
+                            ${fila.candidatos.map(
+                              candidato => {
+
+                                const valor =
+                                  candidato.tipo +
+                                  ":" +
+                                  candidato.id;
 
 
-observaciones:
-fila.observaciones ||
-null,
+                                return `
+
+                                  <option
+                                    value="${valor}"
+                                    ${
+                                      fila.seleccion ===
+                                      valor
+
+                                        ? "selected"
+                                        : ""
+                                    }
+                                  >
+
+                                    ${
+                                      candidato.tipo ===
+                                      "registrado"
+
+                                        ? "SDU: "
+
+                                        : "Deportivo: "
+                                    }
+
+                                    ${escapar(
+                                      candidato.nombre
+                                    )}
+
+                                  </option>
+
+                                `;
+
+                              }
+                            ).join("")}
+
+                          </select>
+
+                        `
+                    }
+
+                  </td>
+
+                </tr>
+
+              `
+            ).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
 
 
-updated_at:
-new Date()
-.toISOString()
+      <div class="acciones">
 
-};
+        <button
+          class="boton boton-principal"
+          id="btnGuardarResultados"
+        >
+          Guardar resultados
+        </button>
 
-
-if (
-existentes.length
-) {
-
-const existente =
-existentes[0];
+      </div>
 
 
-const cambios = {
+      <div
+        id="mensajeResultados"
+      ></div>
 
-...datos
+    </div>
 
-};
+  `;
 
 
-if (
-existente.puesto_original ===
-null ||
+  document
+    .querySelectorAll(
+      "[data-resultado]"
+    )
+    .forEach(
+      selector => {
 
-existente.puesto_original ===
-undefined
-) {
+        selector.onchange =
+          () => {
 
-cambios.puesto_original =
+            previewResultados[
+              Number(
+                selector.dataset.resultado
+              )
+            ].seleccion =
+              selector.value;
 
-fila.estado ===
-"clasificado"
+          };
 
-? fila.puesto
+      }
+    );
 
-: null;
+
+  document
+    .getElementById(
+      "btnGuardarResultados"
+    )
+    .onclick =
+      async () => {
+
+        const sinRelacion =
+          previewResultados.filter(
+            fila =>
+              !fila.participante_id &&
+              !fila.seleccion
+          );
+
+
+        if(sinRelacion.length){
+
+          alert(
+            "Hay caballos sin relacionar."
+          );
+
+          return;
+
+        }
+
+
+        const boton =
+          document.getElementById(
+            "btnGuardarResultados"
+          );
+
+
+        const mensaje =
+          document.getElementById(
+            "mensajeResultados"
+          );
+
+
+        boton.disabled =
+          true;
+
+
+        mensaje.innerHTML = `
+
+          <div class="mensaje">
+            Guardando resultados...
+          </div>
+
+        `;
+
+
+        try{
+
+          const base =
+            await cargarBaseCaballos();
+
+
+          for(
+            const fila
+            of previewResultados
+          ){
+
+            let participanteId =
+              fila.participante_id;
+
+
+            if(!participanteId){
+
+              participanteId =
+                await obtenerOCrearParticipanteResultado(
+
+                  competenciaActual.id,
+
+                  fila,
+
+                  base
+
+                );
+
+            }
+
+
+            await guardarFilaResultado(
+              participanteId,
+              fila
+            );
+
+          }
+
+
+          await apiPatch(
+
+            "competencias",
+
+            "id=eq." +
+            competenciaActual.id,
+
+            {
+
+              estado:
+                "resultado_provisorio",
+
+              archivo_origen:
+                nombreArchivo,
+
+              updated_at:
+                new Date()
+                  .toISOString()
+
+            }
+
+          );
+
+
+          competenciaActual.estado =
+            "resultado_provisorio";
+
+
+          mensaje.innerHTML = `
+
+            <div
+              class="mensaje mensaje-exito"
+            >
+
+              Resultado guardado.
+
+              <br>
+
+              Los puestos y empates oficiales
+              fueron conservados.
+
+            </div>
+
+          `;
+
+
+        }catch(error){
+
+          console.error(error);
+
+          mensaje.innerHTML = `
+
+            <div
+              class="mensaje mensaje-error"
+            >
+              ${escapar(error.message)}
+            </div>
+
+          `;
+
+        }
+
+
+        boton.disabled =
+          false;
+
+      };
 
 }
 
 
-if (
-!existente.estado_original
-) {
+/* =========================================================
+   HISTÓRICOS EN LOTE
+========================================================= */
 
-cambios.estado_original =
-fila.estado;
+function mostrarHistoricos(){
+
+  app.innerHTML = `
+
+    <div class="tarjeta">
+
+      <h2>
+        Importar resultados históricos FEU
+      </h2>
+
+      <p class="subtitulo">
+
+        Seleccioná juntos todos los Excel históricos.
+
+        <br><br>
+
+        El administrador leerá automáticamente:
+
+        <br>
+
+        N.º de Raid,
+        nombre,
+        edición,
+        fecha,
+        distancia,
+        participantes
+        y resultados.
+
+        <br><br>
+
+        Si el Raid no existe,
+        lo crea automáticamente.
+
+        Si el caballo ya existe,
+        lo relaciona.
+
+        Si está registrado en SDU
+        pero todavía no tiene ficha deportiva,
+        crea la ficha deportiva vinculada.
+
+        Si es completamente nuevo,
+        crea un caballo deportivo nuevo.
+
+      </p>
+
+      <input
+        id="archivosHistoricos"
+        type="file"
+        accept=".xlsx,.xls,.xlsm"
+        multiple
+      >
+
+
+      <div class="acciones">
+
+        <button
+          class="boton boton-principal"
+          id="btnAnalizarHistoricos"
+        >
+          Analizar archivos
+        </button>
+
+      </div>
+
+
+      <div
+        id="resultadoHistoricos"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  document
+    .getElementById(
+      "btnAnalizarHistoricos"
+    )
+    .onclick =
+      analizarHistoricosSeleccionados;
 
 }
 
 
-await apiPatch(
+async function analizarHistoricosSeleccionados(){
 
-"resultados_competencia",
+  const archivos =
+    [
+      ...document
+        .getElementById(
+          "archivosHistoricos"
+        )
+        .files
+    ];
 
-"participante_id=eq." +
-participanteId,
 
-cambios
+  const zona =
+    document.getElementById(
+      "resultadoHistoricos"
+    );
 
-);
 
-}
+  if(!archivos.length){
 
-else {
+    alert(
+      "Seleccioná los Excel FEU."
+    );
 
-await apiPost(
+    return;
 
-"resultados_competencia",
+  }
 
-{
 
-participante_id:
-participanteId,
+  zona.innerHTML = `
 
+    <div class="mensaje">
+      Analizando ${archivos.length} archivo(s)...
+    </div>
 
-...datos,
+  `;
 
 
-puesto_original:
+  const analizados =
+    [];
 
-fila.estado ===
-"clasificado"
 
-? fila.puesto
+  for(
+    const archivo
+    of archivos
+  ){
 
-: null,
+    try{
 
+      const lectura =
+        await leerExcel(
+          archivo,
+          "resultados"
+        );
 
-estado_original:
-fila.estado
 
-}
+      const metadata =
+        extraerMetadataResultado(
+          lectura.matriz,
+          archivo.name
+        );
 
-);
 
-}
+      const completo =
+        Boolean(
 
-}
+          metadata.numero_raid &&
 
+          metadata.nombre &&
 
-await apiPatch(
+          metadata.edicion &&
 
-"competencias",
+          metadata.fecha &&
 
-"id=eq." +
-competenciaActual.id,
+          metadata.distancia_km !==
+          null
 
-{
+        );
 
-estado:
-"resultado_provisorio",
 
-archivo_origen:
-nombreArchivo,
+      analizados.push({
 
-updated_at:
-new Date()
-.toISOString()
+        archivo,
+        lectura,
+        metadata,
+        completo,
+        error:
+          null
 
-}
+      });
 
-);
 
+    }catch(error){
 
-competenciaActual.estado =
-"resultado_provisorio";
+      analizados.push({
 
+        archivo,
 
-mensaje.innerHTML = `
+        lectura:
+          null,
 
-<div
-class="mensaje mensaje-exito"
->
+        metadata:
+          null,
 
-<strong>
-Resultado importado correctamente.
-</strong>
+        completo:
+          false,
 
-<br><br>
+        error:
+          error.message
 
-Participantes que ya existían:
-${relacionados}
+      });
 
-<br>
+    }
 
-Participantes creados:
-${creados}
+  }
 
-<br>
 
-Total de resultados:
-${previewResultados.length}
+  const listos =
+    analizados.filter(
+      item =>
+        item.completo
+    );
 
-<br><br>
 
-Los puestos y empates oficiales FEU
-fueron conservados.
+  const revisar =
+    analizados.filter(
+      item =>
+        !item.completo
+    );
 
-</div>
 
-`;
+  zona.innerHTML = `
 
+    <div
+      class="mensaje ${
+        revisar.length
 
-} catch (error) {
+          ? "mensaje-alerta"
 
-console.error(error);
+          : "mensaje-exito"
+      }"
+    >
 
+      <strong>
+        ${listos.length}
+        archivo(s) listos.
+      </strong>
 
-mensaje.innerHTML = `
+      <br>
 
-<div
-class="mensaje mensaje-error"
->
+      ${revisar.length}
+      archivo(s) necesitan revisión.
 
-No se pudieron guardar
-los resultados.
+    </div>
 
-<br><br>
 
-${escapar(
-error.message
-)}
+    ${analizados.map(
+      item => `
 
-</div>
+        <div
+          class="archivo-resultado"
+        >
 
-`;
+          <strong>
+            ${escapar(
+              item.archivo.name
+            )}
+          </strong>
 
-}
+          <br><br>
 
+          ${
+            item.error
 
-if (boton) {
-boton.disabled = false;
-}
+              ? `
 
-}
+                <span
+                  style="color:var(--rojo)"
+                >
+                  ${escapar(
+                    item.error
+                  )}
+                </span>
 
+              `
 
-/* ==========================================================
-   EDITOR RESULTADOS
-========================================================== */
+              : `
 
-async function mostrarEditorResultados(
-id
-) {
+                Raid:
+                ${escapar(
+                  item.metadata.numero_raid ??
+                  "-"
+                )}
 
-const contenedor =
-document
-.getElementById(
-"contenidoCompetencia"
-);
+                <br>
 
+                Nombre:
+                ${escapar(
+                  item.metadata.nombre ||
+                  "-"
+                )}
 
-contenedor.innerHTML = `
+                <br>
 
-<div class="tarjeta">
+                Edición:
+                ${escapar(
+                  item.metadata.edicion ||
+                  "-"
+                )}
 
-Cargando resultados...
+                <br>
 
-</div>
+                Fecha:
+                ${fechaUY(
+                  item.metadata.fecha
+                )}
 
-`;
+                <br>
 
+                Distancia:
+                ${item.metadata.distancia_km ?? "-"}
+                km
 
-try {
+                <br>
 
+                Resultados:
+                ${item.lectura.filas.length}
 
-const participantes =
-await apiGet(
+                ${
+                  item.completo
 
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-id +
-"&order=id.asc"
+                    ? `
 
-);
+                      <div
+                        style="
+                          margin-top:6px;
+                          color:var(--verde);
+                        "
+                      >
+                        ✓ Datos completos
+                      </div>
 
+                    `
 
-const ids =
-participantes.map(
-p => p.id
-);
+                    : `
 
+                      <div
+                        style="
+                          margin-top:6px;
+                          color:var(--rojo);
+                        "
+                      >
+                        Falta algún dato del encabezado.
+                      </div>
 
-let resultados =
-[];
+                    `
+                }
 
+              `
+          }
 
-if (
-ids.length
-) {
+        </div>
 
-resultados =
-await apiGet(
+      `
+    ).join("")}
 
-"resultados_competencia" +
-"?select=*" +
-"&participante_id=in.(" +
-ids.join(",") +
-")"
 
-);
+    ${
+      listos.length
 
-}
+        ? `
 
+          <div class="acciones">
 
-const mapa =
-new Map();
+            <button
+              class="boton boton-verde"
+              id="btnImportarHistoricos"
+            >
 
+              Importar
+              ${listos.length}
+              archivo(s)
 
-resultados.forEach(
+            </button>
 
-r => {
+          </div>
 
-mapa.set(
+        `
 
-Number(
-r.participante_id
-),
+        : ""
+    }
 
-r
 
-);
+    <div
+      id="progresoHistoricos"
+    ></div>
 
-}
+  `;
 
-);
 
+  const boton =
+    document.getElementById(
+      "btnImportarHistoricos"
+    );
 
-contenedor.innerHTML = `
 
-<div class="tarjeta">
+  if(boton){
 
+    boton.onclick =
+      () => {
 
-<h3>
-Editar resultados
-</h3>
+        importarHistoricosAnalizados(
+          listos
+        );
 
+      };
 
-<p class="subtitulo">
-
-Acá podés corregir
-puestos, NC, DQ,
-Premio FEU,
-pulsaciones
-y observaciones.
-
-</p>
-
-
-<div
-class="tabla-contenedor"
->
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>
-Caballo
-</th>
-
-<th>
-Estado
-</th>
-
-<th>
-Puesto
-</th>
-
-<th>
-Promedio
-</th>
-
-<th>
-Premio FEU
-</th>
-
-<th>
-PPM
-</th>
-
-<th>
-Observaciones
-</th>
-
-<th>
-Guardar
-</th>
-
-</tr>
-
-</thead>
-
-
-<tbody>
-
-
-${participantes.map(
-
-p => {
-
-
-const r =
-mapa.get(
-Number(p.id)
-) ||
-{};
-
-
-return `
-
-
-<tr
-
-class="resultado-fila"
-
-data-fila-participante="${p.id}"
-
->
-
-
-<td>
-
-<strong>
-
-${escapar(
-p.nombre_nomina
-)}
-
-</strong>
-
-</td>
-
-
-<td>
-
-
-<select
-data-campo="estado"
->
-
-
-<option
-
-value="clasificado"
-
-${
-(
-r.estado_resultado ||
-"clasificado"
-) ===
-"clasificado"
-
-? "selected"
-
-: ""
-}
-
->
-
-Clasificado
-
-</option>
-
-
-<option
-
-value="NC"
-
-${
-r.estado_resultado ===
-"NC"
-
-? "selected"
-
-: ""
-}
-
->
-
-NC
-
-</option>
-
-
-<option
-
-value="DQ"
-
-${
-r.estado_resultado ===
-"DQ"
-
-? "selected"
-
-: ""
-}
-
->
-
-DQ
-
-</option>
-
-
-<option
-
-value="retirado"
-
-${
-r.estado_resultado ===
-"retirado"
-
-? "selected"
-
-: ""
-}
-
->
-
-Retirado
-
-</option>
-
-
-</select>
-
-
-</td>
-
-
-<td>
-
-<input
-
-data-campo="puesto"
-
-type="number"
-
-value="${
-r.puesto ??
-""
-}"
-
->
-
-</td>
-
-
-<td>
-
-<input
-
-data-campo="promedio"
-
-type="number"
-
-step="0.01"
-
-value="${
-r.promedio_kmh ??
-""
-}"
-
->
-
-</td>
-
-
-<td>
-
-<input
-
-data-campo="premio"
-
-type="checkbox"
-
-${
-r.premio_feu
-? "checked"
-: ""
-}
-
->
-
-</td>
-
-
-<td>
-
-<input
-
-data-campo="ppm"
-
-type="number"
-
-value="${
-r.premio_feu_ppm ??
-""
-}"
-
->
-
-</td>
-
-
-<td>
-
-<input
-
-class="observaciones"
-
-data-campo="observaciones"
-
-type="text"
-
-value="${escapar(
-r.observaciones ||
-""
-)}"
-
->
-
-</td>
-
-
-<td>
-
-<button
-
-class="boton boton-principal"
-
-data-guardar-resultado="${p.id}"
-
->
-
-Guardar
-
-</button>
-
-</td>
-
-
-</tr>
-
-
-`;
-
-}
-
-).join("")}
-
-
-</tbody>
-
-
-</table>
-
-
-</div>
-
-
-<div class="acciones">
-
-
-<button
-
-id="btnRecalcular"
-
-class="boton boton-dorado"
-
->
-
-Recalcular posiciones vigentes
-
-</button>
-
-
-</div>
-
-
-<div
-id="mensajeEditor"
-></div>
-
-
-</div>
-
-`;
-
-
-document
-.querySelectorAll(
-"[data-guardar-resultado]"
-)
-.forEach(
-
-boton => {
-
-boton.onclick =
-() => {
-
-guardarResultadoManual(
-
-boton.dataset
-.guardarResultado
-
-);
-
-};
-
-}
-
-);
-
-
-document
-.getElementById(
-"btnRecalcular"
-)
-.onclick =
-() => {
-
-recalcularPosiciones(id);
-
-};
-
-
-} catch (error) {
-
-
-console.error(error);
-
-
-contenedor.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-No se pudieron cargar
-los resultados.
-
-</div>
-
-`;
-
-}
+  }
 
 }
 
 
-/* ==========================================================
+/* =========================================================
+   CREAR / ACTUALIZAR COMPETENCIA HISTÓRICA
+========================================================= */
+
+async function obtenerOCrearCompetenciaHistorica(
+  metadata,
+  nombreArchivo
+){
+
+  /*
+    Primero usamos N.º Raid + fecha.
+    Así no mezclamos el mismo número
+    de diferentes años.
+  */
+  const coincidenciaExacta =
+    await apiGet(
+
+      "competencias" +
+      "?select=*" +
+      "&numero_raid=eq." +
+      metadata.numero_raid +
+      "&fecha=eq." +
+      encodeURIComponent(
+        metadata.fecha
+      ) +
+      "&limit=1"
+
+    );
+
+
+  let competencia =
+    coincidenciaExacta[0] ||
+    null;
+
+
+  /*
+    Puede existir un registro incompleto
+    creado anteriormente.
+  */
+  if(!competencia){
+
+    const mismoNumero =
+      await apiGet(
+
+        "competencias" +
+        "?select=*" +
+        "&numero_raid=eq." +
+        metadata.numero_raid +
+        "&order=id.asc"
+
+      );
+
+
+    competencia =
+      mismoNumero.find(
+        item =>
+          !item.fecha
+      )
+      ||
+      null;
+
+  }
+
+
+  const datos = {
+
+    numero_raid:
+      metadata.numero_raid,
+
+    nombre:
+      metadata.nombre,
+
+    edicion:
+      metadata.edicion,
+
+    fecha:
+      metadata.fecha,
+
+    distancia_km:
+      metadata.distancia_km,
+
+    estado:
+      "resultado_definitivo",
+
+    archivo_origen:
+      nombreArchivo,
+
+    updated_at:
+      new Date()
+        .toISOString()
+
+  };
+
+
+  if(competencia){
+
+    await apiPatch(
+
+      "competencias",
+
+      "id=eq." +
+      competencia.id,
+
+      datos
+
+    );
+
+
+    return {
+
+      ...competencia,
+      ...datos
+
+    };
+
+  }
+
+
+  const creada =
+    await apiPost(
+
+      "competencias",
+
+      {
+
+        numero_raid:
+          metadata.numero_raid,
+
+        nombre:
+          metadata.nombre,
+
+        edicion:
+          metadata.edicion,
+
+        fecha:
+          metadata.fecha,
+
+        distancia_km:
+          metadata.distancia_km,
+
+        club:
+          null,
+
+        localidad:
+          null,
+
+        estado:
+          "resultado_definitivo",
+
+        archivo_origen:
+          nombreArchivo
+
+      }
+
+    );
+
+
+  return creada[0];
+}
+
+
+/* =========================================================
+   IMPORTAR HISTÓRICOS
+========================================================= */
+
+async function importarHistoricosAnalizados(
+  analizados
+){
+
+  const zona =
+    document.getElementById(
+      "progresoHistoricos"
+    );
+
+
+  const boton =
+    document.getElementById(
+      "btnImportarHistoricos"
+    );
+
+
+  if(boton){
+    boton.disabled = true;
+  }
+
+
+  let correctos =
+    0;
+
+
+  const errores =
+    [];
+
+
+  for(
+    let i=0;
+    i<analizados.length;
+    i++
+  ){
+
+    const item =
+      analizados[i];
+
+
+    zona.innerHTML = `
+
+      <div class="mensaje">
+
+        Importando
+        ${i + 1}
+        de
+        ${analizados.length}:
+
+        <strong>
+          ${escapar(
+            item.archivo.name
+          )}
+        </strong>
+
+      </div>
+
+    `;
+
+
+    try{
+
+      /*
+        Recargamos la base en cada archivo.
+
+        Así los caballos creados
+        en una carrera anterior
+        ya existen para la siguiente.
+      */
+      const base =
+        await cargarBaseCaballos();
+
+
+      /*
+        Antes de guardar revisamos
+        que no haya coincidencias ambiguas.
+      */
+      const ambiguos =
+        [];
+
+
+      for(
+        const fila
+        of item.lectura.filas
+      ){
+
+        const resultado =
+          resolverCaballo(
+            fila,
+            base
+          );
+
+
+        if(
+          resultado.ambiguo
+        ){
+
+          ambiguos.push(
+            fila.equino
+          );
+
+        }
+
+      }
+
+
+      if(ambiguos.length){
+
+        throw new Error(
+
+          "Coincidencias ambiguas: " +
+
+          [
+            ...new Set(
+              ambiguos
+            )
+          ].join(", ")
+
+        );
+
+      }
+
+
+      const competencia =
+        await obtenerOCrearCompetenciaHistorica(
+
+          item.metadata,
+
+          item.archivo.name
+
+        );
+
+
+      for(
+        let j=0;
+        j<item.lectura.filas.length;
+        j++
+      ){
+
+        const fila = {
+
+          ...item.lectura.filas[j],
+
+          fila_origen:
+            j +
+            1,
+
+          seleccion:
+            ""
+
+        };
+
+
+        const participanteExistente =
+          await buscarParticipante(
+
+            competencia.id,
+
+            fila
+
+          );
+
+
+        let participanteId =
+          participanteExistente
+
+            ? participanteExistente.id
+
+            : null;
+
+
+        if(!participanteId){
+
+          const resultado =
+            resolverCaballo(
+              fila,
+              base
+            );
+
+
+          fila.seleccion =
+            resultado.tipo ===
+            "nuevo"
+
+              ? "nuevo"
+
+              : resultado.tipo +
+                ":" +
+                resultado.candidatos[0].id;
+
+
+          participanteId =
+            await obtenerOCrearParticipanteResultado(
+
+              competencia.id,
+
+              fila,
+
+              base
+
+            );
+
+        }
+
+
+        await guardarFilaResultado(
+          participanteId,
+          fila
+        );
+
+      }
+
+
+      correctos++;
+
+
+    }catch(error){
+
+      console.error(error);
+
+      errores.push({
+
+        archivo:
+          item.archivo.name,
+
+        error:
+          error.message
+
+      });
+
+    }
+
+  }
+
+
+  zona.innerHTML = `
+
+    <div
+      class="mensaje ${
+        errores.length
+
+          ? "mensaje-alerta"
+
+          : "mensaje-exito"
+      }"
+    >
+
+      <strong>
+        Importación terminada.
+      </strong>
+
+      <br><br>
+
+      ${correctos}
+      archivo(s) importados correctamente.
+
+      <br>
+
+      ${errores.length}
+      archivo(s) necesitan revisión.
+
+    </div>
+
+
+    ${errores.map(
+      item => `
+
+        <div
+          class="mensaje mensaje-error"
+        >
+
+          <strong>
+            ${escapar(
+              item.archivo
+            )}
+          </strong>
+
+          <br>
+
+          ${escapar(
+            item.error
+          )}
+
+        </div>
+
+      `
+    ).join("")}
+
+  `;
+
+
+  if(boton){
+    boton.disabled = false;
+  }
+
+}
+
+
+/* =========================================================
+   EDITAR RESULTADOS
+========================================================= */
+
+async function mostrarEditorResultados(id){
+
+  const contenedor =
+    document.getElementById(
+      "contenidoCompetencia"
+    );
+
+
+  contenedor.innerHTML = `
+
+    <div class="tarjeta">
+      Cargando resultados...
+    </div>
+
+  `;
+
+
+  try{
+
+    const participantes =
+      await apiGet(
+
+        "participantes_competencia" +
+        "?select=*" +
+        "&competencia_id=eq." +
+        id +
+        "&order=id.asc"
+
+      );
+
+
+    const ids =
+      participantes.map(
+        participante =>
+          participante.id
+      );
+
+
+    let resultados =
+      [];
+
+
+    if(ids.length){
+
+      resultados =
+        await apiGet(
+
+          "resultados_competencia" +
+          "?select=*" +
+          "&participante_id=in.(" +
+          ids.join(",") +
+          ")"
+
+        );
+
+    }
+
+
+    const mapa =
+      new Map();
+
+
+    resultados.forEach(
+      resultado => {
+
+        mapa.set(
+
+          Number(
+            resultado.participante_id
+          ),
+
+          resultado
+
+        );
+
+      }
+    );
+
+
+    contenedor.innerHTML = `
+
+      <div class="tarjeta">
+
+        <h3>
+          Editar resultados
+        </h3>
+
+        <p class="subtitulo">
+
+          Podés corregir
+          estado,
+          puesto,
+          promedio,
+          Premio FEU,
+          PPM
+          y observaciones.
+
+          El puesto original del Excel
+          se conserva.
+
+        </p>
+
+
+        <div
+          class="tabla-contenedor"
+        >
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>
+                  Caballo
+                </th>
+
+                <th>
+                  Estado
+                </th>
+
+                <th>
+                  Puesto
+                </th>
+
+                <th>
+                  Promedio
+                </th>
+
+                <th>
+                  Premio FEU
+                </th>
+
+                <th>
+                  PPM
+                </th>
+
+                <th>
+                  Observaciones
+                </th>
+
+                <th>
+                  Guardar
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              ${participantes.map(
+                participante => {
+
+                  const resultado =
+                    mapa.get(
+                      Number(
+                        participante.id
+                      )
+                    )
+                    ||
+                    {};
+
+
+                  return `
+
+                    <tr
+                      class="resultado-fila"
+                      data-participante="${participante.id}"
+                    >
+
+                      <td>
+
+                        <strong>
+                          ${escapar(
+                            participante.nombre_nomina
+                          )}
+                        </strong>
+
+                      </td>
+
+                      <td>
+
+                        <select
+                          data-campo="estado"
+                        >
+
+                          <option
+                            value="clasificado"
+                            ${
+                              (
+                                resultado.estado_resultado ||
+                                "clasificado"
+                              ) ===
+                              "clasificado"
+
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            Clasificado
+                          </option>
+
+                          <option
+                            value="NC"
+                            ${
+                              resultado.estado_resultado ===
+                              "NC"
+
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            NC
+                          </option>
+
+                          <option
+                            value="DQ"
+                            ${
+                              resultado.estado_resultado ===
+                              "DQ"
+
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            DQ
+                          </option>
+
+                          <option
+                            value="retirado"
+                            ${
+                              resultado.estado_resultado ===
+                              "retirado"
+
+                                ? "selected"
+                                : ""
+                            }
+                          >
+                            Retirado
+                          </option>
+
+                        </select>
+
+                      </td>
+
+                      <td>
+
+                        <input
+                          data-campo="puesto"
+                          type="number"
+                          value="${
+                            resultado.puesto ??
+                            ""
+                          }"
+                        >
+
+                      </td>
+
+                      <td>
+
+                        <input
+                          data-campo="promedio"
+                          type="number"
+                          step="0.01"
+                          value="${
+                            resultado.promedio_kmh ??
+                            ""
+                          }"
+                        >
+
+                      </td>
+
+                      <td>
+
+                        <input
+                          data-campo="premio"
+                          type="checkbox"
+                          ${
+                            resultado.premio_feu
+                              ? "checked"
+                              : ""
+                          }
+                        >
+
+                      </td>
+
+                      <td>
+
+                        <input
+                          data-campo="ppm"
+                          type="number"
+                          value="${
+                            resultado.premio_feu_ppm ??
+                            ""
+                          }"
+                        >
+
+                      </td>
+
+                      <td>
+
+                        <input
+                          class="observaciones"
+                          data-campo="observaciones"
+                          type="text"
+                          value="${escapar(
+                            resultado.observaciones ||
+                            ""
+                          )}"
+                        >
+
+                      </td>
+
+                      <td>
+
+                        <button
+                          class="boton boton-principal"
+                          data-guardar="${participante.id}"
+                        >
+                          Guardar
+                        </button>
+
+                      </td>
+
+                    </tr>
+
+                  `;
+
+                }
+              ).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+
+        <div class="acciones">
+
+          <button
+            id="btnRecalcular"
+            class="boton boton-dorado"
+          >
+            Recalcular posiciones vigentes
+          </button>
+
+        </div>
+
+
+        <div
+          id="mensajeEditor"
+        ></div>
+
+      </div>
+
+    `;
+
+
+    document
+      .querySelectorAll(
+        "[data-guardar]"
+      )
+      .forEach(
+        boton => {
+
+          boton.onclick =
+            () => {
+
+              guardarResultadoManual(
+                boton.dataset.guardar
+              );
+
+            };
+
+        }
+      );
+
+
+    document
+      .getElementById(
+        "btnRecalcular"
+      )
+      .onclick =
+        () => {
+
+          recalcularPosiciones(id);
+
+        };
+
+
+  }catch(error){
+
+    console.error(error);
+
+    contenedor.innerHTML = `
+
+      <div
+        class="mensaje mensaje-error"
+      >
+        No se pudieron cargar los resultados.
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+/* =========================================================
    GUARDAR RESULTADO MANUAL
-========================================================== */
+========================================================= */
 
 async function guardarResultadoManual(
-participanteId
-) {
+  participanteId
+){
 
-const fila =
-document.querySelector(
+  const fila =
+    document.querySelector(
 
-'[data-fila-participante="' +
-participanteId +
-'"]'
+      '[data-participante="' +
+      participanteId +
+      '"]'
 
-);
+    );
 
 
-if (!fila) {
-return;
-}
+  if(!fila){
+    return;
+  }
 
 
-const estado =
-fila
-.querySelector(
-'[data-campo="estado"]'
-)
-.value;
+  const estado =
+    fila
+      .querySelector(
+        '[data-campo="estado"]'
+      )
+      .value;
 
 
-const puestoTexto =
-fila
-.querySelector(
-'[data-campo="puesto"]'
-)
-.value;
+  const puestoTexto =
+    fila
+      .querySelector(
+        '[data-campo="puesto"]'
+      )
+      .value;
 
 
-const promedioTexto =
-fila
-.querySelector(
-'[data-campo="promedio"]'
-)
-.value;
+  const promedioTexto =
+    fila
+      .querySelector(
+        '[data-campo="promedio"]'
+      )
+      .value;
 
 
-const premio =
-fila
-.querySelector(
-'[data-campo="premio"]'
-)
-.checked;
+  const premio =
+    fila
+      .querySelector(
+        '[data-campo="premio"]'
+      )
+      .checked;
 
 
-const ppmTexto =
-fila
-.querySelector(
-'[data-campo="ppm"]'
-)
-.value;
+  const ppmTexto =
+    fila
+      .querySelector(
+        '[data-campo="ppm"]'
+      )
+      .value;
 
 
-const observaciones =
-fila
-.querySelector(
-'[data-campo="observaciones"]'
-)
-.value
-.trim();
+  const observaciones =
+    fila
+      .querySelector(
+        '[data-campo="observaciones"]'
+      )
+      .value
+      .trim();
 
 
-const existentes =
-await apiGet(
+  const existentes =
+    await apiGet(
 
-"resultados_competencia" +
-"?select=*" +
-"&participante_id=eq." +
-participanteId +
-"&limit=1"
+      "resultados_competencia" +
+      "?select=*" +
+      "&participante_id=eq." +
+      participanteId +
+      "&limit=1"
 
-);
+    );
 
 
-const datos = {
+  const datos = {
 
+    puesto:
+      estado ===
+      "clasificado" &&
+      puestoTexto
 
-puesto:
+        ? Number(
+            puestoTexto
+          )
 
-estado ===
-"clasificado" &&
+        : null,
 
-puestoTexto
 
-? Number(
-puestoTexto
-)
+    estado_resultado:
+      estado,
 
-: null,
 
+    promedio_kmh:
+      promedioTexto
 
-estado_resultado:
-estado,
+        ? Number(
+            promedioTexto
+          )
 
+        : null,
 
-promedio_kmh:
 
-promedioTexto
+    premio_feu:
+      premio,
 
-? Number(
-promedioTexto
-)
 
-: null,
+    premio_feu_ppm:
+      premio &&
+      ppmTexto
 
+        ? Number(
+            ppmTexto
+          )
 
-premio_feu:
-premio,
+        : null,
 
 
-premio_feu_ppm:
+    observaciones:
+      observaciones ||
+      null,
 
-premio &&
-ppmTexto
 
-? Number(
-ppmTexto
-)
+    updated_at:
+      new Date()
+        .toISOString()
 
-: null,
+  };
 
 
-observaciones:
-observaciones ||
-null,
+  if(existentes.length){
 
+    await apiPatch(
 
-updated_at:
-new Date()
-.toISOString()
+      "resultados_competencia",
 
-};
+      "participante_id=eq." +
+      participanteId,
 
+      datos
 
-if (
-existentes.length
-) {
+    );
 
 
-await apiPatch(
+  }else{
 
-"resultados_competencia",
+    await apiPost(
 
-"participante_id=eq." +
-participanteId,
+      "resultados_competencia",
 
-datos
+      {
 
-);
+        participante_id:
+          Number(
+            participanteId
+          ),
 
+        ...datos,
 
-} else {
+        puesto_original:
+          datos.puesto,
 
+        estado_original:
+          datos.estado_resultado
 
-await apiPost(
+      }
 
-"resultados_competencia",
+    );
 
-{
+  }
 
 
-participante_id:
-Number(
-participanteId
-),
+  document
+    .getElementById(
+      "mensajeEditor"
+    )
+    .innerHTML = `
 
+      <div
+        class="mensaje mensaje-exito"
+      >
+        Resultado actualizado.
+      </div>
 
-...datos,
-
-
-puesto_original:
-datos.puesto,
-
-
-estado_original:
-datos.estado_resultado
-
-
-}
-
-);
-
-}
-
-
-document
-.getElementById(
-"mensajeEditor"
-)
-.innerHTML = `
-
-<div
-class="mensaje mensaje-exito"
->
-
-Resultado actualizado.
-
-</div>
-
-`;
+    `;
 
 }
 
 
-/* ==========================================================
+/* =========================================================
    RECALCULAR PUESTOS RESPETANDO EMPATES
-========================================================== */
+========================================================= */
 
 async function recalcularPosiciones(
-competenciaId
-) {
+  competenciaId
+){
 
-const confirmar =
-confirm(
+  const confirmar =
+    confirm(
 
-"¿Querés recalcular los puestos vigentes? Se respetarán los empates oficiales. Los NC, DQ y retirados quedan sin puesto."
+      "¿Querés recalcular los puestos vigentes? Se respetarán los empates oficiales. Los NC, DQ y retirados quedan sin puesto."
 
-);
+    );
 
 
-if (!confirmar) {
-return;
-}
+  if(!confirmar){
+    return;
+  }
 
 
-try {
+  try{
 
+    const participantes =
+      await apiGet(
 
-const participantes =
-await apiGet(
+        "participantes_competencia" +
+        "?select=id" +
+        "&competencia_id=eq." +
+        competenciaId
 
-"participantes_competencia" +
-"?select=id" +
-"&competencia_id=eq." +
-competenciaId
+      );
 
-);
 
+    const ids =
+      participantes.map(
+        participante =>
+          participante.id
+      );
 
-const ids =
-participantes.map(
-p => p.id
-);
 
+    if(!ids.length){
+      return;
+    }
 
-if (
-!ids.length
-) {
-return;
-}
 
+    const resultados =
+      await apiGet(
 
-const resultados =
-await apiGet(
+        "resultados_competencia" +
+        "?select=*" +
+        "&participante_id=in.(" +
+        ids.join(",") +
+        ")"
 
-"resultados_competencia" +
-"?select=*" +
-"&participante_id=in.(" +
-ids.join(",") +
-")"
+      );
 
-);
 
+    const clasificados =
+      resultados
 
-const clasificados =
-resultados
+        .filter(
+          resultado =>
+            resultado.estado_resultado ===
+            "clasificado"
+        )
 
-.filter(
+        .sort(
+          (
+            a,
+            b
+          ) => {
 
-r =>
-r.estado_resultado ===
-"clasificado"
+            const puestoA =
+              a.puesto_original ??
+              a.puesto ??
+              999999;
 
-)
 
-.sort(
+            const puestoB =
+              b.puesto_original ??
+              b.puesto ??
+              999999;
 
-(a,b) => {
 
+            if(
+              puestoA !==
+              puestoB
+            ){
 
-const pa =
+              return (
+                puestoA -
+                puestoB
+              );
 
-a.puesto_original ??
-a.puesto ??
-999999;
+            }
 
 
-const pb =
+            return (
+              Number(a.id) -
+              Number(b.id)
+            );
 
-b.puesto_original ??
-b.puesto ??
-999999;
+          }
+        );
 
 
-if (
-pa !== pb
-) {
+    const grupos =
+      [];
 
-return pa - pb;
 
-}
+    for(
+      const resultado
+      of clasificados
+    ){
 
+      const puestoBase =
+        resultado.puesto_original ??
+        resultado.puesto;
 
-return (
 
-Number(a.id) -
-Number(b.id)
+      let grupo =
+        grupos.find(
+          item =>
+            Number(
+              item.puestoBase
+            ) ===
+            Number(
+              puestoBase
+            )
+        );
 
-);
 
-}
+      if(!grupo){
 
-);
+        grupo = {
 
+          puestoBase,
 
-const grupos =
-[];
+          resultados:
+            []
 
+        };
 
-for (
-const resultado
-of clasificados
-) {
 
+        grupos.push(
+          grupo
+        );
 
-const puestoBase =
+      }
 
-resultado.puesto_original ??
-resultado.puesto;
 
+      grupo.resultados.push(
+        resultado
+      );
 
-let grupo =
-grupos.find(
+    }
 
-g =>
-Number(
-g.puestoBase
-) ===
 
-Number(
-puestoBase
-)
+    let anteriores =
+      0;
 
-);
 
+    for(
+      const grupo
+      of grupos
+    ){
 
-if (!grupo) {
+      const nuevoPuesto =
+        anteriores +
+        1;
 
 
-grupo = {
+      for(
+        const resultado
+        of grupo.resultados
+      ){
 
-puestoBase,
+        await apiPatch(
 
-resultados:
-[]
+          "resultados_competencia",
 
-};
+          "id=eq." +
+          resultado.id,
 
+          {
 
-grupos.push(
-grupo
-);
+            puesto:
+              nuevoPuesto,
 
-}
+            updated_at:
+              new Date()
+                .toISOString()
 
+          }
 
-grupo
-.resultados
-.push(
-resultado
-);
+        );
 
-}
+      }
 
 
-let cantidadAnteriores =
-0;
+      anteriores +=
+        grupo.resultados.length;
 
+    }
 
-for (
-const grupo
-of grupos
-) {
 
+    const noClasificados =
+      resultados.filter(
+        resultado =>
+          resultado.estado_resultado !==
+          "clasificado"
+      );
 
-const puestoVigente =
-cantidadAnteriores +
-1;
 
+    for(
+      const resultado
+      of noClasificados
+    ){
 
-for (
-const resultado
-of grupo.resultados
-) {
+      await apiPatch(
 
+        "resultados_competencia",
 
-await apiPatch(
+        "id=eq." +
+        resultado.id,
 
-"resultados_competencia",
+        {
 
-"id=eq." +
-resultado.id,
+          puesto:
+            null,
 
-{
+          updated_at:
+            new Date()
+              .toISOString()
 
-puesto:
-puestoVigente,
+        }
 
-updated_at:
-new Date()
-.toISOString()
+      );
 
-}
+    }
 
-);
 
-}
+    await mostrarEditorResultados(
+      competenciaId
+    );
 
 
-cantidadAnteriores +=
-grupo.resultados.length;
+    document
+      .getElementById(
+        "mensajeEditor"
+      )
+      .innerHTML = `
 
-}
+        <div
+          class="mensaje mensaje-exito"
+        >
 
+          Posiciones recalculadas.
 
-const noClasificados =
-resultados.filter(
+          <br>
 
-r =>
-r.estado_resultado !==
-"clasificado"
+          Los empates oficiales
+          fueron conservados.
 
-);
+        </div>
 
+      `;
 
-for (
-const resultado
-of noClasificados
-) {
 
+  }catch(error){
 
-await apiPatch(
+    console.error(error);
 
-"resultados_competencia",
+    alert(
+      "No se pudieron recalcular las posiciones."
+    );
 
-"id=eq." +
-resultado.id,
-
-{
-
-puesto:
-null,
-
-updated_at:
-new Date()
-.toISOString()
-
-}
-
-);
-
-}
-
-
-await mostrarEditorResultados(
-competenciaId
-);
-
-
-document
-.getElementById(
-"mensajeEditor"
-)
-.innerHTML = `
-
-<div
-class="mensaje mensaje-exito"
->
-
-Posiciones vigentes recalculadas.
-
-Los empates oficiales fueron conservados.
-
-</div>
-
-`;
-
-
-} catch (error) {
-
-
-console.error(error);
-
-
-alert(
-
-"No se pudieron recalcular las posiciones."
-
-);
-
-}
+  }
 
 }
 
 
-/* ==========================================================
-   IMPORTACIÓN HISTÓRICA EN LOTE
-========================================================== */
-
-function mostrarImportacionHistorica() {
-
-app.innerHTML = `
-
-<div class="tarjeta">
-
-<h2>
-Importar resultados históricos en lote
-</h2>
-
-<p class="subtitulo">
-
-Seleccioná varios Excel FEU juntos.
-
-El sistema detecta el número de Raid desde el nombre del archivo,
-relaciona los caballos con SDU o con sus fichas deportivas,
-crea automáticamente los caballos y participantes que falten
-y guarda sus resultados.
-
-</p>
-
-
-<input
-id="archivosHistoricos"
-type="file"
-accept=".xlsx,.xls,.xlsm"
-multiple
->
-
-
-<div class="acciones">
-
-<button
-id="btnProcesarHistoricos"
-class="boton boton-principal"
->
-
-Procesar archivos seleccionados
-
-</button>
-
-</div>
-
-
-<div
-id="mensajeHistoricos"
-></div>
-
-</div>
-
-`;
-
-
-document
-.getElementById(
-"btnProcesarHistoricos"
-)
-.onclick =
-procesarHistoricos;
-
-}
-
-
-/* ==========================================================
-   SACAR N.º RAID DEL NOMBRE DEL ARCHIVO
-========================================================== */
-
-function obtenerNumeroRaidDesdeNombreArchivo(
-nombre
-) {
-
-const texto =
-String(
-nombre ||
-""
-)
-.toLowerCase();
-
-
-const coincidencia =
-texto.match(
-/raid[\s_-]*(\d+)/i
-);
-
-
-return coincidencia
-? Number(
-coincidencia[1]
-)
-: null;
-
-}
-
-
-/* ==========================================================
-   ELEGIR MEJOR COINCIDENCIA AUTOMÁTICA
-========================================================== */
-
-function mejorCandidatoAutomatico(
-candidatos
-) {
-
-if (
-!candidatos ||
-!candidatos.length
-) {
-
-return {
-
-estado:
-"nuevo",
-
-candidato:
-null
-
-};
-
-}
-
-
-const prioridadMinima =
-Math.min(
-
-...candidatos.map(
-
-c =>
-Number(
-c.prioridad ||
-999
-)
-
-)
-
-);
-
-
-const mejores =
-candidatos.filter(
-
-c =>
-Number(
-c.prioridad ||
-999
-) ===
-prioridadMinima
-
-);
-
-
-if (
-mejores.length ===
-1
-) {
-
-return {
-
-estado:
-"unico",
-
-candidato:
-mejores[0]
-
-};
-
-}
-
-
-return {
-
-estado:
-"ambiguo",
-
-candidato:
-null
-
-};
-
-}
-
-
-/* ==========================================================
-   ACTUALIZAR BASE EN MEMORIA
-========================================================== */
-
-async function agregarDeportivoABaseSiFalta(
-base,
-deportivoId
-) {
-
-if (
-
-base.deportivos.some(
-
-d =>
-Number(d.id) ===
-Number(deportivoId)
-
-)
-
-) {
-
-return;
-
-}
-
-
-const encontrados =
-await apiGet(
-
-"caballos_deportivos" +
-"?select=*" +
-"&id=eq." +
-deportivoId +
-"&limit=1"
-
-);
-
-
-if (
-encontrados.length
-) {
-
-base.deportivos.push(
-encontrados[0]
-);
-
-}
-
-}
-
-
-/* ==========================================================
-   PROCESAR TODOS LOS HISTÓRICOS
-========================================================== */
-
-async function procesarHistoricos() {
-
-const input =
-document
-.getElementById(
-"archivosHistoricos"
-);
-
-
-const mensaje =
-document
-.getElementById(
-"mensajeHistoricos"
-);
-
-
-const boton =
-document
-.getElementById(
-"btnProcesarHistoricos"
-);
-
-
-const archivos =
-Array.from(
-input.files ||
-[]
-);
-
-
-if (
-!archivos.length
-) {
-
-alert(
-"Seleccioná los archivos de resultados FEU."
-);
-
-return;
-
-}
-
-
-boton.disabled =
-true;
-
-
-mensaje.innerHTML = `
-
-<div class="mensaje">
-
-Preparando
-${archivos.length}
-archivo(s)...
-
-</div>
-
-`;
-
-
-const resumen =
-[];
-
-
-try {
-
-
-const base =
-await cargarBaseCaballos();
-
-
-for (
-
-let archivoIndex = 0;
-
-archivoIndex <
-archivos.length;
-
-archivoIndex++
-
-) {
-
-
-const archivo =
-archivos[
-archivoIndex
-];
-
-
-mensaje.innerHTML = `
-
-<div class="mensaje">
-
-Procesando
-${archivoIndex + 1}
-de
-${archivos.length}:
-
-<strong>
-${escapar(
-archivo.name
-)}
-</strong>
-
-</div>
-
-`;
-
-
-try {
-
-
-const numeroRaid =
-obtenerNumeroRaidDesdeNombreArchivo(
-archivo.name
-);
-
-
-if (
-!numeroRaid
-) {
-
-throw new Error(
-
-"No pude detectar el número de Raid en el nombre del archivo."
-
-);
-
-}
-
-
-const competencias =
-await apiGet(
-
-"competencias" +
-"?select=*" +
-"&numero_raid=eq." +
-numeroRaid
-
-);
-
-
-if (
-competencias.length ===
-0
-) {
-
-throw new Error(
-
-"No existe una competencia creada con N.º Raid " +
-numeroRaid +
-"."
-
-);
-
-}
-
-
-if (
-competencias.length >
-1
-) {
-
-throw new Error(
-
-"Hay más de una competencia con N.º Raid " +
-numeroRaid +
-". Revisá ese dato antes de importar."
-
-);
-
-}
-
-
-const competencia =
-competencias[0];
-
-
-const lectura =
-await leerExcel(
-archivo,
-"resultados"
-);
-
-
-let participantes =
-await apiGet(
-
-"participantes_competencia" +
-"?select=*" +
-"&competencia_id=eq." +
-competencia.id
-
-);
-
-
-let participantesCreados =
-0;
-
-let participantesExistentes =
-0;
-
-let deportivosNuevos =
-0;
-
-let resultadosGuardados =
-0;
-
-
-/*
-Primero revisamos toda la carrera.
-Si hay una coincidencia verdaderamente ambigua,
-ese archivo se detiene antes de empezar a guardar.
-*/
-const filasPreparadas =
-[];
-
-
-for (
-
-let indice = 0;
-
-indice <
-lectura.filas.length;
-
-indice++
-
-) {
-
-
-const fila =
-lectura.filas[indice];
-
-
-const participante =
-participantes.find(
-
-p =>
-
-(
-
-fila.chip &&
-
-textoLimpio(
-p.chip
-) ===
-textoLimpio(
-fila.chip
-)
-
-)
-
-||
-
-(
-
-fila.pasaporte &&
-
-textoLimpio(
-p.pasaporte_feu
-) ===
-textoLimpio(
-fila.pasaporte
-)
-
-)
-
-||
-
-(
-
-normalizar(
-p.nombre_nomina
-) ===
-normalizar(
-fila.equino
-)
-
-)
-
-);
-
-
-if (
-participante
-) {
-
-filasPreparadas.push({
-
-fila,
-
-indice,
-
-participante,
-
-seleccion:
-null
-
-});
-
-continue;
-
-}
-
-
-const candidatos =
-candidatosCaballo(
-fila,
-base
-);
-
-
-const resolucion =
-mejorCandidatoAutomatico(
-candidatos
-);
-
-
-if (
-resolucion.estado ===
-"ambiguo"
-) {
-
-
-const prioridadMinima =
-Math.min(
-
-...candidatos.map(
-
-x =>
-Number(
-x.prioridad ||
-999
-)
-
-)
-
-);
-
-
-const nombres =
-candidatos
-
-.filter(
-
-c =>
-Number(
-c.prioridad ||
-999
-) ===
-prioridadMinima
-
-)
-
-.map(
-c => c.nombre
-)
-
-.join(
-" / "
-);
-
-
-throw new Error(
-
-`El caballo "${fila.equino}" tiene más de una coincidencia del mismo nivel (${nombres}). ` +
-
-"Cargá ese Raid individualmente para elegir la relación correcta."
-
-);
-
-}
-
-
-const seleccion =
-
-resolucion.estado ===
-"nuevo"
-
-? "nuevo"
-
-: resolucion.candidato.tipo +
-":" +
-resolucion.candidato.id;
-
-
-filasPreparadas.push({
-
-fila,
-
-indice,
-
-participante:
-null,
-
-seleccion
-
-});
-
-}
-
-
-/*
-Si la carrera entera pasó la validación,
-ahora sí guardamos.
-*/
-for (
-const preparado
-of filasPreparadas
-) {
-
-
-const {
-fila,
-indice
-} =
-preparado;
-
-
-let participante =
-preparado.participante;
-
-
-let participanteId;
-
-
-if (
-participante
-) {
-
-participanteId =
-participante.id;
-
-participantesExistentes++;
-
-}
-
-else {
-
-
-const eraNuevoDeportivo =
-preparado.seleccion ===
-"nuevo";
-
-
-const caballoDeportivoId =
-await obtenerOCrearDeportivo({
-
-equino:
-fila.equino,
-
-chip:
-fila.chip,
-
-pasaporte:
-fila.pasaporte,
-
-propietario:
-"",
-
-seleccion:
-preparado.seleccion
-
-});
-
-
-await agregarDeportivoABaseSiFalta(
-base,
-caballoDeportivoId
-);
-
-
-if (
-eraNuevoDeportivo
-) {
-
-deportivosNuevos++;
-
-}
-
-
-/*
-Chequeo adicional para no duplicar
-un participante accidentalmente.
-*/
-participante =
-participantes.find(
-
-p =>
-
-(
-
-fila.chip &&
-
-textoLimpio(
-p.chip
-) ===
-textoLimpio(
-fila.chip
-)
-
-)
-
-||
-
-(
-
-fila.pasaporte &&
-
-textoLimpio(
-p.pasaporte_feu
-) ===
-textoLimpio(
-fila.pasaporte
-)
-
-)
-
-||
-
-(
-
-normalizar(
-p.nombre_nomina
-) ===
-normalizar(
-fila.equino
-)
-
-)
-
-);
-
-
-if (
-participante
-) {
-
-
-participanteId =
-participante.id;
-
-
-participantesExistentes++;
-
-
-await apiPatch(
-
-"participantes_competencia",
-
-"id=eq." +
-participante.id,
-
-{
-
-caballo_deportivo_id:
-caballoDeportivoId,
-
-jinete:
-fila.jinete ||
-participante.jinete ||
-null,
-
-chip:
-fila.chip ||
-participante.chip ||
-null,
-
-pasaporte_feu:
-fila.pasaporte ||
-participante.pasaporte_feu ||
-null
-
-}
-
-);
-
-}
-
-else {
-
-
-const creado =
-await apiPost(
-
-"participantes_competencia",
-
-{
-
-competencia_id:
-competencia.id,
-
-caballo_deportivo_id:
-caballoDeportivoId,
-
-numero_marcacion:
-null,
-
-nombre_nomina:
-fila.equino,
-
-nombre_normalizado:
-normalizar(
-fila.equino
-),
-
-propietario_nomina:
-null,
-
-jinete:
-fila.jinete ||
-null,
-
-club:
-fila.club ||
-null,
-
-chip:
-fila.chip ||
-null,
-
-pasaporte_feu:
-fila.pasaporte ||
-null,
-
-genero:
-null,
-
-fila_origen:
-indice +
-1
-
-}
-
-);
-
-
-participante =
-creado[0];
-
-
-participanteId =
-participante.id;
-
-
-participantes.push(
-participante
-);
-
-
-participantesCreados++;
-
-}
-
-}
-
-
-/*
-Guardar resultado.
-*/
-const resultadosExistentes =
-await apiGet(
-
-"resultados_competencia" +
-"?select=*" +
-"&participante_id=eq." +
-participanteId +
-"&limit=1"
-
-);
-
-
-const datosResultado = {
-
-
-/*
-PUESTO FEU SE GUARDA EXACTAMENTE.
-Los empates no se transforman.
-
-1, 1, 3
-permanece
-1, 1, 3.
-*/
-puesto:
-
-fila.estado ===
-"clasificado"
-
-? fila.puesto
-
-: null,
-
-
-estado_resultado:
-fila.estado,
-
-
-promedio_kmh:
-fila.promedio,
-
-
-tiempo:
-fila.tiempo ||
-null,
-
-
-observaciones:
-fila.observaciones ||
-null,
-
-
-updated_at:
-new Date()
-.toISOString()
-
-};
-
-
-if (
-resultadosExistentes.length
-) {
-
-
-const existente =
-resultadosExistentes[0];
-
-
-const cambios = {
-
-...datosResultado
-
-};
-
-
-if (
-
-existente.puesto_original ===
-null ||
-
-existente.puesto_original ===
-undefined
-
-) {
-
-
-cambios.puesto_original =
-
-fila.estado ===
-"clasificado"
-
-? fila.puesto
-
-: null;
-
-}
-
-
-if (
-!existente.estado_original
-) {
-
-cambios.estado_original =
-fila.estado;
-
-}
-
-
-await apiPatch(
-
-"resultados_competencia",
-
-"participante_id=eq." +
-participanteId,
-
-cambios
-
-);
-
-}
-
-else {
-
-
-await apiPost(
-
-"resultados_competencia",
-
-{
-
-participante_id:
-participanteId,
-
-
-...datosResultado,
-
-
-puesto_original:
-
-fila.estado ===
-"clasificado"
-
-? fila.puesto
-
-: null,
-
-
-estado_original:
-fila.estado
-
-}
-
-);
-
-}
-
-
-resultadosGuardados++;
-
-}
-
-
-await apiPatch(
-
-"competencias",
-
-"id=eq." +
-competencia.id,
-
-{
-
-estado:
-"resultado_provisorio",
-
-archivo_origen:
-archivo.name,
-
-updated_at:
-new Date()
-.toISOString()
-
-}
-
-);
-
-
-resumen.push({
-
-archivo:
-archivo.name,
-
-ok:
-true,
-
-detalle:
-
-`Raid ${numeroRaid}: ${resultadosGuardados} resultados, ` +
-
-`${participantesCreados} participantes creados, ` +
-
-`${participantesExistentes} ya existentes, ` +
-
-`${deportivosNuevos} deportivos nuevos.`
-
-});
-
-
-}
-
-catch (
-errorArchivo
-) {
-
-
-console.error(
-errorArchivo
-);
-
-
-resumen.push({
-
-archivo:
-archivo.name,
-
-ok:
-false,
-
-detalle:
-errorArchivo.message
-
-});
-
-}
-
-}
-
-
-const correctos =
-resumen.filter(
-r => r.ok
-).length;
-
-
-const errores =
-resumen.length -
-correctos;
-
-
-mensaje.innerHTML = `
-
-<div class="tarjeta">
-
-<h3>
-Importación terminada
-</h3>
-
-
-<div
-class="mensaje ${
-errores
-? "mensaje-error"
-: "mensaje-exito"
-}"
->
-
-${correctos}
-archivo(s) importados correctamente.
-
-${
-errores
-? `<br>${errores} archivo(s) necesitan revisión.`
-: ""
-}
-
-</div>
-
-
-${resumen.map(
-
-r => `
-
-<div
-class="mensaje ${
-r.ok
-? "mensaje-exito"
-: "mensaje-error"
-}"
->
-
-<strong>
-${escapar(
-r.archivo
-)}
-</strong>
-
-<br>
-
-${escapar(
-r.detalle
-)}
-
-</div>
-
-`
-
-).join("")}
-
-
-</div>
-
-`;
-
-
-}
-
-catch (error) {
-
-
-console.error(error);
-
-
-mensaje.innerHTML = `
-
-<div
-class="mensaje mensaje-error"
->
-
-No se pudo iniciar la importación.
-
-<br><br>
-
-${escapar(
-error.message
-)}
-
-</div>
-
-`;
-
-}
-
-finally {
-
-boton.disabled =
-false;
-
-}
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    ROUTER
-========================================================== */
+========================================================= */
 
-async function cargarRuta() {
+async function cargarRuta(){
 
+  const haySesion =
+    sesionAdmin &&
+    sesionAdmin.access_token
 
-const haySesion =
+      ? true
 
-sesionAdmin &&
-sesionAdmin.access_token
-
-? true
-
-: await renovarSesion();
+      : await renovarSesion();
 
 
-if (
-!haySesion
-) {
+  if(!haySesion){
 
-mostrarLogin();
+    mostrarLogin();
 
-return;
+    return;
 
-}
+  }
 
 
-const params =
-new URLSearchParams(
-
-window.location.search
-
-);
+  const parametros =
+    new URLSearchParams(
+      window.location.search
+    );
 
 
-const competencia =
-params.get(
-"competencia"
-);
+  const competencia =
+    parametros.get(
+      "competencia"
+    );
 
 
-const vista =
-params.get(
-"vista"
-);
+  const vista =
+    parametros.get(
+      "vista"
+    );
 
 
-const seccion =
-
-params.get(
-"seccion"
-) ||
-
-"general";
-
-
-window.scrollTo({
-
-top:
-0,
-
-behavior:
-"instant"
-
-});
+  const seccion =
+    parametros.get(
+      "seccion"
+    )
+    ||
+    "general";
 
 
-if (
-vista ===
-"nueva"
-) {
-
-mostrarNuevaCompetencia();
-
-return;
-
-}
+  window.scrollTo({
+    top:0,
+    behavior:"instant"
+  });
 
 
-if (
-vista ===
-"historicos"
-) {
+  if(
+    vista ===
+    "nueva"
+  ){
 
-mostrarImportacionHistorica();
+    mostrarNuevaCompetencia();
 
-return;
+    return;
 
-}
+  }
 
 
-if (
-competencia
-) {
+  if(
+    vista ===
+    "historicos"
+  ){
 
-await mostrarCompetencia(
+    mostrarHistoricos();
 
-competencia,
-seccion
+    return;
 
-);
+  }
 
-return;
+
+  if(competencia){
+
+    await mostrarCompetencia(
+      competencia,
+      seccion
+    );
+
+    return;
+
+  }
+
+
+  await mostrarPanel();
 
 }
 
 
-await mostrarPanel();
-
-}
-
-
-/* ==========================================================
+/* =========================================================
    INICIO
-========================================================== */
+========================================================= */
 
 cargarRuta();
 
 
 setInterval(
-
-renovarSesion,
-
-45 *
-60 *
-1000
-
+  renovarSesion,
+  45 * 60 * 1000
 );
 
 </script>
