@@ -4740,40 +4740,42 @@ async function listarParticipantes(
 
 /* ==========================================================
    IMPORTAR RESULTADOS
+   Sirve tanto para carreras nuevas con nómina previa
+   como para carreras históricas sin nómina.
 ========================================================== */
 
-async function mostrarImportarResultados(
-  id
-) {
+async function mostrarImportarResultados(id) {
 
   const contenedor =
-    document
-      .getElementById(
-        "contenidoCompetencia"
-      );
-
+    document.getElementById(
+      "contenidoCompetencia"
+    );
 
   contenedor.innerHTML = `
 
     <div class="tarjeta">
 
-
       <h3>
-        Importar resultados
+        Importar resultados FEU
       </h3>
-
 
       <p class="subtitulo">
 
-        Subí el Excel oficial
-        de resultados FEU.
+        Podés subir un resultado aunque esta carrera
+        no tenga nómina cargada.
 
-        Se relacionará con la nómina
-        usando chip, pasaporte
-        y nombre.
+        <br><br>
+
+        SDU buscará automáticamente cada caballo
+        entre participantes, caballos deportivos,
+        alias y caballos registrados.
+
+        <br>
+
+        Si no existe, se creará automáticamente
+        su ficha deportiva.
 
       </p>
-
 
       <input
         id="archivoResultados"
@@ -4781,11 +4783,9 @@ async function mostrarImportarResultados(
         accept=".xlsx,.xls,.xlsm"
       >
 
-
       <div
         id="previewResultados"
       ></div>
-
 
     </div>
 
@@ -4799,33 +4799,24 @@ async function mostrarImportarResultados(
     .onchange =
       async evento => {
 
-
         const archivo =
-          evento
-            .target
-            .files[0];
-
+          evento.target.files[0];
 
         if (!archivo) {
-
           return;
-
         }
 
 
         const zona =
-          document
-            .getElementById(
-              "previewResultados"
-            );
+          document.getElementById(
+            "previewResultados"
+          );
 
 
         zona.innerHTML = `
 
           <div class="mensaje">
-
             Leyendo resultados...
-
           </div>
 
         `;
@@ -4833,16 +4824,22 @@ async function mostrarImportarResultados(
 
         try {
 
-
+          /*
+            1.
+            Leemos el Excel FEU.
+          */
           const lectura =
             await leerExcel(
-
               archivo,
               "resultados"
-
             );
 
 
+          /*
+            2.
+            Participantes que ya existan
+            en esta competencia.
+          */
           const participantes =
             await apiGet(
 
@@ -4854,71 +4851,191 @@ async function mostrarImportarResultados(
             );
 
 
+          /*
+            3.
+            Toda la base SDU:
+            deportivos,
+            aliases,
+            Caballos registrados.
+          */
+          const base =
+            await cargarBaseCaballos();
+
+
+          /*
+            4.
+            Analizamos caballo por caballo.
+          */
           previewResultados =
             lectura.filas.map(
 
-              fila => {
+              (fila, indice) => {
 
 
-                const candidatos =
+                /*
+                  PRIMERO:
+                  buscamos si ya es participante
+                  de esta carrera.
+                */
+                const participantesCoincidentes =
                   participantes.filter(
 
                     p =>
 
                       (
-
                         fila.chip &&
 
                         textoLimpio(
                           p.chip
                         ) ===
-                        fila.chip
-
+                        textoLimpio(
+                          fila.chip
+                        )
                       )
 
                       ||
 
                       (
-
                         fila.pasaporte &&
 
                         textoLimpio(
                           p.pasaporte_feu
                         ) ===
-                        fila.pasaporte
-
+                        textoLimpio(
+                          fila.pasaporte
+                        )
                       )
 
                       ||
 
                       (
-
                         normalizar(
                           p.nombre_nomina
                         ) ===
-
                         normalizar(
                           fila.equino
                         )
-
                       )
 
                   );
+
+
+                let participante_id =
+                  null;
+
+
+                if (
+                  participantesCoincidentes.length === 1
+                ) {
+
+                  participante_id =
+                    participantesCoincidentes[0].id;
+
+                }
+
+
+                /*
+                  SEGUNDO:
+                  buscamos al caballo en toda
+                  la base deportiva / SDU.
+                */
+                const candidatos =
+                  candidatosCaballo(
+                    fila,
+                    base
+                  );
+
+
+                let seleccion =
+                  "";
+
+
+                /*
+                  Si ya había participante,
+                  usamos su caballo deportivo.
+                */
+                if (
+                  participante_id
+                ) {
+
+                  const participante =
+                    participantesCoincidentes[0];
+
+
+                  if (
+                    participante.caballo_deportivo_id
+                  ) {
+
+                    seleccion =
+                      "deportivo:" +
+                      participante.caballo_deportivo_id;
+
+                  }
+
+                }
+
+
+                /*
+                  Si no había participante
+                  pero encontramos UN caballo,
+                  lo seleccionamos automáticamente.
+                */
+                if (
+                  !seleccion &&
+                  candidatos.length === 1
+                ) {
+
+                  seleccion =
+                    candidatos[0].tipo +
+                    ":" +
+                    candidatos[0].id;
+
+                }
+
+
+                /*
+                  Si no encontramos ninguno,
+                  se creará un caballo deportivo.
+                */
+                if (
+                  !seleccion &&
+                  candidatos.length === 0
+                ) {
+
+                  seleccion =
+                    "nuevo";
+
+                }
+
+
+                /*
+                  Si hay más de una coincidencia,
+                  queda vacío para que el admin
+                  decida cuál es.
+                */
+                if (
+                  candidatos.length > 1 &&
+                  !participante_id
+                ) {
+
+                  seleccion =
+                    "";
+
+                }
 
 
                 return {
 
                   ...fila,
 
+                  fila_origen:
+                    indice + 1,
+
+                  participante_id,
+
                   candidatos,
 
-                  participante_id:
-                    candidatos.length ===
-                    1
-
-                      ? candidatos[0].id
-
-                      : null
+                  seleccion
 
                 };
 
@@ -4928,15 +5045,12 @@ async function mostrarImportarResultados(
 
 
           renderPreviewResultados(
-
             archivo.name,
             participantes
-
           );
 
 
         } catch (error) {
-
 
           console.error(
             error
@@ -4963,6 +5077,1105 @@ async function mostrarImportarResultados(
 }
 
 
+/* ==========================================================
+   PREVIEW RESULTADOS
+========================================================== */
+
+function renderPreviewResultados(
+  nombreArchivo,
+  participantes
+) {
+
+  const zona =
+    document.getElementById(
+      "previewResultados"
+    );
+
+
+  const existentes =
+    previewResultados.filter(
+      x => x.participante_id
+    ).length;
+
+
+  const automaticos =
+    previewResultados.filter(
+
+      x =>
+        !x.participante_id &&
+        x.candidatos.length === 1
+
+    ).length;
+
+
+  const nuevos =
+    previewResultados.filter(
+
+      x =>
+        !x.participante_id &&
+        x.candidatos.length === 0
+
+    ).length;
+
+
+  const revisar =
+    previewResultados.filter(
+
+      x =>
+        !x.participante_id &&
+        x.candidatos.length > 1
+
+    ).length;
+
+
+  zona.innerHTML = `
+
+    <div
+      style="margin-top:20px;"
+    >
+
+      <div class="resumen-preview">
+
+        <div class="resumen-item">
+
+          <strong>
+            ${previewResultados.length}
+          </strong>
+
+          <small>
+            Resultados
+          </small>
+
+        </div>
+
+
+        <div class="resumen-item">
+
+          <strong>
+            ${existentes + automaticos}
+          </strong>
+
+          <small>
+            Relacionados
+          </small>
+
+        </div>
+
+
+        <div class="resumen-item">
+
+          <strong>
+            ${nuevos}
+          </strong>
+
+          <small>
+            Nuevos deportivos
+          </small>
+
+        </div>
+
+      </div>
+
+
+      ${
+        revisar
+          ? `
+
+            <div
+              class="mensaje mensaje-error"
+            >
+
+              Hay ${revisar}
+              caballo(s) con más de una coincidencia.
+
+              Revisalos antes de guardar.
+
+            </div>
+
+          `
+          : ""
+      }
+
+
+      <div
+        class="tabla-contenedor"
+      >
+
+        <table>
+
+          <thead>
+
+            <tr>
+
+              <th>
+                Equino
+              </th>
+
+              <th>
+                Chip
+              </th>
+
+              <th>
+                Pasaporte
+              </th>
+
+              <th>
+                Puesto
+              </th>
+
+              <th>
+                Estado
+              </th>
+
+              <th>
+                Tiempo
+              </th>
+
+              <th>
+                Vel. km/h
+              </th>
+
+              <th>
+                Relación SDU
+              </th>
+
+              <th>
+                Participante
+              </th>
+
+            </tr>
+
+          </thead>
+
+
+          <tbody>
+
+            ${previewResultados.map(
+
+              (fila, indice) => {
+
+
+                let clase =
+                  "preview-nuevo";
+
+
+                if (
+                  fila.participante_id ||
+                  fila.candidatos.length === 1
+                ) {
+
+                  clase =
+                    "preview-ok";
+
+                }
+
+
+                if (
+                  !fila.participante_id &&
+                  fila.candidatos.length > 1
+                ) {
+
+                  clase =
+                    "preview-dudoso";
+
+                }
+
+
+                let estadoParticipante =
+                  "Se creará";
+
+
+                if (
+                  fila.participante_id
+                ) {
+
+                  estadoParticipante =
+                    "Ya existe";
+
+                }
+
+
+                return `
+
+                  <tr
+                    class="${clase}"
+                  >
+
+                    <td>
+
+                      <strong>
+                        ${escapar(
+                          fila.equino
+                        )}
+                      </strong>
+
+                    </td>
+
+
+                    <td>
+
+                      ${escapar(
+                        fila.chip ||
+                        "-"
+                      )}
+
+                    </td>
+
+
+                    <td>
+
+                      ${escapar(
+                        fila.pasaporte ||
+                        "-"
+                      )}
+
+                    </td>
+
+
+                    <td>
+
+                      ${
+                        fila.puesto ??
+                        "-"
+                      }
+
+                    </td>
+
+
+                    <td>
+
+                      ${escapar(
+                        fila.estado
+                      )}
+
+                    </td>
+
+
+                    <td>
+
+                      ${escapar(
+                        fila.tiempo ||
+                        "-"
+                      )}
+
+                    </td>
+
+
+                    <td>
+
+                      ${
+                        fila.promedio ??
+                        "-"
+                      }
+
+                    </td>
+
+
+                    <td>
+
+                      <select
+
+                        class="selector-relacion"
+
+                        data-resultado-relacion="${indice}"
+
+                      >
+
+                        <option
+                          value=""
+                          ${
+                            !fila.seleccion
+                              ? "selected"
+                              : ""
+                          }
+                        >
+
+                          Seleccionar coincidencia
+
+                        </option>
+
+
+                        <option
+                          value="nuevo"
+                          ${
+                            fila.seleccion === "nuevo"
+                              ? "selected"
+                              : ""
+                          }
+                        >
+
+                          Crear caballo deportivo nuevo
+
+                        </option>
+
+
+                        ${fila.candidatos.map(
+
+                          candidato => {
+
+                            const valor =
+                              candidato.tipo +
+                              ":" +
+                              candidato.id;
+
+
+                            return `
+
+                              <option
+
+                                value="${valor}"
+
+                                ${
+                                  fila.seleccion === valor
+                                    ? "selected"
+                                    : ""
+                                }
+
+                              >
+
+                                ${
+                                  candidato.tipo ===
+                                  "registrado"
+
+                                    ? "SDU: "
+
+                                    : "Deportivo: "
+                                }
+
+                                ${escapar(
+                                  candidato.nombre
+                                )}
+
+                              </option>
+
+                            `;
+
+                          }
+
+                        ).join("")}
+
+                      </select>
+
+                    </td>
+
+
+                    <td>
+
+                      ${estadoParticipante}
+
+                    </td>
+
+                  </tr>
+
+                `;
+
+              }
+
+            ).join("")}
+
+          </tbody>
+
+        </table>
+
+      </div>
+
+
+      <div class="acciones">
+
+        <button
+
+          class="boton boton-principal"
+
+          id="btnGuardarResultados"
+
+        >
+
+          Guardar resultados
+
+        </button>
+
+      </div>
+
+
+      <div
+        id="mensajeResultados"
+      ></div>
+
+    </div>
+
+  `;
+
+
+  /*
+    Guardamos lo elegido manualmente
+    en cada selector.
+  */
+  document
+    .querySelectorAll(
+      "[data-resultado-relacion]"
+    )
+    .forEach(
+
+      select => {
+
+        select.onchange =
+          () => {
+
+            const indice =
+              Number(
+                select.dataset
+                  .resultadoRelacion
+              );
+
+
+            previewResultados[
+              indice
+            ].seleccion =
+              select.value;
+
+          };
+
+      }
+
+    );
+
+
+  document
+    .getElementById(
+      "btnGuardarResultados"
+    )
+    .onclick =
+      () => {
+
+        guardarResultados(
+          nombreArchivo
+        );
+
+      };
+}
+
+
+/* ==========================================================
+   OBTENER O CREAR PARTICIPANTE DESDE RESULTADO
+========================================================== */
+
+async function obtenerOCrearParticipanteResultado(
+  fila
+) {
+
+  /*
+    Si el participante ya estaba
+    cargado por una nómina previa,
+    usamos ese mismo.
+  */
+  if (
+    fila.participante_id
+  ) {
+
+    return fila.participante_id;
+
+  }
+
+
+  /*
+    Necesitamos saber a qué
+    caballo deportivo pertenece.
+  */
+  const datosCaballo = {
+
+    equino:
+      fila.equino,
+
+    chip:
+      fila.chip,
+
+    pasaporte:
+      fila.pasaporte,
+
+    propietario:
+      "",
+
+    seleccion:
+      fila.seleccion
+
+  };
+
+
+  const caballoDeportivoId =
+    await obtenerOCrearDeportivo(
+      datosCaballo
+    );
+
+
+  /*
+    Antes de crear un participante,
+    verificamos nuevamente por seguridad
+    que no exista.
+  */
+  const existentes =
+    await apiGet(
+
+      "participantes_competencia" +
+      "?select=*" +
+      "&competencia_id=eq." +
+      competenciaActual.id
+
+    );
+
+
+  const existente =
+    existentes.find(
+
+      p =>
+
+        (
+          fila.chip &&
+
+          textoLimpio(
+            p.chip
+          ) ===
+          textoLimpio(
+            fila.chip
+          )
+        )
+
+        ||
+
+        (
+          fila.pasaporte &&
+
+          textoLimpio(
+            p.pasaporte_feu
+          ) ===
+          textoLimpio(
+            fila.pasaporte
+          )
+        )
+
+        ||
+
+        (
+          normalizar(
+            p.nombre_nomina
+          ) ===
+          normalizar(
+            fila.equino
+          )
+        )
+
+    );
+
+
+  /*
+    Si apareció uno mientras procesábamos,
+    actualizamos su relación.
+  */
+  if (
+    existente
+  ) {
+
+    await apiPatch(
+
+      "participantes_competencia",
+
+      "id=eq." +
+      existente.id,
+
+      {
+
+        caballo_deportivo_id:
+          caballoDeportivoId,
+
+        nombre_nomina:
+          fila.equino,
+
+        nombre_normalizado:
+          normalizar(
+            fila.equino
+          ),
+
+        jinete:
+          fila.jinete ||
+          existente.jinete ||
+          null,
+
+        chip:
+          fila.chip ||
+          existente.chip ||
+          null,
+
+        pasaporte_feu:
+          fila.pasaporte ||
+          existente.pasaporte_feu ||
+          null
+
+      }
+
+    );
+
+
+    return existente.id;
+
+  }
+
+
+  /*
+    No existe participante:
+    lo creamos automáticamente.
+
+    Esto es lo que permite importar
+    las carreras históricas SIN nómina.
+  */
+  const creado =
+    await apiPost(
+
+      "participantes_competencia",
+
+      {
+
+        competencia_id:
+          competenciaActual.id,
+
+        caballo_deportivo_id:
+          caballoDeportivoId,
+
+        numero_marcacion:
+          null,
+
+        nombre_nomina:
+          fila.equino,
+
+        nombre_normalizado:
+          normalizar(
+            fila.equino
+          ),
+
+        propietario_nomina:
+          null,
+
+        jinete:
+          fila.jinete ||
+          null,
+
+        club:
+          fila.club ||
+          null,
+
+        chip:
+          fila.chip ||
+          null,
+
+        pasaporte_feu:
+          fila.pasaporte ||
+          null,
+
+        genero:
+          null,
+
+        fila_origen:
+          fila.fila_origen ||
+          null
+
+      }
+
+    );
+
+
+  return creado[0].id;
+}
+
+
+/* ==========================================================
+   GUARDAR RESULTADOS
+========================================================== */
+
+async function guardarResultados(
+  nombreArchivo
+) {
+
+  const mensaje =
+    document.getElementById(
+      "mensajeResultados"
+    );
+
+
+  /*
+    No dejamos guardar coincidencias
+    ambiguas sin resolver.
+  */
+  const sinRelacion =
+    previewResultados.filter(
+
+      fila =>
+        !fila.participante_id &&
+        !fila.seleccion
+
+    );
+
+
+  if (
+    sinRelacion.length
+  ) {
+
+    alert(
+
+      "Hay " +
+      sinRelacion.length +
+      " caballo(s) sin relacionar. Revisá las filas marcadas antes de guardar."
+
+    );
+
+    return;
+
+  }
+
+
+  const boton =
+    document.getElementById(
+      "btnGuardarResultados"
+    );
+
+
+  if (boton) {
+    boton.disabled = true;
+  }
+
+
+  mensaje.innerHTML = `
+
+    <div class="mensaje">
+
+      Guardando resultados
+      y creando participantes...
+
+    </div>
+
+  `;
+
+
+  try {
+
+    let creados =
+      0;
+
+
+    let relacionados =
+      0;
+
+
+    /*
+      Procesamos cada caballo
+      del Excel FEU.
+    */
+    for (
+      const fila
+      of previewResultados
+    ) {
+
+      const teniaParticipante =
+        Boolean(
+          fila.participante_id
+        );
+
+
+      /*
+        Si no existía participante,
+        se crea automáticamente.
+      */
+      const participanteId =
+        await obtenerOCrearParticipanteResultado(
+          fila
+        );
+
+
+      fila.participante_id =
+        participanteId;
+
+
+      if (
+        teniaParticipante
+      ) {
+
+        relacionados++;
+
+      } else {
+
+        creados++;
+
+      }
+
+
+      /*
+        Buscamos si ya existe
+        un resultado para ese participante.
+      */
+      const existentes =
+        await apiGet(
+
+          "resultados_competencia" +
+          "?select=*" +
+          "&participante_id=eq." +
+          participanteId +
+          "&limit=1"
+
+        );
+
+
+      /*
+        IMPORTANTE:
+
+        Puesto se guarda EXACTAMENTE
+        como viene de FEU.
+
+        Los empates no se modifican.
+
+        1,1,3
+        queda
+        1,1,3.
+      */
+      const datos = {
+
+        puesto:
+
+          fila.estado ===
+          "clasificado"
+
+            ? fila.puesto
+
+            : null,
+
+
+        estado_resultado:
+          fila.estado,
+
+
+        promedio_kmh:
+          fila.promedio,
+
+
+        tiempo:
+          fila.tiempo ||
+          null,
+
+
+        observaciones:
+          fila.observaciones ||
+          null,
+
+
+        updated_at:
+          new Date()
+            .toISOString()
+
+      };
+
+
+      /*
+        Si el resultado ya existía,
+        actualizamos el vigente.
+
+        El resultado original
+        NO se pisa.
+      */
+      if (
+        existentes.length
+      ) {
+
+        const existente =
+          existentes[0];
+
+
+        const cambios = {
+
+          ...datos
+
+        };
+
+
+        /*
+          Solo completamos el original
+          si estaba vacío.
+        */
+        if (
+          existente.puesto_original === null ||
+          existente.puesto_original === undefined
+        ) {
+
+          cambios.puesto_original =
+
+            fila.estado ===
+            "clasificado"
+
+              ? fila.puesto
+
+              : null;
+
+        }
+
+
+        if (
+          !existente.estado_original
+        ) {
+
+          cambios.estado_original =
+            fila.estado;
+
+        }
+
+
+        await apiPatch(
+
+          "resultados_competencia",
+
+          "participante_id=eq." +
+          participanteId,
+
+          cambios
+
+        );
+
+      }
+
+      /*
+        Resultado completamente nuevo.
+      */
+      else {
+
+        await apiPost(
+
+          "resultados_competencia",
+
+          {
+
+            participante_id:
+              participanteId,
+
+
+            ...datos,
+
+
+            puesto_original:
+
+              fila.estado ===
+              "clasificado"
+
+                ? fila.puesto
+
+                : null,
+
+
+            estado_original:
+              fila.estado
+
+          }
+
+        );
+
+      }
+
+    }
+
+
+    /*
+      La competencia pasa a
+      resultado provisorio.
+    */
+    await apiPatch(
+
+      "competencias",
+
+      "id=eq." +
+      competenciaActual.id,
+
+      {
+
+        estado:
+          "resultado_provisorio",
+
+        archivo_origen:
+          nombreArchivo,
+
+        updated_at:
+          new Date()
+            .toISOString()
+
+      }
+
+    );
+
+
+    competenciaActual.estado =
+      "resultado_provisorio";
+
+
+    mensaje.innerHTML = `
+
+      <div
+        class="mensaje mensaje-exito"
+      >
+
+        <strong>
+          Resultado importado correctamente.
+        </strong>
+
+        <br><br>
+
+        Participantes que ya existían:
+        ${relacionados}
+
+        <br>
+
+        Participantes creados automáticamente:
+        ${creados}
+
+        <br>
+
+        Total de resultados:
+        ${previewResultados.length}
+
+        <br><br>
+
+        Los puestos y empates oficiales
+        de FEU fueron conservados.
+
+      </div>
+
+    `;
+
+
+  } catch (error) {
+
+    console.error(
+      error
+    );
+
+
+    mensaje.innerHTML = `
+
+      <div
+        class="mensaje mensaje-error"
+      >
+
+        No se pudieron guardar
+        los resultados.
+
+        <br><br>
+
+        ${escapar(
+          error.message
+        )}
+
+      </div>
+
+    `;
+
+  }
+
+
+  if (boton) {
+    boton.disabled = false;
+  }
+}
 /* ==========================================================
    PREVIEW RESULTADOS
 ========================================================== */
