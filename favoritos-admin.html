@@ -1723,6 +1723,28 @@ function buscarCampo(
 
 function extraerNomina(fila) {
   return {
+
+    numero_marcacion:
+      textoLimpio(
+        buscarCampo(
+          fila,
+          [
+            "NUMERO",
+            "NÚMERO",
+            "NRO",
+            "N°",
+            "Nº",
+            "NUMERO MARCACION",
+            "NÚMERO MARCACIÓN",
+            "NRO MARCACION",
+            "NRO MARCACIÓN",
+            "MARCA",
+            "MARCACION",
+            "MARCACIÓN"
+          ]
+        )
+      ),
+
     equino:
       textoLimpio(
         buscarCampo(
@@ -1801,7 +1823,6 @@ function extraerNomina(fila) {
       )
   };
 }
-
 
 function extraerResultado(fila) {
   const puestoBruto =
@@ -2519,16 +2540,17 @@ function renderPreviewNomina(
         <table>
 
           <thead>
-            <tr>
-              <th>Equino</th>
-              <th>Propietario</th>
-              <th>Jinete</th>
-              <th>Chip</th>
-              <th>Pasaporte</th>
-              <th>Relación SDU</th>
-            </tr>
-          </thead>
-
+           <thead>
+  <tr>
+    <th>N.º</th>
+    <th>Equino</th>
+    <th>Propietario</th>
+    <th>Jinete</th>
+    <th>Chip</th>
+    <th>Pasaporte</th>
+    <th>Relación SDU</th>
+  </tr>
+</thead>
           <tbody>
 
             ${previewNomina.map(
@@ -2554,15 +2576,22 @@ function renderPreviewNomina(
                 }
 
                 return `
-                  <tr class="${clase}">
+                 <tr class="${clase}">
 
-                    <td>
-                      <strong>
-                        ${escapar(
-                          fila.equino
-                        )}
-                      </strong>
-                    </td>
+  <td>
+    ${escapar(
+      fila.numero_marcacion ||
+      "-"
+    )}
+  </td>
+
+  <td>
+    <strong>
+      ${escapar(
+        fila.equino
+      )}
+    </strong>
+  </td>
 
                     <td>
                       ${escapar(
@@ -2957,13 +2986,17 @@ async function guardarNomina(
         "participantes_competencia",
         {
           competencia_id:
-            competenciaActual.id,
+  competenciaActual.id,
 
-          caballo_deportivo_id:
-            depId,
+caballo_deportivo_id:
+  depId,
 
-          nombre_nomina:
-            fila.equino,
+numero_marcacion:
+  fila.numero_marcacion ||
+  null,
+
+nombre_nomina:
+  fila.equino,
 
           nombre_normalizado:
             normalizar(
@@ -3086,14 +3119,15 @@ async function listarParticipantes(id) {
         <table>
 
           <thead>
-            <tr>
-              <th>Equino</th>
-              <th>Propietario</th>
-              <th>Jinete</th>
-              <th>Chip</th>
-              <th>Pasaporte</th>
-            </tr>
-          </thead>
+  <tr>
+    <th>N.º</th>
+    <th>Equino</th>
+    <th>Propietario</th>
+    <th>Jinete</th>
+    <th>Chip</th>
+    <th>Pasaporte</th>
+  </tr>
+</thead>
 
           <tbody>
 
@@ -3101,6 +3135,12 @@ async function listarParticipantes(id) {
 
               <tr>
 
+              <td>
+  ${escapar(
+    p.numero_marcacion ||
+    "-"
+  )}
+</td>
                 <td>
                   ${escapar(
                     p.nombre_nomina
