@@ -7756,6 +7756,287 @@ elemento.classList.add("modo-pdf");
   document.getElementById("nombreCaballo").value = ultimaBusquedaCaballos;
   buscarCaballo();
 }
+
+    async function obtenerCampanaDeportiva(caballoDeportivoId) {
+  if (!caballoDeportivoId) return "";
+
+  try {
+    const headers = {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + SUPABASE_KEY
+    };
+
+    // 1. Participaciones de este caballo
+    const respuestaParticipantes = await fetch(
+      SUPABASE_URL +
+        "/rest/v1/participantes_competencia" +
+        "?select=id,competencia_id,jinete" +
+        "&caballo_deportivo_id=eq." +
+        encodeURIComponent(caballoDeportivoId),
+      { headers }
+    );
+
+    if (!respuestaParticipantes.ok) {
+      console.error(
+        "Error cargando participaciones:",
+        await respuestaParticipantes.text()
+      );
+      return "";
+    }
+
+    const participantes = await respuestaParticipantes.json();
+
+    // Si nunca corrió, NO mostramos campaña deportiva
+    if (!participantes.length) {
+      return "";
+    }
+
+    const idsParticipantes = participantes.map(p => p.id);
+
+    // 2. Resultados
+    const respuestaResultados = await fetch(
+      SUPABASE_URL +
+        "/rest/v1/resultados_competencia" +
+        "?select=participante_id,puesto,estado_resultado,promedio_kmh,premio_feu,premio_feu_ppm" +
+        "&participante_id=in.(" +
+        idsParticipantes.join(",") +
+        ")",
+      { headers }
+    );
+
+    const resultados = respuestaResultados.ok
+      ? await respuestaResultados.json()
+      : [];
+
+    // 3. Competencias
+    const idsCompetencias = [
+      ...new Set(
+        participantes
+          .map(p => p.competencia_id)
+          .filter(Boolean)
+      )
+    ];
+
+    const respuestaCompetencias = await fetch(
+      SUPABASE_URL +
+        "/rest/v1/competencias" +
+        "?select=id,nombre,edicion,fecha,distancia_km" +
+        "&id=in.(" +
+        idsCompetencias.join(",") +
+        ")",
+      { headers }
+    );
+
+    const competencias = respuestaCompetencias.ok
+      ? await respuestaCompetencias.json()
+      : [];
+
+    const resultadoPorParticipante = new Map(
+      resultados.map(r => [
+        Number(r.participante_id),
+        r
+      ])
+    );
+
+    const competenciaPorId = new Map(
+      competencias.map(c => [
+        Number(c.id),
+        c
+      ])
+    );
+
+    // 4. Unimos todo y ordenamos:
+    // MÁS RECIENTE ARRIBA
+    const carreras = participantes
+      .map(p => ({
+        participante: p,
+        resultado:
+          resultadoPorParticipante.get(Number(p.id)) || null,
+        competencia:
+          competenciaPorId.get(Number(p.competencia_id)) || null
+      }))
+      .filter(item => item.competencia)
+      .sort((a, b) => {
+        const fechaA = a.competencia.fecha
+          ? new Date(a.competencia.fecha)
+          : new Date(0);
+
+        const fechaB = b.competencia.fecha
+          ? new Date(b.competencia.fecha)
+          : new Date(0);
+
+        return fechaB - fechaA;
+      });
+
+    if (!carreras.length) {
+      return "";
+    }
+
+    // 5. Resumen
+    const ganadas = carreras.filter(
+      x => Number(x.resultado?.puesto) === 1
+    ).length;
+
+    const segundos = carreras.filter(
+      x => Number(x.resultado?.puesto) === 2
+    ).length;
+
+    const terceros = carreras.filter(
+      x => Number(x.resultado?.puesto) === 3
+    ).length;
+
+    const premiosFEU = carreras.filter(
+      x => x.resultado?.premio_feu === true
+    ).length;
+
+    // 6. HTML
+    return `
+      <div class="campana-deportiva" style="
+        margin-top:35px;
+        padding-top:20px;
+        border-top:1px solid #c9a227;
+      ">
+
+        <h3 style="text-align:center; color:#173b6c;">
+          Campaña deportiva
+        </h3>
+
+        <div style="
+          display:grid;
+          grid-template-columns:repeat(5,1fr);
+          gap:8px;
+          max-width:750px;
+          margin:18px auto 24px;
+        ">
+
+          <div class="dato-ficha">
+            <strong>Carreras</strong>
+            <span>${carreras.length}</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Ganadas</strong>
+            <span>${ganadas}</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>2.º puestos</strong>
+            <span>${segundos}</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>3.º puestos</strong>
+            <span>${terceros}</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Premios FEU</strong>
+            <span>${premiosFEU}</span>
+          </div>
+
+        </div>
+
+        <div class="tabla-resultados-wrap">
+
+          <table class="tabla-resultados">
+
+            <thead>
+              <tr>
+                <th>Fecha</th>
+                <th>Raid</th>
+                <th>Edición</th>
+                <th>Distancia</th>
+                <th>Jinete</th>
+                <th>Puesto</th>
+                <th>Estado</th>
+                <th>Promedio</th>
+                <th>Premio FEU</th>
+              </tr>
+            </thead>
+
+            <tbody>
+
+              ${carreras.map(item => {
+                const c = item.competencia;
+                const p = item.participante;
+                const r = item.resultado;
+
+                const puesto =
+                  r?.puesto !== null &&
+                  r?.puesto !== undefined
+                    ? escapar(r.puesto) + ".º"
+                    : "-";
+
+                const estado =
+                  r?.estado_resultado
+                    ? escapar(r.estado_resultado)
+                    : "-";
+
+                const promedio =
+                  r?.promedio_kmh !== null &&
+                  r?.promedio_kmh !== undefined
+                    ? escapar(r.promedio_kmh) + " km/h"
+                    : "-";
+
+                const premio =
+                  r?.premio_feu === true
+                    ? "🏆 FEU"
+                    : "";
+
+                return `
+                  <tr>
+                    <td>${formatearFecha(c.fecha)}</td>
+
+                    <td>
+                      ${escapar(c.nombre || "-")}
+                    </td>
+
+                    <td>
+                      ${escapar(c.edicion || "-")}
+                    </td>
+
+                    <td>
+                      ${
+                        c.distancia_km
+                          ? escapar(c.distancia_km) + " km"
+                          : "-"
+                      }
+                    </td>
+
+                    <td>
+                      ${escapar(p.jinete || "-")}
+                    </td>
+
+                    <td>${puesto}</td>
+
+                    <td>${estado}</td>
+
+                    <td>${promedio}</td>
+
+                    <td>${premio}</td>
+                  </tr>
+                `;
+              }).join("")}
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+    `;
+
+  } catch (error) {
+    console.error(
+      "Error cargando campaña deportiva:",
+      error
+    );
+
+    return "";
+  }
+}
+    
 async function buscarCaballo() {
   const nombre =
   document
@@ -8511,6 +8792,11 @@ if (caballoDeportivo) {
   aliasDeportivos[0] ||
   null;
     
+    const htmlCampanaDeportiva =
+  caballoDeportivo
+    ? await obtenerCampanaDeportiva(caballoDeportivo.id)
+    : "";
+    
 function nodo(nombre, tipo) {
   return '<div class="pedigree-box ' + tipo + '"' +
     (nombre ? ' data-nombre="' + encodeURIComponent(nombre) + '"' : '') +
@@ -8695,6 +8981,7 @@ ${sesionAdmin ? `
   </div>
 ` : ''}
   </div>
+  ${htmlCampanaDeportiva}
   ${hijosRegistrados.length > 0 ? `
   <div class="descendencia">
     <h3>Descendencia registrada</h3>
