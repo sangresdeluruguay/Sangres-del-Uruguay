@@ -465,10 +465,121 @@ header p {
 .tabla-campana-deportiva th,
 .tabla-campana-deportiva td {
   width: auto !important;
-  white-space: nowrap;
-  padding: 12px 14px;
+  white-space: nowrap !important;
+  padding: 12px 14px !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}
+
+    /* ESTILO SDU - CAMPAÑA DEPORTIVA */
+
+.resumen-campana {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin: 20px 0 22px;
+}
+.resumen-campana .tarjeta-campana {
+  background: #173b59;
+  border: 2px solid #c9a227;
+  border-radius: 10px;
+  padding: 12px 8px;
+  min-height: 82px;
   text-align: center;
-  vertical-align: middle;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.resumen-campana .tarjeta-campana strong {
+  color: white;
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+.resumen-campana .tarjeta-campana > span:last-child {
+  color: #c9a227;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.resumen-campana .icono-campana {
+  font-size: 22px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+/* ENCABEZADO TABLA DE CARRERAS */
+.tabla-campana-deportiva th {
+  background: #173b59 !important;
+  color: white !important;
+  border-top: 1px solid #c9a227 !important;
+  border-bottom: 2px solid #c9a227 !important;
+}
+
+/* LÍNEAS DORADAS ENTRE RESULTADOS */
+.tabla-campana-deportiva td {
+  border-bottom: 1px solid rgba(201, 162, 39, 0.55) !important;
+}
+
+.tabla-campana-deportiva tbody tr:hover {
+  background: rgba(201, 162, 39, 0.08);
+}
+    
+.campana-card {
+  background: #173b59;
+  color: white;
+  border: 1.5px solid #c9a227;
+  border-radius: 10px;
+  padding: 13px 8px;
+  text-align: center;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.10);
+}
+
+.campana-card .icono {
+  display: block;
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.campana-card .titulo {
+  color: #d5b56b;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.campana-card .valor {
+  color: white;
+  font-size: 20px;
+  font-weight: 800;
+}
+
+.tabla-campana-deportiva {
+  border: 1px solid #c9a227;
+  border-radius: 10px;
+  overflow: hidden;
+  background: white;
+}
+
+.tabla-campana-deportiva thead th {
+  background: #173b59 !important;
+  color: white !important;
+  border-bottom: 2px solid #c9a227 !important;
+}
+
+.tabla-campana-deportiva td {
+  border-bottom: 1px solid #dfcf9c !important;
+}
+
+.tabla-campana-deportiva tbody tr:nth-child(even) {
+  background: #fcfaf3;
+}
+
+.tabla-campana-deportiva tbody tr:hover {
+  background: #f7f1dd;
 }
     
 /* Encabezados */
@@ -7917,40 +8028,39 @@ elemento.classList.add("modo-pdf");
           Campaña deportiva
         </h3>
 
-        <div style="
-          display:grid;
-          grid-template-columns:repeat(5,1fr);
-          gap:8px;
-          max-width:750px;
-          margin:18px auto 24px;
-        ">
+      <div class="resumen-campana">
 
-          <div class="dato-ficha">
-            <strong>Carreras</strong>
-            <span>${carreras.length}</span>
-          </div>
+  <div class="dato-ficha tarjeta-campana">
+    <span class="icono-campana">🏇</span>
+    <strong>Carreras</strong>
+    <span>${carreras.length}</span>
+  </div>
 
-          <div class="dato-ficha">
-            <strong>Ganadas</strong>
-            <span>${ganadas}</span>
-          </div>
+  <div class="dato-ficha tarjeta-campana">
+    <span class="icono-campana">🏆</span>
+    <strong>Ganadas</strong>
+    <span>${ganadas}</span>
+  </div>
 
-          <div class="dato-ficha">
-            <strong>2.º puestos</strong>
-            <span>${segundos}</span>
-          </div>
+  <div class="dato-ficha tarjeta-campana">
+    <span class="icono-campana">🥈</span>
+    <strong>2.º puestos</strong>
+    <span>${segundos}</span>
+  </div>
 
-          <div class="dato-ficha">
-            <strong>3.º puestos</strong>
-            <span>${terceros}</span>
-          </div>
+  <div class="dato-ficha tarjeta-campana">
+    <span class="icono-campana">🥉</span>
+    <strong>3.º puestos</strong>
+    <span>${terceros}</span>
+  </div>
 
-          <div class="dato-ficha">
-            <strong>Premios FEU</strong>
-            <span>${premiosFEU}</span>
-          </div>
+  <div class="dato-ficha tarjeta-campana">
+    <span class="icono-campana">⭐</span>
+    <strong>Premios FEU</strong>
+    <span>${premiosFEU}</span>
+  </div>
 
-        </div>
+</div>
 
         <div class="tabla-resultados-wrap">
 
