@@ -455,6 +455,22 @@ header p {
   table-layout: fixed;
 }
 
+    /* TABLA CAMPAÑA DEPORTIVA */
+.tabla-campana-deportiva {
+  width: 100%;
+  min-width: 1050px;
+  table-layout: auto !important;
+}
+
+.tabla-campana-deportiva th,
+.tabla-campana-deportiva td {
+  width: auto !important;
+  white-space: nowrap;
+  padding: 12px 14px;
+  text-align: center;
+  vertical-align: middle;
+}
+    
 /* Encabezados */
 .tabla-resultados th {
   text-align: left;
@@ -7938,8 +7954,7 @@ elemento.classList.add("modo-pdf");
 
         <div class="tabla-resultados-wrap">
 
-          <table class="tabla-resultados">
-
+<table class="tabla-resultados tabla-campana-deportiva">
             <thead>
               <tr>
                 <th>Fecha</th>
