@@ -1,0 +1,3200 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <title>Campaña deportiva | Sangres del Uruguay</title>
+
+
+  <style>
+
+    /* =========================================================
+       1. COLORES GENERALES
+       ========================================================= */
+
+    :root {
+
+      --azul: #173b72;
+      --azul2: #245592;
+
+      --dorado: #b89a56;
+      --dorado-claro: #eadfbf;
+
+      --fondo: #f4f5f7;
+      --blanco: #ffffff;
+
+      --texto: #20242a;
+      --gris: #6b7280;
+
+      --borde: #d9dde5;
+
+      --verde: #21834f;
+      --verde-fondo: #e8f5ed;
+
+      --rojo: #a43c3c;
+      --rojo-fondo: #f9e8e8;
+
+      --celeste-pedigree: #dcebfa;
+      --rosa-pedigree: #f7dce7;
+      --amarillo-pedigree: #fff2b9;
+
+    }
+
+
+    * {
+      box-sizing: border-box;
+    }
+
+
+    body {
+
+      margin: 0;
+
+      min-height: 100vh;
+
+      background: var(--fondo);
+
+      color: var(--texto);
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+    }
+
+
+    a {
+      color: inherit;
+    }
+
+
+    button {
+      font: inherit;
+      cursor: pointer;
+    }
+
+
+
+    /* =========================================================
+       2. ENCABEZADO
+       ========================================================= */
+
+    .encabezado {
+
+      background: var(--azul);
+
+      color: white;
+
+      padding:
+        max(18px, env(safe-area-inset-top))
+        16px
+        18px;
+
+    }
+
+
+    .encabezado-contenido {
+
+      width: min(100%, 1120px);
+
+      margin: 0 auto;
+
+      text-align: center;
+
+    }
+
+
+    /*
+      ==========================================================
+      LOGO SDU
+
+      SI EL LOGO NO ES ESTE,
+      CAMBIAMOS SOLAMENTE EL "src" DEL HTML.
+      ==========================================================
+    */
+
+    .logo-sdu {
+
+      display: block;
+
+      width: 90px;
+      max-height: 90px;
+
+      object-fit: contain;
+
+      margin:
+        0
+        auto
+        8px;
+
+    }
+
+
+    .encabezado h1 {
+
+      margin: 0;
+
+      font-size:
+        clamp(
+          28px,
+          5vw,
+          44px
+        );
+
+      font-weight: 800;
+
+    }
+
+
+    .encabezado-subtitulo {
+
+      margin:
+        6px
+        0
+        0;
+
+      color: #e4d09c;
+
+      font-weight: 700;
+
+    }
+
+
+    .menu {
+
+      margin-top: 18px;
+
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap:
+        9px
+        20px;
+
+    }
+
+
+    .menu a {
+
+      text-decoration: none;
+
+      color: white;
+
+      font-weight: 700;
+
+      font-size: 14px;
+
+    }
+
+
+    .menu a:hover {
+      text-decoration: underline;
+    }
+
+
+
+    /* =========================================================
+       3. CONTENIDO GENERAL
+       ========================================================= */
+
+    main {
+
+      width: min(100%, 1120px);
+
+      margin: 0 auto;
+
+      padding:
+        24px
+        14px
+        60px;
+
+    }
+
+
+    .mensaje {
+
+      padding: 16px;
+
+      border-radius: 12px;
+
+      background: white;
+
+      border: 1px solid var(--borde);
+
+      color: var(--gris);
+
+      text-align: center;
+
+    }
+
+
+    .mensaje-error {
+
+      background: var(--rojo-fondo);
+
+      color: var(--rojo);
+
+    }
+
+
+    .tarjeta {
+
+      background: white;
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      border-radius: 16px;
+
+      padding: 20px;
+
+      margin-bottom: 20px;
+
+      box-shadow:
+        0
+        3px
+        12px
+        rgba(0,0,0,.045);
+
+    }
+
+
+
+    /* =========================================================
+       4. CABECERA DEL CABALLO
+       ========================================================= */
+
+    .ficha-superior {
+
+      display: grid;
+
+      grid-template-columns:
+        220px
+        minmax(0, 1fr);
+
+      gap: 28px;
+
+      align-items: start;
+
+    }
+
+
+    .foto-contenedor {
+
+      width: 100%;
+
+    }
+
+
+    .foto-caballo {
+
+      width: 100%;
+
+      aspect-ratio: 1 / 1;
+
+      object-fit: cover;
+
+      border-radius: 14px;
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      display: block;
+
+      background: #f1f2f4;
+
+    }
+
+
+    .foto-vacia {
+
+      width: 100%;
+
+      aspect-ratio: 1 / 1;
+
+      border-radius: 14px;
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      background:
+        linear-gradient(
+          145deg,
+          #f3f4f6,
+          #e6e8ec
+        );
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      color: var(--gris);
+
+      font-weight: 700;
+
+    }
+
+
+    .nombre-caballo {
+
+      margin:
+        0
+        0
+        3px;
+
+      color: var(--azul);
+
+      font-size:
+        clamp(
+          30px,
+          5vw,
+          44px
+        );
+
+      font-weight: 900;
+
+      line-height: 1.05;
+
+    }
+
+
+    .alias-caballo {
+
+      margin:
+        5px
+        0
+        20px;
+
+      color: var(--dorado);
+
+      font-size: 19px;
+
+      font-weight: 700;
+
+    }
+
+
+    .alias-caballo span {
+
+      color: var(--gris);
+
+      font-size: 13px;
+
+      font-weight: 600;
+
+      margin-right: 4px;
+
+    }
+
+
+
+    /* =========================================================
+       5. DATOS
+       ========================================================= */
+
+    .datos-caballo {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          2,
+          minmax(0, 1fr)
+        );
+
+      gap: 10px;
+
+    }
+
+
+    .dato {
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      border-radius: 10px;
+
+      padding:
+        11px
+        13px;
+
+      min-height: 63px;
+
+    }
+
+
+    .dato strong {
+
+      display: block;
+
+      color: var(--azul);
+
+      font-size: 12px;
+
+      margin-bottom: 5px;
+
+      text-transform: uppercase;
+
+      letter-spacing: .03em;
+
+    }
+
+
+    .dato span {
+
+      font-size: 15px;
+
+      font-weight: 600;
+
+    }
+
+
+
+    /* =========================================================
+       6. TITULOS DE SECCION
+       ========================================================= */
+
+    .titulo-seccion {
+
+      margin:
+        0
+        0
+        17px;
+
+      color: var(--azul);
+
+      font-size:
+        25px;
+
+      text-align: center;
+
+    }
+
+
+
+    /* =========================================================
+       7. PEDIGREE
+       ========================================================= */
+
+    .pedigree-scroll {
+
+      width: 100%;
+
+      overflow-x: auto;
+
+      padding-bottom: 6px;
+
+    }
+
+
+    .pedigree {
+
+      min-width: 800px;
+
+      display: grid;
+
+      grid-template-columns:
+        1fr
+        1fr
+        1.15fr;
+
+      gap: 12px;
+
+      align-items: stretch;
+
+    }
+
+
+    .columna-pedigree {
+
+      display: grid;
+
+      gap: 10px;
+
+    }
+
+
+    .columna-pedigree.padres {
+
+      grid-template-rows:
+        repeat(
+          2,
+          1fr
+        );
+
+    }
+
+
+    .columna-pedigree.abuelos {
+
+      grid-template-rows:
+        repeat(
+          4,
+          1fr
+        );
+
+    }
+
+
+    .columna-pedigree.bisabuelos {
+
+      grid-template-rows:
+        repeat(
+          8,
+          1fr
+        );
+
+    }
+
+
+    .pedigree-celda {
+
+      min-height: 52px;
+
+      border-radius: 9px;
+
+      border:
+        1px
+        solid
+        rgba(0,0,0,.08);
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      text-align: center;
+
+      padding: 8px;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+    }
+
+
+    .pedigree-macho {
+      background: var(--celeste-pedigree);
+    }
+
+
+    .pedigree-hembra {
+      background: var(--rosa-pedigree);
+    }
+
+
+    .pedigree-vacia {
+
+      background: #f4f4f4;
+
+      color: #b0b3b8;
+
+    }
+
+
+    .caballo-consultado {
+
+      margin:
+        0
+        auto
+        14px;
+
+      width:
+        min(
+          100%,
+          360px
+        );
+
+      min-height: 55px;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding: 10px;
+
+      border-radius: 10px;
+
+      background:
+        var(--amarillo-pedigree);
+
+      font-weight: 900;
+
+      color: #55491f;
+
+      text-align: center;
+
+    }
+
+
+
+    /* =========================================================
+       8. RESUMEN DEPORTIVO
+       ========================================================= */
+
+    .resumen-deportivo {
+
+      display: grid;
+
+      grid-template-columns:
+        repeat(
+          5,
+          minmax(0, 1fr)
+        );
+
+      gap: 12px;
+
+    }
+
+
+    .estadistica {
+
+      background: #fafafa;
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      border-radius: 13px;
+
+      padding:
+        15px
+        8px;
+
+      text-align: center;
+
+    }
+
+
+    .estadistica-icono {
+
+      display: block;
+
+      font-size: 26px;
+
+      min-height: 32px;
+
+      margin-bottom: 5px;
+
+    }
+
+
+    .estadistica-numero {
+
+      display: block;
+
+      color: var(--azul);
+
+      font-size: 26px;
+
+      font-weight: 900;
+
+    }
+
+
+    .estadistica-texto {
+
+      display: block;
+
+      margin-top: 3px;
+
+      color: var(--gris);
+
+      font-size: 11px;
+
+      font-weight: 700;
+
+      text-transform: uppercase;
+
+    }
+
+
+
+    /* =========================================================
+       9. TABLA DE CAMPAÑA
+       ========================================================= */
+
+    .tabla-scroll {
+
+      width: 100%;
+
+      overflow-x: auto;
+
+    }
+
+
+    table {
+
+      width: 100%;
+
+      min-width: 830px;
+
+      border-collapse: collapse;
+
+    }
+
+
+    th {
+
+      background: var(--azul);
+
+      color: white;
+
+      padding:
+        11px
+        9px;
+
+      text-align: left;
+
+      font-size: 12px;
+
+    }
+
+
+    td {
+
+      padding:
+        11px
+        9px;
+
+      border-bottom:
+        1px
+        solid
+        var(--borde);
+
+      font-size: 13px;
+
+    }
+
+
+    tbody tr:hover {
+
+      background: #f8f9fb;
+
+    }
+
+
+    .link-raid {
+
+      color: var(--azul);
+
+      font-weight: 800;
+
+      text-decoration: none;
+
+    }
+
+
+    .link-raid:hover {
+      text-decoration: underline;
+    }
+
+
+    .puesto {
+
+      font-weight: 900;
+
+      color: var(--azul);
+
+    }
+
+
+    .premio-feu {
+
+      color: var(--dorado);
+
+      font-weight: 900;
+
+    }
+
+
+    .estado-nc {
+
+      color: var(--rojo);
+
+      font-weight: 800;
+
+    }
+
+
+
+    /* =========================================================
+       10. BOTONES
+       ========================================================= */
+
+    .acciones {
+
+      margin-top: 22px;
+
+      display: flex;
+
+      justify-content: center;
+
+      flex-wrap: wrap;
+
+      gap: 10px;
+
+    }
+
+
+    .boton {
+
+      display: inline-flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      min-height: 43px;
+
+      padding:
+        10px
+        18px;
+
+      border-radius: 10px;
+
+      border: 0;
+
+      text-decoration: none;
+
+      font-weight: 800;
+
+    }
+
+
+    .boton-principal {
+
+      background: var(--azul);
+
+      color: white;
+
+    }
+
+
+    .boton-dorado {
+
+      background: var(--dorado);
+
+      color: white;
+
+    }
+
+
+    .boton-claro {
+
+      background: white;
+
+      border:
+        1px
+        solid
+        var(--borde);
+
+      color: var(--azul);
+
+    }
+
+
+
+    /* =========================================================
+       11. SPONSOR
+       ========================================================= */
+
+    .sponsor {
+
+      text-align: center;
+
+      border:
+        1px
+        solid
+        var(--dorado-claro);
+
+      background: #fffdf8;
+
+    }
+
+
+    .sponsor p {
+
+      color: var(--gris);
+
+      margin-bottom: 15px;
+
+    }
+
+
+
+    /* =========================================================
+       12. RESPONSIVE TABLET / IPAD
+       ========================================================= */
+
+    @media (max-width: 900px) {
+
+      .ficha-superior {
+
+        grid-template-columns:
+          180px
+          minmax(0, 1fr);
+
+        gap: 18px;
+
+      }
+
+
+      .resumen-deportivo {
+
+        grid-template-columns:
+          repeat(
+            3,
+            minmax(0, 1fr)
+          );
+
+      }
+
+    }
+
+
+
+    /* =========================================================
+       13. RESPONSIVE CELULAR
+       ========================================================= */
+
+    @media (max-width: 650px) {
+
+      main {
+        padding:
+          15px
+          9px
+          45px;
+      }
+
+
+      .tarjeta {
+        padding: 14px;
+      }
+
+
+      .ficha-superior {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .foto-contenedor {
+
+        width:
+          min(
+            70%,
+            230px
+          );
+
+        margin: 0 auto;
+
+      }
+
+
+      .nombre-caballo,
+      .alias-caballo {
+
+        text-align: center;
+
+      }
+
+
+      .datos-caballo {
+
+        grid-template-columns: 1fr;
+
+      }
+
+
+      .resumen-deportivo {
+
+        grid-template-columns:
+          repeat(
+            2,
+            minmax(0, 1fr)
+          );
+
+      }
+
+
+      .encabezado h1 {
+        font-size: 30px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+
+<body>
+
+
+  <!-- =========================================================
+       ENCABEZADO
+       ========================================================= -->
+
+  <header class="encabezado">
+
+    <div class="encabezado-contenido">
+
+
+      <!--
+        =========================================================
+        LOGO
+
+        ESTE ES EL PRIMER PUNTO QUE PODEMOS CAMBIAR.
+        =========================================================
+      -->
+
+      <img
+        src="Photoroom_20260612_064648.png"
+        alt="Sangres del Uruguay"
+        class="logo-sdu"
+        onerror="this.style.display='none'"
+      >
+
+
+      <h1>Campaña deportiva</h1>
+
+      <p class="encabezado-subtitulo">
+        Sangres del Uruguay
+      </p>
+
+
+      <nav class="menu">
+
+        <a href="index.html">
+          Sangres del Uruguay
+        </a>
+
+        <a href="favoritos.html">
+          Favoritos
+        </a>
+
+      </nav>
+
+    </div>
+
+  </header>
+
+
+
+  <!-- =========================================================
+       CONTENIDO
+       ========================================================= -->
+
+  <main>
+
+    <div
+      id="estadoCarga"
+      class="mensaje"
+    >
+      Cargando campaña deportiva...
+    </div>
+
+
+    <div
+      id="contenidoCaballo"
+      style="display:none;"
+    >
+
+
+      <!-- =====================================================
+           FICHA PRINCIPAL
+           ===================================================== -->
+
+      <section class="tarjeta">
+
+        <div class="ficha-superior">
+
+
+          <!-- FOTO -->
+
+          <div
+            id="fotoContenedor"
+            class="foto-contenedor"
+          ></div>
+
+
+
+          <!-- DATOS -->
+
+          <div>
+
+            <h2
+              id="nombreCaballo"
+              class="nombre-caballo"
+            ></h2>
+
+
+            <div
+              id="aliasCaballo"
+              class="alias-caballo"
+              style="display:none;"
+            ></div>
+
+
+            <div class="datos-caballo">
+
+
+              <div
+                class="dato"
+                id="datoCriador"
+                style="display:none;"
+              >
+                <strong>Criador</strong>
+                <span id="criador"></span>
+              </div>
+
+
+              <div
+                class="dato"
+                id="datoNumeroCriador"
+                style="display:none;"
+              >
+                <strong>N.º Criador</strong>
+                <span id="numeroCriador"></span>
+              </div>
+
+
+              <div
+                class="dato"
+                id="datoNacimiento"
+                style="display:none;"
+              >
+                <strong>Nacimiento</strong>
+                <span id="nacimiento"></span>
+              </div>
+
+
+              <div
+                class="dato"
+                id="datoSexo"
+                style="display:none;"
+              >
+                <strong>Sexo</strong>
+                <span id="sexo"></span>
+              </div>
+
+
+              <div
+                class="dato"
+                id="datoPelo"
+                style="display:none;"
+              >
+                <strong>Pelo</strong>
+                <span id="pelo"></span>
+              </div>
+
+
+              <div
+                class="dato"
+                id="datoRP"
+                style="display:none;"
+              >
+                <strong>RP</strong>
+                <span id="rp"></span>
+              </div>
+
+
+              <div class="dato">
+
+                <strong>Propietario</strong>
+
+                <span id="propietario">
+                  -
+                </span>
+
+              </div>
+
+
+              <div class="dato">
+
+                <strong>Chip</strong>
+
+                <span id="chip">
+                  -
+                </span>
+
+              </div>
+
+
+              <div class="dato">
+
+                <strong>Pasaporte FEU</strong>
+
+                <span id="pasaporte">
+                  -
+                </span>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           PEDIGREE
+           ===================================================== -->
+
+      <section class="tarjeta">
+
+        <h2 class="titulo-seccion">
+          Pedigree
+        </h2>
+
+
+        <div
+          id="caballoPedigree"
+          class="caballo-consultado"
+        ></div>
+
+
+        <div class="pedigree-scroll">
+
+          <div class="pedigree">
+
+
+            <!-- PADRES -->
+
+            <div class="columna-pedigree padres">
+
+              <div
+                id="padre"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="madre"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+            </div>
+
+
+
+            <!-- ABUELOS -->
+
+            <div class="columna-pedigree abuelos">
+
+              <div
+                id="abueloPaterno"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="abuelaPaterna"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+              <div
+                id="abueloMaterno"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="abuelaMaterna"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+            </div>
+
+
+
+            <!-- BISABUELOS -->
+
+            <div class="columna-pedigree bisabuelos">
+
+              <div
+                id="bis1"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="bis2"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+              <div
+                id="bis3"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="bis4"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+              <div
+                id="bis5"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="bis6"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+              <div
+                id="bis7"
+                class="pedigree-celda pedigree-macho"
+              ></div>
+
+              <div
+                id="bis8"
+                class="pedigree-celda pedigree-hembra"
+              ></div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           RESUMEN DEPORTIVO
+           ===================================================== -->
+
+      <section class="tarjeta">
+
+        <h2 class="titulo-seccion">
+          Campaña deportiva
+        </h2>
+
+
+        <div class="resumen-deportivo">
+
+
+          <div class="estadistica">
+
+            <span class="estadistica-icono">
+              🏇
+            </span>
+
+            <span
+              class="estadistica-numero"
+              id="totalCompetencias"
+            >
+              0
+            </span>
+
+            <span class="estadistica-texto">
+              Competencias
+            </span>
+
+          </div>
+
+
+
+          <div class="estadistica">
+
+            <span class="estadistica-icono">
+              🏆
+            </span>
+
+            <span
+              class="estadistica-numero"
+              id="victorias"
+            >
+              0
+            </span>
+
+            <span class="estadistica-texto">
+              Victorias
+            </span>
+
+          </div>
+
+
+
+          <div class="estadistica">
+
+            <span class="estadistica-icono">
+              🥈
+            </span>
+
+            <span
+              class="estadistica-numero"
+              id="segundos"
+            >
+              0
+            </span>
+
+            <span class="estadistica-texto">
+              Segundos
+            </span>
+
+          </div>
+
+
+
+          <div class="estadistica">
+
+            <span class="estadistica-icono">
+              🥉
+            </span>
+
+            <span
+              class="estadistica-numero"
+              id="terceros"
+            >
+              0
+            </span>
+
+            <span class="estadistica-texto">
+              Terceros
+            </span>
+
+          </div>
+
+
+
+          <div class="estadistica">
+
+            <span class="estadistica-icono">
+              ❤️🐴
+            </span>
+
+            <span
+              class="estadistica-numero"
+              id="premiosFeu"
+            >
+              0
+            </span>
+
+            <span class="estadistica-texto">
+              Premio FEU
+            </span>
+
+          </div>
+
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           RESULTADOS
+           ===================================================== -->
+
+      <section class="tarjeta">
+
+        <h2 class="titulo-seccion">
+          Resultados
+        </h2>
+
+
+        <div
+          id="sinResultados"
+          class="mensaje"
+          style="display:none;"
+        >
+          Todavía no hay resultados deportivos registrados.
+        </div>
+
+
+        <div
+          id="tablaResultadosContenedor"
+          class="tabla-scroll"
+        >
+
+          <table>
+
+            <thead>
+
+              <tr>
+
+                <th>Fecha</th>
+
+                <th>Raid</th>
+
+                <th>Distancia</th>
+
+                <th>Puesto</th>
+
+                <th>Promedio</th>
+
+                <th>Premio</th>
+
+                <th>Observaciones</th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody id="tablaResultados"></tbody>
+
+          </table>
+
+        </div>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           SPONSOR
+           ===================================================== -->
+
+      <section class="tarjeta sponsor">
+
+        <h2 class="titulo-seccion">
+          Ser sponsor
+        </h2>
+
+        <p>
+          ¿Querés acompañar a Sangres del Uruguay
+          y formar parte de nuestras competencias,
+          estadísticas y contenidos?
+        </p>
+
+
+        <!--
+          =======================================================
+          SPONSOR
+
+          DESPUÉS PODEMOS CAMBIAR ESTE LINK
+          POR WHATSAPP, FORMULARIO O PAGINA PROPIA.
+          =======================================================
+        -->
+
+        <a
+          href="index.html#contacto"
+          class="boton boton-dorado"
+        >
+          Quiero ser sponsor
+        </a>
+
+      </section>
+
+
+
+      <!-- =====================================================
+           BOTONES INFERIORES
+           ===================================================== -->
+
+      <div class="acciones">
+
+        <a
+          href="index.html"
+          class="boton boton-claro"
+        >
+          Volver a Sangres del Uruguay
+        </a>
+
+        <a
+          href="favoritos.html"
+          class="boton boton-principal"
+        >
+          Favoritos
+        </a>
+
+      </div>
+
+
+    </div>
+
+  </main>
+
+
+
+  <script>
+
+
+    /* =========================================================
+       1. CONEXION SUPABASE
+       ========================================================= */
+
+    const SUPABASE_URL =
+      "https://arsjvaueyjwntefogmqz.supabase.co";
+
+
+    const SUPABASE_KEY =
+      "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+
+
+    const HEADERS = {
+
+      apikey: SUPABASE_KEY,
+
+      Authorization:
+        `Bearer ${SUPABASE_KEY}`
+
+    };
+
+
+
+    /* =========================================================
+       2. UTILIDADES
+       ========================================================= */
+
+    function escapar(valor) {
+
+      return String(valor ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+
+    }
+
+
+
+    function obtenerCampo(
+      objeto,
+      nombres
+    ) {
+
+      if (!objeto) {
+        return "";
+      }
+
+
+      for (const nombre of nombres) {
+
+        const valor = objeto[nombre];
+
+        if (
+          valor !== undefined &&
+          valor !== null &&
+          String(valor).trim() !== ""
+        ) {
+
+          return valor;
+
+        }
+
+      }
+
+
+      return "";
+
+    }
+
+
+
+    function mostrarDato(
+      idContenedor,
+      idValor,
+      valor
+    ) {
+
+      const contenedor =
+        document.getElementById(
+          idContenedor
+        );
+
+
+      const elemento =
+        document.getElementById(
+          idValor
+        );
+
+
+      if (
+        valor === undefined ||
+        valor === null ||
+        String(valor).trim() === ""
+      ) {
+
+        contenedor.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      elemento.textContent = valor;
+
+      contenedor.style.display = "";
+
+    }
+
+
+
+    function formatearFecha(fecha) {
+
+      if (!fecha) {
+        return "-";
+      }
+
+
+      const partes =
+        String(fecha)
+          .split("-");
+
+
+      if (partes.length !== 3) {
+        return fecha;
+      }
+
+
+      return (
+        partes[2] +
+        "/" +
+        partes[1] +
+        "/" +
+        partes[0]
+      );
+
+    }
+
+
+
+    function textoPuesto(resultado) {
+
+      if (!resultado) {
+        return "-";
+      }
+
+
+      const estado =
+        resultado.estado_resultado;
+
+
+      if (
+        estado === "NC" ||
+        estado === "DQ" ||
+        estado === "retirado"
+      ) {
+
+        return estado;
+
+      }
+
+
+      if (
+        resultado.puesto !== null &&
+        resultado.puesto !== undefined
+      ) {
+
+        return `${resultado.puesto}º`;
+
+      }
+
+
+      return "-";
+
+    }
+
+
+
+    function urlFoto(path) {
+
+      if (!path) {
+        return "";
+      }
+
+
+      if (
+        String(path).startsWith("http://") ||
+        String(path).startsWith("https://")
+      ) {
+
+        return path;
+
+      }
+
+
+      return (
+        SUPABASE_URL +
+        "/storage/v1/object/public/fotos-caballos/" +
+        String(path)
+          .replace(/^\/+/, "")
+      );
+
+    }
+
+
+
+    async function pedirJSON(url) {
+
+      const respuesta =
+        await fetch(
+          url,
+          {
+            headers: HEADERS
+          }
+        );
+
+
+      if (!respuesta.ok) {
+
+        const texto =
+          await respuesta.text();
+
+        throw new Error(
+          texto ||
+          "Error consultando Supabase"
+        );
+
+      }
+
+
+      return respuesta.json();
+
+    }
+
+
+
+    function construirIn(lista) {
+
+      return lista
+        .map(
+          valor =>
+            encodeURIComponent(valor)
+        )
+        .join(",");
+
+    }
+
+
+
+    /* =========================================================
+       3. LEER CABALLO DE LA URL
+
+       FORMAS ADMITIDAS:
+
+       campana.html?id=2
+
+       campana.html?caballo=EL%20GALGO
+
+       campana.html?sdu=98
+       ========================================================= */
+
+    async function obtenerCaballoSolicitado() {
+
+      const parametros =
+        new URLSearchParams(
+          window.location.search
+        );
+
+
+      const idDeportivo =
+        parametros.get("id");
+
+
+      const nombre =
+        parametros.get("caballo");
+
+
+      const idSDU =
+        parametros.get("sdu");
+
+
+
+      /* BUSCAR POR ID DEPORTIVO */
+
+      if (idDeportivo) {
+
+        const datos =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/caballos_deportivos` +
+            `?select=*` +
+            `&id=eq.${encodeURIComponent(idDeportivo)}` +
+            `&limit=1`
+          );
+
+
+        return datos[0] || null;
+
+      }
+
+
+
+      /* BUSCAR POR ID DE CABALLOS SDU */
+
+      if (idSDU) {
+
+        const datos =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/caballos_deportivos` +
+            `?select=*` +
+            `&caballo_id=eq.${encodeURIComponent(idSDU)}` +
+            `&limit=1`
+          );
+
+
+        return datos[0] || null;
+
+      }
+
+
+
+      /* BUSCAR POR NOMBRE PRINCIPAL O ALIAS */
+
+      if (nombre) {
+
+        const nombreLimpio =
+          nombre.trim();
+
+
+        const directos =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/caballos_deportivos` +
+            `?select=*` +
+            `&nombre_principal=ilike.${encodeURIComponent(nombreLimpio)}` +
+            `&limit=1`
+          );
+
+
+        if (directos.length) {
+
+          return directos[0];
+
+        }
+
+
+
+        const aliases =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/alias_caballos` +
+            `?select=*` +
+            `&alias=ilike.${encodeURIComponent(nombreLimpio)}` +
+            `&limit=1`
+          );
+
+
+        if (aliases.length) {
+
+          const deportivoId =
+            aliases[0]
+              .caballo_deportivo_id;
+
+
+          const deportivos =
+            await pedirJSON(
+              `${SUPABASE_URL}/rest/v1/caballos_deportivos` +
+              `?select=*` +
+              `&id=eq.${deportivoId}` +
+              `&limit=1`
+            );
+
+
+          return deportivos[0] || null;
+
+        }
+
+      }
+
+
+      return null;
+
+    }
+
+
+
+    /* =========================================================
+       4. CARGAR DATOS RELACIONADOS
+       ========================================================= */
+
+    async function cargarDatosRelacionados(
+      deportivo
+    ) {
+
+
+      /* CABALLO GENEALOGICO SDU */
+
+      let caballoSDU = null;
+
+
+      if (deportivo.caballo_id) {
+
+        const datos =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/Caballos` +
+            `?select=*` +
+            `&id=eq.${deportivo.caballo_id}` +
+            `&limit=1`
+          );
+
+
+        caballoSDU =
+          datos[0] || null;
+
+      }
+
+
+
+      /* ALIAS */
+
+      const aliases =
+        await pedirJSON(
+          `${SUPABASE_URL}/rest/v1/alias_caballos` +
+          `?select=*` +
+          `&caballo_deportivo_id=eq.${deportivo.id}` +
+          `&order=es_actual.desc,created_at.asc`
+        );
+
+
+
+      /* PARTICIPACIONES */
+
+      const participantes =
+        await pedirJSON(
+          `${SUPABASE_URL}/rest/v1/participantes_competencia` +
+          `?select=*` +
+          `&caballo_deportivo_id=eq.${deportivo.id}`
+        );
+
+
+
+      let resultados = [];
+
+      let competencias = [];
+
+
+      if (participantes.length) {
+
+        const idsParticipantes =
+          participantes
+            .map(p => p.id);
+
+
+        resultados =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/resultados_competencia` +
+            `?select=*` +
+            `&participante_id=in.(${construirIn(idsParticipantes)})`
+          );
+
+
+        const idsCompetencias =
+          [
+            ...new Set(
+              participantes
+                .map(
+                  p =>
+                    p.competencia_id
+                )
+            )
+          ];
+
+
+        competencias =
+          await pedirJSON(
+            `${SUPABASE_URL}/rest/v1/competencias` +
+            `?select=*` +
+            `&id=in.(${construirIn(idsCompetencias)})`
+          );
+
+      }
+
+
+      return {
+
+        caballoSDU,
+        aliases,
+        participantes,
+        resultados,
+        competencias
+
+      };
+
+    }
+
+
+
+    /* =========================================================
+       5. MOSTRAR FOTO
+       ========================================================= */
+
+    function mostrarFoto(
+      caballoSDU
+    ) {
+
+      const contenedor =
+        document.getElementById(
+          "fotoContenedor"
+        );
+
+
+      const fotoPath =
+        obtenerCampo(
+          caballoSDU,
+          [
+            "foto_path",
+            "Foto",
+            "foto"
+          ]
+        );
+
+
+      if (!fotoPath) {
+
+        contenedor.innerHTML = `
+
+          <div class="foto-vacia">
+
+            Sin foto
+
+          </div>
+
+        `;
+
+        return;
+
+      }
+
+
+      contenedor.innerHTML = `
+
+        <img
+          src="${escapar(urlFoto(fotoPath))}"
+          alt="Foto del caballo"
+          class="foto-caballo"
+          onerror="
+            this.outerHTML =
+            '<div class=&quot;foto-vacia&quot;>Sin foto</div>'
+          "
+        >
+
+      `;
+
+    }
+
+
+
+    /* =========================================================
+       6. MOSTRAR IDENTIDAD
+       ========================================================= */
+
+    function mostrarIdentidad(
+      deportivo,
+      caballoSDU,
+      aliases,
+      participantes
+    ) {
+
+
+      const nombrePrincipal =
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Nombre",
+            "nombre"
+          ]
+        ) ||
+        deportivo.nombre_principal;
+
+
+      document
+        .getElementById(
+          "nombreCaballo"
+        )
+        .textContent =
+          nombrePrincipal;
+
+
+      document
+        .getElementById(
+          "caballoPedigree"
+        )
+        .textContent =
+          nombrePrincipal;
+
+
+
+      /* ALIAS */
+
+      if (aliases.length) {
+
+        const aliasActual =
+          aliases.find(
+            a => a.es_actual
+          ) ||
+          aliases[0];
+
+
+        const aliasContenedor =
+          document.getElementById(
+            "aliasCaballo"
+          );
+
+
+        aliasContenedor.innerHTML = `
+
+          <span>
+            Corre como:
+          </span>
+
+          ${escapar(aliasActual.alias)}
+
+        `;
+
+
+        aliasContenedor.style.display =
+          "";
+
+      }
+
+
+
+      /* PROPIETARIO */
+
+      let propietario =
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Propietario",
+            "propietario"
+          ]
+        );
+
+
+      if (!propietario) {
+
+        propietario =
+          deportivo.propietario_actual;
+
+      }
+
+
+      if (
+        !propietario &&
+        participantes.length
+      ) {
+
+        propietario =
+          participantes[
+            participantes.length - 1
+          ]
+          .propietario_nomina;
+
+      }
+
+
+      document
+        .getElementById(
+          "propietario"
+        )
+        .textContent =
+          propietario || "-";
+
+
+
+      /* CHIP */
+
+      document
+        .getElementById(
+          "chip"
+        )
+        .textContent =
+          deportivo.chip || "-";
+
+
+
+      /* PASAPORTE */
+
+      document
+        .getElementById(
+          "pasaporte"
+        )
+        .textContent =
+          deportivo.pasaporte_feu || "-";
+
+
+
+      /* DATOS GENEALOGICOS */
+
+      mostrarDato(
+        "datoCriador",
+        "criador",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Criador",
+            "criador"
+          ]
+        )
+      );
+
+
+      mostrarDato(
+        "datoNumeroCriador",
+        "numeroCriador",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Nº Criador",
+            "N.º Criador",
+            "Numero de Criador",
+            "numero_criador"
+          ]
+        )
+      );
+
+
+      mostrarDato(
+        "datoNacimiento",
+        "nacimiento",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Nacimiento",
+            "nacimiento"
+          ]
+        )
+      );
+
+
+      mostrarDato(
+        "datoSexo",
+        "sexo",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Sexo",
+            "sexo"
+          ]
+        )
+      );
+
+
+      mostrarDato(
+        "datoPelo",
+        "pelo",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "Pelo",
+            "pelo"
+          ]
+        )
+      );
+
+
+      mostrarDato(
+        "datoRP",
+        "rp",
+        obtenerCampo(
+          caballoSDU,
+          [
+            "RP",
+            "rp"
+          ]
+        )
+      );
+
+
+      mostrarFoto(
+        caballoSDU
+      );
+
+    }
+
+
+
+    /* =========================================================
+       7. PEDIGREE
+
+       IMPORTANTE:
+       SI EL CABALLO TODAVIA NO TIENE PEDIGREE,
+       EL ARBOL IGUAL APARECE VACIO.
+       ========================================================= */
+
+    function valorPedigree(
+      caballo,
+      nombres
+    ) {
+
+      const valor =
+        obtenerCampo(
+          caballo,
+          nombres
+        );
+
+
+      return valor || "";
+
+    }
+
+
+
+    function ponerCeldaPedigree(
+      id,
+      valor
+    ) {
+
+      const celda =
+        document.getElementById(id);
+
+
+      if (valor) {
+
+        celda.textContent = valor;
+
+        celda.classList.remove(
+          "pedigree-vacia"
+        );
+
+      } else {
+
+        celda.textContent = "—";
+
+        celda.classList.add(
+          "pedigree-vacia"
+        );
+
+      }
+
+    }
+
+
+
+    function mostrarPedigree(
+      caballo
+    ) {
+
+
+      /* PADRES */
+
+      ponerCeldaPedigree(
+        "padre",
+        valorPedigree(
+          caballo,
+          [
+            "Padre",
+            "padre"
+          ]
+        )
+      );
+
+
+      ponerCeldaPedigree(
+        "madre",
+        valorPedigree(
+          caballo,
+          [
+            "Madre",
+            "madre"
+          ]
+        )
+      );
+
+
+
+      /* ABUELOS */
+
+      ponerCeldaPedigree(
+        "abueloPaterno",
+        valorPedigree(
+          caballo,
+          [
+            "Abuelo paterno",
+            "Abuelo Paterno",
+            "abuelo_paterno"
+          ]
+        )
+      );
+
+
+      ponerCeldaPedigree(
+        "abuelaPaterna",
+        valorPedigree(
+          caballo,
+          [
+            "Abuela paterna",
+            "Abuela Paterna",
+            "abuela_paterna"
+          ]
+        )
+      );
+
+
+      ponerCeldaPedigree(
+        "abueloMaterno",
+        valorPedigree(
+          caballo,
+          [
+            "Abuelo materno",
+            "Abuelo Materno",
+            "abuelo_materno"
+          ]
+        )
+      );
+
+
+      ponerCeldaPedigree(
+        "abuelaMaterna",
+        valorPedigree(
+          caballo,
+          [
+            "Abuela materna",
+            "Abuela Materna",
+            "abuela_materna"
+          ]
+        )
+      );
+
+
+
+      /*
+        BISABUELOS
+
+        DEJE VARIAS FORMAS DE NOMBRE
+        PARA QUE SE ADAPTE A TU TABLA.
+
+        SI ALGUNO NO APARECE,
+        DESPUES MIRAMOS EL NOMBRE EXACTO
+        DE ESA COLUMNA Y LO CORREGIMOS.
+      */
+
+      const bisabuelos = [
+
+        [
+          "Bisabuelo PP",
+          "Bisabuelo paterno paterno",
+          "bisabuelo_pp"
+        ],
+
+        [
+          "Bisabuela PP",
+          "Bisabuela paterna paterna",
+          "bisabuela_pp"
+        ],
+
+        [
+          "Bisabuelo PM",
+          "Bisabuelo paterno materno",
+          "bisabuelo_pm"
+        ],
+
+        [
+          "Bisabuela PM",
+          "Bisabuela paterna materna",
+          "bisabuela_pm"
+        ],
+
+        [
+          "Bisabuelo MP",
+          "Bisabuelo materno paterno",
+          "bisabuelo_mp"
+        ],
+
+        [
+          "Bisabuela MP",
+          "Bisabuela materna paterna",
+          "bisabuela_mp"
+        ],
+
+        [
+          "Bisabuelo MM",
+          "Bisabuelo materno materno",
+          "bisabuelo_mm"
+        ],
+
+        [
+          "Bisabuela MM",
+          "Bisabuela materna materna",
+          "bisabuela_mm"
+        ]
+
+      ];
+
+
+      bisabuelos.forEach(
+        (nombres, indice) => {
+
+          ponerCeldaPedigree(
+            `bis${indice + 1}`,
+            valorPedigree(
+              caballo,
+              nombres
+            )
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /* =========================================================
+       8. UNIR RESULTADOS CON RAID
+       ========================================================= */
+
+    function construirCampana(
+      participantes,
+      resultados,
+      competencias
+    ) {
+
+      const mapaParticipantes =
+        new Map(
+          participantes.map(
+            p =>
+              [
+                p.id,
+                p
+              ]
+          )
+        );
+
+
+      const mapaCompetencias =
+        new Map(
+          competencias.map(
+            c =>
+              [
+                c.id,
+                c
+              ]
+          )
+        );
+
+
+      const campana =
+        resultados
+          .map(
+            resultado => {
+
+              const participante =
+                mapaParticipantes.get(
+                  resultado.participante_id
+                );
+
+
+              if (!participante) {
+                return null;
+              }
+
+
+              const competencia =
+                mapaCompetencias.get(
+                  participante.competencia_id
+                );
+
+
+              if (!competencia) {
+                return null;
+              }
+
+
+              return {
+
+                resultado,
+                participante,
+                competencia
+
+              };
+
+            }
+          )
+          .filter(Boolean);
+
+
+      campana.sort(
+        (a, b) => {
+
+          const fechaA =
+            new Date(
+              a.competencia.fecha ||
+              "1900-01-01"
+            );
+
+
+          const fechaB =
+            new Date(
+              b.competencia.fecha ||
+              "1900-01-01"
+            );
+
+
+          return fechaB - fechaA;
+
+        }
+      );
+
+
+      return campana;
+
+    }
+
+
+
+    /* =========================================================
+       9. RESUMEN
+       ========================================================= */
+
+    function mostrarResumen(
+      campana
+    ) {
+
+      const clasificados =
+        campana.filter(
+          item =>
+            item.resultado
+              .estado_resultado ===
+            "clasificado"
+        );
+
+
+      const victorias =
+        clasificados.filter(
+          item =>
+            Number(
+              item.resultado.puesto
+            ) === 1
+        ).length;
+
+
+      const segundos =
+        clasificados.filter(
+          item =>
+            Number(
+              item.resultado.puesto
+            ) === 2
+        ).length;
+
+
+      const terceros =
+        clasificados.filter(
+          item =>
+            Number(
+              item.resultado.puesto
+            ) === 3
+        ).length;
+
+
+      const premiosFeu =
+        campana.filter(
+          item =>
+            item.resultado
+              .premio_feu === true
+        ).length;
+
+
+      document
+        .getElementById(
+          "totalCompetencias"
+        )
+        .textContent =
+          campana.length;
+
+
+      document
+        .getElementById(
+          "victorias"
+        )
+        .textContent =
+          victorias;
+
+
+      document
+        .getElementById(
+          "segundos"
+        )
+        .textContent =
+          segundos;
+
+
+      document
+        .getElementById(
+          "terceros"
+        )
+        .textContent =
+          terceros;
+
+
+      document
+        .getElementById(
+          "premiosFeu"
+        )
+        .textContent =
+          premiosFeu;
+
+    }
+
+
+
+    /* =========================================================
+       10. TABLA DE RESULTADOS
+       ========================================================= */
+
+    function mostrarResultados(
+      campana
+    ) {
+
+      const cuerpo =
+        document.getElementById(
+          "tablaResultados"
+        );
+
+
+      const sinResultados =
+        document.getElementById(
+          "sinResultados"
+        );
+
+
+      const tablaContenedor =
+        document.getElementById(
+          "tablaResultadosContenedor"
+        );
+
+
+      cuerpo.innerHTML = "";
+
+
+      if (!campana.length) {
+
+        sinResultados.style.display =
+          "";
+
+        tablaContenedor.style.display =
+          "none";
+
+        return;
+
+      }
+
+
+      sinResultados.style.display =
+        "none";
+
+      tablaContenedor.style.display =
+        "";
+
+
+      campana.forEach(
+        item => {
+
+          const {
+            resultado,
+            competencia
+          } = item;
+
+
+          const fila =
+            document.createElement(
+              "tr"
+            );
+
+
+          const premio =
+            resultado.premio_feu
+
+              ? (
+                  "❤️🐴 Premio FEU" +
+                  (
+                    resultado
+                      .premio_feu_ppm
+
+                    ? ` · ${resultado.premio_feu_ppm} ppm`
+
+                    : ""
+                  )
+                )
+
+              : "-";
+
+
+          const promedio =
+            resultado.promedio_kmh !==
+              null &&
+            resultado.promedio_kmh !==
+              undefined
+
+              ? `${resultado.promedio_kmh} km/h`
+
+              : "-";
+
+
+          const puesto =
+            textoPuesto(
+              resultado
+            );
+
+
+          const clasePuesto =
+            (
+              resultado
+                .estado_resultado ===
+              "NC" ||
+
+              resultado
+                .estado_resultado ===
+              "DQ"
+
+            )
+
+              ? "estado-nc"
+
+              : "puesto";
+
+
+          fila.innerHTML = `
+
+            <td>
+              ${escapar(
+                formatearFecha(
+                  competencia.fecha
+                )
+              )}
+            </td>
+
+
+            <td>
+
+              <a
+                class="link-raid"
+                href="resultados.html?id=${competencia.id}"
+              >
+
+                ${escapar(
+                  competencia.nombre ||
+                  "Raid"
+                )}
+
+              </a>
+
+            </td>
+
+
+            <td>
+
+              ${
+                competencia.distancia_km
+                  ? escapar(
+                      competencia.distancia_km
+                    ) + " km"
+                  : "-"
+              }
+
+            </td>
+
+
+            <td class="${clasePuesto}">
+
+              ${escapar(puesto)}
+
+            </td>
+
+
+            <td>
+
+              ${escapar(promedio)}
+
+            </td>
+
+
+            <td class="${
+              resultado.premio_feu
+                ? "premio-feu"
+                : ""
+            }">
+
+              ${escapar(premio)}
+
+            </td>
+
+
+            <td>
+
+              ${escapar(
+                resultado.observaciones ||
+                "-"
+              )}
+
+            </td>
+
+          `;
+
+
+          cuerpo.appendChild(
+            fila
+          );
+
+        }
+      );
+
+    }
+
+
+
+    /* =========================================================
+       11. CARGAR PAGINA
+       ========================================================= */
+
+    async function iniciarCampana() {
+
+      const estado =
+        document.getElementById(
+          "estadoCarga"
+        );
+
+
+      const contenido =
+        document.getElementById(
+          "contenidoCaballo"
+        );
+
+
+      try {
+
+
+        const deportivo =
+          await obtenerCaballoSolicitado();
+
+
+        if (!deportivo) {
+
+          estado.className =
+            "mensaje mensaje-error";
+
+
+          estado.innerHTML = `
+
+            No encontramos el caballo.
+
+            <br><br>
+
+            Para probar esta página podés abrir:
+
+            <br>
+
+            <strong>
+              campana.html?id=2
+            </strong>
+
+          `;
+
+          return;
+
+        }
+
+
+
+        const relacionados =
+          await cargarDatosRelacionados(
+            deportivo
+          );
+
+
+        mostrarIdentidad(
+
+          deportivo,
+
+          relacionados.caballoSDU,
+
+          relacionados.aliases,
+
+          relacionados.participantes
+
+        );
+
+
+        mostrarPedigree(
+          relacionados.caballoSDU
+        );
+
+
+        const campana =
+          construirCampana(
+
+            relacionados.participantes,
+
+            relacionados.resultados,
+
+            relacionados.competencias
+
+          );
+
+
+        mostrarResumen(
+          campana
+        );
+
+
+        mostrarResultados(
+          campana
+        );
+
+
+        estado.style.display =
+          "none";
+
+
+        contenido.style.display =
+          "";
+
+      }
+
+
+      catch (error) {
+
+        console.error(
+          error
+        );
+
+
+        estado.className =
+          "mensaje mensaje-error";
+
+
+        estado.textContent =
+          "No se pudo cargar la campaña deportiva. Revisá la consola para ver el error.";
+
+      }
+
+    }
+
+
+
+    iniciarCampana();
+
+
+  </script>
+
+</body>
+
+</html>
