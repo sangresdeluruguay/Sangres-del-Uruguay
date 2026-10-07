@@ -8446,6 +8446,32 @@ if (caballo["Criador ID"]) {
     propietario = propietarios[0];
   }
 }
+    let caballoDeportivo = null;
+
+try {
+  const respuestaDeportivo = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/caballos_deportivos?select=id,nombre_principal,chip,pasaporte_feu&caballo_id=eq." +
+      encodeURIComponent(caballo.id) +
+      "&limit=1",
+    {
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + SUPABASE_KEY
+      }
+    }
+  );
+
+  const deportivos = await respuestaDeportivo.json();
+
+  if (respuestaDeportivo.ok && deportivos.length > 0) {
+    caballoDeportivo = deportivos[0];
+  }
+
+} catch (error) {
+  console.error("Error cargando datos deportivos:", error);
+}
+    
 function nodo(nombre, tipo) {
   return '<div class="pedigree-box ' + tipo + '"' +
     (nombre ? ' data-nombre="' + encodeURIComponent(nombre) + '"' : '') +
@@ -8559,7 +8585,24 @@ onclick="event.preventDefault(); event.stopPropagation(); proponerFotoCaballo(th
     <strong>RP</strong>
     <span>${caballo.RP ? escapar(caballo.RP) : "-"}</span>
   </div>
+  
+<div class="dato-ficha">
+  <strong>Chip</strong>
+  <span>${
+    caballoDeportivo && caballoDeportivo.chip
+      ? escapar(caballoDeportivo.chip)
+      : "-"
+  }</span>
+</div>
 
+<div class="dato-ficha">
+  <strong>Pasaporte FEU</strong>
+  <span>${
+    caballoDeportivo && caballoDeportivo.pasaporte_feu
+      ? escapar(caballoDeportivo.pasaporte_feu)
+      : "-"
+  }</span>
+</div>
 
 </div>
 </div>
