@@ -4078,6 +4078,134 @@ document.body.appendChild(input);
 
   input.click();
 }   
+
+    async function proponerFotoCaballoDeportivo(nombreCodificado, caballoDeportivoId) {
+
+  const nombreCaballo =
+    decodeURIComponent(nombreCodificado);
+
+  const input = document.createElement("input");
+
+  input.type = "file";
+  input.accept = "image/jpeg,image/png,image/webp";
+  input.style.display = "none";
+
+  document.body.appendChild(input);
+
+  input.onchange = async function () {
+
+    const archivo =
+      input.files && input.files[0];
+
+    if (!archivo) {
+      input.remove();
+      return;
+    }
+
+    if (!archivo.type.startsWith("image/")) {
+      alert("Seleccioná una imagen válida.");
+      input.remove();
+      return;
+    }
+
+    if (archivo.size > 20 * 1024 * 1024) {
+     alert("La foto no puede superar los 20 MB.");
+      input.remove();
+      return;
+    }
+
+    try {
+
+      const extension =
+        archivo.name
+          .split(".")
+          .pop()
+          .toLowerCase();
+
+      const fotoPath =
+        "solicitudes/deportivo-" +
+        caballoDeportivoId +
+        "-" +
+        Date.now() +
+        "." +
+        extension;
+
+      const respuestaFoto = await fetch(
+        SUPABASE_URL +
+        "/storage/v1/object/fotos-caballos/" +
+        fotoPath,
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization:
+              "Bearer " + SUPABASE_KEY,
+            "Content-Type":
+              archivo.type
+          },
+          body: archivo
+        }
+      );
+
+      if (!respuestaFoto.ok) {
+        throw new Error("No se pudo subir la foto.");
+      }
+
+      const respuestaSolicitud = await fetch(
+        SUPABASE_URL +
+        "/rest/v1/SolicitudesFotosCaballos",
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization:
+              "Bearer " + SUPABASE_KEY,
+            "Content-Type":
+              "application/json",
+            Prefer:
+              "return=minimal"
+          },
+          body: JSON.stringify({
+            caballo_deportivo_id:
+              Number(caballoDeportivoId),
+            caballo_nombre:
+              nombreCaballo,
+            caballo_registro:
+              "DEPORTIVO",
+            foto_path:
+              fotoPath,
+            estado:
+              "pendiente"
+          })
+        }
+      );
+
+      if (!respuestaSolicitud.ok) {
+        throw new Error(
+          "No se pudo registrar la solicitud."
+        );
+      }
+
+      alert(
+        "✅ Foto enviada. Quedará visible cuando sea aprobada por el administrador."
+      );
+
+    } catch (error) {
+
+      console.error(error);
+
+      alert(
+        "No se pudo enviar la foto. Intentá nuevamente."
+      );
+
+    } finally {
+      input.remove();
+    }
+  };
+
+  input.click();
+}
+    
     async function enviarSolicitudCaballo() {
   const datos = {
     "Numero de Criador": document.getElementById("caballoNumeroCriador").value.trim().toUpperCase(),
@@ -5274,25 +5402,67 @@ if (seccionCriadoresPropietarios) {
 
     const solicitud = solicitudes[0];
 
-    const respuestaCaballo = await fetch(
-      SUPABASE_URL + "/rest/v1/Caballos?id=eq." + solicitud.caballo_id,
-      {
-        method: "PATCH",
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: "Bearer " + sesionAdmin.access_token,
-          "Content-Type": "application/json",
-          Prefer: "return=minimal"
-        },
-        body: JSON.stringify({
-          foto_path: solicitud.foto_path
-        })
-      }
-    );
+    let respuestaDestino = null;
 
-    if (!respuestaCaballo.ok) {
-      throw new Error("No se pudo colocar la foto en el caballo.");
+/* FOTO DE CABALLO REGISTRADO EN SDU */
+if (solicitud.caballo_id) {
+
+  respuestaDestino = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/Caballos?id=eq." +
+      solicitud.caballo_id,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
+        foto_path: solicitud.foto_path
+      })
     }
+  );
+
+}
+
+/* FOTO DE CABALLO DEPORTIVO NO REGISTRADO */
+else if (solicitud.caballo_deportivo_id) {
+
+  respuestaDestino = await fetch(
+    SUPABASE_URL +
+      "/rest/v1/caballos_deportivos?id=eq." +
+      solicitud.caballo_deportivo_id,
+    {
+      method: "PATCH",
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization:
+          "Bearer " + sesionAdmin.access_token,
+        "Content-Type": "application/json",
+        Prefer: "return=minimal"
+      },
+      body: JSON.stringify({
+        foto_path: solicitud.foto_path
+      })
+    }
+  );
+
+}
+
+else {
+  throw new Error(
+    "La solicitud no tiene un caballo asociado."
+  );
+}
+
+if (!respuestaDestino.ok) {
+  throw new Error(
+    "No se pudo colocar la foto en el caballo."
+  );
+}
 
     const respuestaBorrar = await fetch(
       SUPABASE_URL + "/rest/v1/SolicitudesFotosCaballos?id=eq." + idSolicitud,
@@ -7884,6 +8054,261 @@ elemento.classList.add("modo-pdf");
   buscarCaballo();
 }
 
+async function buscarCaballosDeportivosNoRegistrados(
+  texto,
+  tipoBusqueda = "coincidencia"
+) {
+  const busqueda = String(texto || "").trim();
+
+  if (!busqueda) return [];
+
+  const patron =
+    tipoBusqueda === "comienza"
+      ? busqueda + "%"
+      : "%" + busqueda + "%";
+
+  try {
+    const respuesta = await fetch(
+      SUPABASE_URL +
+        "/rest/v1/caballos_deportivos" +
+        "?select=id,caballo_id,nombre_principal,chip,pasaporte_feu,foto_path" +
+        "&caballo_id=is.null" +
+        "&nombre_principal=ilike." +
+        encodeURIComponent(patron) +
+        "&order=nombre_principal.asc",
+      {
+        headers: {
+          apikey: SUPABASE_KEY,
+          Authorization: "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!respuesta.ok) {
+      console.error(
+        "Error buscando deportivos no registrados:",
+        await respuesta.text()
+      );
+      return [];
+    }
+
+    return await respuesta.json();
+
+  } catch (error) {
+    console.error(
+      "Error buscando deportivos no registrados:",
+      error
+    );
+    return [];
+  }
+}
+    async function mostrarFichaDeportivaNoRegistrada(caballoDeportivo) {
+  if (!caballoDeportivo) return;
+
+  const resultado =
+    document.getElementById("resultado");
+
+  if (!resultado) return;
+
+  const nombre =
+    caballoDeportivo.nombre_principal || "CABALLO";
+
+  const htmlCampana =
+    await obtenerCampanaDeportiva(
+      caballoDeportivo.id
+    );
+
+  const botonRegistrar =
+    sesionAdmin
+      ? `
+        <div style="
+          text-align:center;
+          margin:20px 0;
+        ">
+          <button
+            type="button"
+            class="boton-editar"
+            onclick="registrarCaballoProvisional('${encodeURIComponent(nombre)}')"
+          >
+            Registrar en SDU
+          </button>
+        </div>
+      `
+      : "";
+
+  resultado.innerHTML = `
+    <div class="ficha-caballo">
+
+      <div class="acciones-ficha-superior">
+
+        <button
+          type="button"
+          class="boton-volver-resultados"
+          onclick="volverAResultadosBusqueda()"
+        >
+          ← Volver
+        </button>
+
+      </div>
+
+      <h2 class="nombre-caballo-ficha">
+        ${escapar(nombre)}
+      </h2>
+
+      <div class="ficha-superior-caballo">
+
+        <div class="foto-caballo-ficha">
+
+          ${
+            caballoDeportivo.foto_path
+              ? `
+                <img
+                  src="${SUPABASE_URL}/storage/v1/object/public/fotos-caballos/${escapar(caballoDeportivo.foto_path)}"
+                  alt="${escapar(nombre)}"
+                  class="foto-caballo-img"
+                  onclick="abrirFotoGrande(this.src, this.alt)"
+                  style="cursor:pointer;"
+                >
+              `
+              : `
+                <div class="foto-caballo-vacia">
+                  Sin foto
+                </div>
+              `
+          }
+
+          <button
+            type="button"
+            class="boton-proponer-foto"
+            onclick="proponerFotoCaballoDeportivo(
+              '${encodeURIComponent(nombre)}',
+              ${Number(caballoDeportivo.id)}
+            )"
+          >
+            📷 ${
+              caballoDeportivo.foto_path
+                ? "Proponer cambio de foto"
+                : "Proponer foto"
+            }
+          </button>
+
+        </div>
+
+        <div class="tabla-ficha">
+
+          <div class="dato-ficha">
+            <strong>Criador</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>N.º Criador</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Propietario</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Nacimiento</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Raza</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Sexo</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Pelo</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>RP</strong>
+            <span>-</span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Chip</strong>
+            <span>
+              ${
+                caballoDeportivo.chip
+                  ? escapar(caballoDeportivo.chip)
+                  : "-"
+              }
+            </span>
+          </div>
+
+          <div class="dato-ficha">
+            <strong>Pasaporte FEU</strong>
+            <span>
+              ${
+                caballoDeportivo.pasaporte_feu
+                  ? escapar(caballoDeportivo.pasaporte_feu)
+                  : "-"
+              }
+            </span>
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="pedigree">
+
+        <div class="pedigree-watermark">
+          <img
+            src="Photoroom_20260612_064648.png"
+            alt="Logo SdU"
+          >
+        </div>
+
+        <div class="generacion sujeto">
+          <div class="pedigree-box principal">
+            <strong>${escapar(nombre)}</strong>
+          </div>
+        </div>
+
+        <div class="generacion padres">
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+        </div>
+
+        <div class="generacion abuelos">
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+        </div>
+
+        <div class="generacion bisabuelos">
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+          <div class="pedigree-box macho"></div>
+          <div class="pedigree-box hembra"></div>
+        </div>
+
+      </div>
+
+      ${botonRegistrar}
+
+      ${htmlCampana}
+
+    </div>
+  `;
+}
     async function obtenerCampanaDeportiva(caballoDeportivoId) {
   if (!caballoDeportivoId) return "";
 
@@ -8225,6 +8650,101 @@ const url =
 
     const caballos = await respuesta.json();
 
+    const deportivosNoRegistrados =
+  await buscarCaballosDeportivosNoRegistrados(
+    nombre,
+    tipoBusqueda
+  );
+    /* =========================================================
+   RESULTADOS DEPORTIVOS NO REGISTRADOS EN SDU
+========================================================= */
+
+if (
+  caballos.length === 0 &&
+  deportivosNoRegistrados.length > 0
+) {
+
+  resultado.innerHTML = `
+    <h3>Resultados encontrados</h3>
+
+    <div class="tabla-resultados-wrap">
+
+      <table class="tabla-resultados">
+
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Chip</th>
+            <th>Pasaporte FEU</th>
+            <th>Registro SDU</th>
+          </tr>
+        </thead>
+
+        <tbody>
+
+          ${deportivosNoRegistrados.map(c => `
+            <tr>
+
+              <td>
+                <button
+                  type="button"
+                  class="enlace-genealogia nombre-principal abrir-deportivo"
+                  data-deportivo-id="${Number(c.id)}"
+                >
+                  ${escapar(c.nombre_principal || "-")}
+                </button>
+              </td>
+
+              <td>
+                ${c.chip ? escapar(c.chip) : "-"}
+              </td>
+
+              <td>
+                ${c.pasaporte_feu ? escapar(c.pasaporte_feu) : "-"}
+              </td>
+
+              <td>
+                No registrado
+              </td>
+
+            </tr>
+          `).join("")}
+
+        </tbody>
+
+      </table>
+
+    </div>
+  `;
+
+  resultado
+    .querySelectorAll(".abrir-deportivo")
+    .forEach(boton => {
+
+      boton.addEventListener(
+        "click",
+        function() {
+
+          const id =
+            Number(this.dataset.deportivoId);
+
+          const caballoDeportivo =
+            deportivosNoRegistrados.find(
+              c => Number(c.id) === id
+            );
+
+          if (!caballoDeportivo) return;
+
+          mostrarFichaDeportivaNoRegistrada(
+            caballoDeportivo
+          );
+        }
+      );
+
+    });
+
+  return;
+}
     if (caballos.length === 0) {
 
   const nombreFiltro = encodeURIComponent('"' + nombre.replace(/"/g, '\\"') + '"');
