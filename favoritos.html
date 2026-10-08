@@ -482,18 +482,19 @@
         grid-template-columns: 1fr;
       }
 
-      .caballo-voto {
-        grid-template-columns:
-          44px
-          minmax(0,1fr);
-      }
+      ..caballo-voto {
+  grid-template-columns:
+    44px
+    minmax(0,1fr)
+    auto;
+}
 
-      .accion-voto,
-      .porcentaje-publico {
-        grid-column: 2;
-        justify-self: start;
-        text-align: left;
-      }
+.accion-voto,
+.porcentaje-publico {
+  grid-column: 3;
+  justify-self: end;
+  text-align: right;
+}
 
       .datos-caballo {
         grid-template-columns: 1fr;
@@ -1293,8 +1294,25 @@ async function mostrarRaid(
       return;
 
     }
+const cierreVotacion =
+  new Date(
+    competencia.fecha +
+    "T09:00:00-03:00"
+  );
 
+const ahora =
+  new Date();
 
+const votacionCerradaPorHora =
+  ahora >= cierreVotacion;
+
+if (
+  votacionCerradaPorHora &&
+  competencia.estado === "votacion_abierta"
+) {
+  competencia.estado = "votacion_cerrada";
+}
+    
     const participantes =
       await apiGet(
         "participantes_competencia" +
@@ -1657,6 +1675,24 @@ async function mostrarRaid(
           )}
         </span>
 
+        ${
+  competencia.estado === "votacion_abierta"
+    ? `
+      <div
+        id="contadorCierreVotacion"
+        style="
+          margin-top:14px;
+          font-weight:800;
+          color:#173b72;
+          font-size:17px;
+        "
+      >
+        ⏳ Cierra el domingo a las 09:00
+      </div>
+    `
+    : ""
+}
+
       </section>
 
 
@@ -1801,7 +1837,78 @@ async function mostrarRaid(
       );
 
   }
+const contador =
+  document.getElementById(
+    "contadorCierreVotacion"
+  );
 
+if (
+  contador &&
+  competencia.estado === "votacion_abierta"
+) {
+
+  function actualizarContador() {
+
+    const ahoraActual =
+      new Date();
+
+    const diferencia =
+      cierreVotacion -
+      ahoraActual;
+
+    if (diferencia <= 0) {
+      contador.textContent =
+        "Votación cerrada";
+
+      mostrarRaid(
+        competencia.id
+      );
+
+      return;
+    }
+
+    const horas =
+      Math.floor(
+        diferencia /
+        (1000 * 60 * 60)
+      );
+
+    const minutos =
+      Math.floor(
+        (
+          diferencia %
+          (1000 * 60 * 60)
+        ) /
+        (1000 * 60)
+      );
+
+    const segundos =
+      Math.floor(
+        (
+          diferencia %
+          (1000 * 60)
+        ) /
+        1000
+      );
+
+    contador.textContent =
+      "⏳ Cierra el domingo a las 09:00 · " +
+      "Faltan " +
+      horas +
+      " h " +
+      minutos +
+      " min " +
+      segundos +
+      " s";
+  }
+
+  actualizarContador();
+
+  setInterval(
+    actualizarContador,
+    1000
+  );
+}
   catch (error) {
 
     console.error(
