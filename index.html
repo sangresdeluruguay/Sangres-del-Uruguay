@@ -8529,9 +8529,15 @@ async function buscarCaballosDeportivosNoRegistrados(
                     : "-";
 
                 const premio =
-                  r?.premio_feu === true
-                    ? "🏆 FEU"
-                    : "";
+  r?.premio_feu === true
+    ? "🐴 " +
+      (
+        r?.premio_feu_ppm !== null &&
+        r?.premio_feu_ppm !== undefined
+          ? escapar(r.premio_feu_ppm) + " ppm"
+          : ""
+      )
+    : "";
 
                 return `
                   <tr>
