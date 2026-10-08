@@ -1664,6 +1664,55 @@ transform: none;
     pointer-events: auto !important;
   }
 }
+
+    /* LOGOS SDU + FAVORITOS */
+
+.logos-inicio {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 45px;
+  margin: 18px auto 25px;
+}
+
+.logos-inicio .caballito-inicio {
+  width: 150px !important;
+  max-width: 32vw !important;
+  height: auto !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+.enlace-logo-favoritos {
+  display: block;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.logo-favoritos-inicio {
+  display: block;
+  width: 190px;
+  max-width: 38vw;
+  height: auto;
+  object-fit: contain;
+}
+
+@media (max-width: 600px) {
+  .logos-inicio {
+    gap: 24px;
+    margin: 16px auto 22px;
+  }
+
+  .logos-inicio .caballito-inicio {
+    width: 95px !important;
+  }
+
+  .logo-favoritos-inicio {
+    width: 125px;
+  }
+}
+    
   </style>
 </head>
 
@@ -1807,11 +1856,27 @@ transform: none;
     Registrarse como criador
   </button>
 </div>
+    <div class="logos-inicio">
+
+  <img
+    src="Photoroom_20260612_064648.png"
+    alt="Sangres del Uruguay"
+    class="caballito-inicio"
+  >
+
+  <a
+    href="favoritos.html"
+    class="enlace-logo-favoritos"
+    aria-label="Ir a Favoritos"
+  >
     <img
-  src="Photoroom_20260612_064648.png"
-  alt="Sangres del Uruguay"
-  class="caballito-inicio"
->
+      src="logo-favoritos.png"
+      alt="Favoritos"
+      class="logo-favoritos-inicio"
+    >
+  </a>
+
+</div>
   </main>
   </section>
   
