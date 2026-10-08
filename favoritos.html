@@ -1420,7 +1420,50 @@ if (
       }
     );
 
+const participanteIds =
+  participantes
+    .map(
+      participante =>
+        participante.id
+    );
 
+
+let resultadosRaid =
+  [];
+
+
+if (
+  participanteIds.length
+) {
+
+  resultadosRaid =
+    await apiGet(
+      "resultados_competencia" +
+      "?select=*" +
+      "&participante_id=in.(" +
+      participanteIds.join(",") +
+      ")"
+    );
+
+}
+
+
+const mapaResultadosRaid =
+  new Map();
+
+
+resultadosRaid.forEach(
+  resultado => {
+
+    mapaResultadosRaid.set(
+      Number(
+        resultado.participante_id
+      ),
+      resultado
+    );
+
+  }
+);
     /*
       No pedimos voter_key.
       Solo necesitamos participante_id
@@ -1492,10 +1535,11 @@ if (
       votos.length;
 
 
-    const mostrarPorcentajes =
-      yaVoto ||
-      competencia.estado !==
-        "votacion_abierta";
+const mostrarPorcentajes =
+  totalVotos > 0 ||
+  yaVoto ||
+  competencia.estado !==
+    "votacion_abierta";
 
 
     const ranking =
@@ -1691,6 +1735,15 @@ if (
 
       </section>
 
+      ${
+  resultadosRaid.length
+    ? renderResultadosRaid(
+        participantes,
+        mapaResultadosRaid,
+        mapaDeportivos
+      )
+    : ""
+}
 
       ${
         mostrarPorcentajes &&
@@ -1931,6 +1984,276 @@ if (
 
 }
 
+  function renderResultadosRaid(
+  participantes,
+  mapaResultadosRaid,
+  mapaDeportivos
+) {
+
+  const filas =
+    participantes
+      .map(
+        participante => {
+
+          const resultado =
+            mapaResultadosRaid.get(
+              Number(
+                participante.id
+              )
+            );
+
+
+          return {
+            participante,
+            resultado
+          };
+
+        }
+      )
+      .filter(
+        item =>
+          item.resultado
+      )
+      .sort(
+        (a, b) => {
+
+          const resultadoA =
+            a.resultado;
+
+          const resultadoB =
+            b.resultado;
+
+
+          const clasificadoA =
+            resultadoA.estado_resultado ===
+            "clasificado";
+
+          const clasificadoB =
+            resultadoB.estado_resultado ===
+            "clasificado";
+
+
+          if (
+            clasificadoA &&
+            !clasificadoB
+          ) {
+            return -1;
+          }
+
+
+          if (
+            !clasificadoA &&
+            clasificadoB
+          ) {
+            return 1;
+          }
+
+
+          if (
+            clasificadoA &&
+            clasificadoB
+          ) {
+
+            return (
+              numeroOrden(
+                resultadoA.puesto
+              ) -
+              numeroOrden(
+                resultadoB.puesto
+              )
+            );
+
+          }
+
+
+          return String(
+            a.participante
+              .nombre_nomina ||
+            ""
+          )
+            .localeCompare(
+              String(
+                b.participante
+                  .nombre_nomina ||
+                ""
+              ),
+              "es"
+            );
+
+        }
+      );
+
+
+  return `
+
+    <div class="tarjeta">
+
+      <h3>
+        Resultado
+      </h3>
+
+
+      <div class="ranking-lista">
+
+        ${
+          filas
+            .map(
+              item => {
+
+                const participante =
+                  item.participante;
+
+
+                const resultado =
+                  item.resultado;
+
+
+                const deportivo =
+                  mapaDeportivos.get(
+                    Number(
+                      participante
+                        .caballo_deportivo_id
+                    )
+                  );
+
+
+                let puesto =
+                  "-";
+
+
+                if (
+                  resultado
+                    .estado_resultado ===
+                    "clasificado" &&
+                  resultado.puesto !==
+                    null &&
+                  resultado.puesto !==
+                    undefined
+                ) {
+
+                  puesto =
+                    resultado.puesto +
+                    "º";
+
+                }
+
+
+                const estado =
+                  String(
+                    resultado
+                      .estado_resultado ||
+                    ""
+                  )
+                    .replaceAll(
+                      "_",
+                      " "
+                    );
+
+
+                return `
+
+                  <div
+                    class="ranking-fila"
+                  >
+
+                    <div
+                      class="ranking-puesto"
+                    >
+                      ${escapar(
+                        puesto
+                      )}
+                    </div>
+
+
+                    <div>
+
+                      ${enlaceCaballo(
+                        participante,
+                        deportivo,
+                        "ranking-nombre"
+                      )}
+
+
+                      <div
+                        class="caballo-detalle"
+                      >
+
+                        ${
+                          estado
+                            ? escapar(
+                                estado
+                              )
+                            : ""
+                        }
+
+                        ${
+                          resultado
+                            .promedio_kmh !==
+                            null &&
+                          resultado
+                            .promedio_kmh !==
+                            undefined
+                            ? " · " +
+                              escapar(
+                                resultado
+                                  .promedio_kmh
+                              ) +
+                              " km/h"
+                            : ""
+                        }
+
+                      </div>
+
+                    </div>
+
+
+                    <div
+                      style="
+                        text-align:right;
+                        font-weight:700;
+                        color:var(--azul);
+                      "
+                    >
+
+                      ${
+                        resultado
+                          .premio_feu
+                          ? "🐴 " +
+                            (
+                              resultado
+                                .premio_feu_ppm !==
+                                null &&
+                              resultado
+                                .premio_feu_ppm !==
+                                undefined
+                                ? escapar(
+                                    resultado
+                                      .premio_feu_ppm
+                                  ) +
+                                  " ppm"
+                                : ""
+                            )
+                          : ""
+                      }
+
+                    </div>
+
+                  </div>
+
+                `;
+
+              }
+            )
+            .join("")
+        }
+
+      </div>
+
+    </div>
+
+  `;
+
+}
 
 /* ==========================================================
    TOP 4
