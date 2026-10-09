@@ -3064,6 +3064,41 @@ origenFichaCaballo = "criadores";
 
   opciones.classList.toggle("contacto-abierto");
 }
+    document.addEventListener(
+  "click",
+  function(event) {
+
+    const menuContacto =
+      document.querySelector(
+        ".contacto-menu"
+      );
+
+    const opciones =
+      document.querySelector(
+        ".contacto-opciones"
+      );
+
+    if (
+      !menuContacto ||
+      !opciones
+    ) {
+      return;
+    }
+
+    if (
+      !menuContacto.contains(
+        event.target
+      )
+    ) {
+
+      opciones.classList.remove(
+        "contacto-abierto"
+      );
+
+    }
+
+  }
+);
     function abrirRegistroCaballo() {
       
 ocultarOpcionesBusquedaCaballo();
