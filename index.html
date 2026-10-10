@@ -8007,13 +8007,18 @@ if (propietarioNombre) {
       await respuestaNuevoPropietario.json();
 
     if (
-      !respuestaNuevoPropietario.ok ||
-      !nuevoPropietario.length
-    ) {
-      console.error(nuevoPropietario);
-      alert("No se pudo guardar el propietario.");
-      return;
-    }
+  !respuestaNuevoPropietario.ok ||
+  !nuevoPropietario.length
+) {
+  console.error("Error al guardar propietario:", nuevoPropietario);
+
+  alert(
+    "No se pudo guardar el propietario: " +
+    JSON.stringify(nuevoPropietario)
+  );
+
+  return;
+}
 
     propietarioId =
       Number(nuevoPropietario[0].id);
