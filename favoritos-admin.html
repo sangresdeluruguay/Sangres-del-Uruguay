@@ -1628,6 +1628,16 @@ async function mostrarCompetencia(
         General
       </button>
 
+      <button
+  class="tab ${
+    seccion === "votos"
+      ? "activo"
+      : ""
+  }"
+  data-tab="votos"
+>
+  Votos del público
+</button>
 
       <button
         class="tab ${
@@ -1702,13 +1712,17 @@ async function mostrarCompetencia(
     );
 
 
-  if(seccion === "nomina"){
+  if(seccion === "votos"){
 
-    await mostrarNomina(id);
+  await mostrarVotosAdmin(id);
 
-  }else if(
-    seccion === "resultados"
-  ){
+}else if(seccion === "nomina"){
+
+  await mostrarNomina(id);
+
+}else if(
+  seccion === "resultados"
+){
 
     await mostrarImportarResultados(id);
 
@@ -1726,7 +1740,154 @@ async function mostrarCompetencia(
 
 }
 
+/* =========================================================
+   ESTADÍSTICAS DE VOTOS - SOLO ADMIN
+========================================================= */
 
+async function mostrarVotosAdmin(id) {
+
+  const contenedor =
+    document.getElementById("contenidoCompetencia");
+
+  contenedor.innerHTML = `
+    <div class="tarjeta">
+      Cargando estadísticas de votación...
+    </div>
+  `;
+
+  try {
+
+    const participantes =
+      await apiGet(
+        "participantes_competencia" +
+        "?select=id,nombre_nomina,numero_marcacion" +
+        "&competencia_id=eq." +
+        encodeURIComponent(id)
+      );
+
+    const votos =
+      await apiGet(
+        "votos_favoritos" +
+        "?select=participante_id" +
+        "&competencia_id=eq." +
+        encodeURIComponent(id)
+      );
+
+    const total = votos.length;
+
+    const conteos = new Map();
+
+    votos.forEach(voto => {
+      const pid = Number(voto.participante_id);
+
+      conteos.set(
+        pid,
+        (conteos.get(pid) || 0) + 1
+      );
+    });
+
+    const ranking = participantes
+      .map(p => ({
+        nombre: p.nombre_nomina,
+        numero: p.numero_marcacion,
+        votos: conteos.get(Number(p.id)) || 0
+      }))
+      .sort((a, b) =>
+        b.votos - a.votos ||
+        String(a.nombre).localeCompare(String(b.nombre), "es")
+      );
+
+    contenedor.innerHTML = `
+
+      <div class="tarjeta">
+
+        <h3>Votación del público</h3>
+
+        <div class="resumen-item"
+             style="max-width:300px;margin:20px auto;">
+
+          <small>Total de votos recibidos</small>
+
+          <strong>${total}</strong>
+
+        </div>
+
+        <div class="lista-competencias">
+
+          ${ranking.map((caballo, indice) => {
+
+            const porc = total
+              ? Math.round(caballo.votos * 100 / total)
+              : 0;
+
+            return `
+
+              <div class="competencia">
+
+                <div style="
+                  display:flex;
+                  justify-content:space-between;
+                  gap:15px;
+                  align-items:center;
+                ">
+
+                  <strong>
+                    ${indice + 1}. ${escapar(caballo.nombre)}
+                  </strong>
+
+                  <div style="text-align:right;">
+
+                    <strong>${porc}%</strong>
+
+                    <div class="meta">
+                      ${caballo.votos} votos
+                    </div>
+
+                  </div>
+
+                </div>
+
+                <div style="
+                  background:#e7eaf0;
+                  height:8px;
+                  border-radius:10px;
+                  margin-top:10px;
+                  overflow:hidden;
+                ">
+
+                  <div style="
+                    background:var(--dorado);
+                    height:100%;
+                    width:${porc}%;
+                  "></div>
+
+                </div>
+
+              </div>
+
+            `;
+
+          }).join("")}
+
+        </div>
+
+      </div>
+
+    `;
+
+  } catch(error) {
+
+    console.error(error);
+
+    contenedor.innerHTML = `
+      <div class="mensaje mensaje-error">
+        No se pudieron cargar las estadísticas.
+      </div>
+    `;
+
+  }
+
+}
 /* =========================================================
    ESTADO COMPETENCIA
 ========================================================= */
