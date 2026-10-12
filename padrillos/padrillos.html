@@ -8,712 +8,640 @@
 
 <style>
 :root {
-  --azul: #17233b;
-  --azul2: #173b59;
-  --dorado: #d5b56b;
-  --borde: #b59b55;
+  --azul:#17233b;
+  --azul2:#173b59;
+  --dorado:#d5b56b;
+  --borde:#b59b55;
 }
-
-* { box-sizing: border-box; }
+* { box-sizing:border-box; }
+[hidden] { display:none!important; }
 
 body {
-  margin: 0;
-  color: var(--azul);
-  font-family: Arial, sans-serif;
-  background: #f5f5f2;
+  margin:0;
+  font-family:Arial,sans-serif;
+  color:var(--azul);
+  background:#f5f5f2;
 }
-
 header {
-  background: var(--azul);
-  color: white;
-  text-align: center;
-  padding: 35px 20px;
-  position: relative;
+  position:relative;
+  padding:35px 20px;
+  background:var(--azul);
+  color:white;
+  text-align:center;
 }
-
 .header-logo-sdu {
-  position: absolute;
-  width: 70px;
-  height: auto;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
+  position:absolute;
+  left:24px;
+  top:50%;
+  width:70px;
+  transform:translateY(-50%);
 }
-
-header h1 {
-  margin: 0;
-  font-size: 34px;
-}
-
-header p {
-  margin: 8px 0 0;
-  color: var(--dorado);
-}
-
+header h1 { margin:0; font-size:34px; }
+header p { margin:8px 0 0; color:var(--dorado); }
 .menu-principal {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 22px;
-  margin-top: 20px;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
+  gap:22px;
+  margin-top:20px;
 }
-
 .menu-principal a {
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 6px 4px;
+  color:white;
+  font-size:13px;
+  font-weight:600;
+  text-decoration:none;
 }
-
 .menu-principal a:hover,
-.menu-principal .activo {
-  color: var(--dorado);
-}
-
-.menu-mobile-sdu { display: none; }
+.menu-principal .activo { color:var(--dorado); }
+.menu-mobile-sdu { display:none; }
 
 .portada-foto {
-  min-height: 100vh;
-  padding: 30px 16px 80px;
-  background: url("../fondo-inicio-sdu.png")
-              center top / cover no-repeat;
-  background-attachment: fixed;
+  min-height:100vh;
+  padding:30px 16px 80px;
+  background:url("../fondo-inicio-sdu.png")
+    center top/cover no-repeat;
+  background-attachment:fixed;
 }
-
-.contenedor {
-  max-width: 1120px;
-  margin: auto;
-}
+.contenedor { max-width:1120px; margin:auto; }
 
 .encabezado {
-  background: rgba(255,255,255,.89);
-  border: 1px solid var(--borde);
-  border-radius: 15px;
-  padding: 25px;
-  text-align: center;
-  margin-bottom: 23px;
+  padding:25px;
+  margin-bottom:22px;
+  background:rgba(255,255,255,.93);
+  border:1px solid var(--borde);
+  border-radius:15px;
+  text-align:center;
 }
-
 .encabezado h2 {
-  margin: 0;
-  font-size: 33px;
-  color: var(--azul2);
+  margin:0;
+  color:var(--azul2);
+  font-size:33px;
 }
-
 .encabezado h2::after {
-  content: "";
-  display: block;
-  width: 60px;
-  height: 3px;
-  margin: 12px auto;
-  background: var(--dorado);
-}
-
-.encabezado p {
-  margin: 0;
-  color: #596477;
-}
-
-.herramientas {
-  display: flex;
-  gap: 12px;
-  padding: 14px;
-  margin-bottom: 20px;
-  background: rgba(255,255,255,.95);
-  border-radius: 12px;
-  border: 1px solid var(--borde);
-}
-
-input {
-  font-family: inherit;
-  font-size: 16px;
-  padding: 13px;
-  border-radius: 8px;
-  border: 1px solid #bbb;
-}
-
-.herramientas input {
-  width: 100%;
+  content:"";
+  display:block;
+  width:60px;
+  height:3px;
+  margin:12px auto 0;
+  background:var(--dorado);
 }
 
 .boton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px 17px;
-  border: 1px solid var(--dorado);
-  border-radius: 8px;
-  background: var(--azul2);
-  color: white;
-  text-decoration: none;
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 700;
-  text-align: center;
-  cursor: pointer;
+  display:inline-flex;
+  justify-content:center;
+  align-items:center;
+  gap:8px;
+  padding:12px 17px;
+  border:1px solid var(--dorado);
+  border-radius:8px;
+  background:var(--azul2);
+  color:white;
+  font:700 14px Arial,sans-serif;
+  text-decoration:none;
+  cursor:pointer;
+  text-align:center;
 }
-
-.boton:hover { background: var(--azul); }
-
-.boton-claro {
-  color: var(--azul2);
-  background: white;
-}
-
-.boton-claro:hover {
-  background: #f5f0e4;
-}
+.boton:hover { background:var(--azul); }
+.boton:disabled { opacity:.5; cursor:wait; }
+.boton-claro { background:white; color:var(--azul2); }
+.boton-claro:hover { background:#f4eddf; }
+.boton-rojo { background:#9a3030; }
+.boton-rojo:hover { background:#7b2424; }
 
 .lista {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
 }
-
-/* FICHAS MEDIANAS DE PORTADA */
-
 .tarjeta {
-  display: grid;
-  grid-template-columns: 34% minmax(0,1fr) 175px;
-  align-items: stretch;
-  gap: 20px;
-  min-height: 270px;
-  padding: 14px;
-  background: rgba(255,255,255,.96);
-  border: 1px solid var(--borde);
-  border-radius: 14px;
-  box-shadow: 0 5px 18px rgba(0,0,0,.09);
+  display:grid;
+  grid-template-columns:34% minmax(0,1fr) 175px;
+  gap:20px;
+  min-height:270px;
+  padding:14px;
+  background:rgba(255,255,255,.96);
+  border:1px solid var(--borde);
+  border-radius:14px;
+  box-shadow:0 5px 18px rgba(0,0,0,.09);
 }
-
 .portada-imagen {
-  position: relative;
-  min-height: 235px;
-  overflow: hidden;
-  border: 1px solid var(--borde);
-  border-radius: 10px;
-  background: #e9e9e6;
+  position:relative;
+  min-height:235px;
+  overflow:hidden;
+  border:1px solid var(--borde);
+  border-radius:10px;
+  background:#e9e9e6;
 }
-
 .portada-imagen img {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  inset: 0;
-  object-fit: cover;
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
-
 .sin-foto {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  min-height: 220px;
-  color: #667085;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  height:100%;
+  min-height:220px;
+  color:#667085;
 }
-
 .destacado {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  z-index: 2;
-  padding: 7px 10px;
-  background: #aa8a42;
-  color: white;
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 6px;
+  position:absolute;
+  top:10px;
+  left:10px;
+  z-index:2;
+  padding:7px 10px;
+  background:#aa8a42;
+  color:white;
+  font-size:11px;
+  font-weight:bold;
+  border-radius:6px;
 }
-
-.tarjeta-info {
-  padding: 8px 0;
-  min-width: 0;
-}
-
+.tarjeta-info { padding:8px 0; min-width:0; }
 .nombre {
-  color: var(--azul2);
-  font-size: 26px;
-  font-weight: 800;
-  text-decoration: none;
+  color:var(--azul2);
+  font-size:26px;
+  font-weight:800;
+  text-decoration:none;
 }
-
-.nombre:hover { text-decoration: underline; }
-
+.nombre:hover { text-decoration:underline; }
 .subtitulo {
-  margin: 8px 0 20px;
-  color: #687386;
-  font-size: 14px;
+  margin:8px 0 20px;
+  color:#687386;
+  font-size:14px;
 }
-
 .datos-portada {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  gap: 17px;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:17px;
 }
-
 .dato strong {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 12px;
-  color: var(--azul2);
+  display:block;
+  margin-bottom:5px;
+  font-size:12px;
+  color:var(--azul2);
 }
-
 .dato span {
-  font-size: 14px;
-  overflow-wrap: anywhere;
+  font-size:14px;
+  overflow-wrap:anywhere;
 }
-
-.dato .precio {
-  font-size: 21px;
-  font-weight: 800;
-}
-
+.dato .precio { font-size:21px; font-weight:800; }
 .acciones {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 12px;
-  padding-left: 17px;
-  border-left: 1px solid #e2d7bc;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:12px;
+  padding-left:17px;
+  border-left:1px solid #e2d7bc;
 }
-
-/* FICHA COMPLETA */
+.acciones .boton { width:100%; }
 
 .ficha-grande {
-  padding: 23px;
-  border: 1px solid var(--borde);
-  border-radius: 15px;
-  background: rgba(255,255,255,.97);
+  padding:23px;
+  border:1px solid var(--borde);
+  border-radius:15px;
+  background:rgba(255,255,255,.97);
 }
-
-.boton-volver {
-  margin-bottom: 18px;
-}
-
 .ficha-cabecera {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) minmax(0,1fr);
-  gap: 26px;
+  display:grid;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:26px;
 }
-
-.galeria {
-  min-width: 0;
-}
-
 .visualizador {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-  aspect-ratio: 4 / 3;
-  overflow: hidden;
-  background: #e9e9e6;
-  border: 1px solid var(--borde);
-  border-radius: 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  border:1px solid var(--borde);
+  border-radius:12px;
+  background:#e9e9e6;
 }
-
 .visualizador img,
 .visualizador video {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  width:100%;
+  height:100%;
+  object-fit:contain;
 }
-
-.visualizador img { cursor: zoom-in; }
-
-.visualizador video { background: #101820; }
-
+.visualizador img { cursor:zoom-in; }
+.visualizador video { background:#101820; }
 .miniaturas {
-  display: flex;
-  gap: 8px;
-  overflow-x: auto;
-  padding: 10px 0;
+  display:flex;
+  gap:8px;
+  overflow-x:auto;
+  padding:10px 0;
 }
-
 .miniatura {
-  position: relative;
-  flex: 0 0 92px;
-  height: 70px;
-  overflow: hidden;
-  padding: 0;
-  border: 2px solid transparent;
-  border-radius: 7px;
-  background: #ddd;
-  cursor: pointer;
+  position:relative;
+  flex:0 0 92px;
+  height:70px;
+  padding:0;
+  overflow:hidden;
+  border:2px solid transparent;
+  border-radius:7px;
+  background:#ddd;
+  cursor:pointer;
 }
-
-.miniatura.activa {
-  border-color: #bd9a46;
+.miniatura.activa { border-color:#bd9a46; }
+.miniatura img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
-
-.miniatura img,
-.miniatura video {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
+.play {
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(0,0,0,.6);
+  color:white;
+  font-size:25px;
 }
-
-.miniatura .play {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%,-50%);
-  color: white;
-  background: rgba(0,0,0,.7);
-  border-radius: 50%;
-  padding: 7px;
-}
-
 .ficha-nombre {
-  margin: 0;
-  color: var(--azul2);
-  font-size: 31px;
+  margin:0;
+  color:var(--azul2);
+  font-size:31px;
 }
-
 .ficha-nombre::after {
-  content: "";
-  display: block;
-  width: 55px;
-  height: 3px;
-  background: var(--dorado);
-  margin-top: 10px;
+  content:"";
+  display:block;
+  width:55px;
+  height:3px;
+  margin-top:10px;
+  background:var(--dorado);
 }
-
 .ficha-link {
-  display: inline-block;
-  margin: 13px 0;
-  color: #174e91;
-  font-weight: 600;
+  display:inline-block;
+  margin:13px 0;
+  color:#174e91;
+  font-weight:600;
 }
-
 .tabla-datos {
-  display: grid;
-  grid-template-columns: repeat(2,minmax(0,1fr));
-  margin-top: 15px;
-  border: 1px solid var(--borde);
-  border-radius: 9px;
-  overflow: hidden;
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  margin-top:15px;
+  border:1px solid var(--borde);
+  border-radius:9px;
+  overflow:hidden;
 }
-
 .celda {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  min-height: 73px;
-  padding: 12px;
-  text-align: center;
-  border-bottom: 1px solid #dfd0a7;
-  border-right: 1px solid #dfd0a7;
-  overflow-wrap: anywhere;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  min-height:73px;
+  padding:12px;
+  text-align:center;
+  border-right:1px solid #dfd0a7;
+  border-bottom:1px solid #dfd0a7;
+  overflow-wrap:anywhere;
 }
-
-.celda:nth-child(2n) {
-  border-right: none;
-}
-
+.celda:nth-child(2n) { border-right:none; }
 .celda strong {
-  color: var(--azul2);
-  font-size: 13px;
-  margin-bottom: 6px;
+  margin-bottom:6px;
+  color:var(--azul2);
+  font-size:13px;
 }
-
-.celda span { font-size: 15px; }
-
 .seccion {
-  margin-top: 25px;
-  padding-top: 20px;
-  border-top: 1px solid var(--borde);
+  margin-top:25px;
+  padding-top:20px;
+  border-top:1px solid var(--borde);
 }
-
-.seccion h3 {
-  color: var(--azul2);
-  margin: 0 0 15px;
-  font-size: 22px;
-}
-
-.descripcion {
-  line-height: 1.7;
-  white-space: pre-wrap;
-}
-
-/* PEDIGREE: COLORES ORIGINALES SDU */
+.seccion h3 { color:var(--azul2); }
+.descripcion { line-height:1.7; white-space:pre-wrap; }
 
 .pedigree-scroll {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  padding: 14px 0;
+  overflow-x:auto;
+  padding:14px 0;
+  -webkit-overflow-scrolling:touch;
 }
-
 .pedigree {
-  display: grid;
-  grid-template-columns: repeat(4,170px);
-  align-items: center;
-  gap: 22px;
-  min-width: 746px;
+  display:grid;
+  grid-template-columns:repeat(4,170px);
+  gap:22px;
+  min-width:746px;
+  align-items:center;
 }
-
-.generacion {
-  display: grid;
-  align-items: center;
-}
-
-.generacion.sujeto {
-  grid-template-rows: 1fr;
-}
-
-.generacion.padres {
-  grid-template-rows: repeat(2,320px);
-}
-
-.generacion.abuelos {
-  grid-template-rows: repeat(4,160px);
-}
-
-.generacion.bisabuelos {
-  grid-template-rows: repeat(8,80px);
-}
-
+.generacion { display:grid; align-items:center; }
+.generacion.padres { grid-template-rows:repeat(2,320px); }
+.generacion.abuelos { grid-template-rows:repeat(4,160px); }
+.generacion.bisabuelos { grid-template-rows:repeat(8,80px); }
 .pedigree-box {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 57px;
-  padding: 8px;
-  border: 1px solid rgba(0,0,0,.15);
-  border-radius: 8px;
-  font-size: 12px;
-  font-weight: 700;
-  text-align: center;
-  overflow-wrap: anywhere;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:57px;
+  padding:8px;
+  border:1px solid rgba(0,0,0,.15);
+  border-radius:8px;
+  font-size:12px;
+  font-weight:700;
+  text-align:center;
+  overflow-wrap:anywhere;
 }
-
-.pedigree-box.principal {
-  background: #fff3b0;
-}
-
-.pedigree-box.macho {
-  background: #d9efff;
-}
-
-.pedigree-box.hembra {
-  background: #f9dce5;
-}
-
-.pedigree-box a {
-  color: inherit;
-  text-decoration: none;
-}
-
-.pedigree-box a:hover {
-  text-decoration: underline;
-}
+.pedigree-box.principal { background:#fff3b0; }
+.pedigree-box.macho { background:#d9efff; }
+.pedigree-box.hembra { background:#f9dce5; }
+.pedigree-box a { color:inherit; text-decoration:none; }
+.pedigree-box a:hover { text-decoration:underline; }
 
 .aviso {
-  background: rgba(255,255,255,.94);
-  padding: 30px;
-  border: 1px solid var(--borde);
-  border-radius: 12px;
-  text-align: center;
-  line-height: 1.6;
+  padding:30px;
+  border:1px solid var(--borde);
+  border-radius:12px;
+  background:rgba(255,255,255,.94);
+  text-align:center;
+  line-height:1.6;
 }
-
 .modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 10000;
-  align-items: center;
-  justify-content: center;
-  padding: 45px 15px;
-  background: rgba(0,0,0,.93);
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:45px 15px;
+  background:rgba(0,0,0,.93);
 }
-
-.modal.visible { display: flex; }
-
-.modal img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
-}
-
+.modal.visible { display:flex; }
+.modal img { max-width:100%; max-height:100%; object-fit:contain; }
 .modal button {
-  position: absolute;
-  right: 15px;
-  top: 10px;
-  font-size: 35px;
-  color: white;
-  border: none;
-  background: transparent;
-  cursor: pointer;
+  position:absolute;
+  right:15px;
+  top:10px;
+  border:0;
+  background:transparent;
+  color:white;
+  font-size:35px;
+  cursor:pointer;
+}
+
+/* PANEL ADMINISTRADOR */
+
+.admin-barra {
+  display:flex;
+  justify-content:flex-end;
+  gap:10px;
+  margin-bottom:17px;
+  flex-wrap:wrap;
+}
+.panel-admin {
+  padding:25px;
+  margin-bottom:20px;
+  background:rgba(255,255,255,.97);
+  border:1px solid var(--borde);
+  border-radius:15px;
+}
+.panel-admin h2,
+.panel-admin h3 {
+  color:var(--azul2);
+  margin-top:0;
+}
+.form-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+.campo {
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+  min-width:0;
+}
+.campo label {
+  font-size:13px;
+  font-weight:700;
+  color:var(--azul2);
+}
+.campo input,
+.campo select,
+.campo textarea,
+.buscador-admin {
+  width:100%;
+  min-width:0;
+  padding:12px;
+  border:1px solid #b8b8b8;
+  border-radius:8px;
+  background:white;
+  color:var(--azul);
+  font:16px Arial,sans-serif;
+}
+.campo textarea { min-height:94px; resize:vertical; }
+.campo-ancho { grid-column:1/-1; }
+.acciones-admin {
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+.sugerencias {
+  border:1px solid #d5bd86;
+  border-radius:9px;
+  overflow:hidden;
+  background:white;
+}
+.sugerencias button {
+  display:block;
+  width:100%;
+  padding:12px;
+  border:0;
+  border-bottom:1px solid #eee;
+  background:white;
+  color:var(--azul);
+  text-align:left;
+  cursor:pointer;
+}
+.sugerencias button:hover { background:#f9f3e5; }
+.caballo-elegido {
+  margin:12px 0 20px;
+  padding:14px;
+  border:1px solid var(--borde);
+  background:#fbf8ed;
+  border-radius:9px;
+}
+.admin-anuncio {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:15px;
+  margin:10px 0;
+  border:1px solid #e0d3b5;
+  border-radius:10px;
+  background:white;
+}
+.admin-anuncio strong { display:block; margin-bottom:6px; }
+.admin-anuncio small { color:#667085; }
+
+.archivo-admin {
+  padding:13px;
+  margin-top:10px;
+  background:#f9f9f7;
+  border:1px solid #ddd1b5;
+  border-radius:10px;
+}
+.archivo-admin img {
+  max-width:145px;
+  max-height:100px;
+  object-fit:contain;
+  background:#eee;
+  border-radius:6px;
+}
+.archivo-cabecera {
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  align-items:center;
+}
+.archivo-acciones {
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin-top:10px;
+}
+.ayuda {
+  font-size:13px;
+  color:#636e7c;
+  line-height:1.5;
+}
+.encuadre {
+  position:relative;
+  width:100%;
+  max-width:470px;
+  aspect-ratio:4/3;
+  overflow:hidden;
+  border:2px solid var(--borde);
+  border-radius:10px;
+  background:#e9e9e6;
+  touch-action:none;
+  cursor:grab;
+  user-select:none;
+}
+.encuadre img {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  pointer-events:none;
+}
+.control-encuadre { max-width:470px; margin-top:12px; }
+.control-encuadre label { display:block; margin:9px 0 5px; }
+.control-encuadre input { width:100%; }
+.estado {
+  margin:14px 0;
+  padding:12px;
+  border-radius:8px;
+  background:#f7f0df;
+  border:1px solid var(--borde);
+  line-height:1.5;
+}
+.separador {
+  margin:26px 0;
+  border:0;
+  border-top:1px solid var(--borde);
 }
 
 footer {
-  background: var(--azul);
-  color: white;
-  padding: 23px;
-  text-align: center;
-  font-size: 13px;
+  padding:23px;
+  background:var(--azul);
+  color:white;
+  text-align:center;
+  font-size:13px;
 }
 
-/* TABLETS */
-
-@media (max-width: 950px) {
-  .tarjeta {
-    grid-template-columns: 38% minmax(0,1fr);
-  }
-
+@media(max-width:950px) {
+  .tarjeta { grid-template-columns:38% minmax(0,1fr); }
   .acciones {
-    grid-column: 1 / -1;
-    flex-direction: row;
-    padding: 12px 0 0;
-    border-left: none;
-    border-top: 1px solid #e2d7bc;
+    grid-column:1/-1;
+    flex-direction:row;
+    padding:12px 0 0;
+    border-left:0;
+    border-top:1px solid #e2d7bc;
   }
-
-  .acciones .boton { flex: 1; }
-
-  .ficha-cabecera {
-    grid-template-columns: 1fr;
-  }
-
-  .portada-foto {
-    background-attachment: scroll;
-  }
+  .ficha-cabecera { grid-template-columns:1fr; }
+  .portada-foto { background-attachment:scroll; }
 }
-
-/* CELULARES */
-
-@media (max-width: 600px) {
+@media(max-width:600px) {
   header {
-    height: 145px;
-    padding: 0;
-    background: #12233f;
+    height:145px;
+    padding:0;
+    background:#12233f;
   }
-
-  .header-logo-sdu {
-    width: 72px;
-    left: 18px;
-  }
-
+  .header-logo-sdu { width:72px; left:18px; }
   header h1 {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 190px;
-    transform: translate(-50%,-50%);
-    font-size: 27px;
-    line-height: 1.05;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    width:190px;
+    font-size:27px;
+    line-height:1.05;
   }
-
-  header p { display: none; }
-
+  header p { display:none; }
   .menu-mobile-sdu {
-    position: absolute;
-    right: 18px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 54px;
-    height: 54px;
-    padding: 0;
-    background: transparent;
-    color: var(--dorado);
-    border: 2px solid var(--dorado);
-    border-radius: 14px;
-    font-size: 31px;
-    cursor: pointer;
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    width:54px;
+    height:54px;
+    padding:0;
+    background:transparent;
+    color:var(--dorado);
+    border:2px solid var(--dorado);
+    border-radius:14px;
+    font-size:31px;
   }
-
   header nav {
-    display: none !important;
-    position: absolute;
-    top: 125px;
-    right: 16px;
-    z-index: 1000;
-    width: min(310px,calc(100vw - 32px));
-    padding: 10px;
-    background: #12233f;
-    border: 1px solid var(--dorado);
-    border-radius: 14px;
+    display:none!important;
+    position:absolute;
+    top:125px;
+    right:16px;
+    z-index:1000;
+    width:min(310px,calc(100vw - 32px));
+    padding:10px;
+    border:1px solid var(--dorado);
+    border-radius:14px;
+    background:#12233f;
   }
-
   header nav.menu-mobile-abierto {
-    display: flex !important;
-    flex-direction: column;
-    gap: 6px;
+    display:flex!important;
+    flex-direction:column;
+    gap:6px;
   }
-
   header nav a {
-    display: block;
-    padding: 13px 14px;
-    background: #173b63;
-    color: white;
-    border-radius: 8px;
-    font-size: 16px;
+    display:block;
+    padding:13px;
+    background:#173b63;
+    border-radius:8px;
+    font-size:16px;
   }
-
-  .portada-foto {
-    padding: 18px 12px 60px;
-  }
-
-  .encabezado {
-    padding: 21px 12px;
-  }
-
-  .encabezado h2 { font-size: 27px; }
-
-  .tarjeta {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .portada-imagen {
-    height: 270px;
-    min-height: 270px;
-  }
-
-  .tarjeta-info {
-    padding: 7px 4px;
-  }
-
-  .nombre {
-    font-size: 24px;
-  }
-
-  .datos-portada {
-    gap: 16px;
-  }
-
+  .portada-foto { padding:18px 12px 60px; }
+  .encabezado { padding:21px 12px; }
+  .encabezado h2 { font-size:27px; }
+  .tarjeta { grid-template-columns:1fr; gap:12px; }
+  .portada-imagen { height:270px; min-height:270px; }
+  .nombre { font-size:24px; }
+  .datos-portada { gap:16px; }
   .acciones {
-    grid-column: auto;
-    flex-direction: column;
-    padding-top: 13px;
+    grid-column:auto;
+    flex-direction:column;
   }
-
-  .acciones .boton {
-    width: 100%;
-  }
-
-  .ficha-grande {
-    padding: 14px;
-  }
-
-  .ficha-nombre {
-    font-size: 27px;
-  }
-
-  .tabla-datos {
-    grid-template-columns: repeat(2,minmax(0,1fr));
-  }
-
-  .celda {
-    padding: 11px 7px;
+  .ficha-grande { padding:14px; }
+  .ficha-nombre { font-size:27px; }
+  .celda { padding:11px 7px; }
+  .form-grid { grid-template-columns:1fr; }
+  .campo-ancho { grid-column:auto; }
+  .panel-admin { padding:17px; }
+  .admin-anuncio {
+    flex-direction:column;
+    align-items:stretch;
   }
 }
 </style>
@@ -726,91 +654,273 @@ footer {
     <img
       class="header-logo-sdu"
       src="../Photoroom_20260816_214628.PNG"
-      alt="SdU"
-    >
+      alt="SdU">
   </a>
 
   <h1>Sangres del Uruguay</h1>
 
   <button
-    class="menu-mobile-sdu"
-    type="button"
     id="botonMenu"
+    type="button"
+    class="menu-mobile-sdu"
     aria-label="Abrir menú"
-    aria-expanded="false"
-  >&#9776;</button>
+    aria-expanded="false">&#9776;</button>
 
   <p>Registro y genealogía equina</p>
 
   <nav class="menu-principal" id="menuPrincipal">
     <a href="../index.html">Inicio</a>
-    <a href="../index.html?vista=buscar-caballo">
-      🔍 Buscar caballo
-    </a>
-    <a href="../index.html?vista=criadores">
-      Criadores / Propietarios
-    </a>
+    <a href="../index.html?vista=buscar-caballo">🔍 Buscar caballo</a>
+    <a href="../index.html?vista=criadores">Criadores / Propietarios</a>
     <a href="padrillos.html" class="activo">Padrillos</a>
     <a href="../favoritos.html">Favoritos</a>
     <a href="../index.html">Sobre SDU</a>
-    <a href="https://wa.me/59891909423"
-       target="_blank"
-       rel="noopener noreferrer">Contacto</a>
+    <a href="https://wa.me/59891909423" target="_blank" rel="noopener noreferrer">Contacto</a>
   </nav>
 </header>
 
 <section class="portada-foto">
-  <main class="contenedor">
+<main class="contenedor">
 
-    <div class="encabezado">
-      <h2>PADRILLOS</h2>
-      <p>
-        Servicios reproductivos publicados en Sangres del Uruguay.
-        Conocé su genética, fotografías y disponibilidad.
+  <div class="encabezado">
+    <h2>PADRILLOS</h2>
+  </div>
+
+  <div class="admin-barra">
+    <button
+      id="btnAdmin"
+      type="button"
+      class="boton boton-claro"
+      hidden>Administrar padrillos</button>
+
+    <button
+      id="btnCerrarSesion"
+      type="button"
+      class="boton boton-claro"
+      hidden>Cerrar sesión</button>
+  </div>
+
+  <!-- LISTADO PUBLICO -->
+  <div id="vistaLista">
+    <div id="listaPadrillos" class="lista">
+      <div class="aviso">Cargando padrillos...</div>
+    </div>
+  </div>
+
+  <!-- DETALLE PUBLICO -->
+  <div id="vistaDetalle" hidden>
+    <button
+      type="button"
+      class="boton boton-claro"
+      id="volverListado"
+      style="margin-bottom:18px">← Volver a padrillos</button>
+
+    <div id="contenidoDetalle"></div>
+  </div>
+
+  <!-- PANEL ADMINISTRADOR -->
+  <div id="vistaAdmin" hidden>
+
+    <div class="panel-admin">
+      <div class="admin-barra">
+        <button
+          id="btnVolverPublico"
+          class="boton boton-claro"
+          type="button">← Vista pública</button>
+
+        <button
+          id="btnNuevoPadrillo"
+          class="boton"
+          type="button">+ Nuevo padrillo</button>
+      </div>
+
+      <h2>Administración de padrillos</h2>
+      <p class="ayuda">
+        Desde acá podés crear, modificar, publicar y ocultar anuncios.
+        Los datos genealógicos se toman de los caballos registrados en SDU.
       </p>
+
+      <div id="listaAdmin"></div>
     </div>
 
-    <div id="vistaLista">
-      <div class="herramientas">
+    <!-- FORMULARIO -->
+    <div class="panel-admin" id="formularioAdmin" hidden>
+      <h2 id="tituloFormulario">Nuevo padrillo</h2>
+
+      <input type="hidden" id="editarId">
+      <input type="hidden" id="caballoId">
+
+      <div class="campo">
+        <label for="buscarCaballoAdmin">
+          Buscar caballo registrado en SDU
+        </label>
         <input
+          id="buscarCaballoAdmin"
+          class="buscador-admin"
           type="search"
-          id="buscarPadrillo"
-          placeholder="Buscar padrillo por nombre o ubicación"
-          aria-label="Buscar padrillo"
-        >
+          placeholder="Escribí el nombre del caballo"
+          autocomplete="off">
+
+        <div id="sugerenciasCaballos" class="sugerencias" hidden></div>
       </div>
 
-      <div id="listaPadrillos" class="lista">
-        <div class="aviso">Cargando padrillos...</div>
+      <div id="caballoSeleccionado" class="caballo-elegido" hidden></div>
+
+      <hr class="separador">
+
+      <div class="form-grid">
+        <div class="campo">
+          <label for="ubicacion">Ubicación</label>
+          <input id="ubicacion" placeholder="Ej.: Flores, Uruguay">
+        </div>
+
+        <div class="campo">
+          <label for="precioUsd">Precio del servicio (USD)</label>
+          <input id="precioUsd" type="number" min="0" step="0.01">
+        </div>
+
+        <div class="campo">
+          <label for="modalidad">Modalidad</label>
+          <input id="modalidad" placeholder="Ej.: Monta natural">
+        </div>
+
+        <div class="campo">
+          <label for="disponibilidad">Disponibilidad</label>
+          <input id="disponibilidad" placeholder="Ej.: Temporada 2026">
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="descripcion">Descripción</label>
+          <textarea id="descripcion"></textarea>
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="condiciones">Condiciones del servicio</label>
+          <textarea id="condiciones"></textarea>
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="garantia">Garantía de preñez</label>
+          <textarea id="garantia"></textarea>
+        </div>
+
+        <div class="campo campo-ancho">
+          <label for="requisitos">Requisitos sanitarios</label>
+          <textarea id="requisitos"></textarea>
+        </div>
+
+        <div class="campo">
+          <label for="fechaInicio">Publicar desde</label>
+          <input id="fechaInicio" type="date">
+        </div>
+
+        <div class="campo">
+          <label for="fechaFin">Publicar hasta</label>
+          <input id="fechaFin" type="date">
+        </div>
+
+        <div class="campo">
+          <label for="orden">Orden de aparición</label>
+          <input id="orden" type="number" min="0" value="0">
+        </div>
+
+        <div class="campo">
+          <label>Opciones de publicación</label>
+          <label>
+            <input id="destacado" type="checkbox">
+            Destacado
+          </label>
+          <label>
+            <input id="publicado" type="checkbox">
+            Publicado
+          </label>
+        </div>
       </div>
+
+      <p class="ayuda">
+        Todos los campos son opcionales salvo el caballo y una fotografía
+        para publicar. Los campos vacíos no se mostrarán al público.
+        La moneda siempre será USD.
+      </p>
+
+      <div class="acciones-admin">
+        <button id="btnGuardarAnuncio" type="button" class="boton">
+          Guardar padrillo
+        </button>
+        <button id="btnCancelarEdicion" type="button" class="boton boton-claro">
+          Cancelar
+        </button>
+      </div>
+
+      <div id="estadoGuardar" class="estado" hidden></div>
+
+      <section id="gestionMultimedia" class="seccion" hidden>
+        <h3>Fotografías y videos</h3>
+
+        <p class="ayuda">
+          Primero subí una fotografía. Esa será la portada.
+          Después podés subir más fotos o videos.
+          La fotografía de portada se puede mover y acercar.
+        </p>
+
+        <div class="acciones-admin">
+          <label class="boton" for="subirFoto">+ Subir fotografía</label>
+          <input id="subirFoto" type="file"
+                 accept="image/jpeg,image/png,image/webp" hidden>
+
+          <label class="boton boton-claro" for="subirVideo">+ Subir video</label>
+          <input id="subirVideo" type="file"
+                 accept="video/mp4,video/webm,video/quicktime" hidden>
+        </div>
+
+        <div id="estadoMultimedia" class="estado" hidden></div>
+        <div id="listaMultimediaAdmin"></div>
+
+        <div id="editorPortada" hidden>
+          <hr class="separador">
+          <h3>Encuadrar fotografía de portada</h3>
+
+          <p class="ayuda">
+            Arrastrá la foto con el mouse o con el dedo.
+            También podés ajustar la posición y el zoom.
+            El encuadre queda guardado en Supabase.
+            Al abrir la foto, se mostrará completa.
+          </p>
+
+          <div class="encuadre" id="vistaEncuadre">
+            <img id="imagenEncuadre" alt="Vista previa de portada">
+          </div>
+
+          <div class="control-encuadre">
+            <label for="posicionX">Posición horizontal</label>
+            <input id="posicionX" type="range" min="0" max="100" value="50">
+
+            <label for="posicionY">Posición vertical</label>
+            <input id="posicionY" type="range" min="0" max="100" value="50">
+
+            <label for="zoomFoto">Zoom</label>
+            <input id="zoomFoto" type="range"
+                   min="1" max="4" step="0.05" value="1">
+          </div>
+
+          <div class="acciones-admin">
+            <button id="btnGuardarEncuadre" class="boton" type="button">
+              Guardar encuadre
+            </button>
+            <button id="btnCentrarFoto" class="boton boton-claro" type="button">
+              Centrar foto
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
+  </div>
 
-    <div id="vistaDetalle" hidden>
-      <button
-        type="button"
-        class="boton boton-claro boton-volver"
-        id="volverListado"
-      >
-        ← Volver a padrillos
-      </button>
-
-      <div id="contenidoDetalle"></div>
-    </div>
-
-  </main>
+</main>
 </section>
 
-<div
-  class="modal"
-  id="modalFoto"
-  role="dialog"
-  aria-label="Fotografía ampliada"
->
-  <button
-    type="button"
-    id="cerrarModal"
-    aria-label="Cerrar foto"
-  >×</button>
+<div class="modal" id="modalFoto" role="dialog" aria-label="Fotografía ampliada">
+  <button type="button" id="cerrarModal" aria-label="Cerrar">×</button>
   <img id="imagenModal" alt="Fotografía del padrillo">
 </div>
 
@@ -821,7 +931,9 @@ footer {
 <script>
 "use strict";
 
-/* CONEXION ORIGINAL DE SANGRES DEL URUGUAY */
+/* =====================================================
+   CONFIGURACION SDU
+===================================================== */
 
 const SUPABASE_URL =
   "https://arsjvaueyjwntefogmqz.supabase.co";
@@ -830,26 +942,40 @@ const SUPABASE_KEY =
   "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
 
 const WHATSAPP_SDU = "59891909423";
-
 const CABALLOS_URL = "../index.html?caballo=";
+const BUCKET_PADRILLOS = "padrillos";
 
 let anuncios = [];
 let caballosPorId = new Map();
 let mediosPorPadrillo = new Map();
 
+let anunciosAdmin = [];
+let sesion = null;
+let autorizado = false;
+let caballoElegido = null;
+let medioPortadaAdmin = null;
+let cargando = false;
+let contadorBusqueda = 0;
+
+const $ = id => document.getElementById(id);
+
 /* UTILIDADES */
 
 function escapar(valor) {
   return String(valor ?? "")
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#39;");
 }
 
 function texto(valor) {
   return String(valor ?? "").trim();
+}
+
+function normalizar(valor) {
+  return texto(valor).toUpperCase();
 }
 
 function urlCaballo(nombre) {
@@ -859,76 +985,57 @@ function urlCaballo(nombre) {
 function enlaceWhatsApp(nombre) {
   const mensaje =
     "Hola, quisiera consultar por el servicio del padrillo " +
-    nombre +
-    " publicado en Sangres del Uruguay.";
+    nombre + " publicado en Sangres del Uruguay.";
 
-  return (
-    "https://wa.me/" +
-    WHATSAPP_SDU +
-    "?text=" +
-    encodeURIComponent(mensaje)
-  );
+  return "https://wa.me/" + WHATSAPP_SDU +
+    "?text=" + encodeURIComponent(mensaje);
 }
 
-function fechaAnio(fecha) {
-  return fecha ? String(fecha).slice(0,4) : "";
+function dinero(valor) {
+  if (valor === null || valor === undefined || valor === "") {
+    return "";
+  }
+  const n = Number(valor);
+  return Number.isFinite(n)
+    ? "USD " + n.toLocaleString("es-UY",{maximumFractionDigits:2})
+    : "";
 }
 
-function dinero(precio) {
-  if (
-    precio === null ||
-    precio === undefined ||
-    precio === ""
-  ) return "";
-
-  return "USD " +
-    Number(precio).toLocaleString("es-UY", {
-      maximumFractionDigits: 2
-    });
-}
-
-function detalleHTML(etiqueta, valor, clase = "") {
-  if (
-    valor === null ||
-    valor === undefined ||
-    String(valor).trim() === ""
-  ) return "";
-
+function datoHTML(titulo,valor,clase="") {
+  if (valor === null || valor === undefined || texto(valor) === "") {
+    return "";
+  }
   return `
     <div class="dato">
-      <strong>${escapar(etiqueta)}</strong>
+      <strong>${escapar(titulo)}</strong>
       <span class="${clase}">${escapar(valor)}</span>
-    </div>
-  `;
+    </div>`;
 }
 
-function celdaHTML(etiqueta, valor) {
-  if (
-    valor === null ||
-    valor === undefined ||
-    String(valor).trim() === ""
-  ) return "";
-
+function celdaHTML(titulo,valor) {
+  if (valor === null || valor === undefined || texto(valor) === "") {
+    return "";
+  }
   return `
     <div class="celda">
-      <strong>${escapar(etiqueta)}</strong>
+      <strong>${escapar(titulo)}</strong>
       <span>${escapar(valor)}</span>
-    </div>
-  `;
+    </div>`;
 }
 
 function cerrarBordesTabla(contenedor) {
-  const celdas = contenedor.querySelectorAll(".celda");
+  if (!contenedor) return;
+  const celdas = [...contenedor.querySelectorAll(".celda")];
   const total = celdas.length;
 
-  celdas.forEach((celda, i) => {
+  celdas.forEach((celda,i) => {
     celda.style.borderRight =
       i % 2 === 1 ? "none" : "1px solid #dfd0a7";
 
-    if (i >= total - (total % 2 === 0 ? 2 : 1)) {
+    const ultimaFila = total % 2 === 0 ? 2 : 1;
+    if (i >= total - ultimaFila) {
       celda.style.borderBottom = "none";
     }
-
     if (total % 2 === 1 && i === total - 1) {
       celda.style.gridColumn = "1 / -1";
       celda.style.borderRight = "none";
@@ -936,34 +1043,138 @@ function cerrarBordesTabla(contenedor) {
   });
 }
 
-/* SUPABASE */
+function avisar(id,mensaje,error=false) {
+  const elemento = $(id);
+  if (!elemento) return;
+  elemento.hidden = false;
+  elemento.textContent = mensaje;
+  elemento.style.color = error ? "#972b2b" : "#17233b";
+}
 
-async function consultar(tabla, filtros = "") {
+function ocultarAviso(id) {
+  $(id).hidden = true;
+  $(id).textContent = "";
+}
+
+function errorRespuesta(respuesta,contenido) {
+  let mensaje = "";
+  try {
+    const d = JSON.parse(contenido);
+    mensaje = d.message || d.error || contenido;
+  } catch {
+    mensaje = contenido;
+  }
+  return "Error " + respuesta.status + ": " + mensaje;
+}
+
+function cabecerasPublicas() {
+  return {
+    apikey:SUPABASE_KEY,
+    Authorization:"Bearer " + SUPABASE_KEY
+  };
+}
+
+function cabecerasAdmin(json=false) {
+  const h = {
+    apikey:SUPABASE_KEY,
+    Authorization:"Bearer " + sesion.access_token
+  };
+  if (json) h["Content-Type"] = "application/json";
+  return h;
+}
+
+async function consultar(tabla,filtros="",admin=false) {
   const respuesta = await fetch(
     SUPABASE_URL + "/rest/v1/" + tabla + filtros,
-    {
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: "Bearer " + SUPABASE_KEY
-      }
-    }
+    {headers:admin ? cabecerasAdmin() : cabecerasPublicas()}
   );
 
   if (!respuesta.ok) {
-    throw new Error(
-      tabla + ": " + await respuesta.text()
-    );
+    throw new Error(errorRespuesta(
+      respuesta,await respuesta.text()
+    ));
+  }
+  return respuesta.json();
+}
+
+async function escribir(tabla,metodo,datos,filtro="") {
+  if (!autorizado || !sesion?.access_token) {
+    throw new Error("No hay sesión de administrador autorizada.");
   }
 
-  return await respuesta.json();
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/" + tabla + filtro,
+    {
+      method:metodo,
+      headers:{
+        ...cabecerasAdmin(true),
+        Prefer:"return=representation"
+      },
+      body:JSON.stringify(datos)
+    }
+  );
+
+  const contenido = await respuesta.text();
+  if (!respuesta.ok) {
+    throw new Error(errorRespuesta(respuesta,contenido));
+  }
+
+  return contenido ? JSON.parse(contenido) : [];
 }
+
+function urlMedio(m) {
+  const path = texto(m?.archivo_path);
+  if (!path) return "";
+
+  if (/^https:\/\//i.test(path)) return path;
+
+  let limpio = path.replace(/^\/+/,"");
+  if (limpio.startsWith("padrillos/")) {
+    limpio = limpio.slice("padrillos/".length);
+  }
+
+  return SUPABASE_URL +
+    "/storage/v1/object/public/padrillos/" +
+    limpio.split("/").map(encodeURIComponent).join("/");
+}
+
+function ordenarMedios(id) {
+  const lista = [...(mediosPorPadrillo.get(Number(id)) || [])]
+    .filter(m => m.archivo_path)
+    .sort((a,b) =>
+      Number(a.orden || 0)-Number(b.orden || 0) ||
+      Number(a.id)-Number(b.id)
+    );
+
+  const fotos = lista.filter(m => m.tipo === "foto");
+  if (!fotos.length) return [];
+
+  const primera = fotos[0];
+  return [primera,...lista.filter(m => m.id !== primera.id)];
+}
+
+function estiloEncuadre(m) {
+  const x = Math.max(0,Math.min(100,Number(m.posicion_x ?? 50)));
+  const y = Math.max(0,Math.min(100,Number(m.posicion_y ?? 50)));
+  const z = Math.max(1,Math.min(4,Number(m.zoom ?? 1)));
+
+  return `object-position:${x}% ${y}%;transform:scale(${z});`;
+}
+
+function portada(p) {
+  return ordenarMedios(p.id).find(m => m.tipo === "foto") || null;
+}
+
+/* =====================================================
+   PAGINA PUBLICA
+===================================================== */
 
 async function cargarPadrillos() {
   try {
     const hoy = new Date();
     const fechaHoy = [
       hoy.getFullYear(),
-      String(hoy.getMonth() + 1).padStart(2,"0"),
+      String(hoy.getMonth()+1).padStart(2,"0"),
       String(hoy.getDate()).padStart(2,"0")
     ].join("-");
 
@@ -977,138 +1188,55 @@ async function cargarPadrillos() {
       (!p.fecha_fin || p.fecha_fin >= fechaHoy)
     );
 
-    if (!anuncios.length) {
-      mostrarListado();
-      return;
-    }
-
-    const idsCaballos = [
-      ...new Set(anuncios.map(p => Number(p.caballo_id)))
-    ];
-
-    const idsPadrillos = anuncios.map(p => Number(p.id));
-
-    const [caballos, medios] = await Promise.all([
-      consultar(
-        "Caballos",
-        "?select=*&id=in.(" + idsCaballos.join(",") + ")"
-      ),
-      consultar(
-        "padrillos_medios",
-        "?select=*&padrillo_id=in.(" +
-        idsPadrillos.join(",") +
-        ")&order=orden.asc,id.asc"
-      )
-    ]);
-
-    caballosPorId = new Map(
-      caballos.map(c => [Number(c.id), c])
-    );
-
+    caballosPorId = new Map();
     mediosPorPadrillo = new Map();
 
-    medios.forEach(m => {
-      const id = Number(m.padrillo_id);
+    if (anuncios.length) {
+      const idsCaballos = [
+        ...new Set(anuncios.map(p => Number(p.caballo_id)))
+      ].filter(Number.isFinite);
 
-      if (!mediosPorPadrillo.has(id)) {
-        mediosPorPadrillo.set(id, []);
-      }
+      const idsAnuncios = anuncios.map(p => Number(p.id));
 
-      mediosPorPadrillo.get(id).push(m);
-    });
+      const [caballos,medios] = await Promise.all([
+        consultar("Caballos",
+          "?select=*&id=in.(" + idsCaballos.join(",") + ")"),
+        consultar("padrillos_medios",
+          "?select=*&padrillo_id=in.(" + idsAnuncios.join(",") +
+          ")&order=orden.asc,id.asc")
+      ]);
+
+      caballosPorId = new Map(
+        caballos.map(c => [Number(c.id),c])
+      );
+
+      medios.forEach(m => {
+        const id = Number(m.padrillo_id);
+        if (!mediosPorPadrillo.has(id)) {
+          mediosPorPadrillo.set(id,[]);
+        }
+        mediosPorPadrillo.get(id).push(m);
+      });
+    }
 
     mostrarRuta();
-
-  } catch (error) {
-    console.error("Error cargando padrillos:", error);
-
-    document.getElementById("listaPadrillos").innerHTML = `
-      <div class="aviso">
-        No se pudo cargar la sección Padrillos.
-        Revisá la conexión y los permisos de Supabase.
-      </div>
-    `;
+  } catch(error) {
+    console.error(error);
+    $("listaPadrillos").innerHTML =
+      '<div class="aviso">No se pudo cargar Padrillos. Revisá la conexión y los permisos de Supabase.</div>';
   }
 }
 
-/* MULTIMEDIA */
+function htmlTarjeta(p) {
+  const c = caballosPorId.get(Number(p.caballo_id));
+  if (!c) return "";
 
-function ordenarMedios(idPadrillo) {
-  const medios =
-    (mediosPorPadrillo.get(Number(idPadrillo)) || [])
-      .filter(m => m.archivo_path);
-
-  const fotos = medios.filter(m => m.tipo === "foto");
-  const otros = medios.filter(m => m.tipo !== "foto");
-
-  /* La primera posición siempre es fotografía */
-  if (!fotos.length) return [];
-
-  return [fotos[0], ...medios.filter(m => m.id !== fotos[0].id)];
-}
-
-function urlMedio(medio) {
-  const path = texto(medio.archivo_path);
-
-  if (!path) return "";
-
-  /* Enlaces de videos externos, cuando se usen */
-  if (/^https:\/\/(www\.)?(youtube\.com|youtu\.be|vimeo\.com)\//i.test(path)) {
-    return path;
-  }
-
-  if (path.startsWith("padrillos/")) {
-    return (
-      SUPABASE_URL +
-      "/storage/v1/object/public/" +
-      path
-        .split("/")
-        .map(encodeURIComponent)
-        .join("/")
-    );
-  }
-
-  return (
-    SUPABASE_URL +
-    "/storage/v1/object/public/padrillos/" +
-    path.split("/").map(encodeURIComponent).join("/")
-  );
-}
-
-function imagenPortada(padrillo) {
-  return ordenarMedios(padrillo.id).find(m => m.tipo === "foto") || null;
-}
-
-function estiloEncuadre(medio) {
-  const x = Number(medio.posicion_x ?? 50);
-  const y = Number(medio.posicion_y ?? 50);
-  const zoom = Number(medio.zoom ?? 1);
-
-  return (
-    "object-position:" +
-    Math.max(0,Math.min(100,x)) + "% " +
-    Math.max(0,Math.min(100,y)) + "%;" +
-    "transform:scale(" +
-    Math.max(1,Math.min(4,zoom)) +
-    ");"
-  );
-}
-
-/* LISTADO PUBLICO */
-
-function htmlTarjeta(padrillo) {
-  const caballo =
-    caballosPorId.get(Number(padrillo.caballo_id));
-
-  if (!caballo) return "";
-
-  const nombre = texto(caballo.Nombre) || "Padrillo";
-  const foto = imagenPortada(padrillo);
-  const nacimiento = fechaAnio(caballo.Nacimiento);
+  const nombre = texto(c.Nombre);
+  const foto = portada(p);
 
   const subtitulo = [
-    texto(caballo.Raza),
-    nacimiento
+    texto(c.Raza),
+    c.Nacimiento ? String(c.Nacimiento).slice(0,4) : ""
   ].filter(Boolean).join(" · ");
 
   return `
@@ -1116,464 +1244,1310 @@ function htmlTarjeta(padrillo) {
 
       <div class="portada-imagen">
         ${foto ? `
-          <img
-            src="${escapar(urlMedio(foto))}"
-            alt="${escapar(nombre)}"
-            loading="lazy"
-            style="${estiloEncuadre(foto)}"
-          >
-        ` : `
-          <div class="sin-foto">Sin fotografía</div>
-        `}
+          <img src="${escapar(urlMedio(foto))}"
+               alt="${escapar(nombre)}"
+               loading="lazy"
+               style="${estiloEncuadre(foto)}">
+        ` : '<div class="sin-foto">Sin fotografía</div>'}
 
-        ${padrillo.destacado ? `
-          <span class="destacado">DESTACADO</span>
-        ` : ""}
+        ${p.destacado ?
+          '<span class="destacado">DESTACADO</span>' : ""}
       </div>
 
       <div class="tarjeta-info">
-        <a
-          class="nombre"
-          href="${escapar(urlCaballo(nombre))}"
-          title="Ver genealogía en Sangres del Uruguay"
-        >${escapar(nombre)}</a>
+        <a class="nombre"
+           href="${escapar(urlCaballo(nombre))}">
+          ${escapar(nombre)}
+        </a>
 
-        ${subtitulo ? `
-          <p class="subtitulo">${escapar(subtitulo)}</p>
-        ` : ""}
+        ${subtitulo ?
+          `<p class="subtitulo">${escapar(subtitulo)}</p>` : ""}
 
         <div class="datos-portada">
-          ${detalleHTML("Ubicación", padrillo.ubicacion)}
-          ${detalleHTML(
-            "Precio del servicio",
-            dinero(padrillo.precio_usd),
-            "precio"
-          )}
-          ${detalleHTML("Modalidad", padrillo.modalidad)}
-          ${detalleHTML("Disponibilidad", padrillo.disponibilidad)}
+          ${datoHTML("Ubicación",p.ubicacion)}
+          ${datoHTML("Precio del servicio",dinero(p.precio_usd),"precio")}
+          ${datoHTML("Modalidad",p.modalidad)}
+          ${datoHTML("Disponibilidad",p.disponibilidad)}
         </div>
       </div>
 
       <div class="acciones">
-        <a
-          class="boton"
-          href="?id=${Number(padrillo.id)}"
-        >Ver padrillo</a>
+        <a class="boton"
+           href="?id=${Number(p.id)}">Ver padrillo</a>
 
-        <a
-          class="boton boton-claro"
-          href="${escapar(enlaceWhatsApp(nombre))}"
-          target="_blank"
-          rel="noopener noreferrer"
-        >Consultar por WhatsApp</a>
+        <a class="boton boton-claro"
+           target="_blank"
+           rel="noopener noreferrer"
+           href="${escapar(enlaceWhatsApp(nombre))}">
+          Consultar por WhatsApp
+        </a>
       </div>
-
-    </article>
-  `;
+    </article>`;
 }
 
 function mostrarListado() {
-  const lista = document.getElementById("listaPadrillos");
-  const busqueda = texto(
-    document.getElementById("buscarPadrillo").value
-  ).toUpperCase();
+  const lista = $("listaPadrillos");
 
-  const filtrados = anuncios.filter(p => {
-    const caballo =
-      caballosPorId.get(Number(p.caballo_id));
-
-    const nombre = texto(caballo?.Nombre).toUpperCase();
-    const ubicacion = texto(p.ubicacion).toUpperCase();
-
-    return (
-      nombre.includes(busqueda) ||
-      ubicacion.includes(busqueda)
-    );
-  });
-
-  if (!filtrados.length) {
-    lista.innerHTML = `
-      <div class="aviso">
-        ${
-          busqueda
-            ? "No se encontraron padrillos con esa búsqueda."
-            : "Todavía no hay padrillos publicados."
-        }
-      </div>
-    `;
+  if (!anuncios.length) {
+    lista.innerHTML =
+      '<div class="aviso">Todavía no hay padrillos publicados.</div>';
     return;
   }
 
-  lista.innerHTML = filtrados.map(htmlTarjeta).join("");
-
-  if (!lista.innerHTML.trim()) {
-    lista.innerHTML = `
-      <div class="aviso">
-        No hay anuncios disponibles.
-      </div>
-    `;
-  }
+  lista.innerHTML = anuncios.map(htmlTarjeta).join("") ||
+    '<div class="aviso">No hay anuncios disponibles.</div>';
 }
 
-/* PEDIGREE AUTOMATICO */
-
-function nodo(nombre, tipo, principal = false) {
+function nodo(nombre,tipo,principal=false) {
   const valor = texto(nombre);
 
-  return `
-    <div class="pedigree-box ${tipo}">
-      ${valor ? (
-        principal
-          ? `<strong>${escapar(valor)}</strong>`
-          : `<a href="${escapar(urlCaballo(valor))}">${escapar(valor)}</a>`
-      ) : ""}
-    </div>
-  `;
+  return `<div class="pedigree-box ${tipo}">
+    ${valor ? (
+      principal
+        ? `<strong>${escapar(valor)}</strong>`
+        : `<a href="${escapar(urlCaballo(valor))}">${escapar(valor)}</a>`
+    ) : ""}
+  </div>`;
 }
 
 function crearPedigree(c) {
   return `
     <div class="pedigree-scroll">
       <div class="pedigree">
-
         <div class="generacion sujeto">
-          ${nodo(c.Nombre, "principal", true)}
+          ${nodo(c.Nombre,"principal",true)}
         </div>
-
         <div class="generacion padres">
-          ${nodo(c.Padre, "macho")}
-          ${nodo(c.Madre, "hembra")}
+          ${nodo(c.Padre,"macho")}
+          ${nodo(c.Madre,"hembra")}
         </div>
-
         <div class="generacion abuelos">
-          ${nodo(c.abuelo_paterno, "macho")}
-          ${nodo(c.abuela_paterno, "hembra")}
-          ${nodo(c.abuelo_materno, "macho")}
-          ${nodo(c.abuela_materna, "hembra")}
+          ${nodo(c.abuelo_paterno,"macho")}
+          ${nodo(c.abuela_paterno,"hembra")}
+          ${nodo(c.abuelo_materno,"macho")}
+          ${nodo(c.abuela_materna,"hembra")}
         </div>
-
         <div class="generacion bisabuelos">
-          ${nodo(c.bisabuelo_pp, "macho")}
-          ${nodo(c.bisabuela_pp, "hembra")}
-          ${nodo(c.bisabuelo_pm, "macho")}
-          ${nodo(c.bisabuela_pm, "hembra")}
-          ${nodo(c.bisabuelo_mp, "macho")}
-          ${nodo(c.bisabuela_mp, "hembra")}
-          ${nodo(c.bisabuelo_mm, "macho")}
-          ${nodo(c.bisabuela_mm, "hembra")}
+          ${nodo(c.bisabuelo_pp,"macho")}
+          ${nodo(c.bisabuela_pp,"hembra")}
+          ${nodo(c.bisabuelo_pm,"macho")}
+          ${nodo(c.bisabuela_pm,"hembra")}
+          ${nodo(c.bisabuelo_mp,"macho")}
+          ${nodo(c.bisabuela_mp,"hembra")}
+          ${nodo(c.bisabuelo_mm,"macho")}
+          ${nodo(c.bisabuela_mm,"hembra")}
         </div>
-
       </div>
-    </div>
-  `;
+    </div>`;
 }
-
-/* FICHA GRANDE */
 
 function mostrarDetalle(id) {
-  const padrillo = anuncios.find(
-    p => Number(p.id) === Number(id)
-  );
+  const p = anuncios.find(a => Number(a.id) === Number(id));
+  const cont = $("contenidoDetalle");
 
-  const contenedor =
-    document.getElementById("contenidoDetalle");
+  if (!p) {
+    cont.innerHTML = '<div class="aviso">No se encontró el padrillo.</div>';
+  } else {
+    const c = caballosPorId.get(Number(p.caballo_id));
 
-  if (!padrillo) {
-    contenedor.innerHTML =
-      '<div class="aviso">No se encontró este padrillo.</div>';
-    return;
-  }
-
-  const caballo =
-    caballosPorId.get(Number(padrillo.caballo_id));
-
-  if (!caballo) {
-    contenedor.innerHTML =
-      '<div class="aviso">No se encontró la ficha genealógica.</div>';
-    return;
-  }
-
-  const nombre = texto(caballo.Nombre);
-  const multimedia = ordenarMedios(padrillo.id);
-  const primeraFoto = multimedia.find(m => m.tipo === "foto");
-
-  contenedor.innerHTML = `
-    <article class="ficha-grande">
-
-      <div class="ficha-cabecera">
-
-        <div class="galeria">
-          <div class="visualizador" id="visualizador">
-            ${primeraFoto ? `
-              <img
-                src="${escapar(urlMedio(primeraFoto))}"
-                alt="${escapar(nombre)}"
-                id="fotoVisualizada"
-              >
-            ` : `
-              <div class="sin-foto">Sin fotografía</div>
-            `}
-          </div>
-
-          <div class="miniaturas" id="miniaturas"></div>
-        </div>
-
-        <div>
-          <h2 class="ficha-nombre">${escapar(nombre)}</h2>
-
-          <a
-            class="ficha-link"
-            href="${escapar(urlCaballo(nombre))}"
-          >
-            Ver ficha genealógica en Sangres del Uruguay ↗
-          </a>
-
-          <div class="tabla-datos" id="tablaDatos">
-
-            ${celdaHTML("Raza", caballo.Raza)}
-            ${celdaHTML(
-              "Nacimiento",
-              caballo.Nacimiento
-                ? caballo.Nacimiento.split("-").reverse().join("/")
-                : ""
-            )}
-            ${celdaHTML("Pelo", caballo.Pelo)}
-            ${celdaHTML("RP", caballo.RP)}
-            ${celdaHTML("Ubicación", padrillo.ubicacion)}
-            ${celdaHTML(
-              "Precio del servicio",
-              dinero(padrillo.precio_usd)
-            )}
-            ${celdaHTML("Modalidad", padrillo.modalidad)}
-            ${celdaHTML("Disponibilidad", padrillo.disponibilidad)}
-          </div>
-
-          <div style="margin-top:18px;">
-            <a
-              class="boton"
-              href="${escapar(enlaceWhatsApp(nombre))}"
-              target="_blank"
-              rel="noopener noreferrer"
-            >Consultar servicio por WhatsApp</a>
-          </div>
-        </div>
-      </div>
-
-      ${padrillo.descripcion ? `
-        <section class="seccion">
-          <h3>Descripción</h3>
-          <div class="descripcion">${escapar(padrillo.descripcion)}</div>
-        </section>
-      ` : ""}
-
-      <section class="seccion">
-        <h3>Pedigree</h3>
-        ${crearPedigree(caballo)}
-      </section>
-
-      ${padrillo.condiciones_servicio ? `
-        <section class="seccion">
-          <h3>Condiciones del servicio</h3>
-          <div class="descripcion">${escapar(padrillo.condiciones_servicio)}</div>
-        </section>
-      ` : ""}
-
-      ${padrillo.garantia_prenez ? `
-        <section class="seccion">
-          <h3>Garantía de preñez</h3>
-          <div class="descripcion">${escapar(padrillo.garantia_prenez)}</div>
-        </section>
-      ` : ""}
-
-      ${padrillo.requisitos_sanitarios ? `
-        <section class="seccion">
-          <h3>Requisitos sanitarios</h3>
-          <div class="descripcion">${escapar(padrillo.requisitos_sanitarios)}</div>
-        </section>
-      ` : ""}
-
-    </article>
-  `;
-
-  cerrarBordesTabla(document.getElementById("tablaDatos"));
-
-  const miniaturas =
-    document.getElementById("miniaturas");
-
-  multimedia.forEach((medio, indice) => {
-    const boton = document.createElement("button");
-    boton.type = "button";
-    boton.className =
-      "miniatura" + (indice === 0 ? " activa" : "");
-
-    if (medio.tipo === "foto") {
-      const img = document.createElement("img");
-      img.src = urlMedio(medio);
-      img.alt = "Fotografía " + (indice + 1);
-      boton.appendChild(img);
+    if (!c) {
+      cont.innerHTML =
+        '<div class="aviso">No se encontró su ficha genealógica.</div>';
     } else {
-      const play = document.createElement("span");
-      play.className = "play";
-      play.textContent = "▶";
-      boton.appendChild(play);
-      boton.setAttribute("aria-label", "Ver video");
+      const nombre = texto(c.Nombre);
+      const medios = ordenarMedios(p.id);
+      const foto = medios[0];
+
+      cont.innerHTML = `
+        <article class="ficha-grande">
+          <div class="ficha-cabecera">
+            <div class="galeria">
+              <div class="visualizador" id="visualizador">
+                ${foto ? `
+                  <img id="fotoInicial"
+                       src="${escapar(urlMedio(foto))}"
+                       alt="${escapar(nombre)}">
+                ` : '<div class="sin-foto">Sin fotografía</div>'}
+              </div>
+              <div class="miniaturas" id="miniaturas"></div>
+            </div>
+
+            <div>
+              <h2 class="ficha-nombre">${escapar(nombre)}</h2>
+              <a class="ficha-link"
+                 href="${escapar(urlCaballo(nombre))}">
+                Ver ficha genealógica en Sangres del Uruguay ↗
+              </a>
+
+              <div class="tabla-datos" id="tablaDatos">
+                ${celdaHTML("Raza",c.Raza)}
+                ${celdaHTML("Nacimiento",
+                  c.Nacimiento ?
+                  String(c.Nacimiento).split("-").reverse().join("/") : "")}
+                ${celdaHTML("Pelo",c.Pelo)}
+                ${celdaHTML("RP",c.RP)}
+                ${celdaHTML("Ubicación",p.ubicacion)}
+                ${celdaHTML("Precio del servicio",dinero(p.precio_usd))}
+                ${celdaHTML("Modalidad",p.modalidad)}
+                ${celdaHTML("Disponibilidad",p.disponibilidad)}
+              </div>
+
+              <div style="margin-top:18px">
+                <a class="boton"
+                   href="${escapar(enlaceWhatsApp(nombre))}"
+                   target="_blank"
+                   rel="noopener noreferrer">
+                  Consultar servicio por WhatsApp
+                </a>
+              </div>
+            </div>
+          </div>
+
+          ${seccionOpcional("Descripción",p.descripcion)}
+          <section class="seccion">
+            <h3>Pedigree</h3>
+            ${crearPedigree(c)}
+          </section>
+          ${seccionOpcional("Condiciones del servicio",p.condiciones_servicio)}
+          ${seccionOpcional("Garantía de preñez",p.garantia_prenez)}
+          ${seccionOpcional("Requisitos sanitarios",p.requisitos_sanitarios)}
+        </article>`;
+
+      cerrarBordesTabla($("tablaDatos"));
+
+      const miniaturas = $("miniaturas");
+
+      medios.forEach((m,i) => {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.className = "miniatura" + (i === 0 ? " activa" : "");
+
+        if (m.tipo === "foto") {
+          const img = document.createElement("img");
+          img.src = urlMedio(m);
+          img.alt = "Fotografía " + (i+1);
+          b.appendChild(img);
+        } else {
+          const icono = document.createElement("span");
+          icono.className = "play";
+          icono.textContent = "▶";
+          b.appendChild(icono);
+        }
+
+        b.onclick = () => {
+          cambiarMedio(m,nombre);
+          miniaturas.querySelectorAll("button").forEach(x =>
+            x.classList.remove("activa")
+          );
+          b.classList.add("activa");
+        };
+
+        miniaturas.appendChild(b);
+      });
+
+      if ($("fotoInicial")) {
+        $("fotoInicial").onclick = () =>
+          abrirFoto($("fotoInicial").src,nombre);
+      }
     }
-
-    boton.addEventListener("click", () => {
-      cambiarMedio(medio, nombre);
-      miniaturas
-        .querySelectorAll(".miniatura")
-        .forEach(b => b.classList.remove("activa"));
-
-      boton.classList.add("activa");
-    });
-
-    miniaturas.appendChild(boton);
-  });
-
-  const fotoInicial =
-    document.getElementById("fotoVisualizada");
-
-  if (fotoInicial) {
-    fotoInicial.addEventListener("click", () => {
-      abrirFoto(fotoInicial.src, nombre);
-    });
   }
 
-  document.getElementById("vistaLista").hidden = true;
-  document.getElementById("vistaDetalle").hidden = false;
-
-  window.scrollTo({top:0,behavior:"instant"});
+  $("vistaLista").hidden = true;
+  $("vistaDetalle").hidden = false;
+  window.scrollTo(0,0);
 }
 
-function cambiarMedio(medio, nombre) {
-  const visualizador =
-    document.getElementById("visualizador");
+function seccionOpcional(titulo,valor) {
+  if (!texto(valor)) return "";
+  return `
+    <section class="seccion">
+      <h3>${escapar(titulo)}</h3>
+      <div class="descripcion">${escapar(valor)}</div>
+    </section>`;
+}
 
-  visualizador.replaceChildren();
+function cambiarMedio(m,nombre) {
+  const v = $("visualizador");
+  v.replaceChildren();
+  const url = urlMedio(m);
 
-  const enlace = urlMedio(medio);
-
-  if (medio.tipo === "foto") {
+  if (m.tipo === "foto") {
     const img = document.createElement("img");
-    img.src = enlace;
+    img.src = url;
     img.alt = nombre;
-    img.addEventListener("click", () => abrirFoto(enlace,nombre));
-    visualizador.appendChild(img);
-    return;
-  }
-
-  if (/youtube\.com|youtu\.be|vimeo\.com/i.test(enlace)) {
-    const aviso = document.createElement("div");
-    aviso.style.padding = "20px";
-    aviso.style.textAlign = "center";
-
+    img.onclick = () => abrirFoto(url,nombre);
+    v.appendChild(img);
+  } else if (/^https:\/\//i.test(texto(m.archivo_path))) {
     const a = document.createElement("a");
     a.className = "boton";
-    a.href = enlace;
+    a.href = url;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
     a.textContent = "▶ Abrir video";
-
-    aviso.appendChild(a);
-    visualizador.appendChild(aviso);
-    return;
+    v.appendChild(a);
+  } else {
+    const video = document.createElement("video");
+    video.src = url;
+    video.controls = true;
+    video.playsInline = true;
+    video.preload = "metadata";
+    v.appendChild(video);
   }
-
-  const video = document.createElement("video");
-  video.src = enlace;
-  video.controls = true;
-  video.playsInline = true;
-  video.preload = "metadata";
-  visualizador.appendChild(video);
 }
-
-/* FOTOGRAFIA COMPLETA */
-
-function abrirFoto(src, nombre) {
-  const modal = document.getElementById("modalFoto");
-  const img = document.getElementById("imagenModal");
-
-  img.src = src;
-  img.alt = nombre || "Fotografía del padrillo";
-
-  modal.classList.add("visible");
-  document.body.style.overflow = "hidden";
-}
-
-function cerrarFoto() {
-  document.getElementById("modalFoto")
-    .classList.remove("visible");
-
-  document.body.style.overflow = "";
-}
-
-/* NAVEGACION */
 
 function mostrarRuta() {
-  const parametros =
-    new URLSearchParams(window.location.search);
+  if ($("vistaAdmin").hidden === false) return;
 
-  const id = parametros.get("id");
+  const params = new URLSearchParams(location.search);
+  const id = params.get("id");
 
   if (id) {
     mostrarDetalle(id);
   } else {
-    document.getElementById("vistaLista").hidden = false;
-    document.getElementById("vistaDetalle").hidden = true;
+    $("vistaLista").hidden = false;
+    $("vistaDetalle").hidden = true;
     mostrarListado();
   }
 }
 
-document.getElementById("buscarPadrillo")
-  .addEventListener("input", mostrarListado);
+function abrirFoto(src,nombre) {
+  $("imagenModal").src = src;
+  $("imagenModal").alt = nombre || "Fotografía del padrillo";
+  $("modalFoto").classList.add("visible");
+  document.body.style.overflow = "hidden";
+}
 
-document.getElementById("volverListado")
-  .addEventListener("click", () => {
-    window.history.pushState({}, "", "padrillos.html");
-    mostrarRuta();
-  });
+function cerrarFoto() {
+  $("modalFoto").classList.remove("visible");
+  document.body.style.overflow = "";
+}
 
-window.addEventListener("popstate", mostrarRuta);
+/* =====================================================
+   AUTENTICACION ADMINISTRADOR
+===================================================== */
 
-document.getElementById("cerrarModal")
-  .addEventListener("click", cerrarFoto);
-
-document.getElementById("modalFoto")
-  .addEventListener("click", evento => {
-    if (evento.target.id === "modalFoto") {
-      cerrarFoto();
+async function verificarPermiso(token) {
+  const respuesta = await fetch(
+    SUPABASE_URL + "/rest/v1/rpc/es_admin_padrillos",
+    {
+      method:"POST",
+      headers:{
+        apikey:SUPABASE_KEY,
+        Authorization:"Bearer " + token,
+        "Content-Type":"application/json"
+      },
+      body:"{}"
     }
+  );
+
+  if (!respuesta.ok) {
+    throw new Error(
+      "No se pudo verificar el permiso: " +
+      await respuesta.text()
+    );
+  }
+
+  return await respuesta.json() === true;
+}
+
+async function recuperarSesion() {
+  const guardado = localStorage.getItem("sesionAdminSdU");
+  if (!guardado) return false;
+
+  let anterior;
+  try {
+    anterior = JSON.parse(guardado);
+  } catch {
+    return false;
+  }
+
+  if (!anterior.refresh_token) return false;
+
+  const r = await fetch(
+    SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+    {
+      method:"POST",
+      headers:{
+        apikey:SUPABASE_KEY,
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify({refresh_token:anterior.refresh_token})
+    }
+  );
+
+  if (!r.ok) return false;
+
+  const nueva = await r.json();
+
+  if (!await verificarPermiso(nueva.access_token)) {
+    return false;
+  }
+
+  sesion = nueva;
+  autorizado = true;
+  localStorage.setItem("sesionAdminSdU",JSON.stringify(nueva));
+  actualizarBotonesAdmin();
+  return true;
+}
+
+function actualizarBotonesAdmin() {
+  $("btnAdmin").hidden = !autorizado;
+  $("btnCerrarSesion").hidden = !autorizado;
+}
+
+async function iniciarAdmin() {
+  if (autorizado) {
+    abrirAdministracion();
+    return;
+  }
+
+  const email = prompt("Email del administrador de SDU:");
+  if (!email) return;
+
+  const password = prompt("Contraseña:");
+  if (!password) return;
+
+  try {
+    const r = await fetch(
+      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      {
+        method:"POST",
+        headers:{
+          apikey:SUPABASE_KEY,
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify({email,password})
+      }
+    );
+
+    if (!r.ok) {
+      alert("No se pudo iniciar sesión.");
+      return;
+    }
+
+    const datos = await r.json();
+    const permiso = await verificarPermiso(datos.access_token);
+
+    if (!permiso) {
+      alert("Esta cuenta no tiene permiso para administrar Padrillos.");
+      return;
+    }
+
+    sesion = datos;
+    autorizado = true;
+    localStorage.setItem("sesionAdminSdU",JSON.stringify(datos));
+    actualizarBotonesAdmin();
+    abrirAdministracion();
+
+  } catch(error) {
+    console.error(error);
+    alert(error.message);
+  }
+}
+
+function cerrarSesionAdmin() {
+  sesion = null;
+  autorizado = false;
+  localStorage.removeItem("sesionAdminSdU");
+  actualizarBotonesAdmin();
+  volverPublico();
+}
+
+async function renovarSiHaceFalta() {
+  if (!autorizado || !sesion?.access_token) {
+    throw new Error("Iniciá sesión nuevamente.");
+  }
+
+  const vencimiento = Number(sesion.expires_at || 0);
+  const ahora = Math.floor(Date.now()/1000);
+
+  if (vencimiento && vencimiento > ahora+60) return;
+
+  const ok = await recuperarSesion();
+  if (!ok) {
+    autorizado = false;
+    actualizarBotonesAdmin();
+    throw new Error("La sesión venció. Iniciá sesión nuevamente.");
+  }
+}
+
+/* =====================================================
+   LISTADO ADMINISTRATIVO
+===================================================== */
+
+async function abrirAdministracion() {
+  if (!autorizado) return;
+
+  $("vistaLista").hidden = true;
+  $("vistaDetalle").hidden = true;
+  $("vistaAdmin").hidden = false;
+  $("formularioAdmin").hidden = true;
+
+  history.replaceState({},"","padrillos.html?admin=1");
+
+  await cargarAdmin();
+  window.scrollTo(0,0);
+}
+
+async function cargarAdmin() {
+  try {
+    await renovarSiHaceFalta();
+
+    $("listaAdmin").innerHTML = "<p>Cargando anuncios...</p>";
+
+    anunciosAdmin = await consultar(
+      "padrillos",
+      "?select=*&order=destacado.desc,orden.asc,id.asc",
+      true
+    );
+
+    const ids = [...new Set(
+      anunciosAdmin.map(a => Number(a.caballo_id))
+    )].filter(Number.isFinite);
+
+    let nombres = new Map();
+
+    if (ids.length) {
+      const caballos = await consultar(
+        "Caballos",
+        "?select=id,Nombre&id=in.(" + ids.join(",") + ")",
+        true
+      );
+      nombres = new Map(
+        caballos.map(c => [Number(c.id),c.Nombre])
+      );
+    }
+
+    if (!anunciosAdmin.length) {
+      $("listaAdmin").innerHTML =
+        '<div class="aviso">Todavía no hay padrillos cargados.</div>';
+      return;
+    }
+
+    $("listaAdmin").innerHTML = anunciosAdmin.map(p => `
+      <div class="admin-anuncio">
+        <div>
+          <strong>${escapar(nombres.get(Number(p.caballo_id)) ||
+            "Caballo ID " + p.caballo_id)}</strong>
+
+          <small>
+            ${p.publicado ? "Publicado" : "Oculto"}
+            ${p.destacado ? " · Destacado" : ""}
+            ${p.ubicacion ? " · " + escapar(p.ubicacion) : ""}
+          </small>
+        </div>
+
+        <button type="button"
+                class="boton"
+                data-editar="${Number(p.id)}">
+          Editar
+        </button>
+      </div>
+    `).join("");
+
+    $("listaAdmin").querySelectorAll("[data-editar]")
+      .forEach(b => {
+        b.onclick = () => editarAnuncio(Number(b.dataset.editar));
+      });
+
+  } catch(error) {
+    console.error(error);
+    $("listaAdmin").innerHTML =
+      '<div class="aviso">' + escapar(error.message) + '</div>';
+  }
+}
+
+function volverPublico() {
+  $("vistaAdmin").hidden = true;
+  $("formularioAdmin").hidden = true;
+  history.replaceState({},"","padrillos.html");
+  cargarPadrillos();
+}
+
+/* =====================================================
+   NUEVO PADRILLO / EDITAR
+===================================================== */
+
+function limpiarFormulario() {
+  $("formularioAdmin").querySelectorAll(
+    "input:not([type=checkbox]):not([type=file]),textarea"
+  ).forEach(c => c.value = "");
+
+  $("destacado").checked = false;
+  $("publicado").checked = false;
+  $("orden").value = "0";
+
+  $("editarId").value = "";
+  $("caballoId").value = "";
+  $("buscarCaballoAdmin").value = "";
+
+  caballoElegido = null;
+  medioPortadaAdmin = null;
+
+  $("caballoSeleccionado").hidden = true;
+  $("sugerenciasCaballos").hidden = true;
+  $("gestionMultimedia").hidden = true;
+  $("editorPortada").hidden = true;
+  $("listaMultimediaAdmin").innerHTML = "";
+
+  ocultarAviso("estadoGuardar");
+  ocultarAviso("estadoMultimedia");
+}
+
+function nuevoAnuncio() {
+  limpiarFormulario();
+  $("tituloFormulario").textContent = "Nuevo padrillo";
+  $("formularioAdmin").hidden = false;
+  $("formularioAdmin").scrollIntoView({behavior:"smooth"});
+}
+
+function fijarCaballo(c) {
+  caballoElegido = c;
+  $("caballoId").value = c.id;
+  $("buscarCaballoAdmin").value = c.Nombre;
+  $("sugerenciasCaballos").hidden = true;
+
+  $("caballoSeleccionado").hidden = false;
+  $("caballoSeleccionado").innerHTML = `
+    <strong>${escapar(c.Nombre)}</strong>
+    <p>${escapar(c.Padre || "-")} × ${escapar(c.Madre || "-")}</p>
+    <a href="${escapar(urlCaballo(c.Nombre))}"
+       target="_blank"
+       rel="noopener noreferrer">
+      Ver ficha genealógica ↗
+    </a>`;
+}
+
+async function buscarCaballoParaAnuncio() {
+  const escrito = texto($("buscarCaballoAdmin").value);
+  const actual = ++contadorBusqueda;
+
+  $("caballoId").value = "";
+  caballoElegido = null;
+  $("caballoSeleccionado").hidden = true;
+
+  if (escrito.length < 2) {
+    $("sugerenciasCaballos").hidden = true;
+    return;
+  }
+
+  try {
+    const datos = await consultar(
+      "Caballos",
+      "?select=id,Nombre,Padre,Madre,Sexo" +
+      "&Nombre=ilike." + encodeURIComponent("%"+escrito+"%") +
+      "&order=Nombre.asc&limit=20",
+      true
+    );
+
+    if (actual !== contadorBusqueda) return;
+
+    const machos = datos.filter(c =>
+      ["ME","MC","M"].includes(normalizar(c.Sexo))
+    );
+
+    const candidatos = machos.length ? machos : datos;
+
+    const cont = $("sugerenciasCaballos");
+    cont.innerHTML = "";
+
+    candidatos.forEach(c => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.textContent = c.Nombre +
+        (c.Padre ? " — " + c.Padre : "");
+      b.onclick = () => fijarCaballo(c);
+      cont.appendChild(b);
+    });
+
+    if (!candidatos.length) {
+      cont.textContent = "No se encontraron caballos.";
+    }
+
+    cont.hidden = false;
+  } catch(error) {
+    console.error(error);
+    avisar("estadoGuardar",
+      "No se pudieron buscar caballos: " + error.message,true);
+  }
+}
+
+async function editarAnuncio(id) {
+  try {
+    await renovarSiHaceFalta();
+
+    const p = anunciosAdmin.find(a => Number(a.id) === Number(id));
+    if (!p) return;
+
+    limpiarFormulario();
+    $("tituloFormulario").textContent = "Editar padrillo";
+    $("editarId").value = p.id;
+    $("caballoId").value = p.caballo_id;
+
+    const campos = {
+      ubicacion:"ubicacion",
+      precioUsd:"precio_usd",
+      modalidad:"modalidad",
+      disponibilidad:"disponibilidad",
+      descripcion:"descripcion",
+      condiciones:"condiciones_servicio",
+      garantia:"garantia_prenez",
+      requisitos:"requisitos_sanitarios",
+      fechaInicio:"fecha_inicio",
+      fechaFin:"fecha_fin",
+      orden:"orden"
+    };
+
+    Object.entries(campos).forEach(([idCampo,clave]) => {
+      $(idCampo).value = p[clave] ?? "";
+    });
+
+    $("destacado").checked = p.destacado === true;
+    $("publicado").checked = p.publicado === true;
+
+    const caballos = await consultar(
+      "Caballos",
+      "?select=*&id=eq." + Number(p.caballo_id) + "&limit=1",
+      true
+    );
+
+    if (caballos.length) fijarCaballo(caballos[0]);
+
+    $("formularioAdmin").hidden = false;
+    $("gestionMultimedia").hidden = false;
+
+    await cargarMultimediaAdmin(p.id);
+
+    $("formularioAdmin").scrollIntoView({behavior:"smooth"});
+
+  } catch(error) {
+    console.error(error);
+    alert("No se pudo abrir el anuncio: " + error.message);
+  }
+}
+
+function datosDelFormulario() {
+  const idCaballo = Number($("caballoId").value);
+
+  if (!Number.isInteger(idCaballo) || idCaballo <= 0) {
+    throw new Error("Seleccioná un caballo registrado de las sugerencias.");
+  }
+
+  const precio = texto($("precioUsd").value);
+
+  if (precio && (!Number.isFinite(Number(precio)) ||
+       Number(precio) < 0)) {
+    throw new Error("El precio debe ser un número válido en USD.");
+  }
+
+  const inicio = $("fechaInicio").value || null;
+  const fin = $("fechaFin").value || null;
+
+  if (inicio && fin && fin < inicio) {
+    throw new Error("La fecha final no puede ser anterior a la inicial.");
+  }
+
+  return {
+    caballo_id:idCaballo,
+    ubicacion:texto($("ubicacion").value) || null,
+    precio_usd:precio ? Number(precio) : null,
+    modalidad:texto($("modalidad").value) || null,
+    disponibilidad:texto($("disponibilidad").value) || null,
+    descripcion:texto($("descripcion").value) || null,
+    condiciones_servicio:texto($("condiciones").value) || null,
+    garantia_prenez:texto($("garantia").value) || null,
+    requisitos_sanitarios:texto($("requisitos").value) || null,
+    fecha_inicio:inicio,
+    fecha_fin:fin,
+    orden:Number($("orden").value || 0),
+    destacado:$("destacado").checked,
+    publicado:$("publicado").checked
+  };
+}
+
+async function guardarAnuncio() {
+  if (cargando) return;
+  cargando = true;
+  $("btnGuardarAnuncio").disabled = true;
+
+  try {
+    await renovarSiHaceFalta();
+
+    const datos = datosDelFormulario();
+    const id = Number($("editarId").value);
+
+    if (datos.publicado && id) {
+      const fotos = await consultar(
+        "padrillos_medios",
+        "?select=id&tipo=eq.foto&padrillo_id=eq." + id + "&limit=1",
+        true
+      );
+
+      if (!fotos.length) {
+        throw new Error(
+          "Subí una fotografía antes de publicar el padrillo."
+        );
+      }
+    }
+
+    if (datos.publicado && !id) {
+      datos.publicado = false;
+    }
+
+    let guardados;
+
+    if (id) {
+      guardados = await escribir(
+        "padrillos","PATCH",datos,"?id=eq." + id
+      );
+    } else {
+      guardados = await escribir("padrillos","POST",datos);
+    }
+
+    if (!guardados.length) {
+      throw new Error("Supabase no confirmó el guardado del anuncio.");
+    }
+
+    const nuevoId = Number(guardados[0].id);
+    $("editarId").value = nuevoId;
+    $("gestionMultimedia").hidden = false;
+
+    avisar("estadoGuardar",
+      datos.publicado
+        ? "✅ Padrillo guardado y publicado correctamente."
+        : "✅ Padrillo guardado. Podés subir la foto y luego publicarlo."
+    );
+
+    if (!id && $("publicado").checked) {
+      $("publicado").checked = false;
+      avisar("estadoGuardar",
+        "✅ Anuncio creado como borrador. Subí una fotografía y después marcá Publicado y guardá nuevamente."
+      );
+    }
+
+    await cargarAdmin();
+    await cargarMultimediaAdmin(nuevoId);
+    await cargarPadrillos();
+
+  } catch(error) {
+    console.error(error);
+    avisar("estadoGuardar",error.message,true);
+  } finally {
+    cargando = false;
+    $("btnGuardarAnuncio").disabled = false;
+  }
+}
+
+/* =====================================================
+   FOTOGRAFIAS Y VIDEOS
+===================================================== */
+
+async function subirArchivo(archivo,tipo) {
+  if (!archivo) return;
+
+  const id = Number($("editarId").value);
+  if (!id) {
+    alert("Primero guardá el anuncio.");
+    return;
+  }
+
+  if (tipo === "foto" &&
+      !["image/jpeg","image/png","image/webp"].includes(archivo.type)) {
+    alert("Usá una imagen JPG, PNG o WEBP.");
+    return;
+  }
+
+  if (tipo === "video" &&
+      !["video/mp4","video/webm","video/quicktime"].includes(archivo.type)) {
+    alert("Usá un video MP4, WEBM o MOV.");
+    return;
+  }
+
+  const limite = tipo === "foto" ? 20 : 100;
+
+  if (archivo.size > limite * 1024 * 1024) {
+    alert("El archivo supera el límite de " + limite + " MB.");
+    return;
+  }
+
+  try {
+    await renovarSiHaceFalta();
+
+    avisar("estadoMultimedia","Subiendo archivo...");
+
+    const existentes = await consultar(
+      "padrillos_medios",
+      "?select=id,tipo,orden&padrillo_id=eq." + id +
+      "&order=orden.asc,id.asc",
+      true
+    );
+
+    if (tipo === "video" &&
+        !existentes.some(m => m.tipo === "foto")) {
+      throw new Error("Primero tenés que subir una fotografía.");
+    }
+
+    const extension = archivo.name.split(".").pop().toLowerCase();
+    const nombre =
+      id + "/" + Date.now() + "-" +
+      Math.random().toString(36).slice(2,10) + "." + extension;
+
+    const respuesta = await fetch(
+      SUPABASE_URL +
+      "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
+      nombre.split("/").map(encodeURIComponent).join("/"),
+      {
+        method:"POST",
+        headers:{
+          ...cabecerasAdmin(),
+          "Content-Type":archivo.type,
+          "x-upsert":"false"
+        },
+        body:archivo
+      }
+    );
+
+    if (!respuesta.ok) {
+      throw new Error(
+        "Error al subir archivo: " + await respuesta.text()
+      );
+    }
+
+    const orden = existentes.length
+      ? Math.max(...existentes.map(m => Number(m.orden || 0))) + 1
+      : 0;
+
+    const nuevoMedio = {
+      padrillo_id:id,
+      tipo,
+      archivo_path:nombre,
+      orden,
+      posicion_x:50,
+      posicion_y:50,
+      zoom:1
+    };
+
+    try {
+      await escribir("padrillos_medios","POST",nuevoMedio);
+    } catch(error) {
+      await fetch(
+        SUPABASE_URL +
+        "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
+        nombre.split("/").map(encodeURIComponent).join("/"),
+        {
+          method:"DELETE",
+          headers:cabecerasAdmin()
+        }
+      );
+      throw error;
+    }
+
+    avisar("estadoMultimedia","✅ Archivo subido correctamente.");
+    await cargarMultimediaAdmin(id);
+    await cargarPadrillos();
+
+  } catch(error) {
+    console.error(error);
+    avisar("estadoMultimedia",error.message,true);
+  }
+}
+
+async function cargarMultimediaAdmin(id) {
+  const medios = await consultar(
+    "padrillos_medios",
+    "?select=*&padrillo_id=eq." + Number(id) +
+    "&order=orden.asc,id.asc",
+    true
+  );
+
+  const cont = $("listaMultimediaAdmin");
+
+  if (!medios.length) {
+    cont.innerHTML =
+      '<p class="ayuda">Todavía no hay fotografías ni videos.</p>';
+    $("editorPortada").hidden = true;
+    medioPortadaAdmin = null;
+    return;
+  }
+
+  const ordenados = [...medios].sort((a,b) =>
+    Number(a.orden||0)-Number(b.orden||0) ||
+    Number(a.id)-Number(b.id)
+  );
+
+  const primeraFoto = ordenados.find(m => m.tipo === "foto");
+
+  cont.innerHTML = ordenados.map(m => `
+    <div class="archivo-admin">
+      <div class="archivo-cabecera">
+        ${
+          m.tipo === "foto"
+            ? `<img src="${escapar(urlMedio(m))}"
+                    alt="Fotografía">`
+            : '<span>▶ Video</span>'
+        }
+        <div>
+          <strong>
+            ${m.tipo === "foto" ? "Fotografía" : "Video"}
+            ${primeraFoto && m.id === primeraFoto.id
+              ? " · PORTADA" : ""}
+          </strong>
+          <small>Orden: ${Number(m.orden||0)}</small>
+        </div>
+      </div>
+
+      <div class="archivo-acciones">
+        ${
+          m.tipo === "foto" &&
+          primeraFoto &&
+          m.id !== primeraFoto.id
+            ? `<button class="boton boton-claro"
+                       data-portada="${Number(m.id)}">
+                 Usar como portada
+               </button>`
+            : ""
+        }
+
+        <button class="boton boton-claro"
+                data-subir-orden="${Number(m.id)}">
+          ↑ Subir
+        </button>
+
+        <button class="boton boton-rojo"
+                data-borrar-medio="${Number(m.id)}">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  `).join("");
+
+  cont.querySelectorAll("[data-portada]").forEach(b => {
+    b.onclick = () =>
+      cambiarPortada(Number(b.dataset.portada),ordenados);
   });
 
-document.addEventListener("keydown", evento => {
-  if (evento.key === "Escape") cerrarFoto();
+  cont.querySelectorAll("[data-subir-orden]").forEach(b => {
+    b.onclick = () =>
+      subirOrdenMedio(Number(b.dataset.subirOrden),ordenados);
+  });
+
+  cont.querySelectorAll("[data-borrar-medio]").forEach(b => {
+    b.onclick = () =>
+      borrarMedio(Number(b.dataset.borrarMedio),ordenados);
+  });
+
+  medioPortadaAdmin = primeraFoto || null;
+
+  $("editorPortada").hidden = !primeraFoto;
+
+  if (primeraFoto) {
+    $("imagenEncuadre").src = urlMedio(primeraFoto);
+    $("posicionX").value = primeraFoto.posicion_x ?? 50;
+    $("posicionY").value = primeraFoto.posicion_y ?? 50;
+    $("zoomFoto").value = primeraFoto.zoom ?? 1;
+    actualizarEncuadre();
+  }
+}
+
+async function cambiarPortada(id,lista) {
+  const elegida = lista.find(m => Number(m.id) === id);
+  const actual = lista.find(m => m.tipo === "foto");
+
+  if (!elegida || !actual || elegida.tipo !== "foto") return;
+
+  try {
+    await renovarSiHaceFalta();
+
+    const ordenActual = Number(actual.orden||0);
+    const ordenNuevo = Number(elegida.orden||0);
+
+    await escribir("padrillos_medios","PATCH",
+      {orden:ordenActual},"?id=eq."+id);
+
+    await escribir("padrillos_medios","PATCH",
+      {orden:ordenNuevo},"?id=eq."+actual.id);
+
+    await cargarMultimediaAdmin($("editarId").value);
+    await cargarPadrillos();
+
+  } catch(error) {
+    avisar("estadoMultimedia",error.message,true);
+  }
+}
+
+async function subirOrdenMedio(id,lista) {
+  const indice = lista.findIndex(m => Number(m.id) === id);
+  if (indice <= 0) return;
+
+  const actual = lista[indice];
+  const anterior = lista[indice-1];
+
+  try {
+    await renovarSiHaceFalta();
+
+    await escribir("padrillos_medios","PATCH",
+      {orden:Number(anterior.orden||0)},"?id=eq."+actual.id);
+
+    await escribir("padrillos_medios","PATCH",
+      {orden:Number(actual.orden||0)},"?id=eq."+anterior.id);
+
+    await cargarMultimediaAdmin($("editarId").value);
+    await cargarPadrillos();
+
+  } catch(error) {
+    avisar("estadoMultimedia",error.message,true);
+  }
+}
+
+async function borrarMedio(id,lista) {
+  const medio = lista.find(m => Number(m.id) === id);
+  if (!medio) return;
+
+  if (!confirm("¿Eliminar este archivo del anuncio?")) return;
+
+  try {
+    await renovarSiHaceFalta();
+
+    const idAnuncio = Number($("editarId").value);
+
+    if (medio.tipo === "foto" &&
+        lista.filter(m => m.tipo === "foto").length === 1 &&
+        $("publicado").checked) {
+      throw new Error(
+        "Primero ocultá el anuncio y guardá los cambios para quitar su única fotografía."
+      );
+    }
+
+    const borrados = await escribir(
+      "padrillos_medios","DELETE",{},
+      "?id=eq." + id + "&padrillo_id=eq." + idAnuncio
+    );
+
+    if (!borrados.length) {
+      throw new Error("Supabase no confirmó la eliminación.");
+    }
+
+    const path = texto(medio.archivo_path);
+
+    if (path && !/^https:\/\//i.test(path)) {
+      const limpio = path.startsWith("padrillos/")
+        ? path.slice("padrillos/".length) : path;
+
+      const r = await fetch(
+        SUPABASE_URL +
+        "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
+        limpio.split("/").map(encodeURIComponent).join("/"),
+        {method:"DELETE",headers:cabecerasAdmin()}
+      );
+
+      if (!r.ok) {
+        console.warn("Archivo no eliminado del Storage:",await r.text());
+      }
+    }
+
+    avisar("estadoMultimedia","Archivo quitado.");
+    await cargarMultimediaAdmin(idAnuncio);
+    await cargarPadrillos();
+
+  } catch(error) {
+    avisar("estadoMultimedia",error.message,true);
+  }
+}
+
+/* =====================================================
+   ENCUADRE DE PORTADA
+===================================================== */
+
+function actualizarEncuadre() {
+  $("imagenEncuadre").style.objectPosition =
+    $("posicionX").value + "% " + $("posicionY").value + "%";
+
+  $("imagenEncuadre").style.transform =
+    "scale(" + $("zoomFoto").value + ")";
+}
+
+function centrarEncuadre() {
+  $("posicionX").value = 50;
+  $("posicionY").value = 50;
+  $("zoomFoto").value = 1;
+  actualizarEncuadre();
+}
+
+async function guardarEncuadre() {
+  if (!medioPortadaAdmin) return;
+
+  try {
+    await renovarSiHaceFalta();
+
+    const cambios = {
+      posicion_x:Number($("posicionX").value),
+      posicion_y:Number($("posicionY").value),
+      zoom:Number($("zoomFoto").value)
+    };
+
+    const guardados = await escribir(
+      "padrillos_medios",
+      "PATCH",
+      cambios,
+      "?id=eq." + Number(medioPortadaAdmin.id)
+    );
+
+    if (!guardados.length) {
+      throw new Error("No se confirmó el guardado del encuadre.");
+    }
+
+    medioPortadaAdmin = {...medioPortadaAdmin,...cambios};
+
+    avisar("estadoMultimedia","✅ Encuadre guardado correctamente.");
+    await cargarPadrillos();
+
+  } catch(error) {
+    avisar("estadoMultimedia",error.message,true);
+  }
+}
+
+let arrastre = null;
+
+$("vistaEncuadre").addEventListener("pointerdown",e => {
+  arrastre = {
+    x:e.clientX,
+    y:e.clientY,
+    px:Number($("posicionX").value),
+    py:Number($("posicionY").value)
+  };
+  $("vistaEncuadre").setPointerCapture(e.pointerId);
 });
 
-/* MENU CELULAR */
+$("vistaEncuadre").addEventListener("pointermove",e => {
+  if (!arrastre) return;
 
-const botonMenu = document.getElementById("botonMenu");
-const menu = document.getElementById("menuPrincipal");
+  const rect = $("vistaEncuadre").getBoundingClientRect();
 
-botonMenu.addEventListener("click", () => {
+  const dx = (e.clientX-arrastre.x)/rect.width*100;
+  const dy = (e.clientY-arrastre.y)/rect.height*100;
+
+  $("posicionX").value =
+    Math.max(0,Math.min(100,arrastre.px-dx));
+
+  $("posicionY").value =
+    Math.max(0,Math.min(100,arrastre.py-dy));
+
+  actualizarEncuadre();
+});
+
+$("vistaEncuadre").addEventListener("pointerup",() => arrastre=null);
+$("vistaEncuadre").addEventListener("pointercancel",() => arrastre=null);
+
+/* =====================================================
+   EVENTOS
+===================================================== */
+
+$("btnAdmin").onclick = abrirAdministracion;
+$("btnCerrarSesion").onclick = cerrarSesionAdmin;
+$("btnVolverPublico").onclick = volverPublico;
+$("btnNuevoPadrillo").onclick = nuevoAnuncio;
+$("btnCancelarEdicion").onclick = () =>
+  $("formularioAdmin").hidden = true;
+
+$("buscarCaballoAdmin").addEventListener(
+  "input",buscarCaballoParaAnuncio
+);
+
+$("btnGuardarAnuncio").onclick = guardarAnuncio;
+
+$("subirFoto").onchange = async e => {
+  const archivo = e.target.files?.[0];
+  if (archivo) await subirArchivo(archivo,"foto");
+  e.target.value = "";
+};
+
+$("subirVideo").onchange = async e => {
+  const archivo = e.target.files?.[0];
+  if (archivo) await subirArchivo(archivo,"video");
+  e.target.value = "";
+};
+
+["posicionX","posicionY","zoomFoto"].forEach(id => {
+  $(id).addEventListener("input",actualizarEncuadre);
+});
+
+$("btnGuardarEncuadre").onclick = guardarEncuadre;
+$("btnCentrarFoto").onclick = centrarEncuadre;
+
+$("volverListado").onclick = () => {
+  history.pushState({},"","padrillos.html");
+  mostrarRuta();
+};
+
+window.addEventListener("popstate",async () => {
+  const params = new URLSearchParams(location.search);
+
+  if (params.get("admin") === "1" && autorizado) {
+    await abrirAdministracion();
+  } else {
+    $("vistaAdmin").hidden = true;
+    mostrarRuta();
+  }
+});
+
+$("cerrarModal").onclick = cerrarFoto;
+
+$("modalFoto").onclick = e => {
+  if (e.target === $("modalFoto")) cerrarFoto();
+};
+
+document.addEventListener("keydown",e => {
+  if (e.key === "Escape") cerrarFoto();
+});
+
+/* MENU MOVIL */
+
+const botonMenu = $("botonMenu");
+const menu = $("menuPrincipal");
+
+botonMenu.onclick = () => {
   const abierto = menu.classList.toggle("menu-mobile-abierto");
-  botonMenu.setAttribute("aria-expanded", String(abierto));
-});
+  botonMenu.setAttribute("aria-expanded",String(abierto));
+};
 
-document.addEventListener("click", evento => {
-  if (
-    !menu.contains(evento.target) &&
-    !botonMenu.contains(evento.target)
-  ) {
+document.addEventListener("click",e => {
+  if (!menu.contains(e.target) && !botonMenu.contains(e.target)) {
     menu.classList.remove("menu-mobile-abierto");
     botonMenu.setAttribute("aria-expanded","false");
   }
 });
 
-/* INICIO */
+/* =====================================================
+   INICIO
+===================================================== */
 
-cargarPadrillos();
+async function iniciarPagina() {
+  await cargarPadrillos();
+
+  try {
+    const ok = await recuperarSesion();
+
+    if (ok && new URLSearchParams(location.search).get("admin") === "1") {
+      await abrirAdministracion();
+    }
+  } catch(error) {
+    console.error("Sesión administrativa:",error);
+  }
+}
+
+/*
+  Acceso manual inicial:
+  En la consola del navegador puede llamarse:
+  iniciarAdmin()
+
+  Si ya existe una sesión de SDU autorizada,
+  el botón Administrar padrillos aparece automáticamente.
+*/
+
+window.iniciarAdmin = iniciarAdmin;
+
+iniciarPagina();
+
 </script>
-
 </body>
 </html>
