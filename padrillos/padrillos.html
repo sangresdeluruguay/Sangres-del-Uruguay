@@ -13,6 +13,7 @@
   --dorado:#d5b56b;
   --borde:#b59b55;
 }
+
 * { box-sizing:border-box; }
 [hidden] { display:none!important; }
 
@@ -22,6 +23,7 @@ body {
   color:var(--azul);
   background:#f5f5f2;
 }
+
 header {
   position:relative;
   padding:35px 20px;
@@ -29,6 +31,7 @@ header {
   color:white;
   text-align:center;
 }
+
 .header-logo-sdu {
   position:absolute;
   left:24px;
@@ -36,8 +39,10 @@ header {
   width:70px;
   transform:translateY(-50%);
 }
+
 header h1 { margin:0; font-size:34px; }
 header p { margin:8px 0 0; color:var(--dorado); }
+
 .menu-principal {
   display:flex;
   flex-wrap:wrap;
@@ -45,14 +50,17 @@ header p { margin:8px 0 0; color:var(--dorado); }
   gap:22px;
   margin-top:20px;
 }
+
 .menu-principal a {
   color:white;
   font-size:13px;
   font-weight:600;
   text-decoration:none;
 }
+
 .menu-principal a:hover,
 .menu-principal .activo { color:var(--dorado); }
+
 .menu-mobile-sdu { display:none; }
 
 .portada-foto {
@@ -62,7 +70,11 @@ header p { margin:8px 0 0; color:var(--dorado); }
     center top/cover no-repeat;
   background-attachment:fixed;
 }
-.contenedor { max-width:1120px; margin:auto; }
+
+.contenedor {
+  max-width:1120px;
+  margin:auto;
+}
 
 .encabezado {
   padding:25px;
@@ -72,11 +84,13 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:15px;
   text-align:center;
 }
+
 .encabezado h2 {
   margin:0;
   color:var(--azul2);
   font-size:33px;
 }
+
 .encabezado h2::after {
   content:"";
   display:block;
@@ -101,6 +115,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   cursor:pointer;
   text-align:center;
 }
+
 .boton:hover { background:var(--azul); }
 .boton:disabled { opacity:.5; cursor:wait; }
 .boton-claro { background:white; color:var(--azul2); }
@@ -113,6 +128,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   flex-direction:column;
   gap:18px;
 }
+
 .tarjeta {
   display:grid;
   grid-template-columns:34% minmax(0,1fr) 175px;
@@ -124,6 +140,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:14px;
   box-shadow:0 5px 18px rgba(0,0,0,.09);
 }
+
 .portada-imagen {
   position:relative;
   min-height:235px;
@@ -132,6 +149,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:10px;
   background:#e9e9e6;
 }
+
 .portada-imagen img {
   position:absolute;
   inset:0;
@@ -139,6 +157,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   height:100%;
   object-fit:cover;
 }
+
 .sin-foto {
   display:flex;
   align-items:center;
@@ -147,6 +166,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   min-height:220px;
   color:#667085;
 }
+
 .destacado {
   position:absolute;
   top:10px;
@@ -159,35 +179,50 @@ header p { margin:8px 0 0; color:var(--dorado); }
   font-weight:bold;
   border-radius:6px;
 }
-.tarjeta-info { padding:8px 0; min-width:0; }
+
+.tarjeta-info {
+  padding:8px 0;
+  min-width:0;
+}
+
 .nombre {
   color:var(--azul2);
   font-size:26px;
   font-weight:800;
   text-decoration:none;
 }
+
 .nombre:hover { text-decoration:underline; }
+
 .subtitulo {
   margin:8px 0 20px;
   color:#687386;
   font-size:14px;
 }
+
 .datos-portada {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:17px;
 }
+
 .dato strong {
   display:block;
   margin-bottom:5px;
   font-size:12px;
   color:var(--azul2);
 }
+
 .dato span {
   font-size:14px;
   overflow-wrap:anywhere;
 }
-.dato .precio { font-size:21px; font-weight:800; }
+
+.dato .precio {
+  font-size:21px;
+  font-weight:800;
+}
+
 .acciones {
   display:flex;
   flex-direction:column;
@@ -196,6 +231,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   padding-left:17px;
   border-left:1px solid #e2d7bc;
 }
+
 .acciones .boton { width:100%; }
 
 .ficha-grande {
@@ -204,11 +240,13 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:15px;
   background:rgba(255,255,255,.97);
 }
+
 .ficha-cabecera {
   display:grid;
   grid-template-columns:minmax(0,1fr) minmax(0,1fr);
   gap:26px;
 }
+
 .visualizador {
   display:flex;
   align-items:center;
@@ -219,20 +257,45 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:12px;
   background:#e9e9e6;
 }
+
 .visualizador img,
 .visualizador video {
   width:100%;
   height:100%;
   object-fit:contain;
 }
+
 .visualizador img { cursor:zoom-in; }
 .visualizador video { background:#101820; }
+
+.visualizador.youtube {
+  background:#101820;
+}
+
+.visualizador.youtube iframe {
+  width:100%;
+  height:100%;
+  border:0;
+}
+
+.visualizador.youtube.short {
+  aspect-ratio:4/3;
+}
+
+.visualizador.youtube.short iframe {
+  width:min(100%,300px);
+  height:100%;
+  aspect-ratio:9/16;
+  flex:none;
+}
+
 .miniaturas {
   display:flex;
   gap:8px;
   overflow-x:auto;
   padding:10px 0;
 }
+
 .miniatura {
   position:relative;
   flex:0 0 92px;
@@ -244,12 +307,15 @@ header p { margin:8px 0 0; color:var(--dorado); }
   background:#ddd;
   cursor:pointer;
 }
+
 .miniatura.activa { border-color:#bd9a46; }
+
 .miniatura img {
   width:100%;
   height:100%;
   object-fit:cover;
 }
+
 .play {
   position:absolute;
   inset:0;
@@ -260,11 +326,25 @@ header p { margin:8px 0 0; color:var(--dorado); }
   color:white;
   font-size:25px;
 }
+
+.miniatura-youtube {
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+  height:100%;
+  background:#151515;
+  color:white;
+  font-size:12px;
+  font-weight:700;
+}
+
 .ficha-nombre {
   margin:0;
   color:var(--azul2);
   font-size:31px;
 }
+
 .ficha-nombre::after {
   content:"";
   display:block;
@@ -273,12 +353,14 @@ header p { margin:8px 0 0; color:var(--dorado); }
   margin-top:10px;
   background:var(--dorado);
 }
+
 .ficha-link {
   display:inline-block;
   margin:13px 0;
   color:#174e91;
   font-weight:600;
 }
+
 .tabla-datos {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
@@ -287,6 +369,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:9px;
   overflow:hidden;
 }
+
 .celda {
   display:flex;
   flex-direction:column;
@@ -298,25 +381,34 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-bottom:1px solid #dfd0a7;
   overflow-wrap:anywhere;
 }
+
 .celda:nth-child(2n) { border-right:none; }
+
 .celda strong {
   margin-bottom:6px;
   color:var(--azul2);
   font-size:13px;
 }
+
 .seccion {
   margin-top:25px;
   padding-top:20px;
   border-top:1px solid var(--borde);
 }
+
 .seccion h3 { color:var(--azul2); }
-.descripcion { line-height:1.7; white-space:pre-wrap; }
+
+.descripcion {
+  line-height:1.7;
+  white-space:pre-wrap;
+}
 
 .pedigree-scroll {
   overflow-x:auto;
   padding:14px 0;
   -webkit-overflow-scrolling:touch;
 }
+
 .pedigree {
   display:grid;
   grid-template-columns:repeat(4,170px);
@@ -324,10 +416,24 @@ header p { margin:8px 0 0; color:var(--dorado); }
   min-width:746px;
   align-items:center;
 }
-.generacion { display:grid; align-items:center; }
-.generacion.padres { grid-template-rows:repeat(2,320px); }
-.generacion.abuelos { grid-template-rows:repeat(4,160px); }
-.generacion.bisabuelos { grid-template-rows:repeat(8,80px); }
+
+.generacion {
+  display:grid;
+  align-items:center;
+}
+
+.generacion.padres {
+  grid-template-rows:repeat(2,320px);
+}
+
+.generacion.abuelos {
+  grid-template-rows:repeat(4,160px);
+}
+
+.generacion.bisabuelos {
+  grid-template-rows:repeat(8,80px);
+}
+
 .pedigree-box {
   display:flex;
   justify-content:center;
@@ -341,6 +447,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   text-align:center;
   overflow-wrap:anywhere;
 }
+
 .pedigree-box.principal { background:#fff3b0; }
 .pedigree-box.macho { background:#d9efff; }
 .pedigree-box.hembra { background:#f9dce5; }
@@ -355,6 +462,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   text-align:center;
   line-height:1.6;
 }
+
 .modal {
   position:fixed;
   inset:0;
@@ -365,8 +473,15 @@ header p { margin:8px 0 0; color:var(--dorado); }
   padding:45px 15px;
   background:rgba(0,0,0,.93);
 }
+
 .modal.visible { display:flex; }
-.modal img { max-width:100%; max-height:100%; object-fit:contain; }
+
+.modal img {
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+}
+
 .modal button {
   position:absolute;
   right:15px;
@@ -387,6 +502,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   margin-bottom:17px;
   flex-wrap:wrap;
 }
+
 .panel-admin {
   padding:25px;
   margin-bottom:20px;
@@ -394,27 +510,32 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border:1px solid var(--borde);
   border-radius:15px;
 }
+
 .panel-admin h2,
 .panel-admin h3 {
   color:var(--azul2);
   margin-top:0;
 }
+
 .form-grid {
   display:grid;
   grid-template-columns:repeat(2,minmax(0,1fr));
   gap:15px;
 }
+
 .campo {
   display:flex;
   flex-direction:column;
   gap:7px;
   min-width:0;
 }
+
 .campo label {
   font-size:13px;
   font-weight:700;
   color:var(--azul2);
 }
+
 .campo input,
 .campo select,
 .campo textarea,
@@ -428,20 +549,40 @@ header p { margin:8px 0 0; color:var(--dorado); }
   color:var(--azul);
   font:16px Arial,sans-serif;
 }
-.campo textarea { min-height:94px; resize:vertical; }
+
+.campo textarea {
+  min-height:94px;
+  resize:vertical;
+}
+
 .campo-ancho { grid-column:1/-1; }
+
+.campo label:has(input[type="checkbox"]) {
+  display:flex;
+  align-items:center;
+  gap:9px;
+  font-weight:400;
+}
+
+.campo input[type="checkbox"] {
+  width:auto;
+  min-width:0;
+}
+
 .acciones-admin {
   display:flex;
   flex-wrap:wrap;
   gap:10px;
   margin-top:18px;
 }
+
 .sugerencias {
   border:1px solid #d5bd86;
   border-radius:9px;
   overflow:hidden;
   background:white;
 }
+
 .sugerencias button {
   display:block;
   width:100%;
@@ -453,7 +594,9 @@ header p { margin:8px 0 0; color:var(--dorado); }
   text-align:left;
   cursor:pointer;
 }
+
 .sugerencias button:hover { background:#f9f3e5; }
+
 .caballo-elegido {
   margin:12px 0 20px;
   padding:14px;
@@ -461,6 +604,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   background:#fbf8ed;
   border-radius:9px;
 }
+
 .admin-anuncio {
   display:flex;
   align-items:center;
@@ -472,7 +616,12 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border-radius:10px;
   background:white;
 }
-.admin-anuncio strong { display:block; margin-bottom:6px; }
+
+.admin-anuncio strong {
+  display:block;
+  margin-bottom:6px;
+}
+
 .admin-anuncio small { color:#667085; }
 
 .archivo-admin {
@@ -482,6 +631,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border:1px solid #ddd1b5;
   border-radius:10px;
 }
+
 .archivo-admin img {
   max-width:145px;
   max-height:100px;
@@ -489,23 +639,27 @@ header p { margin:8px 0 0; color:var(--dorado); }
   background:#eee;
   border-radius:6px;
 }
+
 .archivo-cabecera {
   display:flex;
   flex-wrap:wrap;
   gap:12px;
   align-items:center;
 }
+
 .archivo-acciones {
   display:flex;
   flex-wrap:wrap;
   gap:8px;
   margin-top:10px;
 }
+
 .ayuda {
   font-size:13px;
   color:#636e7c;
   line-height:1.5;
 }
+
 .encuadre {
   position:relative;
   width:100%;
@@ -519,6 +673,7 @@ header p { margin:8px 0 0; color:var(--dorado); }
   cursor:grab;
   user-select:none;
 }
+
 .encuadre img {
   position:absolute;
   inset:0;
@@ -527,9 +682,19 @@ header p { margin:8px 0 0; color:var(--dorado); }
   object-fit:cover;
   pointer-events:none;
 }
-.control-encuadre { max-width:470px; margin-top:12px; }
-.control-encuadre label { display:block; margin:9px 0 5px; }
+
+.control-encuadre {
+  max-width:470px;
+  margin-top:12px;
+}
+
+.control-encuadre label {
+  display:block;
+  margin:9px 0 5px;
+}
+
 .control-encuadre input { width:100%; }
+
 .estado {
   margin:14px 0;
   padding:12px;
@@ -538,10 +703,57 @@ header p { margin:8px 0 0; color:var(--dorado); }
   border:1px solid var(--borde);
   line-height:1.5;
 }
+
 .separador {
   margin:26px 0;
   border:0;
   border-top:1px solid var(--borde);
+}
+
+.youtube-formulario {
+  padding:16px;
+  border:1px solid #d5bd86;
+  border-radius:10px;
+  background:#fbf8ed;
+}
+
+.youtube-formulario input {
+  width:100%;
+}
+
+.youtube-admin-miniatura {
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:145px;
+  height:100px;
+  overflow:hidden;
+  border-radius:7px;
+  background:#151515;
+  color:white;
+  font-size:30px;
+}
+
+.youtube-admin-miniatura img {
+  width:100%;
+  height:100%;
+  max-width:none;
+  max-height:none;
+  object-fit:cover;
+}
+
+.youtube-admin-miniatura span {
+  position:absolute;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  width:44px;
+  height:31px;
+  border-radius:9px;
+  background:#ed1b24;
+  color:white;
+  font-size:17px;
 }
 
 footer {
@@ -553,7 +765,10 @@ footer {
 }
 
 @media(max-width:950px) {
-  .tarjeta { grid-template-columns:38% minmax(0,1fr); }
+  .tarjeta {
+    grid-template-columns:38% minmax(0,1fr);
+  }
+
   .acciones {
     grid-column:1/-1;
     flex-direction:row;
@@ -561,16 +776,23 @@ footer {
     border-left:0;
     border-top:1px solid #e2d7bc;
   }
+
   .ficha-cabecera { grid-template-columns:1fr; }
   .portada-foto { background-attachment:scroll; }
 }
+
 @media(max-width:600px) {
   header {
     height:145px;
     padding:0;
     background:#12233f;
   }
-  .header-logo-sdu { width:72px; left:18px; }
+
+  .header-logo-sdu {
+    width:72px;
+    left:18px;
+  }
+
   header h1 {
     position:absolute;
     top:50%;
@@ -580,7 +802,9 @@ footer {
     font-size:27px;
     line-height:1.05;
   }
+
   header p { display:none; }
+
   .menu-mobile-sdu {
     position:absolute;
     right:18px;
@@ -598,6 +822,7 @@ footer {
     border-radius:14px;
     font-size:31px;
   }
+
   header nav {
     display:none!important;
     position:absolute;
@@ -610,11 +835,13 @@ footer {
     border-radius:14px;
     background:#12233f;
   }
+
   header nav.menu-mobile-abierto {
     display:flex!important;
     flex-direction:column;
     gap:6px;
   }
+
   header nav a {
     display:block;
     padding:13px;
@@ -622,6 +849,7 @@ footer {
     border-radius:8px;
     font-size:16px;
   }
+
   .portada-foto { padding:18px 12px 60px; }
   .encabezado { padding:21px 12px; }
   .encabezado h2 { font-size:27px; }
@@ -629,19 +857,26 @@ footer {
   .portada-imagen { height:270px; min-height:270px; }
   .nombre { font-size:24px; }
   .datos-portada { gap:16px; }
+
   .acciones {
     grid-column:auto;
     flex-direction:column;
   }
+
   .ficha-grande { padding:14px; }
   .ficha-nombre { font-size:27px; }
   .celda { padding:11px 7px; }
   .form-grid { grid-template-columns:1fr; }
   .campo-ancho { grid-column:auto; }
   .panel-admin { padding:17px; }
+
   .admin-anuncio {
     flex-direction:column;
     align-items:stretch;
+  }
+
+  .visualizador.youtube.short iframe {
+    width:min(100%,280px);
   }
 }
 </style>
@@ -675,7 +910,9 @@ footer {
     <a href="padrillos.html" class="activo">Padrillos</a>
     <a href="../favoritos.html">Favoritos</a>
     <a href="../index.html">Sobre SDU</a>
-    <a href="https://wa.me/59891909423" target="_blank" rel="noopener noreferrer">Contacto</a>
+    <a href="https://wa.me/59891909423"
+       target="_blank"
+       rel="noopener noreferrer">Contacto</a>
   </nav>
 </header>
 
@@ -701,6 +938,7 @@ footer {
   </div>
 
   <!-- LISTADO PUBLICO -->
+
   <div id="vistaLista">
     <div id="listaPadrillos" class="lista">
       <div class="aviso">Cargando padrillos...</div>
@@ -708,6 +946,7 @@ footer {
   </div>
 
   <!-- DETALLE PUBLICO -->
+
   <div id="vistaDetalle" hidden>
     <button
       type="button"
@@ -719,6 +958,7 @@ footer {
   </div>
 
   <!-- PANEL ADMINISTRADOR -->
+
   <div id="vistaAdmin" hidden>
 
     <div class="panel-admin">
@@ -735,6 +975,7 @@ footer {
       </div>
 
       <h2>Administración de padrillos</h2>
+
       <p class="ayuda">
         Desde acá podés crear, modificar, publicar y ocultar anuncios.
         Los datos genealógicos se toman de los caballos registrados en SDU.
@@ -744,6 +985,7 @@ footer {
     </div>
 
     <!-- FORMULARIO -->
+
     <div class="panel-admin" id="formularioAdmin" hidden>
       <h2 id="tituloFormulario">Nuevo padrillo</h2>
 
@@ -754,6 +996,7 @@ footer {
         <label for="buscarCaballoAdmin">
           Buscar caballo registrado en SDU
         </label>
+
         <input
           id="buscarCaballoAdmin"
           class="buscador-admin"
@@ -761,14 +1004,21 @@ footer {
           placeholder="Escribí el nombre del caballo"
           autocomplete="off">
 
-        <div id="sugerenciasCaballos" class="sugerencias" hidden></div>
+        <div
+          id="sugerenciasCaballos"
+          class="sugerencias"
+          hidden></div>
       </div>
 
-      <div id="caballoSeleccionado" class="caballo-elegido" hidden></div>
+      <div
+        id="caballoSeleccionado"
+        class="caballo-elegido"
+        hidden></div>
 
       <hr class="separador">
 
       <div class="form-grid">
+
         <div class="campo">
           <label for="ubicacion">Ubicación</label>
           <input id="ubicacion" placeholder="Ej.: Flores, Uruguay">
@@ -776,17 +1026,25 @@ footer {
 
         <div class="campo">
           <label for="precioUsd">Precio del servicio (USD)</label>
-          <input id="precioUsd" type="number" min="0" step="0.01">
+          <input
+            id="precioUsd"
+            type="number"
+            min="0"
+            step="0.01">
         </div>
 
         <div class="campo">
           <label for="modalidad">Modalidad</label>
-          <input id="modalidad" placeholder="Ej.: Monta natural">
+          <input
+            id="modalidad"
+            placeholder="Ej.: Monta natural">
         </div>
 
         <div class="campo">
           <label for="disponibilidad">Disponibilidad</label>
-          <input id="disponibilidad" placeholder="Ej.: Temporada 2026">
+          <input
+            id="disponibilidad"
+            placeholder="Ej.: Temporada 2026">
         </div>
 
         <div class="campo campo-ancho">
@@ -809,6 +1067,32 @@ footer {
           <textarea id="requisitos"></textarea>
         </div>
 
+        <div class="campo campo-ancho youtube-formulario">
+          <label for="youtubeUrl">
+            ▶ Video de YouTube o Short
+          </label>
+
+          <input
+            id="youtubeUrl"
+            type="url"
+            placeholder="https://youtube.com/shorts/..."
+            autocomplete="off">
+
+          <p class="ayuda">
+            Pegá el enlace de un video o Short de YouTube.
+            El video se reproducirá dentro de Sangres del Uruguay
+            sin ocupar espacio de almacenamiento en Supabase.
+            Podés agregar varios videos, uno por vez.
+          </p>
+
+          <p class="ayuda" id="ayudaVideoNuevo">
+            Si estás creando un padrillo nuevo, primero guardá
+            el anuncio y subí una fotografía de portada.
+            El enlace que escribas quedará en el formulario
+            para guardarlo después.
+          </p>
+        </div>
+
         <div class="campo">
           <label for="fechaInicio">Publicar desde</label>
           <input id="fechaInicio" type="date">
@@ -821,63 +1105,104 @@ footer {
 
         <div class="campo">
           <label for="orden">Orden de aparición</label>
-          <input id="orden" type="number" min="0" value="0">
+          <input
+            id="orden"
+            type="number"
+            min="0"
+            value="0">
         </div>
 
         <div class="campo">
           <label>Opciones de publicación</label>
+
           <label>
             <input id="destacado" type="checkbox">
             Destacado
           </label>
+
           <label>
             <input id="publicado" type="checkbox">
             Publicado
           </label>
         </div>
+
       </div>
 
       <p class="ayuda">
-        Todos los campos son opcionales salvo el caballo y una fotografía
-        para publicar. Los campos vacíos no se mostrarán al público.
+        Todos los campos son opcionales salvo el caballo y
+        una fotografía para publicar.
+        Los campos vacíos no se mostrarán al público.
         La moneda siempre será USD.
       </p>
 
       <div class="acciones-admin">
-        <button id="btnGuardarAnuncio" type="button" class="boton">
+        <button
+          id="btnGuardarAnuncio"
+          type="button"
+          class="boton">
           Guardar padrillo
         </button>
-        <button id="btnCancelarEdicion" type="button" class="boton boton-claro">
+
+        <button
+          id="btnCancelarEdicion"
+          type="button"
+          class="boton boton-claro">
           Cancelar
         </button>
       </div>
 
-      <div id="estadoGuardar" class="estado" hidden></div>
+      <div
+        id="estadoGuardar"
+        class="estado"
+        hidden></div>
 
-      <section id="gestionMultimedia" class="seccion" hidden>
+      <!-- MULTIMEDIA -->
+
+      <section
+        id="gestionMultimedia"
+        class="seccion"
+        hidden>
+
         <h3>Fotografías y videos</h3>
 
         <p class="ayuda">
-          Primero subí una fotografía. Esa será la portada.
-          Después podés subir más fotos o videos.
-          La fotografía de portada se puede mover y acercar.
+          Subí las fotografías directamente a SDU.
+          Los videos se agregan mediante enlaces de YouTube.
+          La primera fotografía será la portada.
+          Podés moverla, acercarla y cambiar su encuadre.
         </p>
 
         <div class="acciones-admin">
-          <label class="boton" for="subirFoto">+ Subir fotografía</label>
-          <input id="subirFoto" type="file"
-                 accept="image/jpeg,image/png,image/webp" hidden>
+          <label
+            class="boton"
+            for="subirFoto">+ Subir fotografía</label>
 
-          <label class="boton boton-claro" for="subirVideo">+ Subir video</label>
-          <input id="subirVideo" type="file"
-                 accept="video/mp4,video/webm,video/quicktime" hidden>
+          <input
+            id="subirFoto"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            hidden>
+
+          <button
+            id="btnIrVideo"
+            class="boton boton-claro"
+            type="button">
+            ▶ Agregar video de YouTube
+          </button>
         </div>
 
-        <div id="estadoMultimedia" class="estado" hidden></div>
+        <div
+          id="estadoMultimedia"
+          class="estado"
+          hidden></div>
+
         <div id="listaMultimediaAdmin"></div>
+
+        <!-- EDITOR DE PORTADA -->
 
         <div id="editorPortada" hidden>
           <hr class="separador">
+
           <h3>Encuadrar fotografía de portada</h3>
 
           <p class="ayuda">
@@ -887,41 +1212,86 @@ footer {
             Al abrir la foto, se mostrará completa.
           </p>
 
-          <div class="encuadre" id="vistaEncuadre">
-            <img id="imagenEncuadre" alt="Vista previa de portada">
+          <div
+            class="encuadre"
+            id="vistaEncuadre">
+            <img
+              id="imagenEncuadre"
+              alt="Vista previa de portada">
           </div>
 
           <div class="control-encuadre">
-            <label for="posicionX">Posición horizontal</label>
-            <input id="posicionX" type="range" min="0" max="100" value="50">
+            <label for="posicionX">
+              Posición horizontal
+            </label>
 
-            <label for="posicionY">Posición vertical</label>
-            <input id="posicionY" type="range" min="0" max="100" value="50">
+            <input
+              id="posicionX"
+              type="range"
+              min="0"
+              max="100"
+              value="50">
+
+            <label for="posicionY">
+              Posición vertical
+            </label>
+
+            <input
+              id="posicionY"
+              type="range"
+              min="0"
+              max="100"
+              value="50">
 
             <label for="zoomFoto">Zoom</label>
-            <input id="zoomFoto" type="range"
-                   min="1" max="4" step="0.05" value="1">
+
+            <input
+              id="zoomFoto"
+              type="range"
+              min="1"
+              max="4"
+              step="0.05"
+              value="1">
           </div>
 
           <div class="acciones-admin">
-            <button id="btnGuardarEncuadre" class="boton" type="button">
+            <button
+              id="btnGuardarEncuadre"
+              class="boton"
+              type="button">
               Guardar encuadre
             </button>
-            <button id="btnCentrarFoto" class="boton boton-claro" type="button">
+
+            <button
+              id="btnCentrarFoto"
+              class="boton boton-claro"
+              type="button">
               Centrar foto
             </button>
           </div>
         </div>
       </section>
+
     </div>
   </div>
 
 </main>
 </section>
 
-<div class="modal" id="modalFoto" role="dialog" aria-label="Fotografía ampliada">
-  <button type="button" id="cerrarModal" aria-label="Cerrar">×</button>
-  <img id="imagenModal" alt="Fotografía del padrillo">
+<div
+  class="modal"
+  id="modalFoto"
+  role="dialog"
+  aria-label="Fotografía ampliada">
+
+  <button
+    type="button"
+    id="cerrarModal"
+    aria-label="Cerrar">×</button>
+
+  <img
+    id="imagenModal"
+    alt="Fotografía del padrillo">
 </div>
 
 <footer>
@@ -959,7 +1329,9 @@ let contadorBusqueda = 0;
 
 const $ = id => document.getElementById(id);
 
-/* UTILIDADES */
+/* =====================================================
+   UTILIDADES
+===================================================== */
 
 function escapar(valor) {
   return String(valor ?? "")
@@ -992,19 +1364,32 @@ function enlaceWhatsApp(nombre) {
 }
 
 function dinero(valor) {
-  if (valor === null || valor === undefined || valor === "") {
+  if (
+    valor === null ||
+    valor === undefined ||
+    valor === ""
+  ) {
     return "";
   }
+
   const n = Number(valor);
+
   return Number.isFinite(n)
-    ? "USD " + n.toLocaleString("es-UY",{maximumFractionDigits:2})
+    ? "USD " + n.toLocaleString("es-UY",{
+        maximumFractionDigits:2
+      })
     : "";
 }
 
 function datoHTML(titulo,valor,clase="") {
-  if (valor === null || valor === undefined || texto(valor) === "") {
+  if (
+    valor === null ||
+    valor === undefined ||
+    texto(valor) === ""
+  ) {
     return "";
   }
+
   return `
     <div class="dato">
       <strong>${escapar(titulo)}</strong>
@@ -1013,9 +1398,14 @@ function datoHTML(titulo,valor,clase="") {
 }
 
 function celdaHTML(titulo,valor) {
-  if (valor === null || valor === undefined || texto(valor) === "") {
+  if (
+    valor === null ||
+    valor === undefined ||
+    texto(valor) === ""
+  ) {
     return "";
   }
+
   return `
     <div class="celda">
       <strong>${escapar(titulo)}</strong>
@@ -1025,18 +1415,29 @@ function celdaHTML(titulo,valor) {
 
 function cerrarBordesTabla(contenedor) {
   if (!contenedor) return;
-  const celdas = [...contenedor.querySelectorAll(".celda")];
+
+  const celdas = [
+    ...contenedor.querySelectorAll(".celda")
+  ];
+
   const total = celdas.length;
 
   celdas.forEach((celda,i) => {
     celda.style.borderRight =
-      i % 2 === 1 ? "none" : "1px solid #dfd0a7";
+      i % 2 === 1
+        ? "none"
+        : "1px solid #dfd0a7";
 
     const ultimaFila = total % 2 === 0 ? 2 : 1;
+
     if (i >= total - ultimaFila) {
       celda.style.borderBottom = "none";
     }
-    if (total % 2 === 1 && i === total - 1) {
+
+    if (
+      total % 2 === 1 &&
+      i === total - 1
+    ) {
       celda.style.gridColumn = "1 / -1";
       celda.style.borderRight = "none";
     }
@@ -1046,24 +1447,32 @@ function cerrarBordesTabla(contenedor) {
 function avisar(id,mensaje,error=false) {
   const elemento = $(id);
   if (!elemento) return;
+
   elemento.hidden = false;
   elemento.textContent = mensaje;
-  elemento.style.color = error ? "#972b2b" : "#17233b";
+
+  elemento.style.color =
+    error ? "#972b2b" : "#17233b";
 }
 
 function ocultarAviso(id) {
-  $(id).hidden = true;
-  $(id).textContent = "";
+  const elemento = $(id);
+  if (!elemento) return;
+
+  elemento.hidden = true;
+  elemento.textContent = "";
 }
 
 function errorRespuesta(respuesta,contenido) {
   let mensaje = "";
+
   try {
     const d = JSON.parse(contenido);
     mensaje = d.message || d.error || contenido;
   } catch {
     mensaje = contenido;
   }
+
   return "Error " + respuesta.status + ": " + mensaje;
 }
 
@@ -1079,27 +1488,41 @@ function cabecerasAdmin(json=false) {
     apikey:SUPABASE_KEY,
     Authorization:"Bearer " + sesion.access_token
   };
-  if (json) h["Content-Type"] = "application/json";
+
+  if (json) {
+    h["Content-Type"] = "application/json";
+  }
+
   return h;
 }
 
 async function consultar(tabla,filtros="",admin=false) {
   const respuesta = await fetch(
     SUPABASE_URL + "/rest/v1/" + tabla + filtros,
-    {headers:admin ? cabecerasAdmin() : cabecerasPublicas()}
+    {
+      headers:admin
+        ? cabecerasAdmin()
+        : cabecerasPublicas()
+    }
   );
 
   if (!respuesta.ok) {
-    throw new Error(errorRespuesta(
-      respuesta,await respuesta.text()
-    ));
+    throw new Error(
+      errorRespuesta(
+        respuesta,
+        await respuesta.text()
+      )
+    );
   }
+
   return respuesta.json();
 }
 
 async function escribir(tabla,metodo,datos,filtro="") {
   if (!autorizado || !sesion?.access_token) {
-    throw new Error("No hay sesión de administrador autorizada.");
+    throw new Error(
+      "No hay sesión de administrador autorizada."
+    );
   }
 
   const respuesta = await fetch(
@@ -1115,54 +1538,263 @@ async function escribir(tabla,metodo,datos,filtro="") {
   );
 
   const contenido = await respuesta.text();
+
   if (!respuesta.ok) {
-    throw new Error(errorRespuesta(respuesta,contenido));
+    throw new Error(
+      errorRespuesta(respuesta,contenido)
+    );
   }
 
   return contenido ? JSON.parse(contenido) : [];
 }
 
+/* =====================================================
+   YOUTUBE Y SHORTS
+===================================================== */
+
+function obtenerDatosYouTube(enlace) {
+  const valor = texto(enlace);
+
+  if (!valor) return null;
+
+  try {
+    const url = new URL(valor);
+    const host = url.hostname.toLowerCase()
+      .replace(/^www\./,"")
+      .replace(/^m\./,"");
+
+    if (url.protocol !== "https:") {
+      return null;
+    }
+
+    let id = "";
+    let esShort = false;
+
+    if (host === "youtu.be") {
+      id = url.pathname.split("/")[1] || "";
+
+    } else if (
+      host === "youtube.com" ||
+      host === "youtube-nocookie.com"
+    ) {
+      const partes = url.pathname
+        .split("/")
+        .filter(Boolean);
+
+      if (partes[0] === "watch") {
+        id = url.searchParams.get("v") || "";
+      } else if (
+        ["shorts","embed","live"].includes(partes[0])
+      ) {
+        id = partes[1] || "";
+        esShort = partes[0] === "shorts";
+      }
+    } else {
+      return null;
+    }
+
+    if (!/^[A-Za-z0-9_-]{11}$/.test(id)) {
+      return null;
+    }
+
+    return {id,esShort};
+
+  } catch {
+    return null;
+  }
+}
+
+function esVideoYouTube(m) {
+  return Boolean(
+    obtenerDatosYouTube(m?.archivo_path)
+  );
+}
+
+function idYouTube(m) {
+  return obtenerDatosYouTube(m?.archivo_path)?.id || "";
+}
+
+function enlaceEmbedYouTube(enlace) {
+  const datos = obtenerDatosYouTube(enlace);
+
+  if (!datos) return "";
+
+  return (
+    "https://www.youtube-nocookie.com/embed/" +
+    encodeURIComponent(datos.id) +
+    "?rel=0"
+  );
+}
+
+function miniaturaYouTube(enlace) {
+  const datos = obtenerDatosYouTube(enlace);
+
+  if (!datos) return "";
+
+  return (
+    "https://i.ytimg.com/vi/" +
+    encodeURIComponent(datos.id) +
+    "/hqdefault.jpg"
+  );
+}
+
+function esShortYouTube(enlace) {
+  return Boolean(
+    obtenerDatosYouTube(enlace)?.esShort
+  );
+}
+
+async function guardarVideoYouTube(idPadrillo,enlace) {
+  const datos = obtenerDatosYouTube(enlace);
+
+  if (!datos) {
+    throw new Error(
+      "El enlace de YouTube no es válido. " +
+      "Copialo desde Compartir → Copiar enlace."
+    );
+  }
+
+  await renovarSiHaceFalta();
+
+  const existentes = await consultar(
+    "padrillos_medios",
+    "?select=id,tipo,archivo_path,orden" +
+    "&padrillo_id=eq." + Number(idPadrillo) +
+    "&order=orden.asc,id.asc",
+    true
+  );
+
+  if (!existentes.some(m => m.tipo === "foto")) {
+    throw new Error(
+      "Primero tenés que subir una fotografía de portada."
+    );
+  }
+
+  const repetido = existentes.some(m => {
+    const otro = obtenerDatosYouTube(m.archivo_path);
+    return otro?.id === datos.id;
+  });
+
+  if (repetido) {
+    throw new Error(
+      "Este video de YouTube ya está agregado a este padrillo."
+    );
+  }
+
+  const siguienteOrden = existentes.length
+    ? Math.max(
+        ...existentes.map(m => Number(m.orden || 0))
+      ) + 1
+    : 0;
+
+  const enlaceLimpio = datos.esShort
+    ? "https://www.youtube.com/shorts/" + datos.id
+    : "https://www.youtube.com/watch?v=" + datos.id;
+
+  const nuevoMedio = {
+    padrillo_id:Number(idPadrillo),
+    tipo:"video",
+    archivo_path:enlaceLimpio,
+    orden:siguienteOrden,
+    posicion_x:50,
+    posicion_y:50,
+    zoom:1
+  };
+
+  const guardados = await escribir(
+    "padrillos_medios",
+    "POST",
+    nuevoMedio
+  );
+
+  if (!guardados.length) {
+    throw new Error(
+      "Supabase no confirmó que el enlace se haya guardado."
+    );
+  }
+
+  return guardados[0];
+}
+
+/* =====================================================
+   ARCHIVOS Y FOTOGRAFIAS
+===================================================== */
+
 function urlMedio(m) {
   const path = texto(m?.archivo_path);
+
   if (!path) return "";
 
-  if (/^https:\/\//i.test(path)) return path;
+  if (/^https:\/\//i.test(path)) {
+    return path;
+  }
 
   let limpio = path.replace(/^\/+/,"");
+
   if (limpio.startsWith("padrillos/")) {
     limpio = limpio.slice("padrillos/".length);
   }
 
-  return SUPABASE_URL +
+  return (
+    SUPABASE_URL +
     "/storage/v1/object/public/padrillos/" +
-    limpio.split("/").map(encodeURIComponent).join("/");
+    limpio.split("/")
+      .map(encodeURIComponent)
+      .join("/")
+  );
 }
 
 function ordenarMedios(id) {
-  const lista = [...(mediosPorPadrillo.get(Number(id)) || [])]
+  const lista = [
+    ...(mediosPorPadrillo.get(Number(id)) || [])
+  ]
     .filter(m => m.archivo_path)
     .sort((a,b) =>
-      Number(a.orden || 0)-Number(b.orden || 0) ||
-      Number(a.id)-Number(b.id)
+      Number(a.orden || 0) -
+      Number(b.orden || 0) ||
+      Number(a.id) -
+      Number(b.id)
     );
 
-  const fotos = lista.filter(m => m.tipo === "foto");
+  const fotos = lista.filter(
+    m => m.tipo === "foto"
+  );
+
   if (!fotos.length) return [];
 
   const primera = fotos[0];
-  return [primera,...lista.filter(m => m.id !== primera.id)];
+
+  return [
+    primera,
+    ...lista.filter(m => m.id !== primera.id)
+  ];
 }
 
 function estiloEncuadre(m) {
-  const x = Math.max(0,Math.min(100,Number(m.posicion_x ?? 50)));
-  const y = Math.max(0,Math.min(100,Number(m.posicion_y ?? 50)));
-  const z = Math.max(1,Math.min(4,Number(m.zoom ?? 1)));
+  const x = Math.max(
+    0,
+    Math.min(100,Number(m.posicion_x ?? 50))
+  );
 
-  return `object-position:${x}% ${y}%;transform:scale(${z});`;
+  const y = Math.max(
+    0,
+    Math.min(100,Number(m.posicion_y ?? 50))
+  );
+
+  const z = Math.max(
+    1,
+    Math.min(4,Number(m.zoom ?? 1))
+  );
+
+  return (
+    `object-position:${x}% ${y}%;` +
+    `transform:scale(${z});`
+  );
 }
 
 function portada(p) {
-  return ordenarMedios(p.id).find(m => m.tipo === "foto") || null;
+  return ordenarMedios(p.id)
+    .find(m => m.tipo === "foto") || null;
 }
 
 /* =====================================================
@@ -1172,6 +1804,7 @@ function portada(p) {
 async function cargarPadrillos() {
   try {
     const hoy = new Date();
+
     const fechaHoy = [
       hoy.getFullYear(),
       String(hoy.getMonth()+1).padStart(2,"0"),
@@ -1180,12 +1813,16 @@ async function cargarPadrillos() {
 
     const todos = await consultar(
       "padrillos",
-      "?select=*&publicado=eq.true&order=destacado.desc,orden.asc,id.asc"
+      "?select=*" +
+      "&publicado=eq.true" +
+      "&order=destacado.desc,orden.asc,id.asc"
     );
 
     anuncios = todos.filter(p =>
-      (!p.fecha_inicio || p.fecha_inicio <= fechaHoy) &&
-      (!p.fecha_fin || p.fecha_fin >= fechaHoy)
+      (!p.fecha_inicio ||
+        p.fecha_inicio <= fechaHoy) &&
+      (!p.fecha_fin ||
+        p.fecha_fin >= fechaHoy)
     );
 
     caballosPorId = new Map();
@@ -1193,42 +1830,70 @@ async function cargarPadrillos() {
 
     if (anuncios.length) {
       const idsCaballos = [
-        ...new Set(anuncios.map(p => Number(p.caballo_id)))
+        ...new Set(
+          anuncios.map(
+            p => Number(p.caballo_id)
+          )
+        )
       ].filter(Number.isFinite);
 
-      const idsAnuncios = anuncios.map(p => Number(p.id));
+      const idsAnuncios = anuncios.map(
+        p => Number(p.id)
+      );
 
       const [caballos,medios] = await Promise.all([
-        consultar("Caballos",
-          "?select=*&id=in.(" + idsCaballos.join(",") + ")"),
-        consultar("padrillos_medios",
-          "?select=*&padrillo_id=in.(" + idsAnuncios.join(",") +
-          ")&order=orden.asc,id.asc")
+        consultar(
+          "Caballos",
+          "?select=*&id=in.(" +
+            idsCaballos.join(",") +
+          ")"
+        ),
+        consultar(
+          "padrillos_medios",
+          "?select=*" +
+          "&padrillo_id=in.(" +
+            idsAnuncios.join(",") +
+          ")" +
+          "&order=orden.asc,id.asc"
+        )
       ]);
 
       caballosPorId = new Map(
-        caballos.map(c => [Number(c.id),c])
+        caballos.map(c => [
+          Number(c.id),
+          c
+        ])
       );
 
       medios.forEach(m => {
         const id = Number(m.padrillo_id);
+
         if (!mediosPorPadrillo.has(id)) {
           mediosPorPadrillo.set(id,[]);
         }
+
         mediosPorPadrillo.get(id).push(m);
       });
     }
 
     mostrarRuta();
+
   } catch(error) {
     console.error(error);
+
     $("listaPadrillos").innerHTML =
-      '<div class="aviso">No se pudo cargar Padrillos. Revisá la conexión y los permisos de Supabase.</div>';
+      '<div class="aviso">' +
+      'No se pudo cargar Padrillos. ' +
+      'Revisá la conexión y los permisos de Supabase.' +
+      '</div>';
   }
 }
 
 function htmlTarjeta(p) {
-  const c = caballosPorId.get(Number(p.caballo_id));
+  const c = caballosPorId.get(
+    Number(p.caballo_id)
+  );
+
   if (!c) return "";
 
   const nombre = texto(c.Nombre);
@@ -1236,7 +1901,9 @@ function htmlTarjeta(p) {
 
   const subtitulo = [
     texto(c.Raza),
-    c.Nacimiento ? String(c.Nacimiento).slice(0,4) : ""
+    c.Nacimiento
+      ? String(c.Nacimiento).slice(0,4)
+      : ""
   ].filter(Boolean).join(" · ");
 
   return `
@@ -1244,44 +1911,61 @@ function htmlTarjeta(p) {
 
       <div class="portada-imagen">
         ${foto ? `
-          <img src="${escapar(urlMedio(foto))}"
-               alt="${escapar(nombre)}"
-               loading="lazy"
-               style="${estiloEncuadre(foto)}">
-        ` : '<div class="sin-foto">Sin fotografía</div>'}
+          <img
+            src="${escapar(urlMedio(foto))}"
+            alt="${escapar(nombre)}"
+            loading="lazy"
+            style="${estiloEncuadre(foto)}">
+        ` : `
+          <div class="sin-foto">
+            Sin fotografía
+          </div>
+        `}
 
-        ${p.destacado ?
-          '<span class="destacado">DESTACADO</span>' : ""}
+        ${p.destacado
+          ? '<span class="destacado">DESTACADO</span>'
+          : ""}
       </div>
 
       <div class="tarjeta-info">
-        <a class="nombre"
-           href="${escapar(urlCaballo(nombre))}">
+        <a
+          class="nombre"
+          href="${escapar(urlCaballo(nombre))}">
           ${escapar(nombre)}
         </a>
 
-        ${subtitulo ?
-          `<p class="subtitulo">${escapar(subtitulo)}</p>` : ""}
+        ${subtitulo
+          ? `<p class="subtitulo">${escapar(subtitulo)}</p>`
+          : ""}
 
         <div class="datos-portada">
           ${datoHTML("Ubicación",p.ubicacion)}
-          ${datoHTML("Precio del servicio",dinero(p.precio_usd),"precio")}
+          ${datoHTML(
+            "Precio del servicio",
+            dinero(p.precio_usd),
+            "precio"
+          )}
           ${datoHTML("Modalidad",p.modalidad)}
           ${datoHTML("Disponibilidad",p.disponibilidad)}
         </div>
       </div>
 
       <div class="acciones">
-        <a class="boton"
-           href="?id=${Number(p.id)}">Ver padrillo</a>
+        <a
+          class="boton"
+          href="?id=${Number(p.id)}">
+          Ver padrillo
+        </a>
 
-        <a class="boton boton-claro"
-           target="_blank"
-           rel="noopener noreferrer"
-           href="${escapar(enlaceWhatsApp(nombre))}">
+        <a
+          class="boton boton-claro"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="${escapar(enlaceWhatsApp(nombre))}">
           Consultar por WhatsApp
         </a>
       </div>
+
     </article>`;
 }
 
@@ -1290,43 +1974,59 @@ function mostrarListado() {
 
   if (!anuncios.length) {
     lista.innerHTML =
-      '<div class="aviso">Todavía no hay padrillos publicados.</div>';
+      '<div class="aviso">' +
+      'Todavía no hay padrillos publicados.' +
+      '</div>';
     return;
   }
 
-  lista.innerHTML = anuncios.map(htmlTarjeta).join("") ||
-    '<div class="aviso">No hay anuncios disponibles.</div>';
+  lista.innerHTML =
+    anuncios.map(htmlTarjeta).join("") ||
+    '<div class="aviso">' +
+    'No hay anuncios disponibles.' +
+    '</div>';
 }
+
+/* =====================================================
+   PEDIGREE
+===================================================== */
 
 function nodo(nombre,tipo,principal=false) {
   const valor = texto(nombre);
 
-  return `<div class="pedigree-box ${tipo}">
-    ${valor ? (
-      principal
-        ? `<strong>${escapar(valor)}</strong>`
-        : `<a href="${escapar(urlCaballo(valor))}">${escapar(valor)}</a>`
-    ) : ""}
-  </div>`;
+  return `
+    <div class="pedigree-box ${tipo}">
+      ${valor ? (
+        principal
+          ? `<strong>${escapar(valor)}</strong>`
+          : `<a href="${escapar(urlCaballo(valor))}">
+               ${escapar(valor)}
+             </a>`
+      ) : ""}
+    </div>`;
 }
 
 function crearPedigree(c) {
   return `
     <div class="pedigree-scroll">
       <div class="pedigree">
+
         <div class="generacion sujeto">
           ${nodo(c.Nombre,"principal",true)}
         </div>
+
         <div class="generacion padres">
           ${nodo(c.Padre,"macho")}
           ${nodo(c.Madre,"hembra")}
         </div>
+
         <div class="generacion abuelos">
           ${nodo(c.abuelo_paterno,"macho")}
           ${nodo(c.abuela_paterno,"hembra")}
           ${nodo(c.abuelo_materno,"macho")}
           ${nodo(c.abuela_materna,"hembra")}
         </div>
+
         <div class="generacion bisabuelos">
           ${nodo(c.bisabuelo_pp,"macho")}
           ${nodo(c.bisabuela_pp,"hembra")}
@@ -1337,22 +2037,39 @@ function crearPedigree(c) {
           ${nodo(c.bisabuelo_mm,"macho")}
           ${nodo(c.bisabuela_mm,"hembra")}
         </div>
+
       </div>
     </div>`;
 }
 
+/* =====================================================
+   DETALLE DEL PADRILLO
+===================================================== */
+
 function mostrarDetalle(id) {
-  const p = anuncios.find(a => Number(a.id) === Number(id));
+  const p = anuncios.find(
+    a => Number(a.id) === Number(id)
+  );
+
   const cont = $("contenidoDetalle");
 
   if (!p) {
-    cont.innerHTML = '<div class="aviso">No se encontró el padrillo.</div>';
+    cont.innerHTML =
+      '<div class="aviso">' +
+      'No se encontró el padrillo.' +
+      '</div>';
+
   } else {
-    const c = caballosPorId.get(Number(p.caballo_id));
+    const c = caballosPorId.get(
+      Number(p.caballo_id)
+    );
 
     if (!c) {
       cont.innerHTML =
-        '<div class="aviso">No se encontró su ficha genealógica.</div>';
+        '<div class="aviso">' +
+        'No se encontró su ficha genealógica.' +
+        '</div>';
+
     } else {
       const nombre = texto(c.Nombre);
       const medios = ordenarMedios(p.id);
@@ -1360,57 +2077,114 @@ function mostrarDetalle(id) {
 
       cont.innerHTML = `
         <article class="ficha-grande">
+
           <div class="ficha-cabecera">
+
             <div class="galeria">
-              <div class="visualizador" id="visualizador">
+              <div
+                class="visualizador"
+                id="visualizador">
+
                 ${foto ? `
-                  <img id="fotoInicial"
-                       src="${escapar(urlMedio(foto))}"
-                       alt="${escapar(nombre)}">
-                ` : '<div class="sin-foto">Sin fotografía</div>'}
+                  <img
+                    id="fotoInicial"
+                    src="${escapar(urlMedio(foto))}"
+                    alt="${escapar(nombre)}">
+                ` : `
+                  <div class="sin-foto">
+                    Sin fotografía
+                  </div>
+                `}
+
               </div>
-              <div class="miniaturas" id="miniaturas"></div>
+
+              <div
+                class="miniaturas"
+                id="miniaturas"></div>
             </div>
 
             <div>
-              <h2 class="ficha-nombre">${escapar(nombre)}</h2>
-              <a class="ficha-link"
-                 href="${escapar(urlCaballo(nombre))}">
+              <h2 class="ficha-nombre">
+                ${escapar(nombre)}
+              </h2>
+
+              <a
+                class="ficha-link"
+                href="${escapar(urlCaballo(nombre))}">
                 Ver ficha genealógica en Sangres del Uruguay ↗
               </a>
 
-              <div class="tabla-datos" id="tablaDatos">
+              <div
+                class="tabla-datos"
+                id="tablaDatos">
+
                 ${celdaHTML("Raza",c.Raza)}
-                ${celdaHTML("Nacimiento",
-                  c.Nacimiento ?
-                  String(c.Nacimiento).split("-").reverse().join("/") : "")}
+
+                ${celdaHTML(
+                  "Nacimiento",
+                  c.Nacimiento
+                    ? String(c.Nacimiento)
+                        .split("-")
+                        .reverse()
+                        .join("/")
+                    : ""
+                )}
+
                 ${celdaHTML("Pelo",c.Pelo)}
                 ${celdaHTML("RP",c.RP)}
                 ${celdaHTML("Ubicación",p.ubicacion)}
-                ${celdaHTML("Precio del servicio",dinero(p.precio_usd))}
+
+                ${celdaHTML(
+                  "Precio del servicio",
+                  dinero(p.precio_usd)
+                )}
+
                 ${celdaHTML("Modalidad",p.modalidad)}
-                ${celdaHTML("Disponibilidad",p.disponibilidad)}
+                ${celdaHTML(
+                  "Disponibilidad",
+                  p.disponibilidad
+                )}
+
               </div>
 
               <div style="margin-top:18px">
-                <a class="boton"
-                   href="${escapar(enlaceWhatsApp(nombre))}"
-                   target="_blank"
-                   rel="noopener noreferrer">
+                <a
+                  class="boton"
+                  href="${escapar(enlaceWhatsApp(nombre))}"
+                  target="_blank"
+                  rel="noopener noreferrer">
                   Consultar servicio por WhatsApp
                 </a>
               </div>
             </div>
+
           </div>
 
-          ${seccionOpcional("Descripción",p.descripcion)}
+          ${seccionOpcional(
+            "Descripción",
+            p.descripcion
+          )}
+
           <section class="seccion">
             <h3>Pedigree</h3>
             ${crearPedigree(c)}
           </section>
-          ${seccionOpcional("Condiciones del servicio",p.condiciones_servicio)}
-          ${seccionOpcional("Garantía de preñez",p.garantia_prenez)}
-          ${seccionOpcional("Requisitos sanitarios",p.requisitos_sanitarios)}
+
+          ${seccionOpcional(
+            "Condiciones del servicio",
+            p.condiciones_servicio
+          )}
+
+          ${seccionOpcional(
+            "Garantía de preñez",
+            p.garantia_prenez
+          )}
+
+          ${seccionOpcional(
+            "Requisitos sanitarios",
+            p.requisitos_sanitarios
+          )}
+
         </article>`;
 
       cerrarBordesTabla($("tablaDatos"));
@@ -1419,14 +2193,38 @@ function mostrarDetalle(id) {
 
       medios.forEach((m,i) => {
         const b = document.createElement("button");
+
         b.type = "button";
-        b.className = "miniatura" + (i === 0 ? " activa" : "");
+        b.className =
+          "miniatura" +
+          (i === 0 ? " activa" : "");
+
+        b.setAttribute(
+          "aria-label",
+          m.tipo === "foto"
+            ? "Ver fotografía " + (i+1)
+            : "Reproducir video " + (i+1)
+        );
 
         if (m.tipo === "foto") {
           const img = document.createElement("img");
+
           img.src = urlMedio(m);
           img.alt = "Fotografía " + (i+1);
           b.appendChild(img);
+
+        } else if (esVideoYouTube(m)) {
+          const img = document.createElement("img");
+          img.src = miniaturaYouTube(m.archivo_path);
+          img.alt = "Miniatura de YouTube";
+          img.loading = "lazy";
+          b.appendChild(img);
+
+          const icono = document.createElement("span");
+          icono.className = "play";
+          icono.textContent = "▶";
+          b.appendChild(icono);
+
         } else {
           const icono = document.createElement("span");
           icono.className = "play";
@@ -1436,9 +2234,13 @@ function mostrarDetalle(id) {
 
         b.onclick = () => {
           cambiarMedio(m,nombre);
-          miniaturas.querySelectorAll("button").forEach(x =>
-            x.classList.remove("activa")
-          );
+
+          miniaturas
+            .querySelectorAll("button")
+            .forEach(x =>
+              x.classList.remove("activa")
+            );
+
           b.classList.add("activa");
         };
 
@@ -1447,58 +2249,118 @@ function mostrarDetalle(id) {
 
       if ($("fotoInicial")) {
         $("fotoInicial").onclick = () =>
-          abrirFoto($("fotoInicial").src,nombre);
+          abrirFoto(
+            $("fotoInicial").src,
+            nombre
+          );
       }
     }
   }
 
   $("vistaLista").hidden = true;
   $("vistaDetalle").hidden = false;
+
   window.scrollTo(0,0);
 }
 
 function seccionOpcional(titulo,valor) {
   if (!texto(valor)) return "";
+
   return `
     <section class="seccion">
       <h3>${escapar(titulo)}</h3>
-      <div class="descripcion">${escapar(valor)}</div>
+      <div class="descripcion">
+        ${escapar(valor)}
+      </div>
     </section>`;
 }
 
+/* =====================================================
+   REPRODUCTOR DE FOTOS Y VIDEOS
+===================================================== */
+
 function cambiarMedio(m,nombre) {
   const v = $("visualizador");
+
   v.replaceChildren();
+  v.classList.remove("youtube","short");
+
   const url = urlMedio(m);
 
   if (m.tipo === "foto") {
     const img = document.createElement("img");
+
     img.src = url;
     img.alt = nombre;
-    img.onclick = () => abrirFoto(url,nombre);
+
+    img.onclick = () =>
+      abrirFoto(url,nombre);
+
     v.appendChild(img);
-  } else if (/^https:\/\//i.test(texto(m.archivo_path))) {
+
+  } else if (esVideoYouTube(m)) {
+    const iframe = document.createElement("iframe");
+
+    iframe.src = enlaceEmbedYouTube(
+      m.archivo_path
+    );
+
+    iframe.title = "Video de " + nombre;
+
+    iframe.allow =
+      "accelerometer; autoplay; clipboard-write; " +
+      "encrypted-media; gyroscope; picture-in-picture; " +
+      "web-share";
+
+    iframe.allowFullscreen = true;
+
+    iframe.referrerPolicy =
+      "strict-origin-when-cross-origin";
+
+    v.classList.add("youtube");
+
+    if (esShortYouTube(m.archivo_path)) {
+      v.classList.add("short");
+    }
+
+    v.appendChild(iframe);
+
+  } else if (
+    /^https:\/\//i.test(
+      texto(m.archivo_path)
+    )
+  ) {
     const a = document.createElement("a");
+
     a.className = "boton";
     a.href = url;
     a.target = "_blank";
     a.rel = "noopener noreferrer";
     a.textContent = "▶ Abrir video";
+
     v.appendChild(a);
+
   } else {
     const video = document.createElement("video");
+
     video.src = url;
     video.controls = true;
     video.playsInline = true;
     video.preload = "metadata";
+
     v.appendChild(video);
   }
 }
 
 function mostrarRuta() {
-  if ($("vistaAdmin").hidden === false) return;
+  if ($("vistaAdmin").hidden === false) {
+    return;
+  }
 
-  const params = new URLSearchParams(location.search);
+  const params = new URLSearchParams(
+    location.search
+  );
+
   const id = params.get("id");
 
   if (id) {
@@ -1512,7 +2374,9 @@ function mostrarRuta() {
 
 function abrirFoto(src,nombre) {
   $("imagenModal").src = src;
-  $("imagenModal").alt = nombre || "Fotografía del padrillo";
+  $("imagenModal").alt =
+    nombre || "Fotografía del padrillo";
+
   $("modalFoto").classList.add("visible");
   document.body.style.overflow = "hidden";
 }
@@ -1528,7 +2392,8 @@ function cerrarFoto() {
 
 async function verificarPermiso(token) {
   const respuesta = await fetch(
-    SUPABASE_URL + "/rest/v1/rpc/es_admin_padrillos",
+    SUPABASE_URL +
+      "/rest/v1/rpc/es_admin_padrillos",
     {
       method:"POST",
       headers:{
@@ -1551,27 +2416,36 @@ async function verificarPermiso(token) {
 }
 
 async function recuperarSesion() {
-  const guardado = localStorage.getItem("sesionAdminSdU");
+  const guardado = localStorage.getItem(
+    "sesionAdminSdU"
+  );
+
   if (!guardado) return false;
 
   let anterior;
+
   try {
     anterior = JSON.parse(guardado);
   } catch {
     return false;
   }
 
-  if (!anterior.refresh_token) return false;
+  if (!anterior.refresh_token) {
+    return false;
+  }
 
   const r = await fetch(
-    SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+    SUPABASE_URL +
+      "/auth/v1/token?grant_type=refresh_token",
     {
       method:"POST",
       headers:{
         apikey:SUPABASE_KEY,
         "Content-Type":"application/json"
       },
-      body:JSON.stringify({refresh_token:anterior.refresh_token})
+      body:JSON.stringify({
+        refresh_token:anterior.refresh_token
+      })
     }
   );
 
@@ -1585,8 +2459,14 @@ async function recuperarSesion() {
 
   sesion = nueva;
   autorizado = true;
-  localStorage.setItem("sesionAdminSdU",JSON.stringify(nueva));
+
+  localStorage.setItem(
+    "sesionAdminSdU",
+    JSON.stringify(nueva)
+  );
+
   actualizarBotonesAdmin();
+
   return true;
 }
 
@@ -1601,22 +2481,30 @@ async function iniciarAdmin() {
     return;
   }
 
-  const email = prompt("Email del administrador de SDU:");
+  const email = prompt(
+    "Email del administrador de SDU:"
+  );
+
   if (!email) return;
 
   const password = prompt("Contraseña:");
+
   if (!password) return;
 
   try {
     const r = await fetch(
-      SUPABASE_URL + "/auth/v1/token?grant_type=password",
+      SUPABASE_URL +
+        "/auth/v1/token?grant_type=password",
       {
         method:"POST",
         headers:{
           apikey:SUPABASE_KEY,
           "Content-Type":"application/json"
         },
-        body:JSON.stringify({email,password})
+        body:JSON.stringify({
+          email,
+          password
+        })
       }
     );
 
@@ -1626,16 +2514,27 @@ async function iniciarAdmin() {
     }
 
     const datos = await r.json();
-    const permiso = await verificarPermiso(datos.access_token);
+
+    const permiso = await verificarPermiso(
+      datos.access_token
+    );
 
     if (!permiso) {
-      alert("Esta cuenta no tiene permiso para administrar Padrillos.");
+      alert(
+        "Esta cuenta no tiene permiso " +
+        "para administrar Padrillos."
+      );
       return;
     }
 
     sesion = datos;
     autorizado = true;
-    localStorage.setItem("sesionAdminSdU",JSON.stringify(datos));
+
+    localStorage.setItem(
+      "sesionAdminSdU",
+      JSON.stringify(datos)
+    );
+
     actualizarBotonesAdmin();
     abrirAdministracion();
 
@@ -1648,26 +2547,47 @@ async function iniciarAdmin() {
 function cerrarSesionAdmin() {
   sesion = null;
   autorizado = false;
+
   localStorage.removeItem("sesionAdminSdU");
+
   actualizarBotonesAdmin();
   volverPublico();
 }
 
 async function renovarSiHaceFalta() {
-  if (!autorizado || !sesion?.access_token) {
-    throw new Error("Iniciá sesión nuevamente.");
+  if (
+    !autorizado ||
+    !sesion?.access_token
+  ) {
+    throw new Error(
+      "Iniciá sesión nuevamente."
+    );
   }
 
-  const vencimiento = Number(sesion.expires_at || 0);
-  const ahora = Math.floor(Date.now()/1000);
+  const vencimiento = Number(
+    sesion.expires_at || 0
+  );
 
-  if (vencimiento && vencimiento > ahora+60) return;
+  const ahora = Math.floor(
+    Date.now()/1000
+  );
+
+  if (
+    vencimiento &&
+    vencimiento > ahora+60
+  ) {
+    return;
+  }
 
   const ok = await recuperarSesion();
+
   if (!ok) {
     autorizado = false;
     actualizarBotonesAdmin();
-    throw new Error("La sesión venció. Iniciá sesión nuevamente.");
+
+    throw new Error(
+      "La sesión venció. Iniciá sesión nuevamente."
+    );
   }
 }
 
@@ -1683,9 +2603,14 @@ async function abrirAdministracion() {
   $("vistaAdmin").hidden = false;
   $("formularioAdmin").hidden = true;
 
-  history.replaceState({},"","padrillos.html?admin=1");
+  history.replaceState(
+    {},
+    "",
+    "padrillos.html?admin=1"
+  );
 
   await cargarAdmin();
+
   window.scrollTo(0,0);
 }
 
@@ -1693,74 +2618,111 @@ async function cargarAdmin() {
   try {
     await renovarSiHaceFalta();
 
-    $("listaAdmin").innerHTML = "<p>Cargando anuncios...</p>";
+    $("listaAdmin").innerHTML =
+      "<p>Cargando anuncios...</p>";
 
     anunciosAdmin = await consultar(
       "padrillos",
-      "?select=*&order=destacado.desc,orden.asc,id.asc",
+      "?select=*" +
+      "&order=destacado.desc,orden.asc,id.asc",
       true
     );
 
-    const ids = [...new Set(
-      anunciosAdmin.map(a => Number(a.caballo_id))
-    )].filter(Number.isFinite);
+    const ids = [
+      ...new Set(
+        anunciosAdmin.map(
+          a => Number(a.caballo_id)
+        )
+      )
+    ].filter(Number.isFinite);
 
     let nombres = new Map();
 
     if (ids.length) {
       const caballos = await consultar(
         "Caballos",
-        "?select=id,Nombre&id=in.(" + ids.join(",") + ")",
+        "?select=id,Nombre&id=in.(" +
+          ids.join(",") +
+        ")",
         true
       );
+
       nombres = new Map(
-        caballos.map(c => [Number(c.id),c.Nombre])
+        caballos.map(c => [
+          Number(c.id),
+          c.Nombre
+        ])
       );
     }
 
     if (!anunciosAdmin.length) {
       $("listaAdmin").innerHTML =
-        '<div class="aviso">Todavía no hay padrillos cargados.</div>';
+        '<div class="aviso">' +
+        'Todavía no hay padrillos cargados.' +
+        '</div>';
+
       return;
     }
 
-    $("listaAdmin").innerHTML = anunciosAdmin.map(p => `
-      <div class="admin-anuncio">
-        <div>
-          <strong>${escapar(nombres.get(Number(p.caballo_id)) ||
-            "Caballo ID " + p.caballo_id)}</strong>
+    $("listaAdmin").innerHTML = anunciosAdmin.map(
+      p => `
+        <div class="admin-anuncio">
+          <div>
+            <strong>
+              ${escapar(
+                nombres.get(Number(p.caballo_id)) ||
+                "Caballo ID " + p.caballo_id
+              )}
+            </strong>
 
-          <small>
-            ${p.publicado ? "Publicado" : "Oculto"}
-            ${p.destacado ? " · Destacado" : ""}
-            ${p.ubicacion ? " · " + escapar(p.ubicacion) : ""}
-          </small>
+            <small>
+              ${p.publicado ? "Publicado" : "Oculto"}
+              ${p.destacado ? " · Destacado" : ""}
+              ${p.ubicacion
+                ? " · " + escapar(p.ubicacion)
+                : ""}
+            </small>
+          </div>
+
+          <button
+            type="button"
+            class="boton"
+            data-editar="${Number(p.id)}">
+            Editar
+          </button>
         </div>
+      `
+    ).join("");
 
-        <button type="button"
-                class="boton"
-                data-editar="${Number(p.id)}">
-          Editar
-        </button>
-      </div>
-    `).join("");
-
-    $("listaAdmin").querySelectorAll("[data-editar]")
+    $("listaAdmin")
+      .querySelectorAll("[data-editar]")
       .forEach(b => {
-        b.onclick = () => editarAnuncio(Number(b.dataset.editar));
+        b.onclick = () =>
+          editarAnuncio(
+            Number(b.dataset.editar)
+          );
       });
 
   } catch(error) {
     console.error(error);
+
     $("listaAdmin").innerHTML =
-      '<div class="aviso">' + escapar(error.message) + '</div>';
+      '<div class="aviso">' +
+      escapar(error.message) +
+      '</div>';
   }
 }
 
 function volverPublico() {
   $("vistaAdmin").hidden = true;
   $("formularioAdmin").hidden = true;
-  history.replaceState({},"","padrillos.html");
+
+  history.replaceState(
+    {},
+    "",
+    "padrillos.html"
+  );
+
   cargarPadrillos();
 }
 
@@ -1769,9 +2731,11 @@ function volverPublico() {
 ===================================================== */
 
 function limpiarFormulario() {
-  $("formularioAdmin").querySelectorAll(
-    "input:not([type=checkbox]):not([type=file]),textarea"
-  ).forEach(c => c.value = "");
+  $("formularioAdmin")
+    .querySelectorAll(
+      "input:not([type=checkbox]):not([type=file]),textarea"
+    )
+    .forEach(c => c.value = "");
 
   $("destacado").checked = false;
   $("publicado").checked = false;
@@ -1780,6 +2744,7 @@ function limpiarFormulario() {
   $("editarId").value = "";
   $("caballoId").value = "";
   $("buscarCaballoAdmin").value = "";
+  $("youtubeUrl").value = "";
 
   caballoElegido = null;
   medioPortadaAdmin = null;
@@ -1788,6 +2753,7 @@ function limpiarFormulario() {
   $("sugerenciasCaballos").hidden = true;
   $("gestionMultimedia").hidden = true;
   $("editorPortada").hidden = true;
+
   $("listaMultimediaAdmin").innerHTML = "";
 
   ocultarAviso("estadoGuardar");
@@ -1796,30 +2762,48 @@ function limpiarFormulario() {
 
 function nuevoAnuncio() {
   limpiarFormulario();
-  $("tituloFormulario").textContent = "Nuevo padrillo";
+
+  $("tituloFormulario").textContent =
+    "Nuevo padrillo";
+
   $("formularioAdmin").hidden = false;
-  $("formularioAdmin").scrollIntoView({behavior:"smooth"});
+
+  $("formularioAdmin").scrollIntoView({
+    behavior:"smooth"
+  });
 }
 
 function fijarCaballo(c) {
   caballoElegido = c;
+
   $("caballoId").value = c.id;
   $("buscarCaballoAdmin").value = c.Nombre;
   $("sugerenciasCaballos").hidden = true;
 
   $("caballoSeleccionado").hidden = false;
+
   $("caballoSeleccionado").innerHTML = `
     <strong>${escapar(c.Nombre)}</strong>
-    <p>${escapar(c.Padre || "-")} × ${escapar(c.Madre || "-")}</p>
-    <a href="${escapar(urlCaballo(c.Nombre))}"
-       target="_blank"
-       rel="noopener noreferrer">
+
+    <p>
+      ${escapar(c.Padre || "-")}
+      ×
+      ${escapar(c.Madre || "-")}
+    </p>
+
+    <a
+      href="${escapar(urlCaballo(c.Nombre))}"
+      target="_blank"
+      rel="noopener noreferrer">
       Ver ficha genealógica ↗
     </a>`;
 }
 
 async function buscarCaballoParaAnuncio() {
-  const escrito = texto($("buscarCaballoAdmin").value);
+  const escrito = texto(
+    $("buscarCaballoAdmin").value
+  );
+
   const actual = ++contadorBusqueda;
 
   $("caballoId").value = "";
@@ -1835,40 +2819,63 @@ async function buscarCaballoParaAnuncio() {
     const datos = await consultar(
       "Caballos",
       "?select=id,Nombre,Padre,Madre,Sexo" +
-      "&Nombre=ilike." + encodeURIComponent("%"+escrito+"%") +
-      "&order=Nombre.asc&limit=20",
+      "&Nombre=ilike." +
+        encodeURIComponent("%"+escrito+"%") +
+      "&order=Nombre.asc" +
+      "&limit=20",
       true
     );
 
-    if (actual !== contadorBusqueda) return;
+    if (actual !== contadorBusqueda) {
+      return;
+    }
 
     const machos = datos.filter(c =>
-      ["ME","MC","M"].includes(normalizar(c.Sexo))
+      ["ME","MC","M"].includes(
+        normalizar(c.Sexo)
+      )
     );
 
-    const candidatos = machos.length ? machos : datos;
+    const candidatos = machos.length
+      ? machos
+      : datos;
 
     const cont = $("sugerenciasCaballos");
     cont.innerHTML = "";
 
     candidatos.forEach(c => {
       const b = document.createElement("button");
+
       b.type = "button";
-      b.textContent = c.Nombre +
-        (c.Padre ? " — " + c.Padre : "");
-      b.onclick = () => fijarCaballo(c);
+
+      b.textContent =
+        c.Nombre +
+        (c.Padre
+          ? " — " + c.Padre
+          : "");
+
+      b.onclick = () =>
+        fijarCaballo(c);
+
       cont.appendChild(b);
     });
 
     if (!candidatos.length) {
-      cont.textContent = "No se encontraron caballos.";
+      cont.textContent =
+        "No se encontraron caballos.";
     }
 
     cont.hidden = false;
+
   } catch(error) {
     console.error(error);
-    avisar("estadoGuardar",
-      "No se pudieron buscar caballos: " + error.message,true);
+
+    avisar(
+      "estadoGuardar",
+      "No se pudieron buscar caballos: " +
+        error.message,
+      true
+    );
   }
 }
 
@@ -1876,11 +2883,17 @@ async function editarAnuncio(id) {
   try {
     await renovarSiHaceFalta();
 
-    const p = anunciosAdmin.find(a => Number(a.id) === Number(id));
+    const p = anunciosAdmin.find(
+      a => Number(a.id) === Number(id)
+    );
+
     if (!p) return;
 
     limpiarFormulario();
-    $("tituloFormulario").textContent = "Editar padrillo";
+
+    $("tituloFormulario").textContent =
+      "Editar padrillo";
+
     $("editarId").value = p.id;
     $("caballoId").value = p.caballo_id;
 
@@ -1898,75 +2911,140 @@ async function editarAnuncio(id) {
       orden:"orden"
     };
 
-    Object.entries(campos).forEach(([idCampo,clave]) => {
-      $(idCampo).value = p[clave] ?? "";
-    });
+    Object.entries(campos).forEach(
+      ([idCampo,clave]) => {
+        $(idCampo).value = p[clave] ?? "";
+      }
+    );
 
-    $("destacado").checked = p.destacado === true;
-    $("publicado").checked = p.publicado === true;
+    $("destacado").checked =
+      p.destacado === true;
+
+    $("publicado").checked =
+      p.publicado === true;
 
     const caballos = await consultar(
       "Caballos",
-      "?select=*&id=eq." + Number(p.caballo_id) + "&limit=1",
+      "?select=*" +
+      "&id=eq." + Number(p.caballo_id) +
+      "&limit=1",
       true
     );
 
-    if (caballos.length) fijarCaballo(caballos[0]);
+    if (caballos.length) {
+      fijarCaballo(caballos[0]);
+    }
 
     $("formularioAdmin").hidden = false;
     $("gestionMultimedia").hidden = false;
 
     await cargarMultimediaAdmin(p.id);
 
-    $("formularioAdmin").scrollIntoView({behavior:"smooth"});
+    $("formularioAdmin").scrollIntoView({
+      behavior:"smooth"
+    });
 
   } catch(error) {
     console.error(error);
-    alert("No se pudo abrir el anuncio: " + error.message);
+
+    alert(
+      "No se pudo abrir el anuncio: " +
+      error.message
+    );
   }
 }
 
 function datosDelFormulario() {
-  const idCaballo = Number($("caballoId").value);
+  const idCaballo = Number(
+    $("caballoId").value
+  );
 
-  if (!Number.isInteger(idCaballo) || idCaballo <= 0) {
-    throw new Error("Seleccioná un caballo registrado de las sugerencias.");
+  if (
+    !Number.isInteger(idCaballo) ||
+    idCaballo <= 0
+  ) {
+    throw new Error(
+      "Seleccioná un caballo registrado de las sugerencias."
+    );
   }
 
-  const precio = texto($("precioUsd").value);
+  const precio = texto(
+    $("precioUsd").value
+  );
 
-  if (precio && (!Number.isFinite(Number(precio)) ||
-       Number(precio) < 0)) {
-    throw new Error("El precio debe ser un número válido en USD.");
+  if (
+    precio &&
+    (
+      !Number.isFinite(Number(precio)) ||
+      Number(precio) < 0
+    )
+  ) {
+    throw new Error(
+      "El precio debe ser un número válido en USD."
+    );
   }
 
-  const inicio = $("fechaInicio").value || null;
-  const fin = $("fechaFin").value || null;
+  const inicio =
+    $("fechaInicio").value || null;
 
-  if (inicio && fin && fin < inicio) {
-    throw new Error("La fecha final no puede ser anterior a la inicial.");
+  const fin =
+    $("fechaFin").value || null;
+
+  if (
+    inicio &&
+    fin &&
+    fin < inicio
+  ) {
+    throw new Error(
+      "La fecha final no puede ser anterior a la inicial."
+    );
   }
 
   return {
     caballo_id:idCaballo,
-    ubicacion:texto($("ubicacion").value) || null,
-    precio_usd:precio ? Number(precio) : null,
-    modalidad:texto($("modalidad").value) || null,
-    disponibilidad:texto($("disponibilidad").value) || null,
-    descripcion:texto($("descripcion").value) || null,
-    condiciones_servicio:texto($("condiciones").value) || null,
-    garantia_prenez:texto($("garantia").value) || null,
-    requisitos_sanitarios:texto($("requisitos").value) || null,
+
+    ubicacion:
+      texto($("ubicacion").value) || null,
+
+    precio_usd:
+      precio ? Number(precio) : null,
+
+    modalidad:
+      texto($("modalidad").value) || null,
+
+    disponibilidad:
+      texto($("disponibilidad").value) || null,
+
+    descripcion:
+      texto($("descripcion").value) || null,
+
+    condiciones_servicio:
+      texto($("condiciones").value) || null,
+
+    garantia_prenez:
+      texto($("garantia").value) || null,
+
+    requisitos_sanitarios:
+      texto($("requisitos").value) || null,
+
     fecha_inicio:inicio,
     fecha_fin:fin,
-    orden:Number($("orden").value || 0),
-    destacado:$("destacado").checked,
-    publicado:$("publicado").checked
+
+    orden:Number(
+      $("orden").value || 0
+    ),
+
+    destacado:
+      $("destacado").checked,
+
+    publicado:
+      $("publicado").checked
   };
 }
 
 async function guardarAnuncio() {
   if (cargando) return;
+
   cargando = true;
   $("btnGuardarAnuncio").disabled = true;
 
@@ -1974,12 +3052,31 @@ async function guardarAnuncio() {
     await renovarSiHaceFalta();
 
     const datos = datosDelFormulario();
-    const id = Number($("editarId").value);
+    const id = Number(
+      $("editarId").value
+    );
+
+    const enlaceYoutube = texto(
+      $("youtubeUrl").value
+    );
+
+    if (
+      enlaceYoutube &&
+      !obtenerDatosYouTube(enlaceYoutube)
+    ) {
+      throw new Error(
+        "El enlace de YouTube no es válido. " +
+        "Usá Compartir → Copiar enlace."
+      );
+    }
 
     if (datos.publicado && id) {
       const fotos = await consultar(
         "padrillos_medios",
-        "?select=id&tipo=eq.foto&padrillo_id=eq." + id + "&limit=1",
+        "?select=id" +
+        "&tipo=eq.foto" +
+        "&padrillo_id=eq." + id +
+        "&limit=1",
         true
       );
 
@@ -1998,104 +3095,201 @@ async function guardarAnuncio() {
 
     if (id) {
       guardados = await escribir(
-        "padrillos","PATCH",datos,"?id=eq." + id
+        "padrillos",
+        "PATCH",
+        datos,
+        "?id=eq." + id
       );
     } else {
-      guardados = await escribir("padrillos","POST",datos);
+      guardados = await escribir(
+        "padrillos",
+        "POST",
+        datos
+      );
     }
 
     if (!guardados.length) {
-      throw new Error("Supabase no confirmó el guardado del anuncio.");
+      throw new Error(
+        "Supabase no confirmó el guardado del anuncio."
+      );
     }
 
-    const nuevoId = Number(guardados[0].id);
+    const nuevoId = Number(
+      guardados[0].id
+    );
+
     $("editarId").value = nuevoId;
     $("gestionMultimedia").hidden = false;
 
-    avisar("estadoGuardar",
+    avisar(
+      "estadoGuardar",
       datos.publicado
         ? "✅ Padrillo guardado y publicado correctamente."
-        : "✅ Padrillo guardado. Podés subir la foto y luego publicarlo."
+        : "✅ Padrillo guardado correctamente."
     );
 
-    if (!id && $("publicado").checked) {
+    if (
+      !id &&
+      $("publicado").checked
+    ) {
       $("publicado").checked = false;
-      avisar("estadoGuardar",
-        "✅ Anuncio creado como borrador. Subí una fotografía y después marcá Publicado y guardá nuevamente."
+
+      avisar(
+        "estadoGuardar",
+        "✅ Anuncio creado como borrador. " +
+        "Subí una fotografía y después marcá " +
+        "Publicado y guardá nuevamente."
       );
     }
 
     await cargarAdmin();
     await cargarMultimediaAdmin(nuevoId);
+
+    if (enlaceYoutube) {
+      try {
+        await guardarVideoYouTube(
+          nuevoId,
+          enlaceYoutube
+        );
+
+        $("youtubeUrl").value = "";
+
+        avisar(
+          "estadoGuardar",
+          "✅ Padrillo guardado y video de YouTube agregado."
+        );
+
+        await cargarMultimediaAdmin(
+          nuevoId
+        );
+
+      } catch(errorYoutube) {
+        const faltaFoto =
+          errorYoutube.message.includes(
+            "Primero tenés que subir una fotografía"
+          );
+
+        if (faltaFoto) {
+          avisar(
+            "estadoGuardar",
+            "✅ Padrillo guardado. " +
+            "Ahora subí una fotografía de portada. " +
+            "Después pulsá Guardar padrillo otra vez " +
+            "para agregar el enlace de YouTube."
+          );
+
+        } else {
+          avisar(
+            "estadoGuardar",
+            "El padrillo se guardó, " +
+            "pero el video no: " +
+            errorYoutube.message,
+            true
+          );
+        }
+      }
+    }
+
     await cargarPadrillos();
 
   } catch(error) {
     console.error(error);
-    avisar("estadoGuardar",error.message,true);
+
+    avisar(
+      "estadoGuardar",
+      error.message,
+      true
+    );
+
   } finally {
     cargando = false;
+
     $("btnGuardarAnuncio").disabled = false;
   }
 }
 
 /* =====================================================
-   FOTOGRAFIAS Y VIDEOS
+   SUBIR FOTOGRAFIAS
 ===================================================== */
 
 async function subirArchivo(archivo,tipo) {
   if (!archivo) return;
 
-  const id = Number($("editarId").value);
+  const id = Number(
+    $("editarId").value
+  );
+
   if (!id) {
-    alert("Primero guardá el anuncio.");
+    alert(
+      "Primero guardá el anuncio."
+    );
     return;
   }
 
-  if (tipo === "foto" &&
-      !["image/jpeg","image/png","image/webp"].includes(archivo.type)) {
-    alert("Usá una imagen JPG, PNG o WEBP.");
+  if (
+    tipo !== "foto" ||
+    ![
+      "image/jpeg",
+      "image/png",
+      "image/webp"
+    ].includes(archivo.type)
+  ) {
+    alert(
+      "Usá una imagen JPG, PNG o WEBP."
+    );
     return;
   }
 
-  if (tipo === "video" &&
-      !["video/mp4","video/webm","video/quicktime"].includes(archivo.type)) {
-    alert("Usá un video MP4, WEBM o MOV.");
-    return;
-  }
+  const limite = 20;
 
-  const limite = tipo === "foto" ? 20 : 100;
-
-  if (archivo.size > limite * 1024 * 1024) {
-    alert("El archivo supera el límite de " + limite + " MB.");
+  if (
+    archivo.size >
+    limite * 1024 * 1024
+  ) {
+    alert(
+      "La fotografía supera el límite de " +
+      limite + " MB."
+    );
     return;
   }
 
   try {
     await renovarSiHaceFalta();
 
-    avisar("estadoMultimedia","Subiendo archivo...");
+    avisar(
+      "estadoMultimedia",
+      "Subiendo fotografía..."
+    );
 
     const existentes = await consultar(
       "padrillos_medios",
-      "?select=id,tipo,orden&padrillo_id=eq." + id +
+      "?select=id,tipo,orden" +
+      "&padrillo_id=eq." + id +
       "&order=orden.asc,id.asc",
       true
     );
 
-    if (tipo === "video" &&
-        !existentes.some(m => m.tipo === "foto")) {
-      throw new Error("Primero tenés que subir una fotografía.");
-    }
+    const extension = archivo.name
+      .split(".")
+      .pop()
+      .toLowerCase();
 
-    const extension = archivo.name.split(".").pop().toLowerCase();
     const nombre =
-      id + "/" + Date.now() + "-" +
-      Math.random().toString(36).slice(2,10) + "." + extension;
+      id + "/" +
+      Date.now() + "-" +
+      Math.random().toString(36).slice(2,10) +
+      "." + extension;
+
+    const rutaStorage =
+      SUPABASE_URL +
+      "/storage/v1/object/" +
+      BUCKET_PADRILLOS + "/" +
+      nombre.split("/")
+        .map(encodeURIComponent)
+        .join("/");
 
     const respuesta = await fetch(
-      SUPABASE_URL +
-      "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
-      nombre.split("/").map(encodeURIComponent).join("/"),
+      rutaStorage,
       {
         method:"POST",
         headers:{
@@ -2109,17 +3303,22 @@ async function subirArchivo(archivo,tipo) {
 
     if (!respuesta.ok) {
       throw new Error(
-        "Error al subir archivo: " + await respuesta.text()
+        "Error al subir fotografía: " +
+        await respuesta.text()
       );
     }
 
     const orden = existentes.length
-      ? Math.max(...existentes.map(m => Number(m.orden || 0))) + 1
+      ? Math.max(
+          ...existentes.map(
+            m => Number(m.orden || 0)
+          )
+        ) + 1
       : 0;
 
     const nuevoMedio = {
       padrillo_id:id,
-      tipo,
+      tipo:"foto",
       archivo_path:nombre,
       orden,
       posicion_x:50,
@@ -2128,34 +3327,52 @@ async function subirArchivo(archivo,tipo) {
     };
 
     try {
-      await escribir("padrillos_medios","POST",nuevoMedio);
+      await escribir(
+        "padrillos_medios",
+        "POST",
+        nuevoMedio
+      );
+
     } catch(error) {
       await fetch(
-        SUPABASE_URL +
-        "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
-        nombre.split("/").map(encodeURIComponent).join("/"),
+        rutaStorage,
         {
           method:"DELETE",
           headers:cabecerasAdmin()
         }
       );
+
       throw error;
     }
 
-    avisar("estadoMultimedia","✅ Archivo subido correctamente.");
+    avisar(
+      "estadoMultimedia",
+      "✅ Fotografía subida correctamente."
+    );
+
     await cargarMultimediaAdmin(id);
     await cargarPadrillos();
 
   } catch(error) {
     console.error(error);
-    avisar("estadoMultimedia",error.message,true);
+
+    avisar(
+      "estadoMultimedia",
+      error.message,
+      true
+    );
   }
 }
+
+/* =====================================================
+   LISTADO DE FOTOGRAFIAS Y VIDEOS ADMIN
+===================================================== */
 
 async function cargarMultimediaAdmin(id) {
   const medios = await consultar(
     "padrillos_medios",
-    "?select=*&padrillo_id=eq." + Number(id) +
+    "?select=*" +
+    "&padrillo_id=eq." + Number(id) +
     "&order=orden.asc,id.asc",
     true
   );
@@ -2164,119 +3381,258 @@ async function cargarMultimediaAdmin(id) {
 
   if (!medios.length) {
     cont.innerHTML =
-      '<p class="ayuda">Todavía no hay fotografías ni videos.</p>';
+      '<p class="ayuda">' +
+      'Todavía no hay fotografías ni videos.' +
+      '</p>';
+
     $("editorPortada").hidden = true;
     medioPortadaAdmin = null;
+
     return;
   }
 
-  const ordenados = [...medios].sort((a,b) =>
-    Number(a.orden||0)-Number(b.orden||0) ||
-    Number(a.id)-Number(b.id)
+  const ordenados = [...medios].sort(
+    (a,b) =>
+      Number(a.orden || 0) -
+      Number(b.orden || 0) ||
+      Number(a.id) -
+      Number(b.id)
   );
 
-  const primeraFoto = ordenados.find(m => m.tipo === "foto");
+  const primeraFoto = ordenados.find(
+    m => m.tipo === "foto"
+  );
 
-  cont.innerHTML = ordenados.map(m => `
-    <div class="archivo-admin">
-      <div class="archivo-cabecera">
-        ${
-          m.tipo === "foto"
-            ? `<img src="${escapar(urlMedio(m))}"
-                    alt="Fotografía">`
-            : '<span>▶ Video</span>'
-        }
-        <div>
-          <strong>
-            ${m.tipo === "foto" ? "Fotografía" : "Video"}
-            ${primeraFoto && m.id === primeraFoto.id
-              ? " · PORTADA" : ""}
-          </strong>
-          <small>Orden: ${Number(m.orden||0)}</small>
+  cont.innerHTML = ordenados.map(m => {
+    const youtube = esVideoYouTube(m);
+
+    let miniatura = "";
+
+    if (m.tipo === "foto") {
+      miniatura = `
+        <img
+          src="${escapar(urlMedio(m))}"
+          alt="Fotografía">
+      `;
+
+    } else if (youtube) {
+      miniatura = `
+        <div class="youtube-admin-miniatura">
+          <img
+            src="${escapar(
+              miniaturaYouTube(m.archivo_path)
+            )}"
+            alt="Video de YouTube">
+
+          <span>▶</span>
+        </div>
+      `;
+
+    } else {
+      miniatura = `
+        <span>▶ Video</span>
+      `;
+    }
+
+    const titulo = m.tipo === "foto"
+      ? "Fotografía"
+      : youtube
+        ? "Video de YouTube"
+        : "Video";
+
+    const linkYoutube = youtube
+      ? `
+        <a
+          class="boton boton-claro"
+          href="${escapar(m.archivo_path)}"
+          target="_blank"
+          rel="noopener noreferrer">
+          Ver en YouTube ↗
+        </a>
+      `
+      : "";
+
+    return `
+      <div class="archivo-admin">
+
+        <div class="archivo-cabecera">
+          ${miniatura}
+
+          <div>
+            <strong>
+              ${titulo}
+
+              ${primeraFoto &&
+                m.id === primeraFoto.id
+                  ? " · PORTADA"
+                  : ""}
+            </strong>
+
+            <small>
+              Orden: ${Number(m.orden || 0)}
+            </small>
+          </div>
+        </div>
+
+        <div class="archivo-acciones">
+
+          ${m.tipo === "foto" &&
+            primeraFoto &&
+            m.id !== primeraFoto.id
+              ? `
+                <button
+                  class="boton boton-claro"
+                  data-portada="${Number(m.id)}">
+                  Usar como portada
+                </button>
+              `
+              : ""}
+
+          <button
+            class="boton boton-claro"
+            data-subir-orden="${Number(m.id)}">
+            ↑ Subir
+          </button>
+
+          ${linkYoutube}
+
+          <button
+            class="boton boton-rojo"
+            data-borrar-medio="${Number(m.id)}">
+            Eliminar
+          </button>
+
         </div>
       </div>
+    `;
+  }).join("");
 
-      <div class="archivo-acciones">
-        ${
-          m.tipo === "foto" &&
-          primeraFoto &&
-          m.id !== primeraFoto.id
-            ? `<button class="boton boton-claro"
-                       data-portada="${Number(m.id)}">
-                 Usar como portada
-               </button>`
-            : ""
-        }
+  cont
+    .querySelectorAll("[data-portada]")
+    .forEach(b => {
+      b.onclick = () =>
+        cambiarPortada(
+          Number(b.dataset.portada),
+          ordenados
+        );
+    });
 
-        <button class="boton boton-claro"
-                data-subir-orden="${Number(m.id)}">
-          ↑ Subir
-        </button>
+  cont
+    .querySelectorAll("[data-subir-orden]")
+    .forEach(b => {
+      b.onclick = () =>
+        subirOrdenMedio(
+          Number(b.dataset.subirOrden),
+          ordenados
+        );
+    });
 
-        <button class="boton boton-rojo"
-                data-borrar-medio="${Number(m.id)}">
-          Eliminar
-        </button>
-      </div>
-    </div>
-  `).join("");
+  cont
+    .querySelectorAll("[data-borrar-medio]")
+    .forEach(b => {
+      b.onclick = () =>
+        borrarMedio(
+          Number(b.dataset.borrarMedio),
+          ordenados
+        );
+    });
 
-  cont.querySelectorAll("[data-portada]").forEach(b => {
-    b.onclick = () =>
-      cambiarPortada(Number(b.dataset.portada),ordenados);
-  });
+  medioPortadaAdmin =
+    primeraFoto || null;
 
-  cont.querySelectorAll("[data-subir-orden]").forEach(b => {
-    b.onclick = () =>
-      subirOrdenMedio(Number(b.dataset.subirOrden),ordenados);
-  });
-
-  cont.querySelectorAll("[data-borrar-medio]").forEach(b => {
-    b.onclick = () =>
-      borrarMedio(Number(b.dataset.borrarMedio),ordenados);
-  });
-
-  medioPortadaAdmin = primeraFoto || null;
-
-  $("editorPortada").hidden = !primeraFoto;
+  $("editorPortada").hidden =
+    !primeraFoto;
 
   if (primeraFoto) {
-    $("imagenEncuadre").src = urlMedio(primeraFoto);
-    $("posicionX").value = primeraFoto.posicion_x ?? 50;
-    $("posicionY").value = primeraFoto.posicion_y ?? 50;
-    $("zoomFoto").value = primeraFoto.zoom ?? 1;
+    $("imagenEncuadre").src =
+      urlMedio(primeraFoto);
+
+    $("posicionX").value =
+      primeraFoto.posicion_x ?? 50;
+
+    $("posicionY").value =
+      primeraFoto.posicion_y ?? 50;
+
+    $("zoomFoto").value =
+      primeraFoto.zoom ?? 1;
+
     actualizarEncuadre();
   }
 }
 
-async function cambiarPortada(id,lista) {
-  const elegida = lista.find(m => Number(m.id) === id);
-  const actual = lista.find(m => m.tipo === "foto");
+/* =====================================================
+   ORDEN Y PORTADA
+===================================================== */
 
-  if (!elegida || !actual || elegida.tipo !== "foto") return;
+async function cambiarPortada(id,lista) {
+  const elegida = lista.find(
+    m => Number(m.id) === id
+  );
+
+  const actual = lista.find(
+    m => m.tipo === "foto"
+  );
+
+  if (
+    !elegida ||
+    !actual ||
+    elegida.tipo !== "foto"
+  ) {
+    return;
+  }
+
+  if (
+    Number(elegida.id) ===
+    Number(actual.id)
+  ) {
+    return;
+  }
 
   try {
     await renovarSiHaceFalta();
 
-    const ordenActual = Number(actual.orden||0);
-    const ordenNuevo = Number(elegida.orden||0);
+    const ordenActual = Number(
+      actual.orden || 0
+    );
 
-    await escribir("padrillos_medios","PATCH",
-      {orden:ordenActual},"?id=eq."+id);
+    const ordenNuevo = Number(
+      elegida.orden || 0
+    );
 
-    await escribir("padrillos_medios","PATCH",
-      {orden:ordenNuevo},"?id=eq."+actual.id);
+    await escribir(
+      "padrillos_medios",
+      "PATCH",
+      {orden:ordenActual},
+      "?id=eq." + id
+    );
 
-    await cargarMultimediaAdmin($("editarId").value);
+    await escribir(
+      "padrillos_medios",
+      "PATCH",
+      {orden:ordenNuevo},
+      "?id=eq." + actual.id
+    );
+
+    await cargarMultimediaAdmin(
+      $("editarId").value
+    );
+
     await cargarPadrillos();
 
   } catch(error) {
-    avisar("estadoMultimedia",error.message,true);
+    avisar(
+      "estadoMultimedia",
+      error.message,
+      true
+    );
   }
 }
 
 async function subirOrdenMedio(id,lista) {
-  const indice = lista.findIndex(m => Number(m.id) === id);
+  const indice = lista.findIndex(
+    m => Number(m.id) === id
+  );
+
   if (indice <= 0) return;
 
   const actual = lista[indice];
@@ -2285,72 +3641,152 @@ async function subirOrdenMedio(id,lista) {
   try {
     await renovarSiHaceFalta();
 
-    await escribir("padrillos_medios","PATCH",
-      {orden:Number(anterior.orden||0)},"?id=eq."+actual.id);
+    await escribir(
+      "padrillos_medios",
+      "PATCH",
+      {
+        orden:Number(anterior.orden || 0)
+      },
+      "?id=eq." + actual.id
+    );
 
-    await escribir("padrillos_medios","PATCH",
-      {orden:Number(actual.orden||0)},"?id=eq."+anterior.id);
+    await escribir(
+      "padrillos_medios",
+      "PATCH",
+      {
+        orden:Number(actual.orden || 0)
+      },
+      "?id=eq." + anterior.id
+    );
 
-    await cargarMultimediaAdmin($("editarId").value);
+    await cargarMultimediaAdmin(
+      $("editarId").value
+    );
+
     await cargarPadrillos();
 
   } catch(error) {
-    avisar("estadoMultimedia",error.message,true);
+    avisar(
+      "estadoMultimedia",
+      error.message,
+      true
+    );
   }
 }
 
+/* =====================================================
+   ELIMINAR FOTOGRAFIA O VIDEO
+===================================================== */
+
 async function borrarMedio(id,lista) {
-  const medio = lista.find(m => Number(m.id) === id);
+  const medio = lista.find(
+    m => Number(m.id) === id
+  );
+
   if (!medio) return;
 
-  if (!confirm("¿Eliminar este archivo del anuncio?")) return;
+  const mensaje = esVideoYouTube(medio)
+    ? "¿Quitar este video de YouTube del anuncio? " +
+      "El video seguirá existiendo en YouTube."
+    : "¿Eliminar este archivo del anuncio?";
+
+  if (!confirm(mensaje)) return;
 
   try {
     await renovarSiHaceFalta();
 
-    const idAnuncio = Number($("editarId").value);
+    const idAnuncio = Number(
+      $("editarId").value
+    );
 
-    if (medio.tipo === "foto" &&
-        lista.filter(m => m.tipo === "foto").length === 1 &&
-        $("publicado").checked) {
+    if (
+      medio.tipo === "foto" &&
+      lista.filter(
+        m => m.tipo === "foto"
+      ).length === 1 &&
+      $("publicado").checked
+    ) {
       throw new Error(
-        "Primero ocultá el anuncio y guardá los cambios para quitar su única fotografía."
+        "Primero ocultá el anuncio y guardá " +
+        "los cambios para quitar su única fotografía."
       );
     }
 
     const borrados = await escribir(
-      "padrillos_medios","DELETE",{},
-      "?id=eq." + id + "&padrillo_id=eq." + idAnuncio
+      "padrillos_medios",
+      "DELETE",
+      {},
+      "?id=eq." + id +
+      "&padrillo_id=eq." + idAnuncio
     );
 
     if (!borrados.length) {
-      throw new Error("Supabase no confirmó la eliminación.");
+      throw new Error(
+        "Supabase no confirmó la eliminación."
+      );
     }
 
-    const path = texto(medio.archivo_path);
+    const path = texto(
+      medio.archivo_path
+    );
 
-    if (path && !/^https:\/\//i.test(path)) {
-      const limpio = path.startsWith("padrillos/")
-        ? path.slice("padrillos/".length) : path;
+    /*
+      Si es un video de YouTube, solo se elimina
+      el enlace de la tabla padrillos_medios.
+
+      Nunca se intenta borrar un video de YouTube.
+    */
+
+    if (
+      path &&
+      !/^https:\/\//i.test(path)
+    ) {
+      const limpio = path.startsWith(
+        "padrillos/"
+      )
+        ? path.slice("padrillos/".length)
+        : path;
 
       const r = await fetch(
         SUPABASE_URL +
-        "/storage/v1/object/" + BUCKET_PADRILLOS + "/" +
-        limpio.split("/").map(encodeURIComponent).join("/"),
-        {method:"DELETE",headers:cabecerasAdmin()}
+        "/storage/v1/object/" +
+        BUCKET_PADRILLOS + "/" +
+        limpio.split("/")
+          .map(encodeURIComponent)
+          .join("/"),
+        {
+          method:"DELETE",
+          headers:cabecerasAdmin()
+        }
       );
 
       if (!r.ok) {
-        console.warn("Archivo no eliminado del Storage:",await r.text());
+        console.warn(
+          "Archivo no eliminado del Storage:",
+          await r.text()
+        );
       }
     }
 
-    avisar("estadoMultimedia","Archivo quitado.");
-    await cargarMultimediaAdmin(idAnuncio);
+    avisar(
+      "estadoMultimedia",
+      esVideoYouTube(medio)
+        ? "✅ Enlace de YouTube quitado del padrillo."
+        : "✅ Archivo quitado."
+    );
+
+    await cargarMultimediaAdmin(
+      idAnuncio
+    );
+
     await cargarPadrillos();
 
   } catch(error) {
-    avisar("estadoMultimedia",error.message,true);
+    avisar(
+      "estadoMultimedia",
+      error.message,
+      true
+    );
   }
 }
 
@@ -2360,16 +3796,22 @@ async function borrarMedio(id,lista) {
 
 function actualizarEncuadre() {
   $("imagenEncuadre").style.objectPosition =
-    $("posicionX").value + "% " + $("posicionY").value + "%";
+    $("posicionX").value +
+    "% " +
+    $("posicionY").value +
+    "%";
 
   $("imagenEncuadre").style.transform =
-    "scale(" + $("zoomFoto").value + ")";
+    "scale(" +
+    $("zoomFoto").value +
+    ")";
 }
 
 function centrarEncuadre() {
   $("posicionX").value = 50;
   $("posicionY").value = 50;
   $("zoomFoto").value = 1;
+
   actualizarEncuadre();
 }
 
@@ -2380,142 +3822,286 @@ async function guardarEncuadre() {
     await renovarSiHaceFalta();
 
     const cambios = {
-      posicion_x:Number($("posicionX").value),
-      posicion_y:Number($("posicionY").value),
-      zoom:Number($("zoomFoto").value)
+      posicion_x:Number(
+        $("posicionX").value
+      ),
+      posicion_y:Number(
+        $("posicionY").value
+      ),
+      zoom:Number(
+        $("zoomFoto").value
+      )
     };
 
     const guardados = await escribir(
       "padrillos_medios",
       "PATCH",
       cambios,
-      "?id=eq." + Number(medioPortadaAdmin.id)
+      "?id=eq." +
+        Number(medioPortadaAdmin.id)
     );
 
     if (!guardados.length) {
-      throw new Error("No se confirmó el guardado del encuadre.");
+      throw new Error(
+        "No se confirmó el guardado del encuadre."
+      );
     }
 
-    medioPortadaAdmin = {...medioPortadaAdmin,...cambios};
+    medioPortadaAdmin = {
+      ...medioPortadaAdmin,
+      ...cambios
+    };
 
-    avisar("estadoMultimedia","✅ Encuadre guardado correctamente.");
+    avisar(
+      "estadoMultimedia",
+      "✅ Encuadre guardado correctamente."
+    );
+
     await cargarPadrillos();
 
   } catch(error) {
-    avisar("estadoMultimedia",error.message,true);
+    avisar(
+      "estadoMultimedia",
+      error.message,
+      true
+    );
   }
 }
 
-let arrastre = null;
-
-$("vistaEncuadre").addEventListener("pointerdown",e => {
-  arrastre = {
-    x:e.clientX,
-    y:e.clientY,
-    px:Number($("posicionX").value),
-    py:Number($("posicionY").value)
-  };
-  $("vistaEncuadre").setPointerCapture(e.pointerId);
-});
-
-$("vistaEncuadre").addEventListener("pointermove",e => {
-  if (!arrastre) return;
-
-  const rect = $("vistaEncuadre").getBoundingClientRect();
-
-  const dx = (e.clientX-arrastre.x)/rect.width*100;
-  const dy = (e.clientY-arrastre.y)/rect.height*100;
-
-  $("posicionX").value =
-    Math.max(0,Math.min(100,arrastre.px-dx));
-
-  $("posicionY").value =
-    Math.max(0,Math.min(100,arrastre.py-dy));
-
-  actualizarEncuadre();
-});
-
-$("vistaEncuadre").addEventListener("pointerup",() => arrastre=null);
-$("vistaEncuadre").addEventListener("pointercancel",() => arrastre=null);
-
 /* =====================================================
-   EVENTOS
+   ARRASTRAR FOTO DE PORTADA
 ===================================================== */
 
-$("btnAdmin").onclick = abrirAdministracion;
-$("btnCerrarSesion").onclick = cerrarSesionAdmin;
-$("btnVolverPublico").onclick = volverPublico;
-$("btnNuevoPadrillo").onclick = nuevoAnuncio;
-$("btnCancelarEdicion").onclick = () =>
-  $("formularioAdmin").hidden = true;
+let arrastre = null;
 
-$("buscarCaballoAdmin").addEventListener(
-  "input",buscarCaballoParaAnuncio
+$("vistaEncuadre").addEventListener(
+  "pointerdown",
+  e => {
+    arrastre = {
+      x:e.clientX,
+      y:e.clientY,
+      px:Number(
+        $("posicionX").value
+      ),
+      py:Number(
+        $("posicionY").value
+      )
+    };
+
+    $("vistaEncuadre").setPointerCapture(
+      e.pointerId
+    );
+  }
 );
 
-$("btnGuardarAnuncio").onclick = guardarAnuncio;
+$("vistaEncuadre").addEventListener(
+  "pointermove",
+  e => {
+    if (!arrastre) return;
+
+    const rect = $("vistaEncuadre")
+      .getBoundingClientRect();
+
+    const dx =
+      (e.clientX-arrastre.x) /
+      rect.width * 100;
+
+    const dy =
+      (e.clientY-arrastre.y) /
+      rect.height * 100;
+
+    $("posicionX").value =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          arrastre.px-dx
+        )
+      );
+
+    $("posicionY").value =
+      Math.max(
+        0,
+        Math.min(
+          100,
+          arrastre.py-dy
+        )
+      );
+
+    actualizarEncuadre();
+  }
+);
+
+$("vistaEncuadre").addEventListener(
+  "pointerup",
+  () => arrastre=null
+);
+
+$("vistaEncuadre").addEventListener(
+  "pointercancel",
+  () => arrastre=null
+);
+
+/* =====================================================
+   EVENTOS DEL ADMINISTRADOR
+===================================================== */
+
+$("btnAdmin").onclick =
+  abrirAdministracion;
+
+$("btnCerrarSesion").onclick =
+  cerrarSesionAdmin;
+
+$("btnVolverPublico").onclick =
+  volverPublico;
+
+$("btnNuevoPadrillo").onclick =
+  nuevoAnuncio;
+
+$("btnCancelarEdicion").onclick = () => {
+  $("formularioAdmin").hidden = true;
+};
+
+$("buscarCaballoAdmin").addEventListener(
+  "input",
+  buscarCaballoParaAnuncio
+);
+
+$("btnGuardarAnuncio").onclick =
+  guardarAnuncio;
 
 $("subirFoto").onchange = async e => {
   const archivo = e.target.files?.[0];
-  if (archivo) await subirArchivo(archivo,"foto");
+
+  if (archivo) {
+    await subirArchivo(
+      archivo,
+      "foto"
+    );
+  }
+
   e.target.value = "";
 };
 
-$("subirVideo").onchange = async e => {
-  const archivo = e.target.files?.[0];
-  if (archivo) await subirArchivo(archivo,"video");
-  e.target.value = "";
+/*
+  El botón para agregar videos ya no abre
+  archivos locales. Lleva al campo de YouTube.
+*/
+
+$("btnIrVideo").onclick = () => {
+  $("youtubeUrl").scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+  $("youtubeUrl").focus();
 };
 
-["posicionX","posicionY","zoomFoto"].forEach(id => {
-  $(id).addEventListener("input",actualizarEncuadre);
-});
+["posicionX","posicionY","zoomFoto"].forEach(
+  id => {
+    $(id).addEventListener(
+      "input",
+      actualizarEncuadre
+    );
+  }
+);
 
-$("btnGuardarEncuadre").onclick = guardarEncuadre;
-$("btnCentrarFoto").onclick = centrarEncuadre;
+$("btnGuardarEncuadre").onclick =
+  guardarEncuadre;
+
+$("btnCentrarFoto").onclick =
+  centrarEncuadre;
+
+/* =====================================================
+   VOLVER Y NAVEGACION
+===================================================== */
 
 $("volverListado").onclick = () => {
-  history.pushState({},"","padrillos.html");
+  history.pushState(
+    {},
+    "",
+    "padrillos.html"
+  );
+
   mostrarRuta();
 };
 
-window.addEventListener("popstate",async () => {
-  const params = new URLSearchParams(location.search);
+window.addEventListener(
+  "popstate",
+  async () => {
+    const params = new URLSearchParams(
+      location.search
+    );
 
-  if (params.get("admin") === "1" && autorizado) {
-    await abrirAdministracion();
-  } else {
-    $("vistaAdmin").hidden = true;
-    mostrarRuta();
+    if (
+      params.get("admin") === "1" &&
+      autorizado
+    ) {
+      await abrirAdministracion();
+
+    } else {
+      $("vistaAdmin").hidden = true;
+      mostrarRuta();
+    }
   }
-});
+);
 
-$("cerrarModal").onclick = cerrarFoto;
+$("cerrarModal").onclick =
+  cerrarFoto;
 
 $("modalFoto").onclick = e => {
-  if (e.target === $("modalFoto")) cerrarFoto();
+  if (
+    e.target === $("modalFoto")
+  ) {
+    cerrarFoto();
+  }
 };
 
-document.addEventListener("keydown",e => {
-  if (e.key === "Escape") cerrarFoto();
-});
+document.addEventListener(
+  "keydown",
+  e => {
+    if (e.key === "Escape") {
+      cerrarFoto();
+    }
+  }
+);
 
-/* MENU MOVIL */
+/* =====================================================
+   MENU MOVIL
+===================================================== */
 
 const botonMenu = $("botonMenu");
 const menu = $("menuPrincipal");
 
 botonMenu.onclick = () => {
-  const abierto = menu.classList.toggle("menu-mobile-abierto");
-  botonMenu.setAttribute("aria-expanded",String(abierto));
+  const abierto = menu.classList.toggle(
+    "menu-mobile-abierto"
+  );
+
+  botonMenu.setAttribute(
+    "aria-expanded",
+    String(abierto)
+  );
 };
 
-document.addEventListener("click",e => {
-  if (!menu.contains(e.target) && !botonMenu.contains(e.target)) {
-    menu.classList.remove("menu-mobile-abierto");
-    botonMenu.setAttribute("aria-expanded","false");
+document.addEventListener(
+  "click",
+  e => {
+    if (
+      !menu.contains(e.target) &&
+      !botonMenu.contains(e.target)
+    ) {
+      menu.classList.remove(
+        "menu-mobile-abierto"
+      );
+
+      botonMenu.setAttribute(
+        "aria-expanded",
+        "false"
+      );
+    }
   }
-});
+);
 
 /* =====================================================
    INICIO
@@ -2527,21 +4113,32 @@ async function iniciarPagina() {
   try {
     const ok = await recuperarSesion();
 
-    if (ok && new URLSearchParams(location.search).get("admin") === "1") {
+    if (
+      ok &&
+      new URLSearchParams(
+        location.search
+      ).get("admin") === "1"
+    ) {
       await abrirAdministracion();
     }
+
   } catch(error) {
-    console.error("Sesión administrativa:",error);
+    console.error(
+      "Sesión administrativa:",
+      error
+    );
   }
 }
 
 /*
   Acceso manual inicial:
-  En la consola del navegador puede llamarse:
+
+  En la consola del navegador:
   iniciarAdmin()
 
-  Si ya existe una sesión de SDU autorizada,
-  el botón Administrar padrillos aparece automáticamente.
+  Si existe una sesión autorizada de SDU,
+  el botón Administrar padrillos
+  aparece automáticamente.
 */
 
 window.iniciarAdmin = iniciarAdmin;
