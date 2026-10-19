@@ -7552,6 +7552,22 @@ async function registrarCaballoProvisional(nombreCodificado, caballoDeportivoId 
 window.caballoDeportivoIdRegistro =
   caballoDeportivoId;
   
+console.log(
+  "Caballo deportivo seleccionado:",
+  caballoDeportivoId
+);
+
+if (caballoDeportivoId != null) {
+  sessionStorage.setItem(
+    "registroDesdeDeportivoSdU",
+    String(caballoDeportivoId)
+  );
+} else {
+  sessionStorage.removeItem(
+    "registroDesdeDeportivoSdU"
+  );
+}
+
   const nombreFiltro = encodeURIComponent('"' + nombre.replace(/"/g, '\\"') + '"');
 
 const urlHijos =
@@ -7834,8 +7850,27 @@ activarCampoPedigreePublico("nuevaBisabuelaMM", "H");
 
 
 async function guardarCaballoNuevo() {
-  const caballoDeportivoIdRegistro =
-  window.caballoDeportivoIdRegistro || null;
+
+const caballoDeportivoIdRegistro =
+  Number(
+    window.caballoDeportivoIdRegistro ||
+    sessionStorage.getItem("registroDesdeDeportivoSdU")
+  ) || null;
+
+  
+const registroDesdeDeportivo =
+  sessionStorage.getItem("registroDesdeDeportivoSdU");
+
+if (
+  registroDesdeDeportivo &&
+  !caballoDeportivoIdRegistro
+) {
+  alert(
+    "Se perdió la vinculación con el caballo deportivo. No se guardará el registro."
+  );
+  return;
+}
+
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("La sesión de administrador no está activa.");
     return;
@@ -8132,66 +8167,84 @@ Raza:
       document.getElementById("nuevaBisabuelaMM").value.trim() || null
   };
 
-  const respuesta = await fetch(
-    SUPABASE_URL + "/rest/v1/Caballos",
-    {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json",
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify(nuevoCaballo)
+  
+  let caballoNuevoId = null;
+
+  try {
+    // Si viene de una ficha deportiva, registrar y vincular
+    // mediante una única operación de Supabase.
+    if (caballoDeportivoIdRegistro) {
+
+      const respuesta = await fetch(
+        SUPABASE_URL +
+          "/rest/v1/rpc/registrar_y_vincular_deportivo",
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + sesionAdmin.access_token,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            p_deportivo_id: caballoDeportivoIdRegistro,
+            p_caballo: nuevoCaballo
+          })
+        }
+      );
+
+      if (!respuesta.ok) {
+        throw new Error(await respuesta.text());
+      }
+
+      caballoNuevoId = Number(await respuesta.json());
+
+      if (!Number.isSafeInteger(caballoNuevoId) ||
+          caballoNuevoId <= 0) {
+        throw new Error("Supabase no devolvió un ID válido.");
+      }
+
+      window.caballoDeportivoIdRegistro = null;
+      sessionStorage.removeItem("registroDesdeDeportivoSdU");
+
+    } else {
+
+      // Registro normal: se mantiene el procedimiento actual.
+      const respuesta = await fetch(
+        SUPABASE_URL + "/rest/v1/Caballos",
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            Authorization: "Bearer " + sesionAdmin.access_token,
+            "Content-Type": "application/json",
+            Prefer: "return=representation"
+          },
+          body: JSON.stringify(nuevoCaballo)
+        }
+      );
+
+      if (!respuesta.ok) {
+        throw new Error(await respuesta.text());
+      }
+
+      const caballosCreados = await respuesta.json();
+      caballoNuevoId = caballosCreados[0]?.id;
+
+      if (!caballoNuevoId) {
+        throw new Error("No se obtuvo el ID del caballo.");
+      }
     }
-  );
 
-  if (!respuesta.ok) {
-    const error = await respuesta.text();
-    console.error(error);
-    alert("No se pudo guardar el caballo.");
-    return;
-  }
-const caballosCreados = await respuesta.json();
+    console.log("Caballo genealógico registrado:", caballoNuevoId);
 
-const caballoNuevoId =
-  caballosCreados[0]?.id;
-
-if (!caballoNuevoId) {
-  alert("El caballo se guardó, pero no se pudo obtener su ID.");
-  return;
-}
-  if (caballoDeportivoIdRegistro) {
-  const respuestaVinculo = await fetch(
-    SUPABASE_URL +
-      "/rest/v1/caballos_deportivos?id=eq." +
-      encodeURIComponent(caballoDeportivoIdRegistro),
-    {
-      method: "PATCH",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json",
-        Prefer: "return=representation"
-      },
-      body: JSON.stringify({
-        caballo_id: caballoNuevoId
-      })
-    }
-  );
-
-  const vinculos = await respuestaVinculo.json();
-
-  if (!respuestaVinculo.ok || !vinculos.length) {
-    console.error("Error vinculando deportivo:", vinculos);
+  } catch (error) {
+    console.error("Error registrando caballo:", error);
     alert(
-      "El caballo se registró, pero no se pudo vincular con su historial deportivo."
+      "No se pudo completar el registro: " + error.message
     );
     return;
   }
 
-  window.caballoDeportivoIdRegistro = null;
-}
   alert("Caballo registrado correctamente.");
 
   document.getElementById("nombreCaballo").value = nombre;
