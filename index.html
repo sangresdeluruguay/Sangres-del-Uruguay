@@ -4138,70 +4138,29 @@ nuevaAbuelaMaterna: {
 }
     
    
-async function proponerFotoCaballo(nombreCaballo, caballoId) {
-  if (!sesionAdmin?.access_token) {
-    alert("Para esta primera prueba tenés que ingresar como administrador.");
+
+
+/* =========================================
+   FOTOGRAFÍAS SDU - PROPUESTAS PÚBLICAS
+   Destino: Cloudflare R2
+========================================= */
+
+const SDU_FOTOS_API =
+  SUPABASE_URL + "/functions/v1/sdu-fotos-api";
+
+async function seleccionarFotoPublicaSDU(
+  nombreCaballo,
+  tipo,
+  caballoId
+) {
+  const id = Number(caballoId);
+
+  if (!Number.isSafeInteger(id) || id <= 0) {
+    alert("No se encontró el ID del caballo.");
     return;
   }
 
   const input = document.createElement("input");
-  input.type = "file";
-  input.accept = "image/jpeg,image/png,image/webp";
-
-  input.onchange = async () => {
-    const archivo = input.files?.[0];
-    if (!archivo) return;
-
-    if (archivo.size > 10 * 1024 * 1024) {
-      alert("La foto no puede superar los 10 MB.");
-      return;
-    }
-
-    const datos = new FormData();
-    datos.append("foto", archivo);
-    datos.append("caballo_id", String(caballoId));
-    datos.append("caballo_nombre", nombreCaballo);
-
-    try {
-      const respuesta = await fetch(
-        SUPABASE_URL + "/functions/v1/sdu-fotos-api",
-        {
-          method: "POST",
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: "Bearer " + sesionAdmin.access_token
-          },
-          body: datos
-        }
-      );
-
-      const resultado = await respuesta.json();
-
-      if (!respuesta.ok || !resultado.correcto) {
-        throw new Error(resultado.error || "Error al subir");
-      }
-
-      alert(
-        "Foto guardada en Cloudflare R2. Pendiente de aprobación."
-      );
-
-    } catch (error) {
-      console.error(error);
-      alert("No se pudo subir: " + error.message);
-    }
-  };
-
-  input.click();
-}
-
-
-    async function proponerFotoCaballoDeportivo(nombreCodificado, caballoDeportivoId) {
-
-  const nombreCaballo =
-    decodeURIComponent(nombreCodificado);
-
-  const input = document.createElement("input");
-
   input.type = "file";
   input.accept = "image/jpeg,image/png,image/webp";
   input.style.display = "none";
@@ -4209,111 +4168,63 @@ async function proponerFotoCaballo(nombreCaballo, caballoId) {
   document.body.appendChild(input);
 
   input.onchange = async function () {
-
-    const archivo =
-      input.files && input.files[0];
-
-    if (!archivo) {
-      input.remove();
-      return;
-    }
-
-    if (!archivo.type.startsWith("image/")) {
-      alert("Seleccioná una imagen válida.");
-      input.remove();
-      return;
-    }
-
-    if (archivo.size > 20 * 1024 * 1024) {
-     alert("La foto no puede superar los 20 MB.");
-      input.remove();
-      return;
-    }
-
     try {
+      const archivo = input.files?.[0];
+      if (!archivo) return;
 
-      const extension =
-        archivo.name
-          .split(".")
-          .pop()
-          .toLowerCase();
-
-      const fotoPath =
-        "solicitudes/deportivo-" +
-        caballoDeportivoId +
-        "-" +
-        Date.now() +
-        "." +
-        extension;
-
-      const respuestaFoto = await fetch(
-        SUPABASE_URL +
-        "/storage/v1/object/fotos-caballos/" +
-        fotoPath,
-        {
-          method: "POST",
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization:
-              "Bearer " + SUPABASE_KEY,
-            "Content-Type":
-              archivo.type
-          },
-          body: archivo
-        }
-      );
-
-      if (!respuestaFoto.ok) {
-        throw new Error("No se pudo subir la foto.");
+      if (
+        !["image/jpeg", "image/png", "image/webp"]
+          .includes(archivo.type)
+      ) {
+        throw new Error("Seleccioná una imagen JPG, PNG o WebP.");
       }
 
-      const respuestaSolicitud = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/SolicitudesFotosCaballos",
-        {
-          method: "POST",
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization:
-              "Bearer " + SUPABASE_KEY,
-            "Content-Type":
-              "application/json",
-            Prefer:
-              "return=minimal"
-          },
-          body: JSON.stringify({
-            caballo_deportivo_id:
-              Number(caballoDeportivoId),
-            caballo_nombre:
-              nombreCaballo,
-            caballo_registro:
-              "DEPORTIVO",
-            foto_path:
-              fotoPath,
-            estado:
-              "pendiente"
-          })
-        }
-      );
+      if (archivo.size > 15 * 1024 * 1024) {
+        throw new Error("La foto no puede superar los 15 MB.");
+      }
 
-      if (!respuestaSolicitud.ok) {
+      const datos = new FormData();
+
+      datos.append("foto", archivo);
+      datos.append("caballo_nombre", nombreCaballo);
+
+      if (tipo === "DEPORTIVO") {
+        datos.append("caballo_deportivo_id", String(id));
+        datos.append("caballo_registro", "DEPORTIVO");
+      } else {
+        datos.append("caballo_id", String(id));
+      }
+
+      const respuesta = await fetch(SDU_FOTOS_API, {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY
+        },
+        body: datos
+      });
+
+      const texto = await respuesta.text();
+      let resultado;
+
+      try {
+        resultado = JSON.parse(texto);
+      } catch {
+        throw new Error("Respuesta inválida del servidor.");
+      }
+
+      if (!respuesta.ok || resultado.correcto !== true) {
         throw new Error(
-          "No se pudo registrar la solicitud."
+          resultado.error || "No se pudo guardar la fotografía."
         );
       }
 
       alert(
-        "✅ Foto enviada. Quedará visible cuando sea aprobada por el administrador."
+        "✅ Fotografía enviada. Quedará pendiente de aprobación."
       );
 
     } catch (error) {
-
       console.error(error);
-
-      alert(
-        "No se pudo enviar la foto. Intentá nuevamente."
-      );
-
+      alert("No se pudo subir: " + error.message);
     } finally {
       input.remove();
     }
@@ -4321,6 +4232,28 @@ async function proponerFotoCaballo(nombreCaballo, caballoId) {
 
   input.click();
 }
+
+async function proponerFotoCaballo(nombreCaballo, caballoId) {
+  return seleccionarFotoPublicaSDU(
+    nombreCaballo,
+    "GENEALOGICO",
+    caballoId
+  );
+}
+
+async function proponerFotoCaballoDeportivo(
+  nombreCodificado,
+  caballoDeportivoId
+) {
+  const nombreCaballo = decodeURIComponent(nombreCodificado);
+
+  return seleccionarFotoPublicaSDU(
+    nombreCaballo,
+    "DEPORTIVO",
+    caballoDeportivoId
+  );
+}
+
     
     async function enviarSolicitudCaballo() {
   const datos = {
@@ -5437,15 +5370,28 @@ if (seccionCriadoresPropietarios) {
   contador.style.display =
     solicitudes.length > 0 ? "inline-flex" : "none";
 }
-   async function verFotosPendientes() {
-  if (!sesionAdmin || !sesionAdmin.access_token) {
-    alert("Tenés que iniciar sesión como administrador.");
+   
+/* ==========================================
+   FOTOS PENDIENTES - ADMINISTRADOR SDU
+========================================== */
+
+async function verFotosPendientes() {
+  if (!sesionAdmin?.access_token) {
+    alert("Tenés que ingresar como administrador.");
     return;
   }
 
+  const resultado = document.getElementById("resultado");
+
+  if (!resultado) return;
+
+  resultado.innerHTML = "<p>Cargando fotos pendientes...</p>";
+
   try {
     const respuesta = await fetch(
-      SUPABASE_URL + '/rest/v1/SolicitudesFotosCaballos?estado=eq.pendiente&select=*&order=creado_en.asc',
+      SUPABASE_URL +
+      "/rest/v1/SolicitudesFotosCaballos" +
+      "?estado=eq.pendiente&select=*&order=creado_en.asc",
       {
         headers: {
           apikey: SUPABASE_KEY,
@@ -5455,48 +5401,140 @@ if (seccionCriadoresPropietarios) {
     );
 
     if (!respuesta.ok) {
-      throw new Error("No se pudieron cargar las fotos pendientes.");
+      throw new Error(await respuesta.text());
     }
 
     const solicitudes = await respuesta.json();
 
-    if (solicitudes.length === 0) {
-      resultado.innerHTML = `
-        <div class="panel-admin">
-          <h2>Fotos pendientes</h2>
-          <p>No hay fotos pendientes.</p>
-        </div>
-      `;
-      return;
+    const panel = document.createElement("div");
+    panel.className = "panel-admin";
+
+    const titulo = document.createElement("h2");
+    titulo.textContent = "Fotos pendientes";
+    panel.appendChild(titulo);
+
+    if (!solicitudes.length) {
+      const mensaje = document.createElement("p");
+      mensaje.textContent = "No hay fotos pendientes.";
+      panel.appendChild(mensaje);
     }
 
-    resultado.innerHTML = `
-      <div class="panel-admin">
-        <h2>Fotos pendientes</h2>
+    for (const solicitud of solicitudes) {
+      const tarjeta = document.createElement("div");
+      tarjeta.className = "solicitud-foto-admin";
+      tarjeta.style.marginBottom = "25px";
 
-        ${solicitudes.map(s => `
-          <div class="solicitud-foto-admin">
-            <h3>${escapar(s.caballo_nombre || "")}</h3>
+      const nombre = document.createElement("h3");
+      nombre.textContent =
+        solicitud.caballo_nombre || "Caballo";
 
-            <img
-              src="${SUPABASE_URL}/storage/v1/object/public/fotos-caballos/${escapar(s.foto_path)}"
-              alt="${escapar(s.caballo_nombre || "")}"
-              style="width:220px;height:155px;object-fit:cover;border-radius:10px;border:2px solid #c9a227;"
-            >
+      const imagen = document.createElement("img");
+      imagen.alt = nombre.textContent;
+      imagen.style.cssText =
+        "width:220px;height:155px;object-fit:cover;" +
+        "border-radius:10px;border:2px solid #c9a227;" +
+        "display:block;margin:12px auto;cursor:pointer;";
 
-            <div style="margin-top:10px;">
-              <button onclick="aprobarFotoPendiente(${s.id})">
-                Aprobar foto
-              </button>
+      imagen.addEventListener("click", function() {
+        if (imagen.src) {
+          abrirFotoGrande(imagen.src, imagen.alt);
+        }
+      });
 
-              <button onclick="rechazarFotoPendiente(${s.id})">
-                Rechazar
-              </button>
-            </div>
-          </div>
-        `).join("")}
-      </div>
-    `;
+      const controles = document.createElement("div");
+
+      const aprobar = document.createElement("button");
+      aprobar.type = "button";
+      aprobar.textContent = "Aprobar foto";
+
+      aprobar.onclick = function() {
+        aprobarFotoPendiente(solicitud.id);
+      };
+
+      const rechazar = document.createElement("button");
+      rechazar.type = "button";
+      rechazar.textContent = "Rechazar";
+      rechazar.style.marginLeft = "10px";
+
+      rechazar.onclick = function() {
+        rechazarFotoPendiente(solicitud.id);
+      };
+
+      controles.appendChild(aprobar);
+      controles.appendChild(rechazar);
+
+      tarjeta.appendChild(nombre);
+      tarjeta.appendChild(imagen);
+      tarjeta.appendChild(controles);
+
+      panel.appendChild(tarjeta);
+    }
+
+    resultado.replaceChildren(panel);
+
+    const imagenes = panel.querySelectorAll(
+      ".solicitud-foto-admin img"
+    );
+
+    await Promise.all(
+      solicitudes.map(async (solicitud, indice) => {
+        const imagen = imagenes[indice];
+        const ruta = String(solicitud.foto_path || "");
+
+        if (!ruta.startsWith("r2:")) {
+          imagen.src =
+            SUPABASE_URL +
+            "/storage/v1/object/public/fotos-caballos/" +
+            ruta.split("/").map(encodeURIComponent).join("/");
+
+          return;
+        }
+
+        // Las fotos pendientes de R2 son privadas.
+        // La API comprueba los permisos del administrador.
+        try {
+          const respuestaFoto = await fetch(
+            SDU_FOTOS_API +
+            "?accion=pendiente&id=" +
+            encodeURIComponent(solicitud.id),
+            {
+              headers: {
+                apikey: SUPABASE_KEY,
+                Authorization:
+                  "Bearer " + sesionAdmin.access_token
+              }
+            }
+          );
+
+          if (!respuestaFoto.ok) {
+            throw new Error(
+              "No se pudo obtener la foto pendiente."
+            );
+          }
+
+          const archivo = await respuestaFoto.blob();
+          const urlTemporal = URL.createObjectURL(archivo);
+
+          imagen.addEventListener(
+            "load",
+            () => URL.revokeObjectURL(urlTemporal),
+            { once: true }
+          );
+
+          imagen.addEventListener(
+            "error",
+            () => URL.revokeObjectURL(urlTemporal),
+            { once: true }
+          );
+
+          imagen.src = urlTemporal;
+
+        } catch (error) {
+          console.error(error);
+          imagen.alt = "Vista previa no disponible";
+        }
+      })
+    );
 
     resultado.scrollIntoView({
       behavior: "smooth",
@@ -5505,145 +5543,94 @@ if (seccionCriadoresPropietarios) {
 
   } catch (error) {
     console.error(error);
-    alert("No se pudieron cargar las fotos pendientes.");
+    resultado.innerHTML =
+      "<p>No se pudieron cargar las fotos pendientes.</p>";
   }
 }
-    async function aprobarFotoPendiente(idSolicitud) {
-  if (!confirm("¿Aprobar esta foto como foto oficial del caballo?")) return;
+
+
+/* APROBAR O RECHAZAR UNA FOTO */
+
+async function decidirFotoPendienteSDU(accion, idSolicitud) {
+  if (!sesionAdmin?.access_token) {
+    alert("La sesión de administrador no está activa.");
+    return;
+  }
+
+  if (
+    !confirm(
+      accion === "aprobar"
+        ? "¿Aprobar esta fotografía?"
+        : "¿Rechazar esta fotografía?"
+    )
+  ) {
+    return;
+  }
 
   try {
-    const respuestaSolicitud = await fetch(
-      SUPABASE_URL + "/rest/v1/SolicitudesFotosCaballos?id=eq." + idSolicitud + "&select=*",
-      {
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: "Bearer " + sesionAdmin.access_token
-        }
-      }
-    );
-
-    const solicitudes = await respuestaSolicitud.json();
-
-    if (!solicitudes.length) {
-      throw new Error("No se encontró la solicitud.");
-    }
-
-    const solicitud = solicitudes[0];
-
-    let respuestaDestino = null;
-
-/* FOTO DE CABALLO REGISTRADO EN SDU */
-if (solicitud.caballo_id) {
-
-  respuestaDestino = await fetch(
-    SUPABASE_URL +
-      "/rest/v1/Caballos?id=eq." +
-      solicitud.caballo_id,
-    {
-      method: "PATCH",
+    const respuesta = await fetch(SDU_FOTOS_API, {
+      method: "POST",
       headers: {
         apikey: SUPABASE_KEY,
         Authorization:
           "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal"
+        "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        foto_path: solicitud.foto_path
+        accion: accion,
+        id: Number(idSolicitud)
       })
+    });
+
+    const texto = await respuesta.text();
+
+    let datos;
+
+    try {
+      datos = JSON.parse(texto);
+    } catch {
+      throw new Error(
+        "El servidor devolvió una respuesta inválida."
+      );
     }
-  );
 
-}
-
-/* FOTO DE CABALLO DEPORTIVO NO REGISTRADO */
-else if (solicitud.caballo_deportivo_id) {
-
-  respuestaDestino = await fetch(
-    SUPABASE_URL +
-      "/rest/v1/caballos_deportivos?id=eq." +
-      solicitud.caballo_deportivo_id,
-    {
-      method: "PATCH",
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization:
-          "Bearer " + sesionAdmin.access_token,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal"
-      },
-      body: JSON.stringify({
-        foto_path: solicitud.foto_path
-      })
+    if (!respuesta.ok || datos.correcto !== true) {
+      throw new Error(
+        datos.error || "No se pudo procesar la fotografía."
+      );
     }
-  );
 
-}
-
-else {
-  throw new Error(
-    "La solicitud no tiene un caballo asociado."
-  );
-}
-
-if (!respuestaDestino.ok) {
-  throw new Error(
-    "No se pudo colocar la foto en el caballo."
-  );
-}
-
-    const respuestaBorrar = await fetch(
-      SUPABASE_URL + "/rest/v1/SolicitudesFotosCaballos?id=eq." + idSolicitud,
-      {
-        method: "DELETE",
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: "Bearer " + sesionAdmin.access_token
-        }
-      }
+    alert(
+      accion === "aprobar"
+        ? "Foto aprobada correctamente."
+        : "Foto rechazada correctamente."
     );
 
-    if (!respuestaBorrar.ok) {
-      throw new Error("La foto fue aprobada, pero no se pudo borrar la solicitud.");
-    }
-
-    alert("✅ Foto aprobada y colocada en la ficha.");
-    verFotosPendientes();
+    await verFotosPendientes();
+    await actualizarContadorFotosPendientes();
 
   } catch (error) {
     console.error(error);
-    alert("No se pudo aprobar la foto.");
+    alert("No se pudo procesar la foto: " + error.message);
   }
+}
+
+
+async function aprobarFotoPendiente(idSolicitud) {
+  return decidirFotoPendienteSDU(
+    "aprobar",
+    idSolicitud
+  );
 }
 
 
 async function rechazarFotoPendiente(idSolicitud) {
-  if (!confirm("¿Rechazar esta foto?")) return;
-
-  try {
-    const respuesta = await fetch(
-      SUPABASE_URL + "/rest/v1/SolicitudesFotosCaballos?id=eq." + idSolicitud,
-      {
-        method: "DELETE",
-        headers: {
-          apikey: SUPABASE_KEY,
-          Authorization: "Bearer " + sesionAdmin.access_token
-        }
-      }
-    );
-
-    if (!respuesta.ok) {
-      throw new Error("No se pudo rechazar la foto.");
-    }
-
-    alert("Foto rechazada.");
-    verFotosPendientes();
-
-  } catch (error) {
-    console.error(error);
-    alert("No se pudo rechazar la foto.");
-  }
+  return decidirFotoPendienteSDU(
+    "rechazar",
+    idSolicitud
+  );
 }
+
     async function actualizarContadorCaballosPendientes() {
 
   const contador =
