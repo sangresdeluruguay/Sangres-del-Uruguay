@@ -4148,6 +4148,25 @@ nuevaAbuelaMaterna: {
 const SDU_FOTOS_API =
   SUPABASE_URL + "/functions/v1/sdu-fotos-api";
 
+function obtenerUrlFotoSDU(fotoPath, caballoId, tipo) {
+  if (!fotoPath) return "";
+
+  if (String(fotoPath).startsWith("r2:")) {
+    return SDU_FOTOS_API +
+      "?accion=publica&tipo=" +
+      encodeURIComponent(tipo) +
+      "&id=" +
+      encodeURIComponent(caballoId);
+  }
+
+  return SUPABASE_URL +
+    "/storage/v1/object/public/fotos-caballos/" +
+    String(fotoPath)
+      .split("/")
+      .map(encodeURIComponent)
+      .join("/");
+}
+
 async function seleccionarFotoPublicaSDU(
   nombreCaballo,
   tipo,
@@ -8378,7 +8397,7 @@ onclick="registrarCaballoProvisional('${encodeURIComponent(nombre)}', ${Number(c
             caballoDeportivo.foto_path
               ? `
                 <img
-                  src="${SUPABASE_URL}/storage/v1/object/public/fotos-caballos/${escapar(caballoDeportivo.foto_path)}"
+                  src="${escapar(obtenerUrlFotoSDU(caballoDeportivo.foto_path, caballoDeportivo.id, 'deportivo'))}"
                   alt="${escapar(nombre)}"
                   class="foto-caballo-img"
                   onclick="abrirFotoGrande(this.src, this.alt)"
@@ -9719,8 +9738,8 @@ ${aliasActual ? `
 <div class="foto-caballo-ficha">
   ${caballo.foto_path ? `
     <img
-      src="${SUPABASE_URL}/storage/v1/object/public/fotos-caballos/${escapar(caballo.foto_path)}"
-      alt="${escapar(caballo.Nombre)}"
+src="${escapar(obtenerUrlFotoSDU(caballo.foto_path, caballo.id, 'genealogico'))}"
+alt="${escapar(caballo.Nombre)}"
       class="foto-caballo-img" onclick="abrirFotoGrande(this.src, this.alt)" style="cursor:pointer;"
     >
   ` : `
