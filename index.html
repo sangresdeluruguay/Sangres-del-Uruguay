@@ -9067,19 +9067,17 @@ const hijosDirectos = hijos.filter(function(h) {
     madre === nombreBuscadoDirecto
   );
 });
-  // Tomamos un hijo registrado como referencia para reconstruir
-  // la rama conocida del caballo que todavía no está registrado.
-  const hijoReferencia = hijos.length > 0 ? hijos[0] : null;
+
+  // Reconstruir el pedigree provisional usando todos
+  // los descendientes encontrados, sin modificar Supabase.
 
   const pedigreeProvisional = {
     Padre: "",
     Madre: "",
-
     abuelo_paterno: "",
     abuela_paterno: "",
     abuelo_materno: "",
     abuela_materna: "",
-
     bisabuelo_pp: "",
     bisabuela_pp: "",
     bisabuelo_pm: "",
@@ -9090,126 +9088,84 @@ const hijosDirectos = hijos.filter(function(h) {
     bisabuela_mm: ""
   };
 
-if (hijoReferencia) {
-
-  const nombreBuscado =
+  const nombreBuscadoProvisional =
     String(nombre || "").trim().toUpperCase();
 
-  function coincide(valor) {
-    return (
-      String(valor || "").trim().toUpperCase() ===
-      nombreBuscado
-    );
+  function coincideProvisional(valor) {
+    return String(valor || "").trim().toUpperCase() ===
+      nombreBuscadoProvisional;
   }
 
-
-  /* ======================================
-     EL CABALLO APARECE COMO PADRE
-  ====================================== */
-
-  if (coincide(hijoReferencia.Padre)) {
-
-    pedigreeProvisional.Padre =
-      hijoReferencia.abuelo_paterno || "";
-
-    pedigreeProvisional.Madre =
-      hijoReferencia.abuela_paterno || "";
-
-    pedigreeProvisional.abuelo_paterno =
-      hijoReferencia.bisabuelo_pp || "";
-
-    pedigreeProvisional.abuela_paterno =
-      hijoReferencia.bisabuela_pp || "";
-
-    pedigreeProvisional.abuelo_materno =
-      hijoReferencia.bisabuelo_pm || "";
-
-    pedigreeProvisional.abuela_materna =
-      hijoReferencia.bisabuela_pm || "";
+  function completarProvisional(datos) {
+    for (const [campo, valor] of Object.entries(datos)) {
+      if (
+        !pedigreeProvisional[campo] &&
+        typeof valor === "string" &&
+        valor.trim()
+      ) {
+        pedigreeProvisional[campo] = valor.trim();
+      }
+    }
   }
 
+  // Revisar todos los registros donde aparece como padre o madre.
+  for (const h of hijos) {
 
-  /* ======================================
-     EL CABALLO APARECE COMO MADRE
-  ====================================== */
+    if (coincideProvisional(h.Padre)) {
+      completarProvisional({
+        Padre: h.abuelo_paterno,
+        Madre: h.abuela_paterno,
+        abuelo_paterno: h.bisabuelo_pp,
+        abuela_paterno: h.bisabuela_pp,
+        abuelo_materno: h.bisabuelo_pm,
+        abuela_materna: h.bisabuela_pm
+      });
+    }
 
-  else if (coincide(hijoReferencia.Madre)) {
-
-    pedigreeProvisional.Padre =
-      hijoReferencia.abuelo_materno || "";
-
-    pedigreeProvisional.Madre =
-      hijoReferencia.abuela_materna || "";
-
-    pedigreeProvisional.abuelo_paterno =
-      hijoReferencia.bisabuelo_mp || "";
-
-    pedigreeProvisional.abuela_paterno =
-      hijoReferencia.bisabuela_mp || "";
-
-    pedigreeProvisional.abuelo_materno =
-      hijoReferencia.bisabuelo_mm || "";
-
-    pedigreeProvisional.abuela_materna =
-      hijoReferencia.bisabuela_mm || "";
+    if (coincideProvisional(h.Madre)) {
+      completarProvisional({
+        Padre: h.abuelo_materno,
+        Madre: h.abuela_materna,
+        abuelo_paterno: h.bisabuelo_mp,
+        abuela_paterno: h.bisabuela_mp,
+        abuelo_materno: h.bisabuelo_mm,
+        abuela_materna: h.bisabuela_mm
+      });
+    }
   }
 
+  // Revisar también cuando aparece como abuelo o abuela.
+  for (const h of hijos) {
 
-  /* ======================================
-     APARECE COMO ABUELO PATERNO
-  ====================================== */
+    if (coincideProvisional(h.abuelo_paterno)) {
+      completarProvisional({
+        Padre: h.bisabuelo_pp,
+        Madre: h.bisabuela_pp
+      });
+    }
 
-  else if (coincide(hijoReferencia.abuelo_paterno)) {
+    if (coincideProvisional(h.abuela_paterno)) {
+      completarProvisional({
+        Padre: h.bisabuelo_pm,
+        Madre: h.bisabuela_pm
+      });
+    }
 
-    pedigreeProvisional.Padre =
-      hijoReferencia.bisabuelo_pp || "";
+    if (coincideProvisional(h.abuelo_materno)) {
+      completarProvisional({
+        Padre: h.bisabuelo_mp,
+        Madre: h.bisabuela_mp
+      });
+    }
 
-    pedigreeProvisional.Madre =
-      hijoReferencia.bisabuela_pp || "";
+    if (coincideProvisional(h.abuela_materna)) {
+      completarProvisional({
+        Padre: h.bisabuelo_mm,
+        Madre: h.bisabuela_mm
+      });
+    }
   }
 
-
-  /* ======================================
-     APARECE COMO ABUELA PATERNA
-  ====================================== */
-
-  else if (coincide(hijoReferencia.abuela_paterno)) {
-
-    pedigreeProvisional.Padre =
-      hijoReferencia.bisabuelo_pm || "";
-
-    pedigreeProvisional.Madre =
-      hijoReferencia.bisabuela_pm || "";
-  }
-
-
-  /* ======================================
-     APARECE COMO ABUELO MATERNO
-  ====================================== */
-
-  else if (coincide(hijoReferencia.abuelo_materno)) {
-
-    pedigreeProvisional.Padre =
-      hijoReferencia.bisabuelo_mp || "";
-
-    pedigreeProvisional.Madre =
-      hijoReferencia.bisabuela_mp || "";
-  }
-
-
-  /* ======================================
-     APARECE COMO ABUELA MATERNA
-  ====================================== */
-
-  else if (coincide(hijoReferencia.abuela_materna)) {
-
-    pedigreeProvisional.Padre =
-      hijoReferencia.bisabuelo_mm || "";
-
-    pedigreeProvisional.Madre =
-      hijoReferencia.bisabuela_mm || "";
-  }
-}
 
   function nodoProvisional(nombreNodo, tipo) {
     return (
