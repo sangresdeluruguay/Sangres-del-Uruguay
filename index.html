@@ -6256,6 +6256,11 @@ async function editarCaballo(id) {
   }
 
   const caballo = datos[0];
+  const nombreRegistroSDU =
+  caballo.nombre_registro_sdu || "";
+
+const nombreDeportivoSDU =
+  caballo.nombre_deportivo_sdu || "";
 let propietarioActual = "";
 
 if (caballo["Propietario ID"]) {
@@ -6287,7 +6292,33 @@ if (caballo["Propietario ID"]) {
         type="text"
         value="${escapar(caballo.Nombre || "")}"
       >
+<div style="max-width:600px; margin:20px auto;">
 
+  <label for="editNombreRegistroSDU">
+    <strong>Nombre original de registro</strong>
+  </label>
+
+  <input
+    id="editNombreRegistroSDU"
+    type="text"
+    placeholder="Nombre original del caballo"
+    value="${escapar(nombreRegistroSDU)}"
+    style="width:100%; box-sizing:border-box; margin:8px 0 18px;"
+  >
+
+  <label for="editNombreDeportivoSDU">
+    <strong>Nombre deportivo (con el que compite)</strong>
+  </label>
+
+  <input
+    id="editNombreDeportivoSDU"
+    type="text"
+    placeholder="Nombre con el que corre"
+    value="${escapar(nombreDeportivoSDU)}"
+    style="width:100%; box-sizing:border-box; margin-top:8px;"
+  >
+
+</div>
       <div class="tabla-ficha">
 
         <div class="dato-ficha">
@@ -7403,6 +7434,13 @@ const sugerencias = await buscarSugerenciasAncestros(texto, sexoPermitido);
   }
 
   const nombre = document.getElementById("editNombre").value.trim();
+      const nombreRegistroSDU = document
+  .getElementById("editNombreRegistroSDU")
+  .value.trim();
+
+const nombreDeportivoSDU = document
+  .getElementById("editNombreDeportivoSDU")
+  .value.trim();
   const nacimiento = document.getElementById("editNacimiento").value;
   const pelo = document.getElementById("editPelo").value.trim();
   const rp = document.getElementById("editRP").value.trim();
@@ -7489,8 +7527,10 @@ const bisabuelaMM = document.getElementById("editBisabuelaMM").value.trim();
         Prefer: "return=minimal"
       },
       body: JSON.stringify({
-        Nombre: nombre,
-        Nacimiento: nacimiento || null,
+       Nombre: nombre,
+nombre_registro_sdu: nombreRegistroSDU || null,
+nombre_deportivo_sdu: nombreDeportivoSDU || null,
+Nacimiento: nacimiento || null,
         Pelo: pelo || null,
         RP: rp || null,
         "Propietario ID": propietarioId,
@@ -9727,13 +9767,47 @@ ${origenFichaCaballo === "criadores" ? `
 </div>
 `}
 
-<h2 class="nombre-caballo-ficha">${escapar(caballo.Nombre)}</h2>
+<h2 class="nombre-caballo-ficha">
+  ${escapar(
+    caballo.nombre_deportivo_sdu ||
+    caballoDeportivo?.nombre_principal ||
+    caballo.nombre_registro_sdu ||
+    caballo.Nombre
+  )}
+</h2>
 
-${aliasActual ? `
-  <div class="alias-caballo-ficha">
-    (${escapar(aliasActual.alias)})
-  </div>
-` : ""}
+${
+  (
+    caballo.nombre_registro_sdu ||
+    (
+      caballo.nombre_deportivo_sdu
+        ? caballo.Nombre
+        : ""
+    )
+  ) &&
+  (
+    caballo.nombre_deportivo_sdu ||
+    caballoDeportivo?.nombre_principal
+  ) &&
+  (
+    caballo.nombre_registro_sdu ||
+    caballo.Nombre
+  ).trim().toUpperCase() !==
+  (
+    caballo.nombre_deportivo_sdu ||
+    caballoDeportivo?.nombre_principal ||
+    caballo.Nombre
+  ).trim().toUpperCase()
+    ? `
+      <div class="alias-caballo-ficha">
+        (${escapar(
+          caballo.nombre_registro_sdu ||
+          caballo.Nombre
+        )})
+      </div>
+    `
+    : ""
+}
 <div class="ficha-superior-caballo">
 <div class="foto-caballo-ficha">
   ${caballo.foto_path ? `
