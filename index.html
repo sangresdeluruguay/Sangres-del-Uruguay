@@ -8913,8 +8913,12 @@ const patronBusqueda =
 
 const url =
   SUPABASE_URL +
-  "/rest/v1/Caballos?select=*&Nombre=ilike." +
-  encodeURIComponent(patronBusqueda) +
+  "/rest/v1/Caballos?select=*" +
+  "&or=(" +
+    "Nombre.ilike." + encodeURIComponent(patronBusqueda) + "," +
+    "nombre_registro_sdu.ilike." + encodeURIComponent(patronBusqueda) + "," +
+    "nombre_deportivo_sdu.ilike." + encodeURIComponent(patronBusqueda) +
+  ")" +
   "&order=Nacimiento.desc.nullslast";
     
     const respuesta = await fetch(url, {
