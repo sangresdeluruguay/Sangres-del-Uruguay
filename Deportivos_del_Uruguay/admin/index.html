@@ -1,0 +1,303 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administrador | Deportivos del Uruguay</title>
+<style>
+:root {
+  --verde:#102c22;
+  --dorado:#c6a15b;
+  --fondo:#f5f5f0;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:var(--fondo);
+  color:var(--verde);
+}
+header {
+  background:var(--verde);
+  color:white;
+  padding:24px;
+  border-bottom:4px solid var(--dorado);
+}
+header h1 {
+  margin:0;
+  font-family:Georgia,serif;
+  font-size:28px;
+}
+header p { color:var(--dorado); margin:8px 0 0; }
+main { max-width:1150px; margin:30px auto; padding:0 18px; }
+.tarjeta {
+  background:white;
+  border:1px solid #deded8;
+  border-radius:14px;
+  padding:24px;
+  margin-bottom:20px;
+}
+.menu {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:15px;
+}
+button,.boton {
+  display:inline-block;
+  background:var(--verde);
+  color:white;
+  border:1px solid var(--dorado);
+  border-radius:9px;
+  padding:15px 18px;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  text-decoration:none;
+  text-align:center;
+}
+button:hover,.boton:hover { background:#20513d; }
+button:disabled { opacity:.55; cursor:not-allowed; }
+h2 { margin-top:0; }
+.oculto { display:none!important; }
+.estado {
+  padding:14px;
+  background:#f2f4ef;
+  border-radius:9px;
+  line-height:1.6;
+}
+.enlace { color:#a47a31; }
+@media(max-width:650px) {
+  .menu { grid-template-columns:1fr; }
+  header h1 { font-size:23px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DEPORTIVOS DEL URUGUAY</h1>
+  <p>Panel de administración</p>
+</header>
+
+<main>
+  <section class="tarjeta" id="verificacion">
+    <h2>Verificando acceso</h2>
+    <p id="mensajeAcceso">Comprobando la sesión de Sangres del Uruguay...</p>
+    <a class="boton oculto" id="irSDU"
+       href="../../index.html">Ingresar desde Sangres del Uruguay</a>
+  </section>
+
+  <section id="panel" class="oculto">
+    <div class="tarjeta">
+      <h2>Administrador de Deportivos</h2>
+      <p id="correoAdmin"></p>
+      <p>Seleccioná una sección para trabajar.</p>
+      <div class="menu">
+        <button onclick="abrirSeccion('publicaciones')">
+          Solicitudes de publicación
+        </button>
+        <button onclick="abrirSeccion('ofertas')">
+          Consultas y ofertas
+        </button>
+        <button onclick="abrirSeccion('ejemplares')">
+          Ejemplares publicados
+        </button>
+        <button onclick="abrirSeccion('ventas')">
+          Ventas realizadas
+        </button>
+      </div>
+    </div>
+
+    <section class="tarjeta" id="contenido">
+      <h2>Panel principal</h2>
+      <div class="estado">
+        Seleccioná una sección del administrador.
+      </div>
+    </section>
+
+    <a class="boton" href="../index.html">
+      Ver catálogo público
+    </a>
+  </section>
+</main>
+
+<script>
+const SUPABASE_URL =
+  "https://arsjvaueyjwntefogmqz.supabase.co";
+
+const SUPABASE_KEY =
+  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+
+let tokenActual = null;
+
+function mostrarAcceso(texto, mostrarEnlace = false) {
+  document.getElementById("mensajeAcceso").textContent = texto;
+  document.getElementById("irSDU").classList.toggle(
+    "oculto", !mostrarEnlace
+  );
+}
+
+async function solicitudAuth(ruta, token, metodo = "GET", datos) {
+  return fetch(SUPABASE_URL + ruta, {
+    method: metodo,
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    ...(datos ? {body:JSON.stringify(datos)} : {})
+  });
+}
+
+async function verificarAdministrador() {
+  let sesion;
+
+  try {
+    sesion = JSON.parse(
+      localStorage.getItem("sesionAdminSdU") || "null"
+    );
+  } catch {
+    sesion = null;
+  }
+
+  if (!sesion?.access_token) {
+    mostrarAcceso(
+      "Primero tenés que iniciar sesión en Sangres del Uruguay.",
+      true
+    );
+    return;
+  }
+
+  let token = sesion.access_token;
+
+  try {
+    let respuesta = await solicitudAuth(
+      "/auth/v1/user", token
+    );
+
+    if (!respuesta.ok && sesion.refresh_token) {
+      const renovar = await fetch(
+        SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+        {
+          method:"POST",
+          headers:{
+            apikey:SUPABASE_KEY,
+            "Content-Type":"application/json"
+          },
+          body:JSON.stringify({
+            refresh_token:sesion.refresh_token
+          })
+        }
+      );
+
+      if (renovar.ok) {
+        sesion = await renovar.json();
+        token = sesion.access_token;
+        localStorage.setItem(
+          "sesionAdminSdU", JSON.stringify(sesion)
+        );
+        respuesta = await solicitudAuth(
+          "/auth/v1/user", token
+        );
+      }
+    }
+
+    if (!respuesta.ok) {
+      mostrarAcceso(
+        "La sesión venció. Volvé a ingresar desde SDU.",
+        true
+      );
+      return;
+    }
+
+    const usuario = await respuesta.json();
+
+    // Esta función debe existir en Supabase y verificar
+    // los permisos del usuario autenticado.
+    const permiso = await solicitudAuth(
+      "/rest/v1/rpc/es_admin_deportivos",
+      token,
+      "POST",
+      {}
+    );
+
+    if (!permiso.ok) {
+      mostrarAcceso(
+        "Falta configurar la verificación de administradores de Deportivos en Supabase."
+      );
+      return;
+    }
+
+    const autorizado = await permiso.json();
+
+    if (autorizado !== true) {
+      mostrarAcceso(
+        "Tu cuenta no tiene autorización para administrar Deportivos."
+      );
+      return;
+    }
+
+    tokenActual = token;
+
+    document.getElementById("verificacion")
+      .classList.add("oculto");
+
+    document.getElementById("panel")
+      .classList.remove("oculto");
+
+    document.getElementById("correoAdmin").textContent =
+      "Sesión: " + (usuario.email || "Administrador");
+
+  } catch (error) {
+    console.error("Error al verificar acceso:", error);
+    mostrarAcceso(
+      "No se pudo verificar el acceso. Intentá nuevamente."
+    );
+  }
+}
+
+const secciones = {
+  publicaciones: {
+    titulo:"Solicitudes de publicación",
+    detalle:"Aquí aparecerán los caballos enviados por propietarios, pendientes de revisión y aprobación."
+  },
+  ofertas: {
+    titulo:"Consultas y ofertas",
+    detalle:"Aquí aparecerán los datos del comprador, el caballo consultado, el país, el establo y las ofertas en dólares."
+  },
+  ejemplares: {
+    titulo:"Ejemplares publicados",
+    detalle:"Aquí podrás editar datos, precios, fotografías, videos y el estado de venta."
+  },
+  ventas: {
+    titulo:"Ventas realizadas",
+    detalle:"Aquí se registrarán los ejemplares vendidos y sus operaciones."
+  }
+};
+
+function abrirSeccion(nombre) {
+  const seccion = secciones[nombre];
+  if (!seccion || !tokenActual) return;
+
+  const contenido = document.getElementById("contenido");
+  contenido.replaceChildren();
+
+  const titulo = document.createElement("h2");
+  titulo.textContent = seccion.titulo;
+
+  const aviso = document.createElement("div");
+  aviso.className = "estado";
+  aviso.textContent =
+    seccion.detalle +
+    " La conexión con los registros reales está pendiente.";
+
+  contenido.append(titulo, aviso);
+  contenido.scrollIntoView({behavior:"smooth"});
+}
+
+verificarAdministrador();
+</script>
+
+</body>
+</html>
