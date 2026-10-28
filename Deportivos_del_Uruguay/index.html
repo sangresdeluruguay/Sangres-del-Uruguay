@@ -18,9 +18,7 @@
   --borde: #e2e6df;
 }
 
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
@@ -29,13 +27,8 @@ body {
   color: var(--texto);
 }
 
-button, input, select, textarea {
-  font: inherit;
-}
-
-button {
-  cursor: pointer;
-}
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
 
 a {
   color: inherit;
@@ -87,9 +80,7 @@ nav a {
   padding: 10px 13px;
 }
 
-nav a:hover {
-  color: var(--dorado);
-}
+nav a:hover { color: var(--dorado); }
 
 .boton {
   display: inline-block;
@@ -106,23 +97,24 @@ nav a:hover {
   color: white;
 }
 
-.boton-verde:hover {
-  background: #265744;
-}
+.boton-verde:hover { background: #265744; }
 
 .boton-dorado {
   background: var(--dorado);
   color: #17291e;
 }
 
-.boton-dorado:hover {
-  background: #d8b980;
-}
+.boton-dorado:hover { background: #d8b980; }
 
 .boton-borde {
   border: 1px solid var(--verde);
   background: white;
   color: var(--verde);
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 main {
@@ -132,9 +124,7 @@ main {
   min-height: 65vh;
 }
 
-h1, h2, h3 {
-  font-family: Georgia, serif;
-}
+h1, h2, h3 { font-family: Georgia, serif; }
 
 h1 {
   font-size: 35px;
@@ -224,9 +214,7 @@ textarea {
   background: #e5e8e1;
 }
 
-.tarjeta-cuerpo {
-  padding: 20px;
-}
+.tarjeta-cuerpo { padding: 20px; }
 
 .etiqueta {
   display: inline-block;
@@ -257,9 +245,7 @@ textarea {
   margin: 18px 0;
 }
 
-.tarjeta .boton {
-  display: block;
-}
+.tarjeta .boton { display: block; }
 
 .panel {
   background: white;
@@ -283,9 +269,7 @@ textarea {
   margin-bottom: 20px;
 }
 
-.ficha-cabecera h1 {
-  margin-bottom: 8px;
-}
+.ficha-cabecera h1 { margin-bottom: 8px; }
 
 .galeria {
   position: relative;
@@ -315,17 +299,9 @@ textarea {
   border-radius: 5px;
 }
 
-.flecha:hover {
-  background: var(--verde);
-}
-
-.flecha-izq {
-  left: 12px;
-}
-
-.flecha-der {
-  right: 12px;
-}
+.flecha:hover { background: var(--verde); }
+.flecha-izq { left: 12px; }
+.flecha-der { right: 12px; }
 
 .miniaturas {
   display: flex;
@@ -372,9 +348,7 @@ textarea {
   margin-bottom: 8px;
 }
 
-.dato span {
-  font-weight: bold;
-}
+.dato span { font-weight: bold; }
 
 .descripcion {
   line-height: 1.9;
@@ -403,17 +377,10 @@ textarea {
   font-size: 13px;
 }
 
-.pedigree-nombre.macho {
-  background: #e8f3fa;
-}
+.pedigree-nombre.macho { background: #e8f3fa; }
+.pedigree-nombre.hembra { background: #f9eaf0; }
 
-.pedigree-nombre.hembra {
-  background: #f9eaf0;
-}
-
-.tabla-contenedor {
-  overflow-x: auto;
-}
+.tabla-contenedor { overflow-x: auto; }
 
 table {
   width: 100%;
@@ -427,9 +394,7 @@ th, td {
   border-bottom: 1px solid var(--borde);
 }
 
-th {
-  background: #f1f5ef;
-}
+th { background: #f1f5ef; }
 
 .video {
   width: 100%;
@@ -479,9 +444,7 @@ th {
   color: var(--gris);
 }
 
-.oculto {
-  display: none !important;
-}
+.oculto { display: none !important; }
 
 footer {
   background: var(--verde-oscuro);
@@ -490,53 +453,25 @@ footer {
   text-align: center;
 }
 
-footer small {
-  color: #bac9be;
-}
+footer small { color: #bac9be; }
 
 @media(max-width: 900px) {
-  .grilla {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  .grilla { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media(max-width: 600px) {
-  .grilla {
-    grid-template-columns: 1fr;
-  }
-
-  .datos {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .form-grilla {
-    grid-template-columns: 1fr;
-  }
-
-  .form-grilla .ancho-completo {
-    grid-column: auto;
-  }
-
-  .galeria {
-    height: 300px;
-  }
-
-  h1 {
-    font-size: 29px;
-  }
-
-  .marca {
-    font-size: 22px;
-  }
-
+  .grilla { grid-template-columns: 1fr; }
+  .datos { grid-template-columns: repeat(2, 1fr); }
+  .form-grilla { grid-template-columns: 1fr; }
+  .form-grilla .ancho-completo { grid-column: auto; }
+  .galeria { height: 300px; }
+  h1 { font-size: 29px; }
+  .marca { font-size: 22px; }
   .header-inner {
     justify-content: center;
     text-align: center;
   }
-
-  nav {
-    justify-content: center;
-  }
+  nav { justify-content: center; }
 }
 </style>
 </head>
@@ -573,20 +508,50 @@ footer small {
 <script>
 "use strict";
 
+/* ==================================================
+   CONEXIÓN SUPABASE
+   ================================================== */
+
+const SUPABASE_URL =
+  "https://arsjvaueyjwntefogmqz.supabase.co";
+
+const SUPABASE_PUBLIC_KEY =
+  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+
 /*
-  PRIMERA VERSIÓN DEL SITIO
-
-  Los caballos de este archivo son demostrativos.
-
-  Próximamente:
-  - Consulta real a Supabase
-  - Fotos almacenadas en Cloudflare R2
-  - Pedigree y descendencia desde SDU
-  - Formularios y notificaciones reales
-  - Administración protegida
-
-  No incluir claves privadas de Supabase o R2 aquí.
+  La clave anterior es pública.
+  Nunca colocar aquí una service_role o secret key.
 */
+
+async function guardarSolicitudDeportivo(datos) {
+  const respuesta = await fetch(
+    `${SUPABASE_URL}/rest/v1/deportivos_publicaciones`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_PUBLIC_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(datos)
+    }
+  );
+
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text();
+    throw new Error(
+      `Supabase ${respuesta.status}: ${detalle}`
+    );
+  }
+
+  return true;
+}
+
+/* ==================================================
+   CATÁLOGO DEMOSTRATIVO
+   Se reemplazará por publicaciones aprobadas
+   en el paso 5.
+   ================================================== */
 
 const CABALLOS = [
   {
@@ -689,8 +654,7 @@ const IMAGEN_SIN_FOTO = `
        viewBox="0 0 800 500">
     <rect width="800" height="500" fill="#e9eee8"/>
     <circle cx="400" cy="200" r="62" fill="#d1ddd2"/>
-    <path d="M365 190h70v20h-70z"
-          fill="#a1b4a4"/>
+    <path d="M365 190h70v20h-70z" fill="#a1b4a4"/>
     <text x="400" y="310"
           text-anchor="middle"
           font-family="Arial"
@@ -758,8 +722,7 @@ function imagenPrincipal(caballo) {
 function tarjetaCaballo(c) {
   return `
     <article class="tarjeta">
-      <a href="${enlaceCaballo(c.id)}"
-         data-navegar>
+      <a href="${enlaceCaballo(c.id)}" data-navegar>
         <img class="tarjeta-imagen"
              src="${escapar(imagenPrincipal(c))}"
              alt="Fotografía de ${escapar(c.nombre)}">
@@ -792,6 +755,10 @@ function tarjetaCaballo(c) {
   `;
 }
 
+/* ==================================================
+   CATÁLOGO
+   ================================================== */
+
 function mostrarCatalogo() {
   const params = new URLSearchParams(location.search);
   const categoria = params.get("categoria") || "";
@@ -815,7 +782,6 @@ function mostrarCatalogo() {
     <section class="filtros">
       <div class="campo-filtro">
         <label for="filtroCategoria">Categoría</label>
-
         <select id="filtroCategoria">
           <option value="">Todas las categorías</option>
           ${Object.entries(CATEGORIAS).map(([clave, nombre]) => `
@@ -829,7 +795,6 @@ function mostrarCatalogo() {
 
       <div class="campo-filtro">
         <label for="filtroSexo">Sexo</label>
-
         <select id="filtroSexo">
           <option value="">Todos</option>
           <option value="Macho entero"
@@ -915,6 +880,10 @@ function actualizarFiltros() {
   mostrarCatalogo();
 }
 
+/* ==================================================
+   FICHA DEL CABALLO
+   ================================================== */
+
 let indiceFoto = 0;
 
 function mostrarFicha(caballo) {
@@ -945,23 +914,19 @@ function mostrarFicha(caballo) {
              src="${escapar(fotos[0])}"
              alt="Fotografía de ${escapar(caballo.nombre)}">
 
-        ${
-          fotos.length > 1
-            ? `
-              <button class="flecha flecha-izq"
-                      id="fotoAnterior"
-                      aria-label="Fotografía anterior">
-                &#8249;
-              </button>
+        ${fotos.length > 1 ? `
+          <button class="flecha flecha-izq"
+                  id="fotoAnterior"
+                  aria-label="Fotografía anterior">
+            &#8249;
+          </button>
 
-              <button class="flecha flecha-der"
-                      id="fotoSiguiente"
-                      aria-label="Fotografía siguiente">
-                &#8250;
-              </button>
-            `
-            : ""
-        }
+          <button class="flecha flecha-der"
+                  id="fotoSiguiente"
+                  aria-label="Fotografía siguiente">
+            &#8250;
+          </button>
+        ` : ""}
       </div>
 
       <div class="miniaturas">
@@ -992,12 +957,10 @@ function mostrarFicha(caballo) {
     </section>
 
     ${htmlPedigree(caballo)}
-
     ${htmlDescendencia(caballo)}
 
     <section class="panel">
       <h2>Descripción</h2>
-
       <div class="descripcion">
         ${escapar(caballo.descripcion)}
       </div>
@@ -1066,14 +1029,6 @@ function cambiarFoto(nuevoIndice, fotos) {
 }
 
 function htmlPedigree(caballo) {
-  /*
-    Cuando se conecte con Sangres del Uruguay,
-    caballo.pedigree contendrá los ancestros
-    reales del caballo vinculado.
-
-    No se muestran ancestros inventados.
-  */
-
   if (!caballo.pedigree) return "";
 
   const p = caballo.pedigree;
@@ -1117,13 +1072,6 @@ function nombrePedigree(nombre, sexo) {
 }
 
 function htmlDescendencia(caballo) {
-  /*
-    La descendencia se consultará desde SDU.
-
-    Si no hay hijos registrados, no aparece
-    esta sección.
-  */
-
   if (!caballo.descendencia?.length) return "";
 
   const hijos = [...caballo.descendencia]
@@ -1221,6 +1169,11 @@ function htmlVideos(caballo) {
   `;
 }
 
+/* ==================================================
+   FORMULARIO DE PUBLICACIÓN
+   CONECTADO A SUPABASE
+   ================================================== */
+
 function mostrarSolicitar() {
   contenido.innerHTML = `
     <div class="formulario">
@@ -1233,6 +1186,7 @@ function mostrarSolicitar() {
       </p>
 
       <form id="formSolicitar" class="panel">
+
         <h2>Datos del propietario</h2>
 
         <div class="form-grilla">
@@ -1366,15 +1320,20 @@ function mostrarSolicitar() {
           </div>
 
           <div class="ancho-completo">
-            <label>Fotografías del caballo *</label>
+            <label>
+              Fotografías del caballo (próximamente)
+            </label>
+
             <input name="fotografias"
                    type="file"
                    accept="image/*"
-                   multiple required>
+                   multiple disabled>
 
             <p class="ayuda">
-              Seleccioná las fotografías que
-              querés enviar para la publicación.
+              Las fotografías se conectarán con
+              Cloudflare R2 en el siguiente paso.
+              Por ahora se enviarán solamente
+              los datos del caballo.
             </p>
           </div>
         </div>
@@ -1393,35 +1352,43 @@ function mostrarSolicitar() {
           la publicación.
         </p>
 
-       
-<div style="margin:20px 0">
-  <a
-    href="https://wa.me/59891909423?text=Hola%2C%20quiero%20enviar%20videos%20de%20mi%20caballo%20para%20su%20publicaci%C3%B3n%20en%20Deportivos%20del%20Uruguay."
-    target="_blank"
-    rel="noopener noreferrer"
-    class="boton boton-verde"
-  >
-    Enviar videos por WhatsApp
-  </a>
+        <div style="margin:20px 0">
+          <a
+            href="https://wa.me/59891909423?text=Hola%2C%20quiero%20enviar%20videos%20de%20mi%20caballo%20para%20su%20publicaci%C3%B3n%20en%20Deportivos%20del%20Uruguay."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="boton boton-verde">
+            Enviar videos por WhatsApp
+          </a>
 
-  <p class="ayuda">
-    Se abrirá el WhatsApp oficial de Sangres del Uruguay.
-    Adjuntá los videos de tu caballo y envialos.
-    Nuestro equipo revisará el material antes de publicarlo.
-  </p>
-</div>
-
+          <p class="ayuda">
+            Se abrirá el WhatsApp oficial de
+            Sangres del Uruguay. Adjuntá los
+            videos de tu caballo y envialos.
+            Nuestro equipo revisará el material
+            antes de publicarlo.
+          </p>
+        </div>
 
         <div class="aviso">
-          Esta versión es de demostración.
-          Todavía no se reciben publicaciones
-          ni se suben fotografías.
+          Tu solicitud se guardará como
+          <strong>pendiente de aprobación</strong>.
+
+          Las fotografías todavía no se enviarán.
+          SDU deberá incorporarlas antes de
+          publicar el caballo.
         </div>
 
         <button type="submit"
                 class="boton boton-dorado">
           Enviar solicitud de publicación
         </button>
+
+        <p id="estadoSolicitud"
+           role="status"
+           aria-live="polite"
+           style="margin-top:18px"></p>
+
       </form>
     </div>
   `;
@@ -1439,17 +1406,111 @@ function mostrarSolicitar() {
       .required = publico;
   });
 
+  /* ENVÍO REAL A SUPABASE */
+
   document.getElementById("formSolicitar")
-    .addEventListener("submit", e => {
+    .addEventListener("submit", async e => {
       e.preventDefault();
 
-      alert(
-        "Formulario de demostración. " +
-        "Todavía no está conectado para recibir solicitudes. " +
-        "No se enviaron ni guardaron tus datos."
+      const formulario = e.currentTarget;
+
+      if (!formulario.reportValidity()) return;
+
+      const boton = formulario.querySelector(
+        'button[type="submit"]'
       );
+
+      const estado =
+        document.getElementById("estadoSolicitud");
+
+      const datos = new FormData(formulario);
+
+      const texto = campo =>
+        String(datos.get(campo) || "").trim();
+
+      const numero = campo => {
+        const valor = texto(campo);
+        return valor === "" ? null : Number(valor);
+      };
+
+      const reservado =
+        texto("tipoPrecio") === "reservado";
+
+      const solicitud = {
+        nombre: texto("nombre"),
+        raza: texto("raza"),
+        sexo: texto("sexo"),
+        edad: numero("edad"),
+        altura_cm: numero("altura"),
+        pelo: texto("pelo") || null,
+        categoria: texto("categoria"),
+        ubicacion: texto("ubicacion"),
+        pais: texto("pais"),
+        descripcion: texto("descripcion"),
+        precio_usd: reservado
+          ? null
+          : numero("precio"),
+        precio_reservado: reservado,
+        propietario_nombre: texto("propietario"),
+        propietario_email: texto("email"),
+        propietario_telefono: texto("telefono")
+      };
+
+      boton.disabled = true;
+      boton.textContent = "Enviando solicitud...";
+
+      estado.textContent =
+        "Guardando solicitud en Supabase...";
+
+      estado.style.color = "";
+
+      try {
+        await guardarSolicitudDeportivo(solicitud);
+
+        formulario.reset();
+
+        document.getElementById("campoPrecio")
+          .classList.remove("oculto");
+
+        document.getElementById("precio")
+          .required = true;
+
+        estado.textContent =
+          "¡Solicitud recibida correctamente! " +
+          "El caballo quedó pendiente de aprobación. " +
+          "Las fotografías todavía no se enviaron.";
+
+        estado.style.color = "#183d30";
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      } catch (error) {
+        console.error(
+          "Error al enviar solicitud:",
+          error
+        );
+
+        estado.textContent =
+          "No se pudo guardar la solicitud. " +
+          "Intentá nuevamente o comunicate con SDU.";
+
+        estado.style.color = "#a32929";
+
+      } finally {
+        boton.disabled = false;
+        boton.textContent =
+          "Enviar solicitud de publicación";
+      }
     });
 }
+
+/* ==================================================
+   CONSULTAS Y OFERTAS
+   Se conectarán al panel en el paso 4.
+   ================================================== */
 
 function comisionComprador(precio, internacional) {
   if (internacional) return 0.10;
@@ -1666,6 +1727,10 @@ function mostrarConsultar(caballo) {
     });
 }
 
+/* ==================================================
+   NAVEGACIÓN
+   ================================================== */
+
 function mostrarVista() {
   const params = new URLSearchParams(location.search);
 
@@ -1729,13 +1794,6 @@ function mostrarNoEncontrado() {
   `;
 }
 
-/*
-  Navegación interna:
-  - Cambia la URL sin recargar.
-  - Respeta la flecha Atrás del navegador.
-  - Mantiene filtros en la URL.
-*/
-
 document.addEventListener("click", e => {
   const enlace = e.target.closest("a[data-navegar]");
 
@@ -1754,11 +1812,6 @@ document.addEventListener("click", e => {
   ir(enlace.getAttribute("href"));
 });
 
-/*
-  Los enlaces internos del menú también
-  utilizan la navegación de esta página.
-*/
-
 document.querySelectorAll(
   'header a[href="index.html"], header a[href^="?"]'
 ).forEach(enlace => {
@@ -1772,6 +1825,5 @@ window.addEventListener("popstate", () => {
 mostrarVista();
 
 </script>
-
 </body>
 </html>
