@@ -507,3 +507,1323 @@ footer small { color: #bac9be; }
 
 <script>
 "use strict";
+
+/* ==================================================
+   CONEXIÓN SUPABASE
+   ================================================== */
+
+const SUPABASE_URL =
+  "https://arsjvaueyjwntefogmqz.supabase.co";
+
+const SUPABASE_PUBLIC_KEY =
+  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+
+/*
+  La clave anterior es pública.
+  Nunca colocar aquí una service_role o secret key.
+*/
+
+async function guardarSolicitudDeportivo(datos) {
+  const respuesta = await fetch(
+    `${SUPABASE_URL}/rest/v1/deportivos_publicaciones`,
+    {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_PUBLIC_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "return=minimal"
+      },
+      body: JSON.stringify(datos)
+    }
+  );
+
+  if (!respuesta.ok) {
+    const detalle = await respuesta.text();
+    throw new Error(
+      `Supabase ${respuesta.status}: ${detalle}`
+    );
+  }
+
+  return true;
+}
+
+/* ==================================================
+   CATÁLOGO DEMOSTRATIVO
+   Se reemplazará por publicaciones aprobadas
+   en el paso 5.
+   ================================================== */
+
+const CABALLOS = [
+  {
+    id: "ejemplo-1",
+    nombre: "EJEMPLAR DE RAID",
+    categoria: "raid",
+    sexo: "Macho entero",
+    raza: "Anglo-árabe",
+    nacimiento: "2018",
+    altura: "155 cm",
+    pelo: "Zaino",
+    pais: "Uruguay",
+    ubicacion: "Uruguay",
+    precio: 8500,
+    reservado: false,
+    estado: "En venta",
+    descripcion:
+      "Ejemplar de demostración para visualizar cómo se presentará un caballo de raid.\n\nAquí el propietario podrá describir su entrenamiento, antecedentes deportivos, distancias recorridas y características.",
+    fotos: [],
+    videos: [],
+    pedigree: null,
+    descendencia: []
+  },
+  {
+    id: "ejemplo-2",
+    nombre: "EJEMPLAR DE ENDURANCE",
+    categoria: "endurance",
+    sexo: "Hembra",
+    raza: "Árabe",
+    nacimiento: "2019",
+    altura: "148 cm",
+    pelo: "Tordillo",
+    pais: "Uruguay",
+    ubicacion: "Uruguay",
+    precio: null,
+    reservado: true,
+    estado: "En venta",
+    descripcion:
+      "Ejemplar de demostración de la categoría Endurance.\n\nLa descripción incluirá su trayectoria deportiva y toda la información que el propietario desee aportar.",
+    fotos: [],
+    videos: [],
+    pedigree: null,
+    descendencia: []
+  },
+  {
+    id: "ejemplo-3",
+    nombre: "EJEMPLAR PADRILLO",
+    categoria: "padrillos",
+    sexo: "Macho entero",
+    raza: "Anglo-árabe",
+    nacimiento: "2017",
+    altura: "153 cm",
+    pelo: "Alazán",
+    pais: "Uruguay",
+    ubicacion: "Uruguay",
+    precio: 12000,
+    reservado: false,
+    estado: "En venta",
+    descripcion:
+      "Ejemplar de demostración ofrecido como padrillo.\n\nSu descripción podrá incluir antecedentes deportivos, producción y características reproductivas.",
+    fotos: [],
+    videos: [],
+    pedigree: null,
+    descendencia: []
+  },
+  {
+    id: "ejemplo-4",
+    nombre: "EJEMPLAR YEGUA MADRE",
+    categoria: "yeguas-madres",
+    sexo: "Hembra",
+    raza: "Árabe",
+    nacimiento: "2016",
+    altura: "150 cm",
+    pelo: "Zaino",
+    pais: "Uruguay",
+    ubicacion: "Uruguay",
+    precio: null,
+    reservado: true,
+    estado: "En venta",
+    descripcion:
+      "Ejemplar de demostración ofrecido como yegua madre.\n\nEn esta sección se podrán destacar sus líneas maternas y su producción registrada.",
+    fotos: [],
+    videos: [],
+    pedigree: null,
+    descendencia: []
+  }
+];
+
+const CATEGORIAS = {
+  raid: "Raid",
+  endurance: "Endurance",
+  padrillos: "Padrillos",
+  "yeguas-madres": "Yeguas madres"
+};
+
+const contenido = document.getElementById("contenido");
+
+const IMAGEN_SIN_FOTO = `
+  <svg xmlns="http://www.w3.org/2000/svg"
+       viewBox="0 0 800 500">
+    <rect width="800" height="500" fill="#e9eee8"/>
+    <circle cx="400" cy="200" r="62" fill="#d1ddd2"/>
+    <path d="M365 190h70v20h-70z" fill="#a1b4a4"/>
+    <text x="400" y="310"
+          text-anchor="middle"
+          font-family="Arial"
+          font-size="26"
+          fill="#58705f">
+      Fotografía próximamente
+    </text>
+  </svg>
+`;
+
+const FOTO_PLACEHOLDER =
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(IMAGEN_SIN_FOTO);
+
+function escapar(valor) {
+  return String(valor ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+function dinero(valor) {
+  return "USD " + Number(valor).toLocaleString("es-UY");
+}
+
+function precioTexto(caballo) {
+  return caballo.reservado || caballo.precio == null
+    ? "Precio reservado"
+    : dinero(caballo.precio);
+}
+
+function urlCatalogo(categoria = "", sexo = "") {
+  const parametros = new URLSearchParams();
+
+  if (categoria) parametros.set("categoria", categoria);
+  if (sexo) parametros.set("sexo", sexo);
+
+  const consulta = parametros.toString();
+
+  return "index.html" + (consulta ? "?" + consulta : "");
+}
+
+function ir(url) {
+  history.pushState({}, "", url);
+  mostrarVista();
+  window.scrollTo(0, 0);
+}
+
+function enlaceCaballo(id) {
+  return "?caballo=" + encodeURIComponent(id);
+}
+
+function obtenerCaballo(id) {
+  return CABALLOS.find(c => c.id === id);
+}
+
+function imagenPrincipal(caballo) {
+  return caballo.fotos.length
+    ? caballo.fotos[0]
+    : FOTO_PLACEHOLDER;
+}
+
+function tarjetaCaballo(c) {
+  return `
+    <article class="tarjeta">
+      <a href="${enlaceCaballo(c.id)}" data-navegar>
+        <img class="tarjeta-imagen"
+             src="${escapar(imagenPrincipal(c))}"
+             alt="Fotografía de ${escapar(c.nombre)}">
+      </a>
+
+      <div class="tarjeta-cuerpo">
+        <span class="etiqueta">
+          ${escapar(CATEGORIAS[c.categoria])}
+        </span>
+
+        <h2>${escapar(c.nombre)}</h2>
+
+        <div class="detalles">
+          ${escapar(c.pais)}<br>
+          ${escapar(c.raza)}<br>
+          ${escapar(c.sexo)}
+        </div>
+
+        <div class="precio">
+          ${escapar(precioTexto(c))}
+        </div>
+
+        <a class="boton boton-verde"
+           href="${enlaceCaballo(c.id)}"
+           data-navegar>
+          Ver ejemplar
+        </a>
+      </div>
+    </article>
+  `;
+}
+
+/* ==================================================
+   CATÁLOGO
+   ================================================== */
+
+function mostrarCatalogo() {
+  const params = new URLSearchParams(location.search);
+  const categoria = params.get("categoria") || "";
+  const sexo = params.get("sexo") || "";
+
+  const filtrados = CABALLOS.filter(c => {
+    if (c.estado !== "En venta") return false;
+    if (categoria && c.categoria !== categoria) return false;
+    if (sexo && c.sexo !== sexo) return false;
+    return true;
+  });
+
+  contenido.innerHTML = `
+    <h1>Ejemplares disponibles</h1>
+
+    <p class="subtitulo">
+      Caballos de raid, endurance y reproducción
+      disponibles para su comercialización.
+    </p>
+
+    <section class="filtros">
+      <div class="campo-filtro">
+        <label for="filtroCategoria">Categoría</label>
+        <select id="filtroCategoria">
+          <option value="">Todas las categorías</option>
+          ${Object.entries(CATEGORIAS).map(([clave, nombre]) => `
+            <option value="${clave}"
+              ${categoria === clave ? "selected" : ""}>
+              ${nombre}
+            </option>
+          `).join("")}
+        </select>
+      </div>
+
+      <div class="campo-filtro">
+        <label for="filtroSexo">Sexo</label>
+        <select id="filtroSexo">
+          <option value="">Todos</option>
+          <option value="Macho entero"
+            ${sexo === "Macho entero" ? "selected" : ""}>
+            Macho entero
+          </option>
+          <option value="Macho castrado"
+            ${sexo === "Macho castrado" ? "selected" : ""}>
+            Macho castrado
+          </option>
+          <option value="Hembra"
+            ${sexo === "Hembra" ? "selected" : ""}>
+            Hembra
+          </option>
+        </select>
+      </div>
+
+      <button class="boton boton-borde"
+              id="limpiarFiltros">
+        Limpiar filtros
+      </button>
+    </section>
+
+    <div class="contador">
+      ${filtrados.length}
+      ejemplar${filtrados.length === 1 ? "" : "es"}
+      disponible${filtrados.length === 1 ? "" : "s"}
+    </div>
+
+    ${
+      filtrados.length
+        ? `<section class="grilla">
+            ${filtrados.map(tarjetaCaballo).join("")}
+           </section>`
+        : `<div class="vacio">
+             No hay ejemplares disponibles
+             con los filtros seleccionados.
+           </div>`
+    }
+
+    <section class="panel"
+             style="margin-top:35px;text-align:center">
+      <h2>¿Querés publicar tu caballo?</h2>
+
+      <p class="subtitulo">
+        Enviá los datos de tu ejemplar para que
+        nuestro equipo evalúe su publicación.
+      </p>
+
+      <a class="boton boton-dorado"
+         href="?vista=solicitar"
+         data-navegar>
+        Solicitar publicación
+      </a>
+    </section>
+  `;
+
+  document.getElementById("filtroCategoria")
+    .addEventListener("change", actualizarFiltros);
+
+  document.getElementById("filtroSexo")
+    .addEventListener("change", actualizarFiltros);
+
+  document.getElementById("limpiarFiltros")
+    .addEventListener("click", () => {
+      ir("index.html");
+    });
+}
+
+function actualizarFiltros() {
+  const categoria =
+    document.getElementById("filtroCategoria").value;
+
+  const sexo =
+    document.getElementById("filtroSexo").value;
+
+  history.replaceState(
+    {},
+    "",
+    urlCatalogo(categoria, sexo)
+  );
+
+  mostrarCatalogo();
+}
+
+/* ==================================================
+   FICHA DEL CABALLO
+   ================================================== */
+
+let indiceFoto = 0;
+
+function mostrarFicha(caballo) {
+  indiceFoto = 0;
+
+  const fotos = caballo.fotos.length
+    ? caballo.fotos
+    : [FOTO_PLACEHOLDER];
+
+  contenido.innerHTML = `
+    <div class="ficha-cabecera">
+      <div>
+        <h1>${escapar(caballo.nombre)}</h1>
+        <p class="subtitulo" style="margin:0">
+          ${escapar(caballo.ubicacion)}
+          · ${escapar(caballo.raza)}
+        </p>
+      </div>
+
+      <span class="etiqueta">
+        ${escapar(caballo.estado)}
+      </span>
+    </div>
+
+    <section>
+      <div class="galeria">
+        <img id="fotoGrande"
+             src="${escapar(fotos[0])}"
+             alt="Fotografía de ${escapar(caballo.nombre)}">
+
+        ${fotos.length > 1 ? `
+          <button class="flecha flecha-izq"
+                  id="fotoAnterior"
+                  aria-label="Fotografía anterior">
+            &#8249;
+          </button>
+
+          <button class="flecha flecha-der"
+                  id="fotoSiguiente"
+                  aria-label="Fotografía siguiente">
+            &#8250;
+          </button>
+        ` : ""}
+      </div>
+
+      <div class="miniaturas">
+        ${fotos.map((foto, i) => `
+          <button data-foto="${i}"
+                  class="${i === 0 ? "activa" : ""}"
+                  aria-label="Ver fotografía ${i + 1}">
+            <img src="${escapar(foto)}"
+                 alt="Miniatura ${i + 1}">
+          </button>
+        `).join("")}
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Datos del caballo</h2>
+
+      <div class="datos">
+        ${dato("Origen", caballo.pais)}
+        ${dato("Raza", caballo.raza)}
+        ${dato("Sexo", caballo.sexo)}
+        ${dato("Nacimiento", caballo.nacimiento)}
+        ${dato("Altura a la cruz", caballo.altura)}
+        ${dato("Pelo", caballo.pelo)}
+        ${dato("Categoría", CATEGORIAS[caballo.categoria])}
+        ${dato("Estado", caballo.estado)}
+      </div>
+    </section>
+
+    ${htmlPedigree(caballo)}
+    ${htmlDescendencia(caballo)}
+
+    <section class="panel">
+      <h2>Descripción</h2>
+      <div class="descripcion">
+        ${escapar(caballo.descripcion)}
+      </div>
+    </section>
+
+    ${htmlVideos(caballo)}
+
+    <section class="panel" style="text-align:center">
+      <h2>Precio de venta</h2>
+
+      <div class="precio" style="font-size:29px">
+        ${escapar(precioTexto(caballo))}
+      </div>
+
+      <a class="boton boton-dorado"
+         href="?vista=consultar&caballo=${encodeURIComponent(caballo.id)}"
+         data-navegar>
+        Consultar / Hacer oferta
+      </a>
+    </section>
+  `;
+
+  document.querySelectorAll("[data-foto]")
+    .forEach(boton => {
+      boton.addEventListener("click", () => {
+        cambiarFoto(Number(boton.dataset.foto), fotos);
+      });
+    });
+
+  document.getElementById("fotoAnterior")
+    ?.addEventListener("click", () => {
+      cambiarFoto(indiceFoto - 1, fotos);
+    });
+
+  document.getElementById("fotoSiguiente")
+    ?.addEventListener("click", () => {
+      cambiarFoto(indiceFoto + 1, fotos);
+    });
+}
+
+function dato(titulo, valor) {
+  if (!valor) return "";
+
+  return `
+    <div class="dato">
+      <strong>${escapar(titulo)}</strong>
+      <span>${escapar(valor)}</span>
+    </div>
+  `;
+}
+
+function cambiarFoto(nuevoIndice, fotos) {
+  indiceFoto =
+    (nuevoIndice + fotos.length) % fotos.length;
+
+  document.getElementById("fotoGrande").src =
+    fotos[indiceFoto];
+
+  document.querySelectorAll("[data-foto]")
+    .forEach(boton => {
+      boton.classList.toggle(
+        "activa",
+        Number(boton.dataset.foto) === indiceFoto
+      );
+    });
+}
+
+function htmlPedigree(caballo) {
+  if (!caballo.pedigree) return "";
+
+  const p = caballo.pedigree;
+
+  return `
+    <section class="panel">
+      <h2>Pedigree</h2>
+
+      <div class="pedigree">
+        <div class="pedigree-columna">
+          ${nombrePedigree(p.padre, "macho")}
+          ${nombrePedigree(p.madre, "hembra")}
+        </div>
+
+        <div class="pedigree-columna">
+          ${nombrePedigree(p.abueloPaterno, "macho")}
+          ${nombrePedigree(p.abuelaPaterna, "hembra")}
+          ${nombrePedigree(p.abueloMaterno, "macho")}
+          ${nombrePedigree(p.abuelaMaterna, "hembra")}
+        </div>
+
+        <div class="pedigree-columna">
+          ${(p.bisabuelos || []).map((nombre, i) =>
+            nombrePedigree(
+              nombre,
+              i % 2 === 0 ? "macho" : "hembra"
+            )
+          ).join("")}
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function nombrePedigree(nombre, sexo) {
+  return `
+    <div class="pedigree-nombre ${sexo}">
+      ${escapar(nombre || "Sin registro")}
+    </div>
+  `;
+}
+
+function htmlDescendencia(caballo) {
+  if (!caballo.descendencia?.length) return "";
+
+  const hijos = [...caballo.descendencia]
+    .sort((a, b) =>
+      Number(a.nacimiento || 0) -
+      Number(b.nacimiento || 0)
+    );
+
+  return `
+    <section class="panel">
+      <h2>Descendencia registrada</h2>
+
+      <div class="tabla-contenedor">
+        <table>
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Nacimiento</th>
+              <th>Sexo</th>
+              <th>Padre</th>
+              <th>Madre</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${hijos.map(h => `
+              <tr>
+                <td>${escapar(h.nombre)}</td>
+                <td>${escapar(h.nacimiento)}</td>
+                <td>${escapar(h.sexo)}</td>
+                <td>${escapar(h.padre)}</td>
+                <td>${escapar(h.madre)}</td>
+              </tr>
+            `).join("")}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  `;
+}
+
+function idYoutube(url) {
+  try {
+    const u = new URL(url);
+
+    if (u.hostname === "youtu.be") {
+      return u.pathname.slice(1).split("/")[0];
+    }
+
+    if (
+      u.hostname === "youtube.com" ||
+      u.hostname === "www.youtube.com" ||
+      u.hostname === "m.youtube.com"
+    ) {
+      if (u.pathname === "/watch") {
+        return u.searchParams.get("v");
+      }
+
+      if (u.pathname.startsWith("/shorts/")) {
+        return u.pathname.split("/")[2];
+      }
+
+      if (u.pathname.startsWith("/embed/")) {
+        return u.pathname.split("/")[2];
+      }
+    }
+  } catch (error) {}
+
+  return null;
+}
+
+function htmlVideos(caballo) {
+  if (!caballo.videos?.length) return "";
+
+  const videos = caballo.videos
+    .map(idYoutube)
+    .filter(id => /^[a-zA-Z0-9_-]{11}$/.test(id));
+
+  if (!videos.length) return "";
+
+  return `
+    <section class="panel">
+      <h2>Videos del ejemplar</h2>
+
+      ${videos.map(id => `
+        <iframe
+          class="video"
+          src="https://www.youtube-nocookie.com/embed/${id}"
+          title="Video del caballo"
+          loading="lazy"
+          allowfullscreen>
+        </iframe>
+      `).join("")}
+    </section>
+  `;
+}
+
+/* ==================================================
+   FORMULARIO DE PUBLICACIÓN
+   CONECTADO A SUPABASE
+   ================================================== */
+
+function mostrarSolicitar() {
+  contenido.innerHTML = `
+    <div class="formulario">
+      <h1>Solicitar publicación</h1>
+
+      <p class="subtitulo">
+        Completá los datos de tu caballo.
+        La publicación estará sujeta a
+        revisión y aprobación de SDU.
+      </p>
+
+      <form id="formSolicitar" class="panel">
+
+        <h2>Datos del propietario</h2>
+
+        <div class="form-grilla">
+          <div>
+            <label>Nombre completo *</label>
+            <input name="propietario"
+                   required maxlength="120">
+          </div>
+
+          <div>
+            <label>Correo electrónico *</label>
+            <input name="email"
+                   type="email" required>
+          </div>
+
+          <div>
+            <label>Celular / WhatsApp *</label>
+            <input name="telefono"
+                   type="tel" required>
+          </div>
+
+          <div>
+            <label>País *</label>
+            <input name="pais"
+                   required value="Uruguay">
+          </div>
+        </div>
+
+        <h2 style="margin-top:30px">
+          Datos del caballo
+        </h2>
+
+        <div class="form-grilla">
+          <div>
+            <label>Nombre del caballo *</label>
+            <input name="nombre"
+                   required maxlength="120">
+          </div>
+
+          <div>
+            <label>Raza *</label>
+            <input name="raza" required>
+          </div>
+
+          <div>
+            <label>Sexo *</label>
+            <select name="sexo" required>
+              <option value="">Seleccionar</option>
+              <option>Macho entero</option>
+              <option>Macho castrado</option>
+              <option>Hembra</option>
+            </select>
+          </div>
+
+          <div>
+            <label>Edad del caballo *</label>
+            <input name="edad"
+                   type="number"
+                   min="0" max="45" required>
+          </div>
+
+          <div>
+            <label>Altura a la cruz (cm)</label>
+            <input name="altura"
+                   type="number"
+                   min="70" max="220"
+                   step="0.5"
+                   placeholder="Ej.: 155">
+          </div>
+
+          <div>
+            <label>Pelo</label>
+            <input name="pelo"
+                   placeholder="Ej.: Zaino">
+          </div>
+
+          <div>
+            <label>Categoría de venta *</label>
+            <select name="categoria" required>
+              <option value="">Seleccionar</option>
+              <option value="raid">Raid</option>
+              <option value="endurance">Endurance</option>
+              <option value="padrillos">Padrillos</option>
+              <option value="yeguas-madres">
+                Yeguas madres
+              </option>
+            </select>
+
+            <p class="ayuda">
+              Elegí una sola categoría.
+            </p>
+          </div>
+
+          <div>
+            <label>Ubicación del caballo *</label>
+            <input name="ubicacion"
+                   required
+                   placeholder="Departamento y localidad">
+          </div>
+
+          <div class="ancho-completo">
+            <label>
+              Descripción y antecedentes deportivos *
+            </label>
+
+            <textarea name="descripcion"
+                      required
+                      placeholder="Contanos sobre el caballo, su trayectoria, características y antecedentes."></textarea>
+          </div>
+
+          <div>
+            <label>Visibilidad del precio *</label>
+            <select name="tipoPrecio"
+                    id="tipoPrecio" required>
+              <option value="publico">
+                Mostrar precio públicamente
+              </option>
+              <option value="reservado">
+                Precio reservado
+              </option>
+            </select>
+          </div>
+
+          <div id="campoPrecio">
+            <label>Precio solicitado (USD) *</label>
+            <input name="precio"
+                   id="precio"
+                   type="number"
+                   min="1"
+                   step="1" required>
+          </div>
+
+          <div class="ancho-completo">
+            <label>
+              Fotografías del caballo (próximamente)
+            </label>
+
+            <input name="fotografias"
+                   type="file"
+                   accept="image/*"
+                   multiple disabled>
+
+            <p class="ayuda">
+              Las fotografías se conectarán con
+              Cloudflare R2 en el siguiente paso.
+              Por ahora se enviarán solamente
+              los datos del caballo.
+            </p>
+          </div>
+        </div>
+
+        <h2 style="margin-top:30px">
+          Videos del caballo
+        </h2>
+
+        <p class="descripcion">
+          ¿Tenés videos galopando, trotando o
+          compitiendo? Podrás enviarlos al
+          WhatsApp oficial de Sangres del Uruguay.
+
+          Nuestro equipo revisará el material
+          y se encargará de incorporarlo a
+          la publicación.
+        </p>
+
+        <div style="margin:20px 0">
+          <a
+            href="https://wa.me/59891909423?text=Hola%2C%20quiero%20enviar%20videos%20de%20mi%20caballo%20para%20su%20publicaci%C3%B3n%20en%20Deportivos%20del%20Uruguay."
+            target="_blank"
+            rel="noopener noreferrer"
+            class="boton boton-verde">
+            Enviar videos por WhatsApp
+          </a>
+
+          <p class="ayuda">
+            Se abrirá el WhatsApp oficial de
+            Sangres del Uruguay. Adjuntá los
+            videos de tu caballo y envialos.
+            Nuestro equipo revisará el material
+            antes de publicarlo.
+          </p>
+        </div>
+
+        <div class="aviso">
+          Tu solicitud se guardará como
+          <strong>pendiente de aprobación</strong>.
+
+          Las fotografías todavía no se enviarán.
+          SDU deberá incorporarlas antes de
+          publicar el caballo.
+        </div>
+
+        <button type="submit"
+                class="boton boton-dorado">
+          Enviar solicitud de publicación
+        </button>
+
+        <p id="estadoSolicitud"
+           role="status"
+           aria-live="polite"
+           style="margin-top:18px"></p>
+
+      </form>
+    </div>
+  `;
+
+  const tipoPrecio =
+    document.getElementById("tipoPrecio");
+
+  tipoPrecio.addEventListener("change", () => {
+    const publico = tipoPrecio.value === "publico";
+
+    document.getElementById("campoPrecio")
+      .classList.toggle("oculto", !publico);
+
+    document.getElementById("precio")
+      .required = publico;
+  });
+
+  /* ENVÍO REAL A SUPABASE */
+
+  document.getElementById("formSolicitar")
+    .addEventListener("submit", async e => {
+      e.preventDefault();
+
+      const formulario = e.currentTarget;
+
+      if (!formulario.reportValidity()) return;
+
+      const boton = formulario.querySelector(
+        'button[type="submit"]'
+      );
+
+      const estado =
+        document.getElementById("estadoSolicitud");
+
+      const datos = new FormData(formulario);
+
+      const texto = campo =>
+        String(datos.get(campo) || "").trim();
+
+      const numero = campo => {
+        const valor = texto(campo);
+        return valor === "" ? null : Number(valor);
+      };
+
+      const reservado =
+        texto("tipoPrecio") === "reservado";
+
+      const solicitud = {
+        nombre: texto("nombre"),
+        raza: texto("raza"),
+        sexo: texto("sexo"),
+        edad: numero("edad"),
+        altura_cm: numero("altura"),
+        pelo: texto("pelo") || null,
+        categoria: texto("categoria"),
+        ubicacion: texto("ubicacion"),
+        pais: texto("pais"),
+        descripcion: texto("descripcion"),
+        precio_usd: reservado
+          ? null
+          : numero("precio"),
+        precio_reservado: reservado,
+        propietario_nombre: texto("propietario"),
+        propietario_email: texto("email"),
+        propietario_telefono: texto("telefono")
+      };
+
+      boton.disabled = true;
+      boton.textContent = "Enviando solicitud...";
+
+      estado.textContent =
+        "Guardando solicitud en Supabase...";
+
+      estado.style.color = "";
+
+      try {
+        await guardarSolicitudDeportivo(solicitud);
+
+        formulario.reset();
+
+        document.getElementById("campoPrecio")
+          .classList.remove("oculto");
+
+        document.getElementById("precio")
+          .required = true;
+
+        estado.textContent =
+          "¡Solicitud recibida correctamente! " +
+          "El caballo quedó pendiente de aprobación. " +
+          "Las fotografías todavía no se enviaron.";
+
+        estado.style.color = "#183d30";
+
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
+
+      } catch (error) {
+        console.error(
+          "Error al enviar solicitud:",
+          error
+        );
+
+        estado.textContent =
+          "No se pudo guardar la solicitud. " +
+          "Intentá nuevamente o comunicate con SDU.";
+
+        estado.style.color = "#a32929";
+
+      } finally {
+        boton.disabled = false;
+        boton.textContent =
+          "Enviar solicitud de publicación";
+      }
+    });
+}
+
+/* ==================================================
+   CONSULTAS Y OFERTAS
+   Se conectarán al panel en el paso 4.
+   ================================================== */
+
+function comisionComprador(precio, internacional) {
+  if (internacional) return 0.10;
+  if (precio <= 5000) return 0.06;
+  if (precio <= 10000) return 0.04;
+  return 0.03;
+}
+
+function mostrarConsultar(caballo) {
+  contenido.innerHTML = `
+    <div class="formulario">
+      <h1>Consultar / Hacer oferta</h1>
+
+      <p class="subtitulo">
+        Ejemplar:
+        <strong>${escapar(caballo.nombre)}</strong>
+      </p>
+
+      <form id="formConsultar" class="panel">
+        <h2>Datos del interesado</h2>
+
+        <div class="form-grilla">
+          <div>
+            <label>Nombre completo *</label>
+            <input name="nombre" required>
+          </div>
+
+          <div>
+            <label>Correo electrónico *</label>
+            <input name="email"
+                   type="email" required>
+          </div>
+
+          <div>
+            <label>Celular / WhatsApp *</label>
+            <input name="telefono"
+                   type="tel" required>
+          </div>
+
+          <div>
+            <label>Tipo de comprador *</label>
+            <select id="tipoComprador"
+                    name="tipoComprador" required>
+              <option value="nacional">
+                Nacional (Uruguay)
+              </option>
+              <option value="internacional">
+                Internacional
+              </option>
+            </select>
+          </div>
+
+          <div id="campoPais" class="oculto">
+            <label>País *</label>
+            <input name="pais" id="paisComprador">
+          </div>
+
+          <div id="campoEstablo" class="oculto">
+            <label>Establo</label>
+            <input name="establo">
+          </div>
+
+          <div>
+            <label>¿Qué querés hacer? *</label>
+            <select name="accion"
+                    id="tipoConsulta" required>
+              <option value="consulta">
+                Solicitar información
+              </option>
+              <option value="oferta">
+                Realizar una oferta
+              </option>
+            </select>
+          </div>
+
+          <div id="campoOferta" class="oculto">
+            <label>Oferta en USD *</label>
+            <input name="oferta"
+                   id="montoOferta"
+                   type="number"
+                   min="1" step="1">
+          </div>
+
+          <div class="ancho-completo">
+            <label>Mensaje (opcional)</label>
+            <textarea name="mensaje"
+              placeholder="Podés agregar una consulta o comentario."></textarea>
+          </div>
+        </div>
+
+        <details style="margin-top:25px">
+          <summary style="cursor:pointer;color:var(--verde)">
+            Ver condiciones y comisiones de intermediación
+          </summary>
+
+          <div class="aviso">
+            <p>
+              Las consultas y ofertas son
+              gestionadas por Sangres del Uruguay.
+            </p>
+
+            <p>
+              <strong>Compradores nacionales:</strong><br>
+              Hasta USD 5.000: 6%.<br>
+              Más de USD 5.000 y hasta USD 10.000: 4%.<br>
+              Más de USD 10.000: 3%.
+            </p>
+
+            <p>
+              <strong>Compradores internacionales:</strong>
+              10%.
+            </p>
+
+            <p id="estimacionComision"></p>
+
+            <p class="ayuda">
+              El importe final se determinará
+              según las condiciones de la operación.
+              La presentación de una oferta
+              no implica su aceptación.
+            </p>
+          </div>
+        </details>
+
+        <div class="aviso">
+          Versión de demostración:
+          este formulario todavía no envía
+          mensajes ni guarda ofertas.
+        </div>
+
+        <button type="submit"
+                class="boton boton-dorado">
+          Enviar consulta / oferta
+        </button>
+      </form>
+    </div>
+  `;
+
+  const tipoComprador =
+    document.getElementById("tipoComprador");
+
+  const tipoConsulta =
+    document.getElementById("tipoConsulta");
+
+  const montoOferta =
+    document.getElementById("montoOferta");
+
+  function actualizarFormulario() {
+    const internacional =
+      tipoComprador.value === "internacional";
+
+    const esOferta =
+      tipoConsulta.value === "oferta";
+
+    document.getElementById("campoPais")
+      .classList.toggle("oculto", !internacional);
+
+    document.getElementById("campoEstablo")
+      .classList.toggle("oculto", !internacional);
+
+    document.getElementById("paisComprador")
+      .required = internacional;
+
+    document.getElementById("campoOferta")
+      .classList.toggle("oculto", !esOferta);
+
+    montoOferta.required = esOferta;
+
+    const importe = esOferta
+      ? Number(montoOferta.value)
+      : caballo.precio;
+
+    const estimacion =
+      document.getElementById("estimacionComision");
+
+    if (importe && importe > 0) {
+      const porcentaje =
+        comisionComprador(importe, internacional);
+
+      estimacion.textContent =
+        "Comisión estimada del comprador: " +
+        dinero(importe * porcentaje) +
+        " (" + (porcentaje * 100) + "%).";
+    } else {
+      estimacion.textContent =
+        "La comisión se calculará sobre " +
+        "el importe de la operación.";
+    }
+  }
+
+  tipoComprador.addEventListener(
+    "change", actualizarFormulario
+  );
+
+  tipoConsulta.addEventListener(
+    "change", actualizarFormulario
+  );
+
+  montoOferta.addEventListener(
+    "input", actualizarFormulario
+  );
+
+  actualizarFormulario();
+
+  document.getElementById("formConsultar")
+    .addEventListener("submit", e => {
+      e.preventDefault();
+
+      alert(
+        "Formulario de demostración. " +
+        "Todavía no está conectado con SDU. " +
+        "No se envió ni registró ninguna consulta u oferta."
+      );
+    });
+}
+
+/* ==================================================
+   NAVEGACIÓN
+   ================================================== */
+
+function mostrarVista() {
+  const params = new URLSearchParams(location.search);
+
+  const vista = params.get("vista");
+  const id = params.get("caballo");
+
+  document.title =
+    "Deportivos del Uruguay | Sangres del Uruguay";
+
+  if (vista === "solicitar") {
+    mostrarSolicitar();
+    return;
+  }
+
+  if (vista === "consultar") {
+    const caballo = obtenerCaballo(id);
+
+    if (caballo) {
+      mostrarConsultar(caballo);
+    } else {
+      mostrarNoEncontrado();
+    }
+
+    return;
+  }
+
+  if (id) {
+    const caballo = obtenerCaballo(id);
+
+    if (caballo) {
+      document.title =
+        caballo.nombre + " | Deportivos del Uruguay";
+
+      mostrarFicha(caballo);
+    } else {
+      mostrarNoEncontrado();
+    }
+
+    return;
+  }
+
+  mostrarCatalogo();
+}
+
+function mostrarNoEncontrado() {
+  contenido.innerHTML = `
+    <div class="vacio">
+      <h2>Ejemplar no encontrado</h2>
+
+      <p>
+        El ejemplar solicitado no está disponible
+        en este catálogo.
+      </p>
+
+      <a href="index.html"
+         class="boton boton-verde"
+         data-navegar>
+        Ver ejemplares
+      </a>
+    </div>
+  `;
+}
+
+document.addEventListener("click", e => {
+  const enlace = e.target.closest("a[data-navegar]");
+
+  if (!enlace) return;
+
+  if (
+    e.ctrlKey ||
+    e.metaKey ||
+    e.shiftKey ||
+    e.altKey ||
+    e.button !== 0
+  ) return;
+
+  e.preventDefault();
+
+  ir(enlace.getAttribute("href"));
+});
+
+document.querySelectorAll(
+  'header a[href="index.html"], header a[href^="?"]'
+).forEach(enlace => {
+  enlace.setAttribute("data-navegar", "");
+});
+
+window.addEventListener("popstate", () => {
+  mostrarVista();
+});
+
+mostrarVista();
+
+</script>
+</body>
+</html>
