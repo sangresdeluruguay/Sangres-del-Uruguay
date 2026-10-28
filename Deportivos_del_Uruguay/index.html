@@ -1,567 +1,509 @@
 
-const ORIGENES = new Set([
-  "https://sangresdeluruguay.github.io",
-  "https://sangresdeluruguay.com.uy",
-  "https://www.sangresdeluruguay.com.uy"
-]);
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deportivos del Uruguay | Ejemplares disponibles</title>
 
-const MAX_FOTOS = 8;
-const MAX_BYTES = 15 * 1024 * 1024;
-const MAX_TOTAL = 40 * 1024 * 1024;
-
-function responder(datos, status = 200, origen = "") {
-  const headers = {
-    "Content-Type": "application/json; charset=utf-8",
-    "Cache-Control": "no-store",
-    "Vary": "Origin"
-  };
-
-  if (ORIGENES.has(origen)) {
-    headers["Access-Control-Allow-Origin"] = origen;
-    headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS";
-    headers["Access-Control-Allow-Headers"] = "Content-Type";
-  }
-
-  return new Response(
-    status === 204 ? null : JSON.stringify(datos),
-    { status, headers }
-  );
+<style>
+:root {
+  --verde: #183d30;
+  --verde-oscuro: #102a22;
+  --dorado: #c6a66a;
+  --fondo: #f5f5f0;
+  --blanco: #ffffff;
+  --texto: #26352d;
+  --gris: #69736d;
+  --borde: #e2e6df;
 }
 
-function obligatorio(valor, max = 300) {
-  const texto = String(valor ?? "").trim();
+* { box-sizing: border-box; }
 
-  if (!texto || texto.length > max) {
-    throw new Error(
-      "Faltan datos obligatorios o exceden el límite."
-    );
-  }
-
-  return texto;
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
 }
 
-function opcional(valor, max = 300) {
-  const texto = String(valor ?? "").trim();
+button, input, select, textarea { font: inherit; }
+button { cursor: pointer; }
 
-  if (texto.length > max) {
-    throw new Error(
-      "Un campo supera el límite permitido."
-    );
-  }
-
-  return texto || null;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-function numero(valor, minimo, maximo, requerido = false) {
-  if (valor === "" || valor == null) {
-    if (requerido) {
-      throw new Error(
-        "Falta un valor numérico obligatorio."
-      );
-    }
-
-    return null;
-  }
-
-  const n = Number(valor);
-
-  if (
-    !Number.isFinite(n) ||
-    n < minimo ||
-    n > maximo
-  ) {
-    throw new Error(
-      "Un valor numérico es inválido."
-    );
-  }
-
-  return n;
+header {
+  background: var(--verde-oscuro);
+  color: white;
+  border-bottom: 3px solid var(--dorado);
 }
 
-async function supabase(
-  env,
-  tabla,
-  method,
-  body,
-  query = "",
-  prefer = ""
-) {
-  const url =
-    `${env.SUPABASE_URL.replace(/\/$/, "")}` +
-    `/rest/v1/${tabla}${query}`;
-
-  const r = await fetch(url, {
-    method,
-    headers: {
-      apikey: env.SUPABASE_SECRET_KEY,
-      "Content-Type": "application/json",
-      ...(prefer ? { Prefer: prefer } : {})
-    },
-    ...(body !== undefined
-      ? { body: JSON.stringify(body) }
-      : {})
-  });
-
-  if (!r.ok) {
-    const detalle = (await r.text()).slice(0, 300);
-
-    console.error(
-      "Supabase error",
-      r.status,
-      detalle
-    );
-
-    throw new Error(
-      "No fue posible guardar la solicitud."
-    );
-  }
-
-  if (
-    r.status === 204 ||
-    (r.status === 201 && !prefer)
-  ) {
-    return null;
-  }
-
-  return await r.json().catch(() => null);
+.header-inner {
+  max-width: 1200px;
+  margin: auto;
+  padding: 23px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
 }
 
-async function verificarTurnstile(env, token, ip) {
-  if (!token) return false;
-
-  const body = new URLSearchParams({
-    secret: env.TURNSTILE_SECRET_KEY,
-    response: token
-  });
-
-  if (ip) {
-    body.set("remoteip", ip);
-  }
-
-  const r = await fetch(
-    "https://challenges.cloudflare.com/turnstile/v0/siteverify",
-    {
-      method: "POST",
-      body
-    }
-  );
-
-  if (!r.ok) return false;
-
-  const resultado = await r.json();
-
-  return resultado.success === true;
+.marca {
+  font-family: Georgia, serif;
+  font-size: 26px;
+  font-weight: bold;
+  letter-spacing: 1px;
 }
 
-async function extensionReal(foto) {
-  const bytes = new Uint8Array(
-    await foto.slice(0, 16).arrayBuffer()
-  );
-
-  if (
-    bytes.length >= 3 &&
-    bytes[0] === 0xff &&
-    bytes[1] === 0xd8 &&
-    bytes[2] === 0xff
-  ) {
-    return ["jpg", "image/jpeg"];
-  }
-
-  if (
-    bytes.length >= 8 &&
-    [137, 80, 78, 71, 13, 10, 26, 10]
-      .every((v, i) => bytes[i] === v)
-  ) {
-    return ["png", "image/png"];
-  }
-
-  if (
-    bytes.length >= 12 &&
-    String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
-    String.fromCharCode(...bytes.slice(8, 12)) === "WEBP"
-  ) {
-    return ["webp", "image/webp"];
-  }
-
-  throw new Error(
-    "Formato de fotografía no permitido. Usá JPG, PNG o WEBP."
-  );
+.marca span {
+  display: block;
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  color: var(--dorado);
+  letter-spacing: 3px;
+  margin-top: 5px;
 }
 
-export default {
-  async fetch(request, env) {
-    const url = new URL(request.url);
-    const origen = request.headers.get("Origin") || "";
+nav {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
 
-    // CORS
-    if (request.method === "OPTIONS") {
-      return responder(
-        {},
-        ORIGENES.has(origen) ? 204 : 403,
-        origen
-      );
-    }
+nav a {
+  font-size: 14px;
+  padding: 10px 13px;
+}
 
-    // ESTADO DEL SERVICIO
-    if (
-      url.pathname === "/estado" &&
-      request.method === "GET"
-    ) {
-      return responder({
-        servicio: "Deportivos del Uruguay - Fotografías",
-        r2: Boolean(env.FOTOS_DEPORTIVOS),
-        estado: "activo"
-      }, 200, origen);
-    }
+nav a:hover { color: var(--dorado); }
 
-    // RECIBIR SOLICITUDES
-    if (
-      url.pathname !== "/solicitar" ||
-      request.method !== "POST"
-    ) {
-      return responder(
-        { error: "Ruta no disponible" },
-        404,
-        origen
-      );
-    }
+.boton {
+  display: inline-block;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 19px;
+  font-weight: bold;
+  text-align: center;
+  transition: 0.2s;
+}
 
-    if (!ORIGENES.has(origen)) {
-      return responder(
-        { error: "Origen no permitido" },
-        403,
-        origen
-      );
-    }
+.boton-verde {
+  background: var(--verde);
+  color: white;
+}
 
-    // VERIFICAR CONFIGURACIÓN
-    if (
-      !env.FOTOS_DEPORTIVOS ||
-      !env.SUPABASE_URL ||
-      !env.SUPABASE_SECRET_KEY ||
-      !env.TURNSTILE_SECRET_KEY
-    ) {
-      return responder(
-        { error: "Configuración incompleta" },
-        503,
-        origen
-      );
-    }
+.boton-verde:hover { background: #265744; }
 
-    let publicacionId = null;
-    const rutas = [];
+.boton-dorado {
+  background: var(--dorado);
+  color: #17291e;
+}
 
-    try {
-      const contentType =
-        request.headers.get("content-type") || "";
+.boton-dorado:hover { background: #d8b980; }
 
-      if (!contentType.includes("multipart/form-data")) {
-        throw new Error(
-          "Formato de solicitud inválido."
-        );
-      }
+.boton-borde {
+  border: 1px solid var(--verde);
+  background: white;
+  color: var(--verde);
+}
 
-      const form = await request.formData();
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
 
-      // VERIFICACIÓN ANTIBOTS
-      const token = String(
-        form.get("cf-turnstile-response") || ""
-      );
+main {
+  max-width: 1200px;
+  margin: auto;
+  padding: 35px 20px 70px;
+  min-height: 65vh;
+}
 
-      const verificado = await verificarTurnstile(
-        env,
-        token,
-        request.headers.get("CF-Connecting-IP")
-      );
+h1, h2, h3 { font-family: Georgia, serif; }
 
-      if (!verificado) {
-        return responder({
-          error:
-            "Completá la verificación de seguridad e intentá nuevamente."
-        }, 403, origen);
-      }
+h1 {
+  font-size: 35px;
+  color: var(--verde);
+  margin: 0 0 12px;
+}
 
-      // VALIDACIÓN DE FOTOGRAFÍAS
-      const fotos = form
-        .getAll("fotografias")
-        .filter(
-          f => f instanceof File && f.size > 0
-        );
+.subtitulo {
+  color: var(--gris);
+  margin: 0 0 30px;
+  line-height: 1.6;
+}
 
-      if (
-        fotos.length < 1 ||
-        fotos.length > MAX_FOTOS
-      ) {
-        throw new Error(
-          "Adjuntá entre 1 y 8 fotografías."
-        );
-      }
+.filtros {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  align-items: end;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
 
-      let total = 0;
-      const imagenes = [];
+.campo-filtro {
+  flex: 1;
+  min-width: 180px;
+}
 
-      for (const foto of fotos) {
-        if (foto.size > MAX_BYTES) {
-          throw new Error(
-            "Cada fotografía debe pesar como máximo 15 MB."
-          );
-        }
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
 
-        total += foto.size;
+input, select, textarea {
+  width: 100%;
+  border: 1px solid #d2d9d1;
+  border-radius: 7px;
+  background: white;
+  padding: 12px;
+  color: var(--texto);
+}
 
-        const [extension, mime] =
-          await extensionReal(foto);
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--dorado);
+  border-color: var(--dorado);
+}
 
-        imagenes.push({
-          foto,
-          extension,
-          mime
-        });
-      }
+textarea {
+  min-height: 110px;
+  resize: vertical;
+}
 
-      if (total > MAX_TOTAL) {
-        throw new Error(
-          "Las fotografías no pueden superar 40 MB en total."
-        );
-      }
+.contador {
+  font-size: 14px;
+  color: var(--gris);
+  margin-bottom: 15px;
+}
 
-      // DATOS DEL CABALLO
-      const reservado =
-        String(form.get("tipoPrecio")) === "reservado";
+.grilla {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 23px;
+}
 
-      const sexo = obligatorio(
-        form.get("sexo"),
-        40
-      );
+.tarjeta {
+  background: white;
+  border-radius: 12px;
+  border: 1px solid var(--borde);
+  overflow: hidden;
+  transition: 0.2s;
+}
 
-      const categoria = obligatorio(
-        form.get("categoria"),
-        40
-      );
+.tarjeta:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 22px #00000012;
+}
 
-      if (
-        ![
-          "Macho entero",
-          "Macho castrado",
-          "Hembra"
-        ].includes(sexo)
-      ) {
-        throw new Error("Sexo inválido.");
-      }
+.tarjeta-imagen {
+  width: 100%;
+  height: 235px;
+  object-fit: cover;
+  display: block;
+  background: #e5e8e1;
+}
 
-      if (
-        ![
-          "raid",
-          "endurance",
-          "padrillos",
-          "yeguas-madres"
-        ].includes(categoria)
-      ) {
-        throw new Error("Categoría inválida.");
-      }
+.tarjeta-cuerpo { padding: 20px; }
 
-      const email = obligatorio(
-        form.get("email"),
-        254
-      );
+.etiqueta {
+  display: inline-block;
+  background: #edf2e9;
+  color: var(--verde);
+  border-radius: 20px;
+  padding: 6px 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
 
-      if (
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-      ) {
-        throw new Error(
-          "Correo electrónico inválido."
-        );
-      }
+.tarjeta h2 {
+  font-size: 22px;
+  margin: 15px 0 9px;
+  color: var(--verde);
+}
 
-      const publicacion = {
-        nombre: obligatorio(
-          form.get("nombre"),
-          120
-        ),
+.detalles {
+  color: var(--gris);
+  font-size: 14px;
+  line-height: 1.9;
+}
 
-        raza: obligatorio(
-          form.get("raza"),
-          120
-        ),
+.precio {
+  color: var(--verde);
+  font-weight: bold;
+  font-size: 20px;
+  margin: 18px 0;
+}
 
-        sexo,
+.tarjeta .boton { display: block; }
 
-        edad: numero(
-          form.get("edad"),
-          0,
-          45,
-          true
-        ),
+.panel {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 22px;
+}
 
-        altura_cm: numero(
-          form.get("altura"),
-          70,
-          220
-        ),
+.panel h2 {
+  color: var(--verde);
+  margin-top: 0;
+}
 
-        pelo: opcional(
-          form.get("pelo"),
-          120
-        ),
+.ficha-cabecera {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
 
-        categoria,
+.ficha-cabecera h1 { margin-bottom: 8px; }
 
-        ubicacion: obligatorio(
-          form.get("ubicacion"),
-          200
-        ),
+.galeria {
+  position: relative;
+  height: 450px;
+  background: #e8ebe5;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
 
-        pais: obligatorio(
-          form.get("pais"),
-          100
-        ),
+.galeria img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
 
-        descripcion: obligatorio(
-          form.get("descripcion"),
-          6000
-        ),
+.flecha {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: #102a22dd;
+  color: white;
+  border: none;
+  width: 42px;
+  height: 52px;
+  font-size: 28px;
+  border-radius: 5px;
+}
 
-        precio_usd: reservado
-          ? null
-          : numero(
-              form.get("precio"),
-              1,
-              100000000,
-              true
-            ),
+.flecha:hover { background: var(--verde); }
+.flecha-izq { left: 12px; }
+.flecha-der { right: 12px; }
 
-        precio_reservado: reservado,
+.miniaturas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 25px;
+}
 
-        propietario_nombre: obligatorio(
-          form.get("propietario"),
-          120
-        ),
+.miniaturas button {
+  border: 2px solid transparent;
+  background: transparent;
+  padding: 0;
+  border-radius: 6px;
+  overflow: hidden;
+}
 
-        propietario_email: email,
+.miniaturas button.activa {
+  border-color: var(--dorado);
+}
 
-        propietario_telefono: obligatorio(
-          form.get("telefono"),
-          80
-        ),
+.miniaturas img {
+  width: 80px;
+  height: 65px;
+  object-fit: cover;
+  display: block;
+}
 
-        estado: "pendiente"
-      };
+.datos {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+}
 
-      // GUARDAR PUBLICACIÓN EN SUPABASE
-      const registros = await supabase(
-        env,
-        "deportivos_publicaciones",
-        "POST",
-        publicacion,
-        "?select=id",
-        "return=representation"
-      );
+.dato {
+  background: #f6f8f4;
+  border-radius: 8px;
+  padding: 15px;
+}
 
-      publicacionId = registros?.[0]?.id;
+.dato strong {
+  display: block;
+  color: var(--gris);
+  font-size: 12px;
+  margin-bottom: 8px;
+}
 
-      if (!publicacionId) {
-        throw new Error(
-          "No se pudo confirmar la solicitud."
-        );
-      }
+.dato span { font-weight: bold; }
 
-      // GUARDAR FOTOGRAFÍAS EN CLOUDFLARE R2
-      const filas = [];
+.descripcion {
+  line-height: 1.9;
+  white-space: pre-line;
+}
 
-      for (
-        const [i, img] of imagenes.entries()
-      ) {
-        const ruta =
-          `deportivos/pendientes/${publicacionId}/` +
-          `${crypto.randomUUID()}.${img.extension}`;
+.pedigree {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
 
-        await env.FOTOS_DEPORTIVOS.put(
-          ruta,
-          img.foto.stream(),
-          {
-            httpMetadata: {
-              contentType: img.mime
-            },
-            customMetadata: {
-              publicacion_id: publicacionId,
-              estado: "pendiente"
-            }
-          }
-        );
+.pedigree-columna {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  gap: 8px;
+}
 
-        rutas.push(ruta);
+.pedigree-nombre {
+  border: 1px solid #dce5dc;
+  border-radius: 7px;
+  padding: 13px 9px;
+  background: #f2f6f2;
+  text-align: center;
+  font-size: 13px;
+}
 
-        filas.push({
-          publicacion_id: publicacionId,
-          ruta_r2: ruta,
-          orden: i,
-          aprobada: false
-        });
-      }
+.pedigree-nombre.macho { background: #e8f3fa; }
+.pedigree-nombre.hembra { background: #f9eaf0; }
 
-      // GUARDAR REFERENCIAS DE FOTOS EN SUPABASE
-      await supabase(
-        env,
-        "deportivos_fotos",
-        "POST",
-        filas,
-        "",
-        "return=minimal"
-      );
+.tabla-contenedor { overflow-x: auto; }
 
-      return responder({
-        ok: true,
-        mensaje:
-          "Solicitud y fotografías recibidas. Pendientes de aprobación."
-      }, 201, origen);
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
 
-    } catch (e) {
-      console.error(
-        "Error de solicitud",
-        e
-      );
+th, td {
+  text-align: left;
+  padding: 12px;
+  border-bottom: 1px solid var(--borde);
+}
 
-      // LIMPIAR PUBLICACIÓN SI FALLA EL ENVÍO
-      if (publicacionId) {
-        await supabase(
-          env,
-          "deportivos_publicaciones",
-          "DELETE",
-          undefined,
-          `?id=eq.${encodeURIComponent(publicacionId)}`,
-          "return=minimal"
-        ).catch(err =>
-          console.error(
-            "Fallo limpieza DB",
-            err
-          )
-        );
-      }
+th { background: #f1f5ef; }
 
-      // LIMPIAR FOTOS SI FALLA EL ENVÍO
-      await Promise.all(
-        rutas.map(ruta =>
-          env.FOTOS_DEPORTIVOS
-            .delete(ruta)
-            .catch(err =>
-              console.error(
-                "Fallo limpieza R2",
-                err
-              )
-            )
-        )
-      );
+.video {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border: 0;
+  border-radius: 8px;
+}
 
-      const mensaje =
-        e instanceof Error
-          ? e.message
-          : "No se pudo completar la solicitud.";
+.formulario {
+  max-width: 850px;
+  margin: auto;
+}
 
-      return responder(
-        { error: mensaje },
-        400,
-        origen
-      );
-    }
+.form-grilla {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.form-grilla .ancho-completo {
+  grid-column: 1 / -1;
+}
+
+.ayuda {
+  font-size: 12px;
+  color: var(--gris);
+  margin-top: 7px;
+  line-height: 1.5;
+}
+
+.aviso {
+  background: #fff8e8;
+  border: 1px solid #ead7a7;
+  border-radius: 8px;
+  padding: 15px;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 18px 0;
+}
+
+.vacio {
+  text-align: center;
+  padding: 55px 20px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  color: var(--gris);
+}
+
+.oculto { display: none !important; }
+
+footer {
+  background: var(--verde-oscuro);
+  color: white;
+  padding: 30px 20px;
+  text-align: center;
+}
+
+footer small { color: #bac9be; }
+
+@media(max-width: 900px) {
+  .grilla { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 600px) {
+  .grilla { grid-template-columns: 1fr; }
+  .datos { grid-template-columns: repeat(2, 1fr); }
+  .form-grilla { grid-template-columns: 1fr; }
+  .form-grilla .ancho-completo { grid-column: auto; }
+  .galeria { height: 300px; }
+  h1 { font-size: 29px; }
+  .marca { font-size: 22px; }
+  .header-inner {
+    justify-content: center;
+    text-align: center;
   }
-};
+  nav { justify-content: center; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <a href="index.html" class="marca">
+      DEPORTIVOS DEL URUGUAY
+      <span>RAID · ENDURANCE · REPRODUCCIÓN</span>
+    </a>
+
+    <nav>
+      <a href="index.html">Ejemplares</a>
+      <a href="?vista=solicitar">Solicitar publicación</a>
+      <a href="https://www.sangresdeluruguay.com.uy/">
+        Sangres del Uruguay
+      </a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenido"></main>
+
+<footer>
+  <strong>DEPORTIVOS DEL URUGUAY</strong>
+  <p>Una propuesta de Sangres del Uruguay</p>
+  <small>
+    Publicaciones y consultas gestionadas por SDU.
+  </small>
+</footer>
+
+<script>
+"use strict";
