@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -509,7 +508,7 @@ footer small { color: #bac9be; }
 "use strict";
 
 /* ==================================================
-   CONEXIÓN SUPABASE
+   CONFIGURACIÓN Y ENVÍO MEDIANTE EL WORKER
    ================================================== */
 
 const SUPABASE_URL =
@@ -523,28 +522,160 @@ const SUPABASE_PUBLIC_KEY =
   Nunca colocar aquí una service_role o secret key.
 */
 
-async function guardarSolicitudDeportivo(datos) {
-  const respuesta = await fetch(
-    `${SUPABASE_URL}/rest/v1/deportivos_publicaciones`,
-    {
-      method: "POST",
-      headers: {
-        "apikey": SUPABASE_PUBLIC_KEY,
-        "Content-Type": "application/json",
-        "Prefer": "return=minimal"
-      },
-      body: JSON.stringify(datos)
-    }
-  );
+const WORKER_URL =
+  "https://deportivos-fotos.sangresdeluruguay.workers.dev";
 
-  if (!respuesta.ok) {
-    const detalle = await respuesta.text();
+const TURNSTILE_SITE_KEY =
+  "0x4AAAAAAFmpHxaIeKApIMeg";
+
+const MAX_FOTOS = 8;
+const MAX_FOTO_BYTES = 15 * 1024 * 1024;
+const MAX_TOTAL_BYTES = 40 * 1024 * 1024;
+
+function validarFotografias(fotos) {
+  if (fotos.length < 1 || fotos.length > MAX_FOTOS) {
     throw new Error(
-      `Supabase ${respuesta.status}: ${detalle}`
+      "Seleccioná entre 1 y 8 fotografías."
     );
   }
 
-  return true;
+  let total = 0;
+
+  for (const foto of fotos) {
+    if (
+      !["image/jpeg", "image/png", "image/webp"]
+        .includes(foto.type)
+    ) {
+      throw new Error(
+        "Solo se permiten fotografías JPG, PNG o WEBP."
+      );
+    }
+
+    if (!foto.size || foto.size > MAX_FOTO_BYTES) {
+      throw new Error(
+        "Cada fotografía debe pesar entre 1 byte y 15 MB."
+      );
+    }
+
+    total += foto.size;
+  }
+
+  if (total > MAX_TOTAL_BYTES) {
+    throw new Error(
+      "Las fotografías no pueden superar los 40 MB en total."
+    );
+  }
+}
+
+async function guardarSolicitudDeportivo(datos, fotos, token) {
+  validarFotografias(fotos);
+
+  if (!token) {
+    throw new Error(
+      "Completá la verificación de seguridad."
+    );
+  }
+
+  const cuerpo = new FormData();
+
+  cuerpo.append(
+    "publicacion",
+    JSON.stringify(datos)
+  );
+
+  cuerpo.append("turnstileToken", token);
+
+  fotos.forEach(foto => {
+    cuerpo.append("fotos", foto, foto.name);
+  });
+
+  let respuesta;
+  let resultado;
+
+  try {
+    respuesta = await fetch(
+      `${WORKER_URL}/solicitar`,
+      {
+        method: "POST",
+        body: cuerpo
+      }
+    );
+
+    resultado = await respuesta.json();
+
+  } catch {
+    throw new Error(
+      "No pudimos confirmar la recepción. Conservamos el formulario. " +
+      "Consultá con SDU antes de reenviarlo para evitar duplicados."
+    );
+  }
+
+  if (!respuesta.ok) {
+    throw new Error(
+      typeof resultado?.error === "string"
+        ? resultado.error
+        : `No se pudo completar la solicitud (${respuesta.status}).`
+    );
+  }
+
+  if (
+    resultado?.ok !== true ||
+    !resultado.publicacion_id ||
+    resultado.estado !== "pendiente" ||
+    resultado.fotos_recibidas !== fotos.length
+  ) {
+    throw new Error(
+      "La respuesta no permite confirmar el envío completo. " +
+      "Consultá con SDU antes de reenviar la solicitud."
+    );
+  }
+
+  return resultado;
+}
+
+let cargaTurnstile = null;
+let limpiarFormularioSolicitud = null;
+
+function cargarTurnstile() {
+  if (window.turnstile?.render) {
+    return Promise.resolve();
+  }
+
+  if (cargaTurnstile) return cargaTurnstile;
+
+  cargaTurnstile = new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+
+    const temporizador = setTimeout(() => {
+      fallo();
+    }, 20000);
+
+    function fallo() {
+      clearTimeout(temporizador);
+      script.remove();
+      cargaTurnstile = null;
+
+      reject(new Error(
+        "No se pudo cargar la verificación de seguridad."
+      ));
+    }
+
+    window.alCargarTurnstileSDU = () => {
+      clearTimeout(temporizador);
+      resolve();
+    };
+
+    script.src =
+      "https://challenges.cloudflare.com/turnstile/v0/api.js" +
+      "?render=explicit&onload=alCargarTurnstileSDU";
+
+    script.async = true;
+    script.onerror = fallo;
+
+    document.head.appendChild(script);
+  });
+
+  return cargaTurnstile;
 }
 
 /* ==================================================
@@ -1171,7 +1302,7 @@ function htmlVideos(caballo) {
 
 /* ==================================================
    FORMULARIO DE PUBLICACIÓN
-   CONECTADO A SUPABASE
+   FOTOS EN R2 Y DATOS EN SUPABASE
    ================================================== */
 
 function mostrarSolicitar() {
@@ -1199,19 +1330,19 @@ function mostrarSolicitar() {
           <div>
             <label>Correo electrónico *</label>
             <input name="email"
-                   type="email" required>
+                   type="email" maxlength="254" required>
           </div>
 
           <div>
             <label>Celular / WhatsApp *</label>
             <input name="telefono"
-                   type="tel" required>
+                   type="tel" maxlength="100" required>
           </div>
 
           <div>
             <label>País *</label>
             <input name="pais"
-                   required value="Uruguay">
+                   required maxlength="100" value="Uruguay">
           </div>
         </div>
 
@@ -1228,7 +1359,7 @@ function mostrarSolicitar() {
 
           <div>
             <label>Raza *</label>
-            <input name="raza" required>
+            <input name="raza" maxlength="150" required>
           </div>
 
           <div>
@@ -1259,7 +1390,7 @@ function mostrarSolicitar() {
 
           <div>
             <label>Pelo</label>
-            <input name="pelo"
+            <input name="pelo" maxlength="100"
                    placeholder="Ej.: Zaino">
           </div>
 
@@ -1282,7 +1413,7 @@ function mostrarSolicitar() {
 
           <div>
             <label>Ubicación del caballo *</label>
-            <input name="ubicacion"
+            <input name="ubicacion" maxlength="200"
                    required
                    placeholder="Departamento y localidad">
           </div>
@@ -1292,7 +1423,7 @@ function mostrarSolicitar() {
               Descripción y antecedentes deportivos *
             </label>
 
-            <textarea name="descripcion"
+            <textarea name="descripcion" maxlength="5000"
                       required
                       placeholder="Contanos sobre el caballo, su trayectoria, características y antecedentes."></textarea>
           </div>
@@ -1315,25 +1446,23 @@ function mostrarSolicitar() {
             <input name="precio"
                    id="precio"
                    type="number"
-                   min="1"
+                   min="1" max="100000000"
                    step="1" required>
           </div>
 
           <div class="ancho-completo">
             <label>
-              Fotografías del caballo (próximamente)
+              Fotografías del caballo *
             </label>
 
             <input name="fotografias"
                    type="file"
-                   accept="image/*"
-                   multiple disabled>
+                   accept="image/jpeg,image/png,image/webp"
+                   multiple required>
 
             <p class="ayuda">
-              Las fotografías se conectarán con
-              Cloudflare R2 en el siguiente paso.
-              Por ahora se enviarán solamente
-              los datos del caballo.
+              Seleccioná entre 1 y 8 fotografías JPG, PNG o WEBP.
+              Máximo 15 MB por fotografía y 40 MB en total.
             </p>
           </div>
         </div>
@@ -1374,10 +1503,26 @@ function mostrarSolicitar() {
           Tu solicitud se guardará como
           <strong>pendiente de aprobación</strong>.
 
-          Las fotografías todavía no se enviarán.
-          SDU deberá incorporarlas antes de
-          publicar el caballo.
+          Los datos y las fotografías serán revisados
+          por SDU antes de publicar el caballo.
         </div>
+
+        <div id="verificacionSolicitud"
+             style="margin:20px 0"></div>
+
+        <p id="estadoVerificacion"
+           class="ayuda"
+           role="status"
+           aria-live="polite">
+          Cargando verificación de seguridad...
+        </p>
+
+        <button type="button"
+                id="reintentarVerificacion"
+                class="boton boton-borde oculto"
+                style="margin-bottom:15px">
+          Reintentar verificación
+        </button>
 
         <button type="submit"
                 class="boton boton-dorado">
@@ -1393,118 +1538,301 @@ function mostrarSolicitar() {
     </div>
   `;
 
-  const tipoPrecio =
-    document.getElementById("tipoPrecio");
+  const formulario =
+    document.getElementById("formSolicitar");
 
-  tipoPrecio.addEventListener("change", () => {
+  const tipoPrecio =
+    formulario.querySelector("#tipoPrecio");
+
+  const campoPrecio =
+    formulario.querySelector("#campoPrecio");
+
+  const precio =
+    formulario.querySelector("#precio");
+
+  const entradaFotos =
+    formulario.elements.fotografias;
+
+  const boton =
+    formulario.querySelector('button[type="submit"]');
+
+  const estado =
+    formulario.querySelector("#estadoSolicitud");
+
+  const verificacion =
+    formulario.querySelector("#verificacionSolicitud");
+
+  const estadoVerificacion =
+    formulario.querySelector("#estadoVerificacion");
+
+  const reintentar =
+    formulario.querySelector("#reintentarVerificacion");
+
+  let token = "";
+  let widget = null;
+  let enviando = false;
+  let iniciando = false;
+  let activo = true;
+
+  function actualizarPrecio() {
     const publico = tipoPrecio.value === "publico";
 
-    document.getElementById("campoPrecio")
-      .classList.toggle("oculto", !publico);
+    campoPrecio.classList.toggle("oculto", !publico);
 
-    document.getElementById("precio")
-      .required = publico;
-  });
+    precio.required = publico;
+    precio.disabled = !publico;
+  }
 
-  /* ENVÍO REAL A SUPABASE */
+  tipoPrecio.addEventListener(
+    "change",
+    actualizarPrecio
+  );
 
-  document.getElementById("formSolicitar")
-    .addEventListener("submit", async e => {
-      e.preventDefault();
+  actualizarPrecio();
 
-      const formulario = e.currentTarget;
+  function mensaje(texto, error = false) {
+    estado.textContent = texto;
+    estado.style.color = error ? "#a32929" : "#183d30";
+  }
 
-      if (!formulario.reportValidity()) return;
+  function invalidarVerificacion(texto) {
+    if (!activo) return;
 
-      const boton = formulario.querySelector(
-        'button[type="submit"]'
+    token = "";
+    estadoVerificacion.textContent = texto;
+    reintentar.classList.remove("oculto");
+  }
+
+  async function iniciarVerificacion() {
+    if (iniciando || enviando || !activo) return;
+
+    iniciando = true;
+    token = "";
+
+    reintentar.classList.add("oculto");
+
+    estadoVerificacion.textContent =
+      "Cargando verificación de seguridad...";
+
+    try {
+      await cargarTurnstile();
+
+      if (!activo || !formulario.isConnected) return;
+
+      if (widget !== null) {
+        window.turnstile.remove(widget);
+      }
+
+      widget = window.turnstile.render(verificacion, {
+        sitekey: TURNSTILE_SITE_KEY,
+        action: "publicar_deportivo",
+        language: "es",
+        size: "flexible",
+        "response-field": false,
+
+        callback: valor => {
+          if (!activo) return;
+
+          token = valor;
+
+          estadoVerificacion.textContent =
+            "Verificación completada.";
+
+          reintentar.classList.add("oculto");
+        },
+
+        "expired-callback": () => {
+          invalidarVerificacion(
+            "La verificación venció. Completala nuevamente."
+          );
+        },
+
+        "timeout-callback": () => {
+          invalidarVerificacion(
+            "La verificación demoró demasiado. Podés reintentar."
+          );
+        },
+
+        "error-callback": () => {
+          invalidarVerificacion(
+            "No se pudo completar la verificación. Podés reintentar."
+          );
+        }
+      });
+
+    } catch {
+      invalidarVerificacion(
+        "No se pudo cargar la verificación. Revisá tu conexión y reintentá."
       );
 
-      const estado =
-        document.getElementById("estadoSolicitud");
+    } finally {
+      iniciando = false;
+    }
+  }
 
-      const datos = new FormData(formulario);
+  reintentar.addEventListener(
+    "click",
+    iniciarVerificacion
+  );
 
-      const texto = campo =>
-        String(datos.get(campo) || "").trim();
+  limpiarFormularioSolicitud = () => {
+    activo = false;
+    token = "";
 
-      const numero = campo => {
-        const valor = texto(campo);
-        return valor === "" ? null : Number(valor);
-      };
+    if (widget !== null && window.turnstile) {
+      window.turnstile.remove(widget);
+      widget = null;
+    }
+  };
 
-      const reservado =
-        texto("tipoPrecio") === "reservado";
+  iniciarVerificacion();
 
-      const solicitud = {
-        nombre: texto("nombre"),
-        raza: texto("raza"),
-        sexo: texto("sexo"),
-        edad: numero("edad"),
-        altura_cm: numero("altura"),
-        pelo: texto("pelo") || null,
-        categoria: texto("categoria"),
-        ubicacion: texto("ubicacion"),
-        pais: texto("pais"),
-        descripcion: texto("descripcion"),
-        precio_usd: reservado
-          ? null
-          : numero("precio"),
-        precio_reservado: reservado,
-        propietario_nombre: texto("propietario"),
-        propietario_email: texto("email"),
-        propietario_telefono: texto("telefono")
-      };
+  entradaFotos.addEventListener("change", () => {
+    entradaFotos.setCustomValidity("");
 
-      boton.disabled = true;
-      boton.textContent = "Enviando solicitud...";
+    try {
+      validarFotografias(
+        Array.from(entradaFotos.files)
+      );
 
-      estado.textContent =
-        "Guardando solicitud en Supabase...";
+    } catch (error) {
+      entradaFotos.setCustomValidity(error.message);
+      entradaFotos.reportValidity();
+    }
+  });
 
-      estado.style.color = "";
+  formulario.addEventListener("submit", async e => {
+    e.preventDefault();
 
-      try {
-        await guardarSolicitudDeportivo(solicitud);
+    if (enviando) return;
 
-        formulario.reset();
-
-        document.getElementById("campoPrecio")
-          .classList.remove("oculto");
-
-        document.getElementById("precio")
-          .required = true;
-
-        estado.textContent =
-          "¡Solicitud recibida correctamente! " +
-          "El caballo quedó pendiente de aprobación. " +
-          "Las fotografías todavía no se enviaron.";
-
-        estado.style.color = "#183d30";
-
-        window.scrollTo({
-          top: 0,
-          behavior: "smooth"
-        });
-
-      } catch (error) {
-        console.error(
-          "Error al enviar solicitud:",
-          error
-        );
-
-        estado.textContent =
-          "No se pudo guardar la solicitud. " +
-          "Intentá nuevamente o comunicate con SDU.";
-
-        estado.style.color = "#a32929";
-
-      } finally {
-        boton.disabled = false;
-        boton.textContent =
-          "Enviar solicitud de publicación";
-      }
+    formulario.querySelectorAll(
+      'input:not([type="file"]), textarea'
+    ).forEach(campo => {
+      campo.value = campo.value.trim();
     });
+
+    if (!formulario.reportValidity()) return;
+
+    const fotos = Array.from(entradaFotos.files);
+
+    try {
+      validarFotografias(fotos);
+
+    } catch (error) {
+      mensaje(error.message, true);
+      return;
+    }
+
+    if (!token) {
+      mensaje(
+        "Completá la verificación de seguridad antes de enviar.",
+        true
+      );
+      return;
+    }
+
+    const datos = new FormData(formulario);
+
+    const texto = campo =>
+      String(datos.get(campo) || "").trim();
+
+    const numero = campo =>
+      texto(campo) === "" ? null : Number(texto(campo));
+
+    const reservado =
+      texto("tipoPrecio") === "reservado";
+
+    const solicitud = {
+      nombre: texto("nombre"),
+      raza: texto("raza"),
+      sexo: texto("sexo"),
+      edad: numero("edad"),
+      altura_cm: numero("altura"),
+      pelo: texto("pelo") || null,
+      categoria: texto("categoria"),
+      ubicacion: texto("ubicacion"),
+      pais: texto("pais"),
+      descripcion: texto("descripcion"),
+      precio_usd: reservado ? null : numero("precio"),
+      precio_reservado: reservado,
+      propietario_nombre: texto("propietario"),
+      propietario_email: texto("email"),
+      propietario_telefono: texto("telefono")
+    };
+
+    const tokenEnvio = token;
+
+    token = "";
+    enviando = true;
+
+    const controles = Array.from(
+      formulario.querySelectorAll(
+        "input, select, textarea, button"
+      )
+    ).map(campo => ({
+      campo,
+      disabled: campo.disabled
+    }));
+
+    controles.forEach(({ campo }) => {
+      campo.disabled = true;
+    });
+
+    boton.textContent =
+      "Enviando solicitud y fotografías...";
+
+    mensaje(
+      "Enviando los datos y las fotografías. Esperá la confirmación."
+    );
+
+    try {
+      const resultado = await guardarSolicitudDeportivo(
+        solicitud,
+        fotos,
+        tokenEnvio
+      );
+
+      if (!activo) return;
+
+      formulario.reset();
+      entradaFotos.setCustomValidity("");
+
+      mensaje(
+        "¡Solicitud recibida correctamente! " +
+        resultado.fotos_recibidas +
+        " fotografía(s) recibida(s). " +
+        "El caballo quedó pendiente de aprobación de SDU. " +
+        "Número de solicitud: " +
+        resultado.publicacion_id
+      );
+
+      estado.scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+      });
+
+    } catch (error) {
+      if (activo) {
+        mensaje(error.message, true);
+      }
+
+    } finally {
+      enviando = false;
+
+      controles.forEach(({ campo, disabled }) => {
+        campo.disabled = disabled;
+      });
+
+      boton.textContent =
+        "Enviar solicitud de publicación";
+
+      if (activo) {
+        actualizarPrecio();
+        iniciarVerificacion();
+      }
+    }
+  });
 }
 
 /* ==================================================
@@ -1732,6 +2060,11 @@ function mostrarConsultar(caballo) {
    ================================================== */
 
 function mostrarVista() {
+  if (limpiarFormularioSolicitud) {
+    limpiarFormularioSolicitud();
+    limpiarFormularioSolicitud = null;
+  }
+
   const params = new URLSearchParams(location.search);
 
   const vista = params.get("vista");
