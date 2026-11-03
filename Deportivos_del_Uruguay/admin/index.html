@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -15,9 +14,7 @@
       --borde: #deded8;
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
@@ -89,9 +86,7 @@
       cursor: not-allowed;
     }
 
-    h2 {
-      margin-top: 0;
-    }
+    h2 { margin-top: 0; }
 
     h3 {
       margin-top: 0;
@@ -99,9 +94,7 @@
       font-size: 20px;
     }
 
-    .oculto {
-      display: none !important;
-    }
+    .oculto { display: none !important; }
 
     .estado {
       padding: 14px;
@@ -124,9 +117,7 @@
       line-height: 1.5;
     }
 
-    .registro strong {
-      color: #173b2b;
-    }
+    .registro strong { color: #173b2b; }
 
     .contador {
       font-weight: 700;
@@ -152,38 +143,105 @@
     }
 
     @media (max-width: 650px) {
-      .menu {
-        grid-template-columns: 1fr;
-      }
+      .menu { grid-template-columns: 1fr; }
+      header h1 { font-size: 23px; }
+      .tarjeta { padding: 18px; }
+      .registro { padding: 16px; }
+      .enlaces { flex-direction: column; }
+    }
 
-      header h1 {
-        font-size: 23px;
-      }
+    .titulo-fotos { margin-top: 28px; }
 
-      .tarjeta {
-        padding: 18px;
-      }
+    .fotos-admin {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin: 18px 0;
+    }
 
-      .registro {
-        padding: 16px;
-      }
+    .foto-admin {
+      border: 1px solid var(--borde);
+      border-radius: 9px;
+      padding: 12px;
+      background: white;
+    }
 
-      .enlaces {
-        flex-direction: column;
-      }
+    .ampliar-foto {
+      display: block;
+      width: 100%;
+      padding: 0;
+      overflow: hidden;
+      background: #e9e5d8;
+    }
+
+    .ampliar-foto img {
+      display: block;
+      width: 100%;
+      height: 190px;
+      object-fit: contain;
+    }
+
+    .seleccionar-foto {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 12px;
+      line-height: 1.5;
+    }
+
+    .seleccionar-foto input {
+      width: 20px;
+      height: 20px;
+    }
+
+    .acciones {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    #modalFoto {
+      width: min(1100px, 96vw);
+      max-height: 94vh;
+      border: 1px solid var(--dorado);
+      border-radius: 12px;
+      background: #101510;
+      color: white;
+      padding: 16px;
+    }
+
+    #modalFoto::backdrop { background: #000d; }
+
+    #modalFoto img {
+      display: block;
+      width: 100%;
+      max-height: 72vh;
+      object-fit: contain;
+    }
+
+    .modal-cabecera {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 14px;
+    }
+
+    .modal-cabecera h2 {
+      margin: 0;
+      font-size: 20px;
     }
   </style>
 </head>
 
 <body>
-
   <header>
     <h1>DEPORTIVOS DEL URUGUAY</h1>
     <p>Panel de administración</p>
   </header>
 
   <main>
-
     <section class="tarjeta" id="verificacion">
       <h2>Verificando acceso</h2>
 
@@ -191,811 +249,1157 @@
         Comprobando la sesión de Sangres del Uruguay...
       </p>
 
-      <a
-        class="boton oculto"
-        id="irSDU"
-        href="../../index.html"
-      >
+      <a class="boton oculto" id="irSDU" href="../../index.html">
         Ingresar desde Sangres del Uruguay
       </a>
     </section>
 
     <section id="panel" class="oculto">
-
       <div class="tarjeta">
         <h2>Administrador de Deportivos</h2>
-
         <p id="correoAdmin"></p>
-
         <p>Seleccioná una sección para trabajar.</p>
 
         <div class="menu">
-
-          <button
-            type="button"
-            onclick="abrirSeccion('publicaciones')"
-          >
+          <button type="button" onclick="abrirSeccion('publicaciones')">
             Solicitudes de publicación
           </button>
 
-          <button
-            type="button"
-            onclick="abrirSeccion('ofertas')"
-          >
+          <button type="button" onclick="abrirSeccion('ofertas')">
             Consultas y ofertas
           </button>
 
-          <button
-            type="button"
-            onclick="abrirSeccion('ejemplares')"
-          >
+          <button type="button" onclick="abrirSeccion('ejemplares')">
             Ejemplares publicados
           </button>
 
-          <button
-            type="button"
-            onclick="abrirSeccion('ventas')"
-          >
+          <button type="button" onclick="abrirSeccion('ventas')">
             Ventas realizadas
           </button>
-
         </div>
       </div>
 
       <section class="tarjeta" id="contenido">
-
         <h2>Panel principal</h2>
-
         <div class="estado">
           Seleccioná una sección del administrador.
         </div>
-
       </section>
 
       <div class="enlaces">
-
-        <a
-          class="boton"
-          href="../index.html"
-        >
+        <a class="boton" href="../index.html">
           Ver catálogo público
         </a>
 
-        <a
-          class="boton"
-          href="../../index.html"
-        >
+        <a class="boton" href="../../index.html">
           Volver a Sangres del Uruguay
         </a>
-
       </div>
-
     </section>
-
   </main>
 
+  <dialog id="modalFoto" aria-labelledby="tituloFoto">
+    <div class="modal-cabecera">
+      <h2 id="tituloFoto">Fotografía</h2>
+      <button type="button" id="cerrarFoto">Cerrar</button>
+    </div>
+    <img id="fotoGrande" alt="Fotografía del caballo">
+  </dialog>
+
   <script>
+"use strict";
 
-    // ============================================
-    // CONEXIÓN SUPABASE
-    // ============================================
+const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
+const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+const WORKER_URL = "https://deportivos-fotos.sangresdeluruguay.workers.dev";
+const CLAVE_SESION = "sesionAdminSdU";
 
-    const SUPABASE_URL =
-      "https://arsjvaueyjwntefogmqz.supabase.co";
+const UUID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
-    const SUPABASE_KEY =
-      "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+const secciones = {
+  publicaciones: "Solicitudes de publicación",
+  ofertas: "Consultas y ofertas",
+  ejemplares: "Ejemplares publicados",
+  ventas: "Ventas realizadas"
+};
 
-    let tokenActual = null;
+let tokenActual = null;
+let renovacion = null;
+let revisionVista = 0;
+let controlador = new AbortController();
+let urlsFotos = new Map();
+let focoAnterior = null;
+let enviandoRevision = false;
 
-    // ============================================
-    // VERIFICACIÓN DE ADMINISTRADOR
-    // ============================================
+const contenido = document.getElementById("contenido");
+const modal = document.getElementById("modalFoto");
 
-    function mostrarAcceso(
-      texto,
-      mostrarEnlace = false
-    ) {
+/* ============================================
+   SESIÓN Y PERMISOS
+   ============================================ */
 
-      document.getElementById(
-        "mensajeAcceso"
-      ).textContent = texto;
+function leerSesion() {
+  try {
+    return JSON.parse(
+      localStorage.getItem(CLAVE_SESION) || "null"
+    );
+  } catch {
+    return null;
+  }
+}
 
-      document.getElementById(
-        "irSDU"
-      ).classList.toggle(
-        "oculto",
-        !mostrarEnlace
+function mostrarAcceso(texto, mostrarEnlace = false) {
+  document.getElementById("mensajeAcceso").textContent = texto;
+
+  document.getElementById("irSDU")
+    .classList.toggle("oculto", !mostrarEnlace);
+}
+
+function bloquearAcceso(texto) {
+  tokenActual = null;
+  limpiarVista();
+  contenido.replaceChildren();
+
+  document.getElementById("panel").classList.add("oculto");
+
+  document.getElementById("verificacion")
+    .classList.remove("oculto");
+
+  mostrarAcceso(texto, true);
+}
+
+async function solicitudAuth(
+  ruta,
+  token,
+  metodo = "GET",
+  datos
+) {
+  return fetch(SUPABASE_URL + ruta, {
+    method: metodo,
+    headers: {
+      apikey: SUPABASE_KEY,
+      Authorization: "Bearer " + token,
+      "Content-Type": "application/json"
+    },
+    ...(datos !== undefined
+      ? { body: JSON.stringify(datos) }
+      : {})
+  });
+}
+
+async function renovarSesion() {
+  if (renovacion) return renovacion;
+
+  renovacion = (async () => {
+    const anterior = localStorage.getItem(CLAVE_SESION);
+    const sesion = leerSesion();
+
+    if (!sesion?.refresh_token) {
+      throw new Error("Volvé a iniciar sesión desde SDU.");
+    }
+
+    const r = await fetch(
+      SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
+      {
+        method: "POST",
+        headers: {
+          apikey: SUPABASE_KEY,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          refresh_token: sesion.refresh_token
+        })
+      }
+    );
+
+    if (!r.ok) {
+      throw new Error(
+        "No se pudo renovar la sesión. Ingresá nuevamente desde SDU."
       );
-
     }
 
-    async function solicitudAuth(
-      ruta,
-      token,
-      metodo = "GET",
-      datos
-    ) {
+    const nueva = await r.json();
 
-      return fetch(
-        SUPABASE_URL + ruta,
-        {
-          method: metodo,
+    if (!nueva.access_token || !nueva.refresh_token) {
+      throw new Error("Sesión inválida.");
+    }
 
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization: "Bearer " + token,
-            "Content-Type": "application/json"
-          },
-
-          ...(datos
-            ? { body: JSON.stringify(datos) }
-            : {})
-        }
+    if (localStorage.getItem(CLAVE_SESION) !== anterior) {
+      throw new Error(
+        "La sesión cambió en otra pestaña. Recargá esta página."
       );
-
     }
 
-    async function verificarAdministrador() {
+    localStorage.setItem(
+      CLAVE_SESION,
+      JSON.stringify(nueva)
+    );
 
-      let sesion;
+    tokenActual = nueva.access_token;
+    return tokenActual;
+  })();
 
-      try {
+  try {
+    return await renovacion;
+  } finally {
+    renovacion = null;
+  }
+}
 
-        sesion = JSON.parse(
-          localStorage.getItem(
-            "sesionAdminSdU"
-          ) || "null"
-        );
+async function peticionAutorizada(
+  url,
+  opciones = {},
+  esWorker = false
+) {
+  if (renovacion) await renovacion;
 
-      } catch {
+  if (
+    !tokenActual ||
+    leerSesion()?.access_token !== tokenActual
+  ) {
+    bloquearAcceso(
+      "La sesión cambió o terminó. Recargá la página o ingresá desde SDU."
+    );
 
-        sesion = null;
+    throw new Error("Sesión no autorizada.");
+  }
 
-      }
+  const ejecutar = token => {
+    const headers = new Headers(opciones.headers || {});
 
-      if (!sesion?.access_token) {
+    headers.set("Authorization", "Bearer " + token);
 
-        mostrarAcceso(
-          "Primero tenés que iniciar sesión en Sangres del Uruguay.",
-          true
-        );
-
-        return;
-
-      }
-
-      let token = sesion.access_token;
-
-      try {
-
-        let respuesta = await solicitudAuth(
-          "/auth/v1/user",
-          token
-        );
-
-        // Renovar sesión si venció
-        if (
-          !respuesta.ok &&
-          sesion.refresh_token
-        ) {
-
-          const renovar = await fetch(
-            SUPABASE_URL +
-            "/auth/v1/token?grant_type=refresh_token",
-            {
-              method: "POST",
-
-              headers: {
-                apikey: SUPABASE_KEY,
-                "Content-Type": "application/json"
-              },
-
-              body: JSON.stringify({
-                refresh_token: sesion.refresh_token
-              })
-            }
-          );
-
-          if (renovar.ok) {
-
-            sesion = await renovar.json();
-
-            token = sesion.access_token;
-
-            localStorage.setItem(
-              "sesionAdminSdU",
-              JSON.stringify(sesion)
-            );
-
-            respuesta = await solicitudAuth(
-              "/auth/v1/user",
-              token
-            );
-
-          }
-
-        }
-
-        if (!respuesta.ok) {
-
-          mostrarAcceso(
-            "La sesión venció. Volvé a ingresar desde SDU.",
-            true
-          );
-
-          return;
-
-        }
-
-        const usuario = await respuesta.json();
-
-        // Comprobar autorización en Supabase
-        const permiso = await solicitudAuth(
-          "/rest/v1/rpc/es_admin_deportivos",
-          token,
-          "POST",
-          {}
-        );
-
-        if (!permiso.ok) {
-
-          mostrarAcceso(
-            "No se pudo verificar el permiso de administrador en Supabase."
-          );
-
-          return;
-
-        }
-
-        const autorizado = await permiso.json();
-
-        if (autorizado !== true) {
-
-          mostrarAcceso(
-            "Tu cuenta no tiene autorización para administrar Deportivos."
-          );
-
-          return;
-
-        }
-
-        tokenActual = token;
-
-        document.getElementById(
-          "verificacion"
-        ).classList.add("oculto");
-
-        document.getElementById(
-          "panel"
-        ).classList.remove("oculto");
-
-        document.getElementById(
-          "correoAdmin"
-        ).textContent =
-          "Sesión: " +
-          (usuario.email || "Administrador");
-
-      } catch (error) {
-
-        console.error(
-          "Error al verificar acceso:",
-          error
-        );
-
-        mostrarAcceso(
-          "No se pudo verificar el acceso. Intentá nuevamente."
-        );
-
-      }
-
+    if (!esWorker) {
+      headers.set("apikey", SUPABASE_KEY);
     }
 
-    // ============================================
-    // SECCIONES DEL ADMINISTRADOR
-    // ============================================
+    return fetch(url, {
+      ...opciones,
+      headers,
+      cache: "no-store"
+    });
+  };
 
-    const secciones = {
+  const usado = tokenActual;
+  let r = await ejecutar(usado);
 
-      publicaciones:
-        "Solicitudes de publicación",
-
-      ofertas:
-        "Consultas y ofertas",
-
-      ejemplares:
-        "Ejemplares publicados",
-
-      ventas:
-        "Ventas realizadas"
-
-    };
-
-    // ============================================
-    // FUNCIONES PARA MOSTRAR DATOS
-    // ============================================
-
-    function crearElemento(
-      etiqueta,
-      texto,
-      clase = ""
-    ) {
-
-      const elemento =
-        document.createElement(etiqueta);
-
-      elemento.textContent =
-        texto ?? "—";
-
-      if (clase) {
-        elemento.className = clase;
+  if (r.status === 401) {
+    try {
+      if (tokenActual === usado) {
+        await renovarSesion();
       }
 
-      return elemento;
-
+      r = await ejecutar(tokenActual);
+    } catch (error) {
+      bloquearAcceso(error.message);
+      throw error;
     }
+  }
 
-    function mostrarCampo(
-      contenedor,
-      etiqueta,
-      valor
-    ) {
+  if (r.status === 401 || r.status === 403) {
+    bloquearAcceso(
+      "La sesión venció o tu cuenta ya no tiene permiso. Ingresá desde SDU."
+    );
 
-      const parrafo =
-        document.createElement("p");
+    throw new Error("Acceso no autorizado.");
+  }
 
-      const negrita =
-        document.createElement("strong");
+  return r;
+}
 
-      negrita.textContent =
-        etiqueta + ": ";
+async function verificarAdministrador() {
+  const sesion = leerSesion();
 
-      parrafo.append(
-        negrita,
-        document.createTextNode(
-          valor === null ||
-          valor === undefined ||
-          valor === ""
-            ? "—"
-            : String(valor)
-        )
+  if (!sesion?.access_token) {
+    mostrarAcceso(
+      "Primero iniciá sesión en Sangres del Uruguay.",
+      true
+    );
+    return;
+  }
+
+  try {
+    tokenActual = sesion.access_token;
+
+    let r = await solicitudAuth(
+      "/auth/v1/user",
+      tokenActual
+    );
+
+    if (r.status === 401 && sesion.refresh_token) {
+      await renovarSesion();
+
+      r = await solicitudAuth(
+        "/auth/v1/user",
+        tokenActual
       );
-
-      contenedor.append(parrafo);
-
     }
 
-    function fechaLegible(fecha) {
-
-      return fecha
-        ? new Date(fecha).toLocaleString(
-            "es-UY"
-          )
-        : "—";
-
+    if (!r.ok) {
+      throw new Error(
+        "No se pudo verificar la sesión. Ingresá nuevamente desde SDU."
+      );
     }
 
-    function dinero(valor) {
+    const usuario = await r.json();
 
-      return valor === null ||
-        valor === undefined
+    const permiso = await solicitudAuth(
+      "/rest/v1/rpc/es_admin_deportivos",
+      tokenActual,
+      "POST",
+      {}
+    );
+
+    if (!permiso.ok || await permiso.json() !== true) {
+      throw new Error(
+        "Tu cuenta no tiene autorización para administrar Deportivos."
+      );
+    }
+
+    if (leerSesion()?.access_token !== tokenActual) {
+      throw new Error(
+        "La sesión cambió. Recargá la página."
+      );
+    }
+
+    document.getElementById("verificacion")
+      .classList.add("oculto");
+
+    document.getElementById("panel")
+      .classList.remove("oculto");
+
+    document.getElementById("correoAdmin").textContent =
+      "Sesión: " + (usuario.email || "Administrador");
+
+    mostrarRuta();
+  } catch (error) {
+    bloquearAcceso(error.message);
+  }
+}
+
+/* ============================================
+   FUNCIONES PARA MOSTRAR DATOS
+   ============================================ */
+
+function crearElemento(etiqueta, texto, clase = "") {
+  const elemento = document.createElement(etiqueta);
+  elemento.textContent = texto ?? "—";
+
+  if (clase) {
+    elemento.className = clase;
+  }
+
+  return elemento;
+}
+
+function mostrarCampo(contenedor, etiqueta, valor) {
+  const p = document.createElement("p");
+
+  const strong = crearElemento(
+    "strong",
+    etiqueta + ": "
+  );
+
+  p.append(
+    strong,
+    document.createTextNode(
+      valor == null || valor === ""
         ? "—"
-        : "USD " +
-          Number(valor).toLocaleString(
-            "es-UY"
-          );
+        : String(valor)
+    )
+  );
 
-    }
+  contenedor.append(p);
+}
 
-    // ============================================
-    // CONSULTAR SUPABASE
-    // ============================================
+function fechaLegible(fecha) {
+  return fecha
+    ? new Date(fecha).toLocaleString("es-UY")
+    : "—";
+}
 
-    async function consultarTabla(
-      tabla,
-      filtros = ""
-    ) {
+function dinero(valor) {
+  return valor == null
+    ? "—"
+    : "USD " + Number(valor).toLocaleString("es-UY");
+}
 
-      if (!tokenActual) {
+function crearTarjetaRegistro() {
+  return crearElemento("div", "", "registro");
+}
 
-        throw new Error(
-          "Sesión no autorizada"
-        );
+function crearBoton(texto, accion) {
+  const boton = crearElemento("button", texto);
+  boton.type = "button";
+  boton.addEventListener("click", accion);
+  return boton;
+}
 
-      }
+/* ============================================
+   CONSULTAR SUPABASE
+   ============================================ */
 
-      const respuesta = await fetch(
-        SUPABASE_URL +
-        "/rest/v1/" +
-        tabla +
-        "?select=*" +
-        filtros +
-        "&order=creado_en.desc&limit=100",
-        {
-          headers: {
-            apikey: SUPABASE_KEY,
-            Authorization:
-              "Bearer " + tokenActual,
-            Accept: "application/json"
-          }
-        }
-      );
+async function consultarTabla(
+  tabla,
+  filtros = "",
+  signal = controlador.signal
+) {
+  const r = await peticionAutorizada(
+    SUPABASE_URL +
+    "/rest/v1/" +
+    tabla +
+    "?select=*" +
+    filtros +
+    "&order=creado_en.desc&limit=100",
+    { signal }
+  );
 
-      if (!respuesta.ok) {
+  if (!r.ok) {
+    throw new Error(
+      "No se pudo consultar " +
+      tabla +
+      " (HTTP " +
+      r.status +
+      ")."
+    );
+  }
 
-        throw new Error(
-          "Error al consultar " +
-          tabla +
-          " (HTTP " +
-          respuesta.status +
-          ")"
-        );
+  const datos = await r.json();
 
-      }
+  if (!Array.isArray(datos)) {
+    throw new Error("Respuesta de datos inválida.");
+  }
 
-      return await respuesta.json();
+  return datos;
+}
 
-    }
+/* ============================================
+   AMPLIAR FOTOGRAFÍAS
+   ============================================ */
 
-    // ============================================
-    // TARJETAS DE REGISTROS
-    // ============================================
+function cerrarFoto() {
+  if (modal.open) {
+    modal.close();
+  }
 
-    function crearTarjetaRegistro() {
+  document.getElementById("fotoGrande")
+    .removeAttribute("src");
 
-      const tarjeta =
-        document.createElement("div");
+  if (focoAnterior?.isConnected) {
+    focoAnterior.focus();
+  }
+}
 
-      tarjeta.className = "registro";
+function ampliarFoto(url, nombre, boton) {
+  focoAnterior = boton;
 
-      return tarjeta;
+  const imagen = document.getElementById("fotoGrande");
+  imagen.src = url;
+  imagen.alt = "Fotografía de " + nombre;
 
-    }
+  document.getElementById("tituloFoto").textContent =
+    nombre;
 
-    // ============================================
-    // ABRIR SECCIONES
-    // ============================================
+  modal.showModal();
+}
 
-    async function abrirSeccion(nombre) {
+function limpiarVista() {
+  revisionVista++;
 
-      if (
-        !tokenActual ||
-        !secciones[nombre]
-      ) {
-        return;
-      }
+  controlador.abort();
+  controlador = new AbortController();
 
-      const contenido =
-        document.getElementById(
-          "contenido"
-        );
+  cerrarFoto();
 
-      contenido.replaceChildren();
+  for (const url of urlsFotos.values()) {
+    URL.revokeObjectURL(url);
+  }
 
-      contenido.append(
-        crearElemento(
-          "h2",
-          secciones[nombre]
-        )
-      );
+  urlsFotos = new Map();
+}
 
-      const mensaje = crearElemento(
+/* ============================================
+   NAVEGACIÓN
+   ============================================ */
+
+function navegar(seccion, id = "") {
+  const url = new URL(location.href);
+
+  url.search = "";
+  url.hash = "";
+  url.searchParams.set("seccion", seccion);
+
+  if (id) {
+    url.searchParams.set("publicacion", id);
+  }
+
+  if (url.href !== location.href) {
+    history.pushState({}, "", url);
+  }
+
+  mostrarRuta();
+}
+
+function abrirSeccion(nombre) {
+  if (secciones[nombre]) {
+    navegar(nombre);
+  }
+}
+
+/* ============================================
+   DATOS DE PUBLICACIONES Y CONSULTAS
+   ============================================ */
+
+function mostrarDatosCaballo(tarjeta, r) {
+  tarjeta.append(crearElemento("h3", r.nombre));
+
+  const campos = [
+    ["Categoría", r.categoria],
+    ["Raza", r.raza],
+    ["Sexo", r.sexo],
+    ["Edad", r.edad],
+    [
+      "Altura a la cruz",
+      r.altura_cm == null ? null : r.altura_cm + " cm"
+    ],
+    ["Pelo", r.pelo],
+    ["Ubicación", r.ubicacion],
+    ["País", r.pais],
+    ["Descripción", r.descripcion],
+    [
+      "Precio",
+      r.precio_reservado
+        ? "Reservado"
+        : dinero(r.precio_usd)
+    ],
+    ["Propietario", r.propietario_nombre],
+    ["Email propietario", r.propietario_email],
+    ["Teléfono propietario", r.propietario_telefono],
+    ["Estado", r.estado],
+    ["Fecha", fechaLegible(r.creado_en)]
+  ];
+
+  for (const [etiqueta, valor] of campos) {
+    mostrarCampo(tarjeta, etiqueta, valor);
+  }
+}
+
+function mostrarDatosConsulta(tarjeta, r) {
+  tarjeta.append(
+    crearElemento(
+      "h3",
+      r.tipo === "oferta"
+        ? "Oferta recibida"
+        : "Consulta recibida"
+    )
+  );
+
+  const campos = [
+    ["Comprador", r.comprador_nombre],
+    ["Email", r.comprador_email],
+    ["WhatsApp", r.comprador_telefono],
+    ["Tipo de comprador", r.tipo_comprador],
+    ["País", r.pais],
+    ["Establo", r.establo],
+    ["Oferta", dinero(r.oferta_usd)],
+    ["Mensaje", r.mensaje],
+    ["Publicación ID", r.publicacion_id],
+    ["Estado", r.estado],
+    ["Fecha", fechaLegible(r.creado_en)]
+  ];
+
+  for (const [etiqueta, valor] of campos) {
+    mostrarCampo(tarjeta, etiqueta, valor);
+  }
+}
+
+/* ============================================
+   MOSTRAR SECCIONES Y FICHA ADMINISTRATIVA
+   ============================================ */
+
+async function mostrarRuta() {
+  if (!tokenActual) return;
+
+  limpiarVista();
+
+  const vista = revisionVista;
+  const signal = controlador.signal;
+  const params = new URLSearchParams(location.search);
+  const nombre = params.get("seccion");
+  const id = params.get("publicacion");
+
+  contenido.replaceChildren();
+
+  if (!nombre) {
+    contenido.append(
+      crearElemento("h2", "Panel principal"),
+      crearElemento(
+        "div",
+        "Seleccioná una sección del administrador.",
+        "estado"
+      )
+    );
+    return;
+  }
+
+  if (
+    !secciones[nombre] ||
+    (id && (!UUID.test(id) || nombre === "ofertas"))
+  ) {
+    contenido.append(
+      crearElemento(
         "p",
-        "Cargando información de Supabase..."
+        "La dirección solicitada no corresponde a una vista válida.",
+        "estado"
+      )
+    );
+    return;
+  }
+
+  document.title =
+    secciones[nombre] + " | Administrador de Deportivos";
+
+  contenido.append(
+    crearElemento("h2", secciones[nombre])
+  );
+
+  const mensaje = crearElemento(
+    "p",
+    "Cargando información..."
+  );
+
+  contenido.append(mensaje);
+
+  try {
+    if (id) {
+      const registros = await consultarTabla(
+        "deportivos_publicaciones",
+        "&id=eq." + encodeURIComponent(id),
+        signal
       );
 
-      contenido.append(mensaje);
+      if (vista !== revisionVista) return;
 
-      contenido.scrollIntoView({
-        behavior: "smooth"
-      });
+      mensaje.remove();
 
-      try {
-
-        let registros = [];
-
-        // SOLICITUDES PENDIENTES
-        if (nombre === "publicaciones") {
-
-          registros = await consultarTabla(
-            "deportivos_publicaciones",
-            "&estado=eq.pendiente"
-          );
-
-        }
-
-        // EJEMPLARES REGISTRADOS
-        if (nombre === "ejemplares") {
-
-          registros = await consultarTabla(
-            "deportivos_publicaciones",
-            "&estado=in.(publicado,vendido,rechazado)"
-          );
-
-        }
-
-        // CONSULTAS Y OFERTAS
-        if (nombre === "ofertas") {
-
-          registros = await consultarTabla(
-            "deportivos_consultas"
-          );
-
-        }
-
-        // VENTAS REALIZADAS
-        if (nombre === "ventas") {
-
-          registros = await consultarTabla(
-            "deportivos_publicaciones",
-            "&estado=eq.vendido"
-          );
-
-        }
-
-        mensaje.remove();
-
+      if (!registros.length) {
         contenido.append(
           crearElemento(
             "p",
-            "Registros encontrados: " +
-            registros.length,
-            "contador"
+            "Publicación no encontrada.",
+            "estado"
+          )
+        );
+        return;
+      }
+
+      const tarjeta = crearTarjetaRegistro();
+
+      mostrarDatosCaballo(tarjeta, registros[0]);
+      contenido.append(tarjeta);
+
+      await mostrarRevision(
+        registros[0],
+        tarjeta,
+        vista,
+        signal
+      );
+      return;
+    }
+
+    const filtros = {
+      publicaciones: "&estado=eq.pendiente",
+      ejemplares: "&estado=in.(publicado,vendido,rechazado)",
+      ventas: "&estado=eq.vendido",
+      ofertas: ""
+    };
+
+    const registros = await consultarTabla(
+      nombre === "ofertas"
+        ? "deportivos_consultas"
+        : "deportivos_publicaciones",
+      filtros[nombre],
+      signal
+    );
+
+    if (vista !== revisionVista) return;
+
+    mensaje.remove();
+
+    contenido.append(
+      crearElemento(
+        "p",
+        "Registros encontrados: " + registros.length,
+        "contador"
+      )
+    );
+
+    if (!registros.length) {
+      contenido.append(
+        crearElemento(
+          "div",
+          "Todavía no hay registros en esta sección.",
+          "estado"
+        )
+      );
+    }
+
+    for (const r of registros) {
+      const tarjeta = crearTarjetaRegistro();
+
+      if (nombre === "ofertas") {
+        mostrarDatosConsulta(tarjeta, r);
+      } else {
+        mostrarDatosCaballo(tarjeta, r);
+
+        tarjeta.append(
+          crearBoton(
+            r.estado === "pendiente"
+              ? "Revisar solicitud y fotografías"
+              : "Ver fotografías",
+            () => navegar(nombre, r.id)
+          )
+        );
+      }
+
+      contenido.append(tarjeta);
+    }
+
+    if (registros.length === 100) {
+      contenido.append(
+        crearElemento(
+          "p",
+          "Se muestran los primeros 100 registros. Más adelante agregaremos paginación."
+        )
+      );
+    }
+  } catch (error) {
+    if (vista !== revisionVista || signal.aborted) return;
+
+    mensaje.remove();
+
+    contenido.append(
+      crearElemento("p", error.message, "estado"),
+      crearBoton("Intentar nuevamente", mostrarRuta)
+    );
+  }
+}
+
+/* ============================================
+   FOTOS PRIVADAS Y REVISIÓN
+   ============================================ */
+
+async function mostrarRevision(
+  registro,
+  tarjeta,
+  vista,
+  signal
+) {
+  const pendiente = registro.estado === "pendiente";
+
+  tarjeta.append(
+    crearElemento("h3", "Fotografías", "titulo-fotos")
+  );
+
+  tarjeta.append(
+    crearElemento(
+      "p",
+      pendiente
+        ? "Ampliá las fotografías para revisarlas y marcá las que querés aprobar."
+        : "Hacé clic en una fotografía para ampliarla."
+    )
+  );
+
+  const estado = crearElemento(
+    "p",
+    "Cargando fotografías...",
+    "estado"
+  );
+
+  estado.setAttribute("role", "status");
+
+  const galeria = crearElemento("div", "", "fotos-admin");
+  const acciones = crearElemento("div", "", "acciones");
+  const seleccion = new Map();
+
+  let cargaTerminada = false;
+  let ocupado = false;
+  let resuelta = !pendiente;
+  let incierta = false;
+
+  const aprobar = crearBoton(
+    "Aprobar publicación",
+    () => revisar("publicado")
+  );
+
+  const rechazar = crearBoton(
+    "Rechazar solicitud",
+    () => revisar("rechazado")
+  );
+
+  function actualizarBotones() {
+    aprobar.disabled =
+      ocupado ||
+      enviandoRevision ||
+      resuelta ||
+      incierta ||
+      !cargaTerminada ||
+      ![...seleccion.values()].some(
+        c => c.checked && !c.disabled
+      );
+
+    rechazar.disabled =
+      ocupado ||
+      enviandoRevision ||
+      resuelta ||
+      incierta ||
+      !cargaTerminada;
+  }
+
+  if (pendiente) {
+    acciones.append(aprobar, rechazar);
+  }
+
+  tarjeta.append(estado, galeria, acciones);
+  actualizarBotones();
+
+  try {
+    const fotos = await consultarTabla(
+      "deportivos_fotos",
+      "&publicacion_id=eq." +
+        encodeURIComponent(registro.id),
+      signal
+    );
+
+    fotos.sort(
+      (a, b) => (a.orden ?? 0) - (b.orden ?? 0)
+    );
+
+    if (vista !== revisionVista) return;
+
+    let cargadas = 0;
+
+    for (const foto of fotos) {
+      if (vista !== revisionVista) return;
+
+      const caja = crearElemento("div", "", "foto-admin");
+
+      const nota = crearElemento(
+        "p",
+        "Cargando imagen..."
+      );
+
+      caja.append(nota);
+      galeria.append(caja);
+
+      try {
+        if (!UUID.test(foto.id)) {
+          throw new Error(
+            "Identificador de foto inválido."
+          );
+        }
+
+        const r = await peticionAutorizada(
+          WORKER_URL +
+            "/admin/fotos/" +
+            encodeURIComponent(foto.id),
+          { signal },
+          true
+        );
+
+        if (!r.ok) {
+          throw new Error(
+            "No se pudo cargar la foto (HTTP " +
+            r.status +
+            ")."
+          );
+        }
+
+        const blob = await r.blob();
+
+        if (vista !== revisionVista) return;
+
+        if (
+          !["image/jpeg", "image/png", "image/webp"]
+            .includes(blob.type)
+        ) {
+          throw new Error(
+            "Formato de imagen no válido."
+          );
+        }
+
+        const url = URL.createObjectURL(blob);
+        urlsFotos.set(foto.id, url);
+
+        const imagen = document.createElement("img");
+        imagen.alt = "Fotografía de " + registro.nombre;
+        imagen.src = url;
+
+        await imagen.decode();
+
+        if (vista !== revisionVista) return;
+
+        const ampliar = crearBoton(
+          "",
+          () => ampliarFoto(
+            url,
+            registro.nombre,
+            ampliar
           )
         );
 
-        if (registros.length === 0) {
+        ampliar.className = "ampliar-foto";
 
-          contenido.append(
-            crearElemento(
-              "div",
-              "Todavía no hay registros en esta sección.",
-              "estado"
+        ampliar.setAttribute(
+          "aria-label",
+          "Ampliar fotografía de " + registro.nombre
+        );
+
+        ampliar.append(imagen);
+        nota.remove();
+        caja.append(ampliar);
+
+        if (pendiente) {
+          const etiqueta = crearElemento(
+            "label",
+            "",
+            "seleccionar-foto"
+          );
+
+          const check = document.createElement("input");
+          check.type = "checkbox";
+
+          check.addEventListener(
+            "change",
+            actualizarBotones
+          );
+
+          etiqueta.append(
+            check,
+            document.createTextNode(
+              " Aprobar esta fotografía"
             )
           );
 
-          return;
-
-        }
-
-        // MOSTRAR CADA REGISTRO
-        for (const registro of registros) {
-
-          const tarjeta =
-            crearTarjetaRegistro();
-
-          // ==================================
-          // CONSULTAS Y OFERTAS
-          // ==================================
-
-          if (nombre === "ofertas") {
-
-            tarjeta.append(
-              crearElemento(
-                "h3",
-                registro.tipo === "oferta"
-                  ? "Oferta recibida"
-                  : "Consulta recibida"
-              )
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Comprador",
-              registro.comprador_nombre
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Email",
-              registro.comprador_email
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "WhatsApp",
-              registro.comprador_telefono
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Tipo de comprador",
-              registro.tipo_comprador
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "País",
-              registro.pais
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Establo",
-              registro.establo
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Oferta",
-              dinero(registro.oferta_usd)
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Mensaje",
-              registro.mensaje
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Publicación ID",
-              registro.publicacion_id
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Estado",
-              registro.estado
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Fecha",
-              fechaLegible(
-                registro.creado_en
-              )
-            );
-
-          } else {
-
-            // ==================================
-            // PUBLICACIONES DE CABALLOS
-            // ==================================
-
-            tarjeta.append(
-              crearElemento(
-                "h3",
-                registro.nombre
-              )
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Categoría",
-              registro.categoria
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Raza",
-              registro.raza
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Sexo",
-              registro.sexo
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Edad",
-              registro.edad
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Altura a la cruz",
-              registro.altura_cm == null
-                ? null
-                : registro.altura_cm +
-                  " cm"
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Pelo",
-              registro.pelo
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Ubicación",
-              registro.ubicacion
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "País",
-              registro.pais
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Descripción",
-              registro.descripcion
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Precio",
-              registro.precio_reservado
-                ? "Reservado"
-                : dinero(
-                    registro.precio_usd
-                  )
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Propietario",
-              registro.propietario_nombre
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Email propietario",
-              registro.propietario_email
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Teléfono propietario",
-              registro.propietario_telefono
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Estado",
-              registro.estado
-            );
-
-            mostrarCampo(
-              tarjeta,
-              "Fecha",
-              fechaLegible(
-                registro.creado_en
-              )
-            );
-
-          }
-
-          contenido.append(tarjeta);
-
-        }
-
-        // AVISO DE LÍMITE
-        if (registros.length === 100) {
-
-          contenido.append(
+          seleccion.set(foto.id, check);
+          caja.append(etiqueta);
+        } else {
+          caja.append(
             crearElemento(
               "p",
-              "Se muestran los primeros 100 registros. Más adelante agregaremos paginación."
+              foto.aprobada
+                ? "Fotografía aprobada"
+                : "Fotografía sin aprobar"
             )
           );
-
         }
 
+        cargadas++;
       } catch (error) {
+        if (
+          vista !== revisionVista ||
+          signal.aborted
+        ) return;
 
-        console.error(error);
-
-        mensaje.textContent =
-          "No se pudieron cargar los registros: " +
-          error.message;
-
+        nota.textContent = error.message;
       }
-
     }
 
-    // ============================================
-    // INICIAR PANEL
-    // ============================================
+    if (vista !== revisionVista) return;
 
-    verificarAdministrador();
+    estado.textContent = fotos.length
+      ? cargadas +
+        " de " +
+        fotos.length +
+        " fotografías cargadas."
+      : "Esta solicitud no tiene fotografías registradas.";
 
+    if (cargadas < fotos.length) {
+      acciones.append(
+        crearBoton(
+          "Volver a cargar fotografías",
+          mostrarRuta
+        )
+      );
+    }
+  } catch (error) {
+    if (
+      vista !== revisionVista ||
+      signal.aborted
+    ) return;
+
+    estado.textContent = error.message;
+
+    acciones.append(
+      crearBoton(
+        "Volver a cargar fotografías",
+        mostrarRuta
+      )
+    );
+  } finally {
+    if (vista === revisionVista) {
+      cargaTerminada = true;
+      actualizarBotones();
+    }
+  }
+
+  async function revisar(decision) {
+    if (
+      ocupado ||
+      enviandoRevision ||
+      resuelta ||
+      incierta ||
+      vista !== revisionVista
+    ) return;
+
+    const fotos = [...seleccion]
+      .filter(([, check]) => check.checked && !check.disabled)
+      .map(([id]) => id);
+
+    if (decision === "publicado" && !fotos.length) {
+      estado.textContent =
+        "Seleccioná al menos una fotografía.";
+      return;
+    }
+
+    const pregunta = decision === "publicado"
+      ? "¿Aprobar " +
+        registro.nombre +
+        " con " +
+        fotos.length +
+        " fotografía(s) seleccionada(s)?"
+      : "¿Rechazar la solicitud de " +
+        registro.nombre +
+        "?";
+
+    if (!window.confirm(pregunta)) return;
+
+    ocupado = true;
+    enviandoRevision = true;
+
+    for (const check of seleccion.values()) {
+      check.disabled = true;
+    }
+
+    actualizarBotones();
+    estado.textContent = "Guardando revisión...";
+
+    try {
+      const r = await peticionAutorizada(
+        SUPABASE_URL + "/rest/v1/rpc/revisar_deportivo",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            p_publicacion_id: registro.id,
+            p_decision: decision,
+            p_fotos_aprobadas:
+              decision === "publicado" ? fotos : []
+          })
+        }
+      );
+
+      if (!r.ok) {
+        const error = await r.json().catch(() => ({}));
+
+        throw new Error(
+          error.message ||
+          "No se pudo confirmar la revisión (HTTP " +
+          r.status +
+          ")."
+        );
+      }
+
+      const resultado = await r.json();
+
+      if (
+        resultado.ok !== true ||
+        resultado.publicacion_id !== registro.id ||
+        resultado.estado !== decision
+      ) {
+        throw new Error(
+          "La respuesta no permitió confirmar la revisión."
+        );
+      }
+
+      resuelta = true;
+
+      if (vista !== revisionVista) return;
+
+      estado.textContent = decision === "publicado"
+        ? "Publicación aprobada y fotografías seleccionadas guardadas. La conexión con el catálogo público se realizará en el siguiente paso."
+        : "Solicitud rechazada. Los datos y las fotografías se conservaron para administración.";
+
+      acciones.append(
+        crearBoton(
+          "Actualizar información",
+          mostrarRuta
+        )
+      );
+    } catch (error) {
+      incierta = true;
+
+      if (vista !== revisionVista) return;
+
+      estado.textContent =
+        error.message +
+        " Actualizá la información para comprobar el estado antes de intentar otra vez.";
+
+      acciones.append(
+        crearBoton("Comprobar estado", mostrarRuta)
+      );
+    } finally {
+      ocupado = false;
+      enviandoRevision = false;
+
+      if (vista === revisionVista) {
+        actualizarBotones();
+      } else if (tokenActual) {
+        mostrarRuta();
+      }
+    }
+  }
+}
+
+/* ============================================
+   EVENTOS E INICIO
+   ============================================ */
+
+document.getElementById("cerrarFoto")
+  .addEventListener("click", cerrarFoto);
+
+modal.addEventListener("cancel", e => {
+  e.preventDefault();
+  cerrarFoto();
+});
+
+modal.addEventListener("click", e => {
+  if (e.target === modal) {
+    cerrarFoto();
+  }
+});
+
+window.addEventListener("popstate", mostrarRuta);
+
+window.addEventListener("storage", e => {
+  if (e.key === CLAVE_SESION || e.key === null) {
+    bloquearAcceso(
+      "La sesión cambió en otra pestaña. Recargá esta página."
+    );
+  }
+});
+
+window.addEventListener("beforeunload", e => {
+  if (enviandoRevision) {
+    e.preventDefault();
+    e.returnValue = "";
+  }
+});
+
+verificarAdministrador();
   </script>
-
 </body>
 </html>
