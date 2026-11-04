@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -1439,6 +1440,10 @@ function mostrarSolicitar() {
                 Precio reservado
               </option>
             </select>
+            <p class="ayuda">
+              Si elegís precio reservado, el importe será
+              visible solo para la administración de SDU.
+            </p>
           </div>
 
           <div id="campoPrecio">
@@ -1575,12 +1580,11 @@ function mostrarSolicitar() {
   let activo = true;
 
   function actualizarPrecio() {
-    const publico = tipoPrecio.value === "publico";
-
-    campoPrecio.classList.toggle("oculto", !publico);
-
-    precio.required = publico;
-    precio.disabled = !publico;
+    // El precio siempre es obligatorio,
+    // tanto público como reservado.
+    campoPrecio.classList.remove("oculto");
+    precio.required = true;
+    precio.disabled = false;
   }
 
   tipoPrecio.addEventListener(
@@ -1743,6 +1747,19 @@ function mostrarSolicitar() {
     const reservado =
       texto("tipoPrecio") === "reservado";
 
+    // El importe real se valida siempre.
+    const precioUsd = numero("precio");
+
+    if (
+      !Number.isSafeInteger(precioUsd) ||
+      precioUsd < 1 ||
+      precioUsd > 100000000
+    ) {
+      mensaje("Ingresá un precio válido en USD.", true);
+      precio.focus();
+      return;
+    }
+
     const solicitud = {
       nombre: texto("nombre"),
       raza: texto("raza"),
@@ -1754,8 +1771,11 @@ function mostrarSolicitar() {
       ubicacion: texto("ubicacion"),
       pais: texto("pais"),
       descripcion: texto("descripcion"),
-      precio_usd: reservado ? null : numero("precio"),
+
+      // El precio se envía siempre, aunque sea reservado.
+      precio_usd: precioUsd,
       precio_reservado: reservado,
+
       propietario_nombre: texto("propietario"),
       propietario_email: texto("email"),
       propietario_telefono: texto("telefono")
