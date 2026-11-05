@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Administrador | Deportivos del Uruguay</title>
-
   <style>
     :root {
       --verde: #102c22;
@@ -13,40 +13,33 @@
       --fondo: #f5f5f0;
       --borde: #deded8;
     }
-
     * { box-sizing: border-box; }
-
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       background: var(--fondo);
       color: var(--verde);
     }
-
     header {
       background: var(--verde);
       color: white;
       padding: 26px 24px;
       border-bottom: 4px solid var(--dorado);
     }
-
     header h1 {
       margin: 0;
       font-family: Georgia, serif;
       font-size: 28px;
     }
-
     header p {
       color: var(--dorado);
       margin: 8px 0 0;
     }
-
     main {
       max-width: 1150px;
       margin: 30px auto;
       padding: 0 18px;
     }
-
     .tarjeta {
       background: white;
       border: 1px solid var(--borde);
@@ -54,15 +47,12 @@
       padding: 24px;
       margin-bottom: 20px;
     }
-
     .menu {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 15px;
     }
-
-    button,
-    .boton {
+    button, .boton {
       display: inline-block;
       background: var(--verde);
       color: white;
@@ -75,34 +65,26 @@
       text-decoration: none;
       text-align: center;
     }
-
-    button:hover,
-    .boton:hover {
+    button:hover, .boton:hover {
       background: var(--verde-claro);
     }
-
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
     }
-
     h2 { margin-top: 0; }
-
     h3 {
       margin-top: 0;
       color: var(--verde);
       font-size: 20px;
     }
-
     .oculto { display: none !important; }
-
     .estado {
       padding: 14px;
       background: #f2f4ef;
       border-radius: 9px;
       line-height: 1.6;
     }
-
     .registro {
       background: #f8f8f5;
       border: 1px solid #ddd9cc;
@@ -111,19 +93,15 @@
       margin-bottom: 15px;
       overflow-wrap: anywhere;
     }
-
     .registro p {
       margin: 9px 0;
       line-height: 1.5;
     }
-
     .registro strong { color: #173b2b; }
-
     .contador {
       font-weight: 700;
       margin: 18px 0;
     }
-
     .etiqueta {
       display: inline-block;
       padding: 6px 11px;
@@ -134,14 +112,12 @@
       color: var(--verde);
       margin-bottom: 12px;
     }
-
     .enlaces {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
       margin-top: 24px;
     }
-
     @media (max-width: 650px) {
       .menu { grid-template-columns: 1fr; }
       header h1 { font-size: 23px; }
@@ -149,107 +125,21 @@
       .registro { padding: 16px; }
       .enlaces { flex-direction: column; }
     }
-
-    .titulo-fotos { margin-top: 28px; }
-
-    .fotos-admin {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-      gap: 16px;
-      margin: 18px 0;
-    }
-
-    .foto-admin {
-      border: 1px solid var(--borde);
-      border-radius: 9px;
-      padding: 12px;
-      background: white;
-    }
-
-    .ampliar-foto {
-      display: block;
-      width: 100%;
-      padding: 0;
-      overflow: hidden;
-      background: #e9e5d8;
-    }
-
-    .ampliar-foto img {
-      display: block;
-      width: 100%;
-      height: 190px;
-      object-fit: contain;
-    }
-
-    .seleccionar-foto {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    .seleccionar-foto input {
-      width: 20px;
-      height: 20px;
-    }
-
-    .acciones {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 18px;
-    }
-
-    #modalFoto {
-      width: min(1100px, 96vw);
-      max-height: 94vh;
-      border: 1px solid var(--dorado);
-      border-radius: 12px;
-      background: #101510;
-      color: white;
-      padding: 16px;
-    }
-
-    #modalFoto::backdrop { background: #000d; }
-
-    #modalFoto img {
-      display: block;
-      width: 100%;
-      max-height: 72vh;
-      object-fit: contain;
-    }
-
-    .modal-cabecera {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 15px;
-      margin-bottom: 14px;
-    }
-
-    .modal-cabecera h2 {
-      margin: 0;
-      font-size: 20px;
-    }
   </style>
 </head>
-
 <body>
   <header>
     <h1>DEPORTIVOS DEL URUGUAY</h1>
     <p>Panel de administración</p>
   </header>
-
   <main>
     <section class="tarjeta" id="verificacion">
       <h2>Verificando acceso</h2>
-
       <p id="mensajeAcceso">
         Comprobando la sesión de Sangres del Uruguay...
       </p>
-
-      <a class="boton oculto" id="irSDU" href="../../index.html">
+      <a class="boton oculto" id="irSDU"
+         href="../../index.html">
         Ingresar desde Sangres del Uruguay
       </a>
     </section>
@@ -259,21 +149,21 @@
         <h2>Administrador de Deportivos</h2>
         <p id="correoAdmin"></p>
         <p>Seleccioná una sección para trabajar.</p>
-
         <div class="menu">
-          <button type="button" onclick="abrirSeccion('publicaciones')">
+          <button type="button"
+                  onclick="abrirSeccion('publicaciones')">
             Solicitudes de publicación
           </button>
-
-          <button type="button" onclick="abrirSeccion('ofertas')">
+          <button type="button"
+                  onclick="abrirSeccion('ofertas')">
             Consultas y ofertas
           </button>
-
-          <button type="button" onclick="abrirSeccion('ejemplares')">
+          <button type="button"
+                  onclick="abrirSeccion('ejemplares')">
             Ejemplares publicados
           </button>
-
-          <button type="button" onclick="abrirSeccion('ventas')">
+          <button type="button"
+                  onclick="abrirSeccion('ventas')">
             Ventas realizadas
           </button>
         </div>
@@ -290,7 +180,6 @@
         <a class="boton" href="../index.html">
           Ver catálogo público
         </a>
-
         <a class="boton" href="../../index.html">
           Volver a Sangres del Uruguay
         </a>
@@ -298,1108 +187,663 @@
     </section>
   </main>
 
-  <dialog id="modalFoto" aria-labelledby="tituloFoto">
-    <div class="modal-cabecera">
-      <h2 id="tituloFoto">Fotografía</h2>
-      <button type="button" id="cerrarFoto">Cerrar</button>
-    </div>
-    <img id="fotoGrande" alt="Fotografía del caballo">
-  </dialog>
-
-  <script>
+<script>
 "use strict";
 
-const SUPABASE_URL = "https://arsjvaueyjwntefogmqz.supabase.co";
-const SUPABASE_KEY = "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
-const WORKER_URL = "https://deportivos-fotos.sangresdeluruguay.workers.dev";
-const CLAVE_SESION = "sesionAdminSdU";
-
-const UUID =
-  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-
-const secciones = {
-  publicaciones: "Solicitudes de publicación",
-  ofertas: "Consultas y ofertas",
-  ejemplares: "Ejemplares publicados",
-  ventas: "Ventas realizadas"
-};
+const SUPABASE_URL =
+  "https://arsjvaueyjwntefogmqz.supabase.co";
+const SUPABASE_KEY =
+  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+const WORKER_URL =
+  "https://deportivos-fotos.sangresdeluruguay.workers.dev";
 
 let tokenActual = null;
-let renovacion = null;
-let revisionVista = 0;
-let controlador = new AbortController();
-let urlsFotos = new Map();
-let focoAnterior = null;
-let enviandoRevision = false;
+let seccionActual = "publicaciones";
+let urlFotosTemporales = [];
 
-const contenido = document.getElementById("contenido");
-const modal = document.getElementById("modalFoto");
+const $ = id => document.getElementById(id);
 
-/* ============================================
-   SESIÓN Y PERMISOS
-   ============================================ */
+const el = (tag, texto = "", clase = "") => {
+  const e = document.createElement(tag);
+  e.textContent = texto ?? "—";
+  if (clase) e.className = clase;
+  return e;
+};
 
-function leerSesion() {
-  try {
-    return JSON.parse(
-      localStorage.getItem(CLAVE_SESION) || "null"
-    );
-  } catch {
-    return null;
-  }
+function campo(padre, titulo, valor) {
+  const p = el("p");
+  const b = el("strong", titulo + ": ");
+  p.append(
+    b,
+    document.createTextNode(
+      valor === null ||
+      valor === undefined ||
+      valor === ""
+        ? "—"
+        : String(valor)
+    )
+  );
+  padre.append(p);
 }
 
-function mostrarAcceso(texto, mostrarEnlace = false) {
-  document.getElementById("mensajeAcceso").textContent = texto;
-
-  document.getElementById("irSDU")
-    .classList.toggle("oculto", !mostrarEnlace);
+function dinero(v) {
+  return v === null || v === undefined || v === ""
+    ? "Precio no registrado"
+    : "USD " + Number(v).toLocaleString("es-UY");
 }
 
-function bloquearAcceso(texto) {
-  tokenActual = null;
-  limpiarVista();
-  contenido.replaceChildren();
-
-  document.getElementById("panel").classList.add("oculto");
-
-  document.getElementById("verificacion")
-    .classList.remove("oculto");
-
-  mostrarAcceso(texto, true);
+function aviso(texto, error = false) {
+  const a = el("div", texto, "estado");
+  if (error) a.style.color = "#a32929";
+  return a;
 }
 
-async function solicitudAuth(
-  ruta,
-  token,
-  metodo = "GET",
-  datos
-) {
-  return fetch(SUPABASE_URL + ruta, {
-    method: metodo,
+async function authFetch(ruta, token, opciones = {}) {
+  return await fetch(SUPABASE_URL + ruta, {
+    ...opciones,
     headers: {
       apikey: SUPABASE_KEY,
       Authorization: "Bearer " + token,
-      "Content-Type": "application/json"
-    },
-    ...(datos !== undefined
-      ? { body: JSON.stringify(datos) }
-      : {})
+      "Content-Type": "application/json",
+      ...(opciones.headers || {})
+    }
   });
 }
 
-async function renovarSesion() {
-  if (renovacion) return renovacion;
-
-  renovacion = (async () => {
-    const anterior = localStorage.getItem(CLAVE_SESION);
-    const sesion = leerSesion();
-
-    if (!sesion?.refresh_token) {
-      throw new Error("Volvé a iniciar sesión desde SDU.");
-    }
-
-    const r = await fetch(
-      SUPABASE_URL + "/auth/v1/token?grant_type=refresh_token",
-      {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_KEY,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          refresh_token: sesion.refresh_token
-        })
-      }
-    );
-
-    if (!r.ok) {
-      throw new Error(
-        "No se pudo renovar la sesión. Ingresá nuevamente desde SDU."
-      );
-    }
-
-    const nueva = await r.json();
-
-    if (!nueva.access_token || !nueva.refresh_token) {
-      throw new Error("Sesión inválida.");
-    }
-
-    if (localStorage.getItem(CLAVE_SESION) !== anterior) {
-      throw new Error(
-        "La sesión cambió en otra pestaña. Recargá esta página."
-      );
-    }
-
-    localStorage.setItem(
-      CLAVE_SESION,
-      JSON.stringify(nueva)
-    );
-
-    tokenActual = nueva.access_token;
-    return tokenActual;
-  })();
+async function verificarAdministrador() {
+  let sesion;
 
   try {
-    return await renovacion;
-  } finally {
-    renovacion = null;
-  }
-}
-
-async function peticionAutorizada(
-  url,
-  opciones = {},
-  esWorker = false
-) {
-  if (renovacion) await renovacion;
-
-  if (
-    !tokenActual ||
-    leerSesion()?.access_token !== tokenActual
-  ) {
-    bloquearAcceso(
-      "La sesión cambió o terminó. Recargá la página o ingresá desde SDU."
+    sesion = JSON.parse(
+      localStorage.getItem("sesionAdminSdU") || "null"
     );
-
-    throw new Error("Sesión no autorizada.");
+  } catch {
+    sesion = null;
   }
-
-  const ejecutar = token => {
-    const headers = new Headers(opciones.headers || {});
-
-    headers.set("Authorization", "Bearer " + token);
-
-    if (!esWorker) {
-      headers.set("apikey", SUPABASE_KEY);
-    }
-
-    return fetch(url, {
-      ...opciones,
-      headers,
-      cache: "no-store"
-    });
-  };
-
-  const usado = tokenActual;
-  let r = await ejecutar(usado);
-
-  if (r.status === 401) {
-    try {
-      if (tokenActual === usado) {
-        await renovarSesion();
-      }
-
-      r = await ejecutar(tokenActual);
-    } catch (error) {
-      bloquearAcceso(error.message);
-      throw error;
-    }
-  }
-
-  if (r.status === 401 || r.status === 403) {
-    bloquearAcceso(
-      "La sesión venció o tu cuenta ya no tiene permiso. Ingresá desde SDU."
-    );
-
-    throw new Error("Acceso no autorizado.");
-  }
-
-  return r;
-}
-
-async function verificarAdministrador() {
-  const sesion = leerSesion();
 
   if (!sesion?.access_token) {
-    mostrarAcceso(
-      "Primero iniciá sesión en Sangres del Uruguay.",
-      true
-    );
+    $("mensajeAcceso").textContent =
+      "Primero iniciá sesión desde Sangres del Uruguay.";
+    $("irSDU").classList.remove("oculto");
     return;
   }
 
   try {
-    tokenActual = sesion.access_token;
+    let token = sesion.access_token;
+    let r = await authFetch("/auth/v1/user", token);
 
-    let r = await solicitudAuth(
-      "/auth/v1/user",
-      tokenActual
-    );
-
-    if (r.status === 401 && sesion.refresh_token) {
-      await renovarSesion();
-
-      r = await solicitudAuth(
-        "/auth/v1/user",
-        tokenActual
+    if (!r.ok && sesion.refresh_token) {
+      const renovar = await fetch(
+        SUPABASE_URL +
+        "/auth/v1/token?grant_type=refresh_token",
+        {
+          method: "POST",
+          headers: {
+            apikey: SUPABASE_KEY,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            refresh_token: sesion.refresh_token
+          })
+        }
       );
+
+      if (renovar.ok) {
+        sesion = await renovar.json();
+        token = sesion.access_token;
+        localStorage.setItem(
+          "sesionAdminSdU",
+          JSON.stringify(sesion)
+        );
+        r = await authFetch("/auth/v1/user", token);
+      }
     }
 
     if (!r.ok) {
       throw new Error(
-        "No se pudo verificar la sesión. Ingresá nuevamente desde SDU."
+        "La sesión venció. Volvé a ingresar desde SDU."
       );
     }
 
     const usuario = await r.json();
 
-    const permiso = await solicitudAuth(
+    const permiso = await authFetch(
       "/rest/v1/rpc/es_admin_deportivos",
-      tokenActual,
-      "POST",
-      {}
+      token,
+      {
+        method: "POST",
+        body: "{}"
+      }
     );
 
     if (!permiso.ok || await permiso.json() !== true) {
       throw new Error(
-        "Tu cuenta no tiene autorización para administrar Deportivos."
+        "Tu cuenta no está autorizada para Deportivos."
       );
     }
 
-    if (leerSesion()?.access_token !== tokenActual) {
-      throw new Error(
-        "La sesión cambió. Recargá la página."
-      );
-    }
+    tokenActual = token;
 
-    document.getElementById("verificacion")
-      .classList.add("oculto");
+    $("verificacion").classList.add("oculto");
+    $("panel").classList.remove("oculto");
 
-    document.getElementById("panel")
-      .classList.remove("oculto");
-
-    document.getElementById("correoAdmin").textContent =
+    $("correoAdmin").textContent =
       "Sesión: " + (usuario.email || "Administrador");
 
-    mostrarRuta();
+    await abrirSeccion(
+      new URLSearchParams(location.search)
+        .get("seccion") || "publicaciones"
+    );
+
   } catch (error) {
-    bloquearAcceso(error.message);
+    $("mensajeAcceso").textContent =
+      error.message || "No se pudo verificar el acceso.";
+    $("irSDU").classList.remove("oculto");
   }
 }
 
-/* ============================================
-   FUNCIONES PARA MOSTRAR DATOS
-   ============================================ */
-
-function crearElemento(etiqueta, texto, clase = "") {
-  const elemento = document.createElement(etiqueta);
-  elemento.textContent = texto ?? "—";
-
-  if (clase) {
-    elemento.className = clase;
+async function consulta(tabla, filtros = "") {
+  if (!tokenActual) {
+    throw new Error("Sesión no autorizada");
   }
 
-  return elemento;
-}
-
-function mostrarCampo(contenedor, etiqueta, valor) {
-  const p = document.createElement("p");
-
-  const strong = crearElemento(
-    "strong",
-    etiqueta + ": "
-  );
-
-  p.append(
-    strong,
-    document.createTextNode(
-      valor == null || valor === ""
-        ? "—"
-        : String(valor)
-    )
-  );
-
-  contenedor.append(p);
-}
-
-function fechaLegible(fecha) {
-  return fecha
-    ? new Date(fecha).toLocaleString("es-UY")
-    : "—";
-}
-
-function dinero(valor) {
-  return valor == null
-    ? "—"
-    : "USD " + Number(valor).toLocaleString("es-UY");
-}
-
-function crearTarjetaRegistro() {
-  return crearElemento("div", "", "registro");
-}
-
-function crearBoton(texto, accion) {
-  const boton = crearElemento("button", texto);
-  boton.type = "button";
-  boton.addEventListener("click", accion);
-  return boton;
-}
-
-/* ============================================
-   CONSULTAR SUPABASE
-   ============================================ */
-
-async function consultarTabla(
-  tabla,
-  filtros = "",
-  signal = controlador.signal
-) {
-  const r = await peticionAutorizada(
-    SUPABASE_URL +
-    "/rest/v1/" +
-    tabla +
-    "?select=*" +
-    filtros +
-    "&order=creado_en.desc&limit=100",
-    { signal }
+  const r = await authFetch(
+    "/rest/v1/" + tabla + "?select=*" + filtros,
+    tokenActual
   );
 
   if (!r.ok) {
     throw new Error(
-      "No se pudo consultar " +
-      tabla +
-      " (HTTP " +
-      r.status +
-      ")."
+      "No se pudo consultar " + tabla +
+      " (HTTP " + r.status + ")"
     );
   }
 
-  const datos = await r.json();
-
-  if (!Array.isArray(datos)) {
-    throw new Error("Respuesta de datos inválida.");
-  }
-
-  return datos;
+  return await r.json();
 }
 
-/* ============================================
-   AMPLIAR FOTOGRAFÍAS
-   ============================================ */
+async function workerAdmin(ruta, datos) {
+  const r = await fetch(WORKER_URL + ruta, {
+    method: "POST",
+    headers: {
+      Authorization: "Bearer " + tokenActual,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(datos)
+  });
 
-function cerrarFoto() {
-  if (modal.open) {
-    modal.close();
+  const j = await r.json().catch(() => ({}));
+
+  if (!r.ok || j.ok !== true) {
+    throw new Error(
+      j.error || "Error HTTP " + r.status
+    );
   }
 
-  document.getElementById("fotoGrande")
-    .removeAttribute("src");
-
-  if (focoAnterior?.isConnected) {
-    focoAnterior.focus();
-  }
+  return j;
 }
 
-function ampliarFoto(url, nombre, boton) {
-  focoAnterior = boton;
-
-  const imagen = document.getElementById("fotoGrande");
-  imagen.src = url;
-  imagen.alt = "Fotografía de " + nombre;
-
-  document.getElementById("tituloFoto").textContent =
-    nombre;
-
-  modal.showModal();
-}
-
-function limpiarVista() {
-  revisionVista++;
-
-  controlador.abort();
-  controlador = new AbortController();
-
-  cerrarFoto();
-
-  for (const url of urlsFotos.values()) {
+function limpiarFotos() {
+  for (const url of urlFotosTemporales) {
     URL.revokeObjectURL(url);
   }
-
-  urlsFotos = new Map();
+  urlFotosTemporales = [];
 }
 
-/* ============================================
-   NAVEGACIÓN
-   ============================================ */
+async function fotoAdmin(id, img) {
+  try {
+    const r = await fetch(
+      WORKER_URL +
+      "/admin/fotos/" + encodeURIComponent(id),
+      {
+        headers: {
+          Authorization: "Bearer " + tokenActual
+        }
+      }
+    );
 
-function navegar(seccion, id = "") {
-  const url = new URL(location.href);
+    if (!r.ok) {
+      throw new Error("HTTP " + r.status);
+    }
 
-  url.search = "";
-  url.hash = "";
-  url.searchParams.set("seccion", seccion);
+    const blob = await r.blob();
+    const url = URL.createObjectURL(blob);
 
-  if (id) {
-    url.searchParams.set("publicacion", id);
+    urlFotosTemporales.push(url);
+    img.src = url;
+
+    img.onclick = () => {
+      const modal = $("visorFotoAdmin");
+      $("visorImagenAdmin").src = url;
+      modal.classList.remove("oculto");
+    };
+
+  } catch (error) {
+    img.alt = "No se pudo cargar la fotografía";
+    console.error(error);
   }
-
-  if (url.href !== location.href) {
-    history.pushState({}, "", url);
-  }
-
-  mostrarRuta();
 }
 
-function abrirSeccion(nombre) {
-  if (secciones[nombre]) {
-    navegar(nombre);
-  }
+function prepararVisor() {
+  const modal = document.createElement("div");
+  modal.id = "visorFotoAdmin";
+  modal.className = "oculto";
+
+  modal.style.cssText =
+    "position:fixed;inset:0;z-index:1000;" +
+    "background:rgba(0,0,0,.9);" +
+    "display:flex;align-items:center;" +
+    "justify-content:center;padding:24px;" +
+    "cursor:zoom-out";
+
+  const img = document.createElement("img");
+  img.id = "visorImagenAdmin";
+
+  img.style.cssText =
+    "max-width:95vw;max-height:90vh;" +
+    "object-fit:contain";
+
+  modal.append(img);
+
+  modal.onclick = () =>
+    modal.classList.add("oculto");
+
+  document.body.append(modal);
+
+  document.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      modal.classList.add("oculto");
+    }
+  });
 }
 
-/* ============================================
-   DATOS DE PUBLICACIONES Y CONSULTAS
-   ============================================ */
+async function mostrarSolicitud(pub, padre) {
+  const tarjeta = el("article", "", "registro");
+  const titulo = el(
+    "h3",
+    pub.nombre || "Caballo sin nombre"
+  );
 
-function mostrarDatosCaballo(tarjeta, r) {
-  tarjeta.append(crearElemento("h3", r.nombre));
+  tarjeta.append(titulo);
 
-  const campos = [
-    ["Categoría", r.categoria],
-    ["Raza", r.raza],
-    ["Sexo", r.sexo],
-    ["Edad", r.edad],
+  for (const [nombre, valor] of [
+    ["Raza", pub.raza],
+    ["Sexo", pub.sexo],
+    ["Categoría", pub.categoria],
     [
-      "Altura a la cruz",
-      r.altura_cm == null ? null : r.altura_cm + " cm"
+      "Edad",
+      pub.edad == null ? "" : pub.edad + " años"
     ],
-    ["Pelo", r.pelo],
-    ["Ubicación", r.ubicacion],
-    ["País", r.pais],
-    ["Descripción", r.descripcion],
     [
-      "Precio",
-      r.precio_reservado
-        ? "Reservado"
-        : dinero(r.precio_usd)
+      "Altura",
+      pub.altura_cm == null
+        ? ""
+        : pub.altura_cm + " cm"
     ],
-    ["Propietario", r.propietario_nombre],
-    ["Email propietario", r.propietario_email],
-    ["Teléfono propietario", r.propietario_telefono],
-    ["Estado", r.estado],
-    ["Fecha", fechaLegible(r.creado_en)]
-  ];
-
-  for (const [etiqueta, valor] of campos) {
-    mostrarCampo(tarjeta, etiqueta, valor);
+    ["Pelo", pub.pelo],
+    ["Ubicación", pub.ubicacion],
+    ["Descripción", pub.descripcion],
+    [
+      "Precio real (solo administrador)",
+      dinero(pub.precio_usd)
+    ],
+    [
+      "Visibilidad pública",
+      pub.precio_reservado
+        ? "Precio reservado"
+        : "Mostrar precio públicamente"
+    ],
+    ["Propietario", pub.propietario_nombre],
+    ["Email propietario", pub.propietario_email],
+    ["Teléfono propietario", pub.propietario_telefono],
+    ["Estado", pub.estado],
+    [
+      "Fecha",
+      pub.creado_en
+        ? new Date(pub.creado_en)
+            .toLocaleString("es-UY")
+        : ""
+    ]
+  ]) {
+    campo(tarjeta, nombre, valor);
   }
-}
 
-function mostrarDatosConsulta(tarjeta, r) {
+  tarjeta.append(el("h3", "Fotografías"));
+
   tarjeta.append(
-    crearElemento(
-      "h3",
-      r.tipo === "oferta"
-        ? "Oferta recibida"
-        : "Consulta recibida"
+    el(
+      "p",
+      "Ampliá las fotografías y seleccioná " +
+      "las que querés publicar."
     )
   );
 
-  const campos = [
-    ["Comprador", r.comprador_nombre],
-    ["Email", r.comprador_email],
-    ["WhatsApp", r.comprador_telefono],
-    ["Tipo de comprador", r.tipo_comprador],
-    ["País", r.pais],
-    ["Establo", r.establo],
-    ["Oferta", dinero(r.oferta_usd)],
-    ["Mensaje", r.mensaje],
-    ["Publicación ID", r.publicacion_id],
-    ["Estado", r.estado],
-    ["Fecha", fechaLegible(r.creado_en)]
-  ];
-
-  for (const [etiqueta, valor] of campos) {
-    mostrarCampo(tarjeta, etiqueta, valor);
-  }
-}
-
-/* ============================================
-   MOSTRAR SECCIONES Y FICHA ADMINISTRATIVA
-   ============================================ */
-
-async function mostrarRuta() {
-  if (!tokenActual) return;
-
-  limpiarVista();
-
-  const vista = revisionVista;
-  const signal = controlador.signal;
-  const params = new URLSearchParams(location.search);
-  const nombre = params.get("seccion");
-  const id = params.get("publicacion");
-
-  contenido.replaceChildren();
-
-  if (!nombre) {
-    contenido.append(
-      crearElemento("h2", "Panel principal"),
-      crearElemento(
-        "div",
-        "Seleccioná una sección del administrador.",
-        "estado"
-      )
-    );
-    return;
-  }
-
-  if (
-    !secciones[nombre] ||
-    (id && (!UUID.test(id) || nombre === "ofertas"))
-  ) {
-    contenido.append(
-      crearElemento(
-        "p",
-        "La dirección solicitada no corresponde a una vista válida.",
-        "estado"
-      )
-    );
-    return;
-  }
-
-  document.title =
-    secciones[nombre] + " | Administrador de Deportivos";
-
-  contenido.append(
-    crearElemento("h2", secciones[nombre])
+  const fotos = await consulta(
+    "deportivos_fotos",
+    "&publicacion_id=eq." +
+    encodeURIComponent(pub.id) +
+    "&order=orden.asc"
   );
 
-  const mensaje = crearElemento(
-    "p",
-    "Cargando información..."
-  );
+  const seleccionadas = new Set();
 
-  contenido.append(mensaje);
+  for (const foto of fotos) {
+    const caja = el("div", "", "registro");
 
-  try {
-    if (id) {
-      const registros = await consultarTabla(
-        "deportivos_publicaciones",
-        "&id=eq." + encodeURIComponent(id),
-        signal
-      );
+    const img = document.createElement("img");
+    img.alt = "Fotografía del caballo";
 
-      if (vista !== revisionVista) return;
+    img.style.cssText =
+      "display:block;width:100%;" +
+      "max-height:290px;object-fit:contain;" +
+      "background:#eae9e2;" +
+      "border:1px solid #c6a15b;" +
+      "border-radius:9px;cursor:zoom-in";
 
-      mensaje.remove();
+    caja.append(img);
 
-      if (!registros.length) {
-        contenido.append(
-          crearElemento(
-            "p",
-            "Publicación no encontrada.",
-            "estado"
-          )
-        );
-        return;
+    const label = document.createElement("label");
+
+    label.style.cssText =
+      "display:flex;align-items:center;" +
+      "gap:10px;margin-top:12px;cursor:pointer";
+
+    const check = document.createElement("input");
+    check.type = "checkbox";
+    check.checked = true;
+
+    seleccionadas.add(foto.id);
+
+    check.onchange = () => {
+      if (check.checked) {
+        seleccionadas.add(foto.id);
+      } else {
+        seleccionadas.delete(foto.id);
       }
+    };
 
-      const tarjeta = crearTarjetaRegistro();
+    label.append(
+      check,
+      document.createTextNode(
+        "Aprobar esta fotografía"
+      )
+    );
 
-      mostrarDatosCaballo(tarjeta, registros[0]);
-      contenido.append(tarjeta);
+    caja.append(label);
+    tarjeta.append(caja);
 
-      await mostrarRevision(
-        registros[0],
-        tarjeta,
-        vista,
-        signal
+    fotoAdmin(foto.id, img);
+  }
+
+  const acciones = el("div", "", "enlaces");
+
+  const aprobar = el(
+    "button",
+    "Aprobar y publicar"
+  );
+
+  const rechazar = el(
+    "button",
+    "Rechazar solicitud"
+  );
+
+  acciones.append(aprobar, rechazar);
+  tarjeta.append(acciones);
+
+  const mensaje = el(
+    "div",
+    "",
+    "estado oculto"
+  );
+
+  tarjeta.append(mensaje);
+
+  async function actuar(accion) {
+    if (
+      accion === "aprobar" &&
+      seleccionadas.size === 0
+    ) {
+      alert(
+        "Seleccioná al menos una fotografía."
       );
       return;
     }
 
-    const filtros = {
-      publicaciones: "&estado=eq.pendiente",
-      ejemplares: "&estado=in.(publicado,vendido,rechazado)",
-      ventas: "&estado=eq.vendido",
-      ofertas: ""
-    };
+    const pregunta =
+      accion === "aprobar"
+        ? `¿Aprobar y publicar ${pub.nombre} con ` +
+          `${seleccionadas.size} fotografía(s)?`
+        : `¿Rechazar la publicación de ${pub.nombre}?`;
 
-    const registros = await consultarTabla(
-      nombre === "ofertas"
-        ? "deportivos_consultas"
-        : "deportivos_publicaciones",
-      filtros[nombre],
-      signal
+    if (!confirm(pregunta)) return;
+
+    aprobar.disabled = true;
+    rechazar.disabled = true;
+
+    mensaje.classList.remove("oculto");
+    mensaje.textContent = "Guardando cambios...";
+
+    try {
+      await workerAdmin(
+        accion === "aprobar"
+          ? "/admin/publicar"
+          : "/admin/rechazar",
+        {
+          publicacion_id: pub.id,
+          ...(accion === "aprobar"
+            ? { fotos_ids: [...seleccionadas] }
+            : {})
+        }
+      );
+
+      await abrirSeccion("publicaciones");
+
+    } catch (error) {
+      mensaje.textContent = error.message;
+      mensaje.style.color = "#a32929";
+
+      aprobar.disabled = false;
+      rechazar.disabled = false;
+    }
+  }
+
+  aprobar.onclick = () => actuar("aprobar");
+  rechazar.onclick = () => actuar("rechazar");
+
+  padre.append(tarjeta);
+}
+
+async function abrirSeccion(nombre) {
+  if (!tokenActual) return;
+
+  const validas = [
+    "publicaciones",
+    "ejemplares",
+    "ofertas",
+    "ventas"
+  ];
+
+  if (!validas.includes(nombre)) {
+    nombre = "publicaciones";
+  }
+
+  seccionActual = nombre;
+
+  const params = new URLSearchParams(
+    location.search
+  );
+
+  params.set("seccion", nombre);
+  params.delete("publicacion");
+
+  history.replaceState(
+    {},
+    "",
+    "?" + params
+  );
+
+  limpiarFotos();
+
+  const contenido = $("contenido");
+
+  const titulos = {
+    publicaciones: "Solicitudes de publicación",
+    ejemplares: "Ejemplares publicados",
+    ofertas: "Consultas y ofertas",
+    ventas: "Ventas realizadas"
+  };
+
+  contenido.replaceChildren(
+    el("h2", titulos[nombre])
+  );
+
+  contenido.append(
+    aviso("Cargando información...")
+  );
+
+  try {
+    let registros = [];
+
+    if (nombre === "publicaciones") {
+      registros = await consulta(
+        "deportivos_publicaciones",
+        "&estado=eq.pendiente" +
+        "&order=creado_en.desc&limit=100"
+      );
+    }
+
+    if (nombre === "ejemplares") {
+      registros = await consulta(
+        "deportivos_publicaciones",
+        "&estado=in.(publicada,aprobada,publicado,vendido)" +
+        "&order=creado_en.desc&limit=100"
+      );
+    }
+
+    if (nombre === "ventas") {
+      registros = await consulta(
+        "deportivos_publicaciones",
+        "&estado=eq.vendido" +
+        "&order=creado_en.desc&limit=100"
+      );
+    }
+
+    if (nombre === "ofertas") {
+      try {
+        registros = await consulta(
+          "deportivos_consultas",
+          "&order=creado_en.desc&limit=100"
+        );
+      } catch {
+        contenido.replaceChildren(
+          el("h2", "Consultas y ofertas"),
+          aviso(
+            "Las consultas enviadas por WhatsApp " +
+            "se gestionan en el WhatsApp oficial de SDU. " +
+            "No se guardan automáticamente en esta sección."
+          )
+        );
+        return;
+      }
+    }
+
+    contenido.replaceChildren(
+      el("h2", titulos[nombre])
     );
 
-    if (vista !== revisionVista) return;
-
-    mensaje.remove();
-
     contenido.append(
-      crearElemento(
+      el(
         "p",
-        "Registros encontrados: " + registros.length,
+        "Registros encontrados: " +
+        registros.length,
         "contador"
       )
     );
 
     if (!registros.length) {
       contenido.append(
-        crearElemento(
-          "div",
-          "Todavía no hay registros en esta sección.",
-          "estado"
-        )
+        aviso("No hay registros en esta sección.")
       );
-    }
-
-    for (const r of registros) {
-      const tarjeta = crearTarjetaRegistro();
-
-      if (nombre === "ofertas") {
-        mostrarDatosConsulta(tarjeta, r);
-      } else {
-        mostrarDatosCaballo(tarjeta, r);
-
-        tarjeta.append(
-          crearBoton(
-            r.estado === "pendiente"
-              ? "Revisar solicitud y fotografías"
-              : "Ver fotografías",
-            () => navegar(nombre, r.id)
-          )
-        );
-      }
-
-      contenido.append(tarjeta);
-    }
-
-    if (registros.length === 100) {
-      contenido.append(
-        crearElemento(
-          "p",
-          "Se muestran los primeros 100 registros. Más adelante agregaremos paginación."
-        )
-      );
-    }
-  } catch (error) {
-    if (vista !== revisionVista || signal.aborted) return;
-
-    mensaje.remove();
-
-    contenido.append(
-      crearElemento("p", error.message, "estado"),
-      crearBoton("Intentar nuevamente", mostrarRuta)
-    );
-  }
-}
-
-/* ============================================
-   FOTOS PRIVADAS Y REVISIÓN
-   ============================================ */
-
-async function mostrarRevision(
-  registro,
-  tarjeta,
-  vista,
-  signal
-) {
-  const pendiente = registro.estado === "pendiente";
-
-  tarjeta.append(
-    crearElemento("h3", "Fotografías", "titulo-fotos")
-  );
-
-  tarjeta.append(
-    crearElemento(
-      "p",
-      pendiente
-        ? "Ampliá las fotografías para revisarlas y marcá las que querés aprobar."
-        : "Hacé clic en una fotografía para ampliarla."
-    )
-  );
-
-  const estado = crearElemento(
-    "p",
-    "Cargando fotografías...",
-    "estado"
-  );
-
-  estado.setAttribute("role", "status");
-
-  const galeria = crearElemento("div", "", "fotos-admin");
-  const acciones = crearElemento("div", "", "acciones");
-  const seleccion = new Map();
-
-  let cargaTerminada = false;
-  let ocupado = false;
-  let resuelta = !pendiente;
-  let incierta = false;
-
-  const aprobar = crearBoton(
-    "Aprobar publicación",
-    () => revisar("publicado")
-  );
-
-  const rechazar = crearBoton(
-    "Rechazar solicitud",
-    () => revisar("rechazado")
-  );
-
-  function actualizarBotones() {
-    aprobar.disabled =
-      ocupado ||
-      enviandoRevision ||
-      resuelta ||
-      incierta ||
-      !cargaTerminada ||
-      ![...seleccion.values()].some(
-        c => c.checked && !c.disabled
-      );
-
-    rechazar.disabled =
-      ocupado ||
-      enviandoRevision ||
-      resuelta ||
-      incierta ||
-      !cargaTerminada;
-  }
-
-  if (pendiente) {
-    acciones.append(aprobar, rechazar);
-  }
-
-  tarjeta.append(estado, galeria, acciones);
-  actualizarBotones();
-
-  try {
-    const fotos = await consultarTabla(
-      "deportivos_fotos",
-      "&publicacion_id=eq." +
-        encodeURIComponent(registro.id),
-      signal
-    );
-
-    fotos.sort(
-      (a, b) => (a.orden ?? 0) - (b.orden ?? 0)
-    );
-
-    if (vista !== revisionVista) return;
-
-    let cargadas = 0;
-
-    for (const foto of fotos) {
-      if (vista !== revisionVista) return;
-
-      const caja = crearElemento("div", "", "foto-admin");
-
-      const nota = crearElemento(
-        "p",
-        "Cargando imagen..."
-      );
-
-      caja.append(nota);
-      galeria.append(caja);
-
-      try {
-        if (!UUID.test(foto.id)) {
-          throw new Error(
-            "Identificador de foto inválido."
-          );
-        }
-
-        const r = await peticionAutorizada(
-          WORKER_URL +
-            "/admin/fotos/" +
-            encodeURIComponent(foto.id),
-          { signal },
-          true
-        );
-
-        if (!r.ok) {
-          throw new Error(
-            "No se pudo cargar la foto (HTTP " +
-            r.status +
-            ")."
-          );
-        }
-
-        const blob = await r.blob();
-
-        if (vista !== revisionVista) return;
-
-        if (
-          !["image/jpeg", "image/png", "image/webp"]
-            .includes(blob.type)
-        ) {
-          throw new Error(
-            "Formato de imagen no válido."
-          );
-        }
-
-        const url = URL.createObjectURL(blob);
-        urlsFotos.set(foto.id, url);
-
-        const imagen = document.createElement("img");
-        imagen.alt = "Fotografía de " + registro.nombre;
-        imagen.src = url;
-
-        await imagen.decode();
-
-        if (vista !== revisionVista) return;
-
-        const ampliar = crearBoton(
-          "",
-          () => ampliarFoto(
-            url,
-            registro.nombre,
-            ampliar
-          )
-        );
-
-        ampliar.className = "ampliar-foto";
-
-        ampliar.setAttribute(
-          "aria-label",
-          "Ampliar fotografía de " + registro.nombre
-        );
-
-        ampliar.append(imagen);
-        nota.remove();
-        caja.append(ampliar);
-
-        if (pendiente) {
-          const etiqueta = crearElemento(
-            "label",
-            "",
-            "seleccionar-foto"
-          );
-
-          const check = document.createElement("input");
-          check.type = "checkbox";
-
-          check.addEventListener(
-            "change",
-            actualizarBotones
-          );
-
-          etiqueta.append(
-            check,
-            document.createTextNode(
-              " Aprobar esta fotografía"
-            )
-          );
-
-          seleccion.set(foto.id, check);
-          caja.append(etiqueta);
-        } else {
-          caja.append(
-            crearElemento(
-              "p",
-              foto.aprobada
-                ? "Fotografía aprobada"
-                : "Fotografía sin aprobar"
-            )
-          );
-        }
-
-        cargadas++;
-      } catch (error) {
-        if (
-          vista !== revisionVista ||
-          signal.aborted
-        ) return;
-
-        nota.textContent = error.message;
-      }
-    }
-
-    if (vista !== revisionVista) return;
-
-    estado.textContent = fotos.length
-      ? cargadas +
-        " de " +
-        fotos.length +
-        " fotografías cargadas."
-      : "Esta solicitud no tiene fotografías registradas.";
-
-    if (cargadas < fotos.length) {
-      acciones.append(
-        crearBoton(
-          "Volver a cargar fotografías",
-          mostrarRuta
-        )
-      );
-    }
-  } catch (error) {
-    if (
-      vista !== revisionVista ||
-      signal.aborted
-    ) return;
-
-    estado.textContent = error.message;
-
-    acciones.append(
-      crearBoton(
-        "Volver a cargar fotografías",
-        mostrarRuta
-      )
-    );
-  } finally {
-    if (vista === revisionVista) {
-      cargaTerminada = true;
-      actualizarBotones();
-    }
-  }
-
-  async function revisar(decision) {
-    if (
-      ocupado ||
-      enviandoRevision ||
-      resuelta ||
-      incierta ||
-      vista !== revisionVista
-    ) return;
-
-    const fotos = [...seleccion]
-      .filter(([, check]) => check.checked && !check.disabled)
-      .map(([id]) => id);
-
-    if (decision === "publicado" && !fotos.length) {
-      estado.textContent =
-        "Seleccioná al menos una fotografía.";
       return;
     }
 
-    const pregunta = decision === "publicado"
-      ? "¿Aprobar " +
-        registro.nombre +
-        " con " +
-        fotos.length +
-        " fotografía(s) seleccionada(s)?"
-      : "¿Rechazar la solicitud de " +
-        registro.nombre +
-        "?";
+    if (nombre === "publicaciones") {
+      for (const pub of registros) {
+        await mostrarSolicitud(
+          pub,
+          contenido
+        );
+      }
+    } else {
+      for (const pub of registros) {
+        const tarjeta = el(
+          "article",
+          "",
+          "registro"
+        );
 
-    if (!window.confirm(pregunta)) return;
+        tarjeta.append(
+          el(
+            "h3",
+            pub.nombre ||
+            pub.comprador_nombre ||
+            "Registro"
+          )
+        );
 
-    ocupado = true;
-    enviandoRevision = true;
+        for (
+          const [nombreCampo, valor]
+          of Object.entries(pub)
+        ) {
+          if (
+            ["id", "ruta_r2"]
+              .includes(nombreCampo)
+          ) {
+            continue;
+          }
 
-    for (const check of seleccion.values()) {
-      check.disabled = true;
-    }
-
-    actualizarBotones();
-    estado.textContent = "Guardando revisión...";
-
-    try {
-      const r = await peticionAutorizada(
-        SUPABASE_URL + "/rest/v1/rpc/revisar_deportivo",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            p_publicacion_id: registro.id,
-            p_decision: decision,
-            p_fotos_aprobadas:
-              decision === "publicado" ? fotos : []
-          })
+          campo(
+            tarjeta,
+            nombreCampo === "precio_usd"
+              ? "Precio real (USD)"
+              : nombreCampo,
+            nombreCampo === "precio_usd"
+              ? dinero(valor)
+              : valor
+          );
         }
-      );
 
-      if (!r.ok) {
-        const error = await r.json().catch(() => ({}));
+        if (nombre === "ejemplares") {
+          const a = el(
+            "a",
+            "Ver en catálogo público",
+            "boton"
+          );
 
-        throw new Error(
-          error.message ||
-          "No se pudo confirmar la revisión (HTTP " +
-          r.status +
-          ")."
-        );
-      }
+          a.href =
+            "../index.html?caballo=" +
+            encodeURIComponent(pub.id);
 
-      const resultado = await r.json();
+          tarjeta.append(a);
+        }
 
-      if (
-        resultado.ok !== true ||
-        resultado.publicacion_id !== registro.id ||
-        resultado.estado !== decision
-      ) {
-        throw new Error(
-          "La respuesta no permitió confirmar la revisión."
-        );
-      }
-
-      resuelta = true;
-
-      if (vista !== revisionVista) return;
-
-      estado.textContent = decision === "publicado"
-        ? "Publicación aprobada y fotografías seleccionadas guardadas. La conexión con el catálogo público se realizará en el siguiente paso."
-        : "Solicitud rechazada. Los datos y las fotografías se conservaron para administración.";
-
-      acciones.append(
-        crearBoton(
-          "Actualizar información",
-          mostrarRuta
-        )
-      );
-    } catch (error) {
-      incierta = true;
-
-      if (vista !== revisionVista) return;
-
-      estado.textContent =
-        error.message +
-        " Actualizá la información para comprobar el estado antes de intentar otra vez.";
-
-      acciones.append(
-        crearBoton("Comprobar estado", mostrarRuta)
-      );
-    } finally {
-      ocupado = false;
-      enviandoRevision = false;
-
-      if (vista === revisionVista) {
-        actualizarBotones();
-      } else if (tokenActual) {
-        mostrarRuta();
+        contenido.append(tarjeta);
       }
     }
+
+  } catch (error) {
+    contenido.append(
+      aviso(
+        error.message ||
+        "Error al cargar registros",
+        true
+      )
+    );
   }
 }
 
-/* ============================================
-   EVENTOS E INICIO
-   ============================================ */
-
-document.getElementById("cerrarFoto")
-  .addEventListener("click", cerrarFoto);
-
-modal.addEventListener("cancel", e => {
-  e.preventDefault();
-  cerrarFoto();
-});
-
-modal.addEventListener("click", e => {
-  if (e.target === modal) {
-    cerrarFoto();
-  }
-});
-
-window.addEventListener("popstate", mostrarRuta);
-
-window.addEventListener("storage", e => {
-  if (e.key === CLAVE_SESION || e.key === null) {
-    bloquearAcceso(
-      "La sesión cambió en otra pestaña. Recargá esta página."
-    );
-  }
-});
-
-window.addEventListener("beforeunload", e => {
-  if (enviandoRevision) {
-    e.preventDefault();
-    e.returnValue = "";
-  }
-});
-
+prepararVisor();
 verificarAdministrador();
-  </script>
+</script>
 </body>
 </html>
