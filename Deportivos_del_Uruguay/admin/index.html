@@ -1127,6 +1127,190 @@ function panelVincular(pub, contenedor) {
   return panel;
 }
 
+
+// VINCULACIÓN DEL HISTORIAL DEPORTIVO
+// El registro deportivo puede existir sin pedigree en SDU.
+function panelVincularDeportivo(pub, contenedor) {
+  const panel = el("section", "", "panel-interior");
+
+  panel.append(
+    el("h3", "Vincular historial deportivo")
+  );
+
+  const vinculado = pub.caballo_deportivo_id;
+  const tieneVinculo =
+    vinculado !== null &&
+    vinculado !== undefined &&
+    vinculado !== "";
+
+  panel.append(
+    el(
+      "p",
+      tieneVinculo
+        ? "Registro deportivo vinculado: " + vinculado
+        : "Sin registro deportivo vinculado"
+    ),
+    el(
+      "p",
+      "Buscá por nombre deportivo, nombre en la nómina, " +
+      "chip o pasaporte FEU. Compará los datos antes de vincular. " +
+      "El registro genealógico de SDU es independiente.",
+      "ayuda"
+    )
+  );
+
+  const entrada = document.createElement("input");
+  entrada.type = "search";
+  entrada.className = "buscador-sdu";
+  entrada.placeholder = "Nombre, chip o pasaporte FEU";
+  entrada.maxLength = 100;
+  entrada.value = pub.nombre || "";
+  panel.append(entrada);
+
+  const acciones = el("div", "", "acciones");
+  const buscar = boton(
+    "Buscar caballo deportivo",
+    buscarDeportivos
+  );
+  acciones.append(buscar);
+
+  if (tieneVinculo) {
+    acciones.append(
+      boton(
+        "Desvincular historial deportivo",
+        () => guardarVinculoDeportivo(null, "")
+      )
+    );
+  }
+
+  panel.append(acciones);
+
+  const mensaje = el("p");
+  mensaje.setAttribute("role", "status");
+  panel.append(mensaje);
+
+  const resultados = el("div");
+  panel.append(resultados);
+  contenedor.append(panel);
+
+  async function guardarVinculoDeportivo(id, nombre) {
+    const pregunta = id === null
+      ? "¿Desvincular el historial deportivo de " +
+        pub.nombre + "? Los resultados no se borrarán."
+      : "¿Vincular " + pub.nombre +
+        " con el registro deportivo " + id +
+        " (" + nombre + ")? Confirmá que sea el mismo caballo.";
+
+    if (!confirm(pregunta)) return;
+
+    buscar.disabled = true;
+    estadoEn(mensaje, "Guardando vinculación...");
+
+    try {
+      await rpc(
+        "vincular_publicacion_deportivo",
+        {
+          p_publicacion_id: pub.id,
+          p_caballo_deportivo_id: id
+        }
+      );
+
+      await abrirSeccion(
+        "ejemplares",
+        {
+          sinHistorial: true,
+          publicacion: pub.id,
+          modo: "deportivo"
+        }
+      );
+    } catch (error) {
+      estadoEn(mensaje, error.message, true);
+      buscar.disabled = false;
+    }
+  }
+
+  async function buscarDeportivos() {
+    const q = entrada.value.trim();
+    resultados.replaceChildren();
+
+    if (q.length < 2 || q.length > 100) {
+      estadoEn(
+        mensaje,
+        "Escribí entre 2 y 100 caracteres.",
+        true
+      );
+      return;
+    }
+
+    buscar.disabled = true;
+    estadoEn(mensaje, "Buscando en los registros deportivos...");
+
+    try {
+      const lista = await rpc(
+        "buscar_deportivos_para_publicacion",
+        { p_busqueda: q }
+      );
+
+      if (!Array.isArray(lista)) {
+        throw Error("La búsqueda devolvió una respuesta inválida.");
+      }
+
+      estadoEn(
+        mensaje,
+        lista.length
+          ? "Compará nombre, chip y pasaporte antes de elegir."
+          : "No se encontraron registros deportivos."
+      );
+
+      for (const c of lista) {
+        const fila = el("div", "", "resultado-sdu");
+        const info = el("div");
+
+        info.append(
+          el("strong", c.nombre || "Sin nombre principal"),
+          el(
+            "small",
+            "Registro deportivo " + c.id +
+            " · Chip: " + (c.chip || "—") +
+            " · Pasaporte FEU: " + (c.pasaporte_feu || "—")
+          ),
+          el(
+            "small",
+            "Participaciones: " + Number(c.participaciones || 0) +
+            " · SDU: " + (c.caballo_sdu_id || "Sin vincular")
+          )
+        );
+
+        const yaVinculado = String(c.id) === String(vinculado);
+        const seleccionar = boton(
+          yaVinculado ? "Ya vinculado" : "Vincular historial",
+          () => guardarVinculoDeportivo(
+            c.id,
+            c.nombre || "Sin nombre"
+          )
+        );
+        seleccionar.disabled = yaVinculado;
+
+        fila.append(info, seleccionar);
+        resultados.append(fila);
+      }
+    } catch (error) {
+      estadoEn(mensaje, error.message, true);
+    } finally {
+      buscar.disabled = false;
+    }
+  }
+
+  entrada.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buscarDeportivos();
+    }
+  });
+
+  return panel;
+}
+
 function panelEditar(pub, contenedor) {
   const panel = el(
     "section",
@@ -1676,6 +1860,14 @@ function tarjetaEjemplar(
       : "Sin vincular"
   );
 
+  campo(
+    tarjeta,
+    "Historial deportivo",
+    pub.caballo_deportivo_id != null
+      ? "Registro " + pub.caballo_deportivo_id
+      : "Sin vincular"
+  );
+
   const acciones = el(
     "div",
     "",
@@ -1692,6 +1884,13 @@ function tarjetaEjemplar(
       ? "Cambiar vínculo SDU"
       : "Vincular con SDU",
     () => mostrarModo("vincular")
+  );
+
+  const deportivo = boton(
+    pub.caballo_deportivo_id != null
+      ? "Cambiar vínculo deportivo"
+      : "Vincular historial deportivo",
+    () => mostrarModo("deportivo")
   );
 
   const genealogia = boton(
@@ -1712,6 +1911,7 @@ function tarjetaEjemplar(
   acciones.append(
     editar,
     vincular,
+    deportivo,
     genealogia,
     ver
   );
@@ -1725,6 +1925,12 @@ function tarjetaEjemplar(
   );
 
   const vinculoContenedor = el(
+    "div",
+    "",
+    "oculto"
+  );
+
+  const deportivoContenedor = el(
     "div",
     "",
     "oculto"
@@ -1746,9 +1952,15 @@ function tarjetaEjemplar(
     vinculoContenedor
   );
 
+  panelVincularDeportivo(
+    pub,
+    deportivoContenedor
+  );
+
   tarjeta.append(
     editorContenedor,
     vinculoContenedor,
+    deportivoContenedor,
     genealogiaContenedor
   );
 
@@ -1795,6 +2007,11 @@ function tarjetaEjemplar(
       modo !== "vincular"
     );
 
+    deportivoContenedor.classList.toggle(
+      "oculto",
+      modo !== "deportivo"
+    );
+
     genealogiaContenedor.classList.toggle(
       "oculto",
       modo !== "genealogia"
@@ -1825,7 +2042,9 @@ function tarjetaEjemplar(
           ? editorContenedor
           : modo === "vincular"
             ? vinculoContenedor
-            : genealogiaContenedor;
+            : modo === "deportivo"
+              ? deportivoContenedor
+              : genealogiaContenedor;
 
       destino.scrollIntoView({
         behavior: "smooth",
@@ -1836,7 +2055,7 @@ function tarjetaEjemplar(
 
   if (
     pub.id === opciones.publicacion &&
-    ["editar", "vincular", "genealogia"]
+    ["editar", "vincular", "deportivo", "genealogia"]
       .includes(opciones.modo)
   ) {
     mostrarModo(opciones.modo, false);
