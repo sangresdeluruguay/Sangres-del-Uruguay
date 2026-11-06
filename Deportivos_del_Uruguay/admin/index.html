@@ -2,327 +2,572 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administrador | Deportivos del Uruguay</title>
-  <style>
-    :root {
-      --verde: #102c22;
-      --verde-claro: #20513d;
-      --dorado: #c6a15b;
-      --fondo: #f5f5f0;
-      --borde: #deded8;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: var(--fondo);
-      color: var(--verde);
-    }
-    header {
-      background: var(--verde);
-      color: white;
-      padding: 26px 24px;
-      border-bottom: 4px solid var(--dorado);
-    }
-    header h1 {
-      margin: 0;
-      font-family: Georgia, serif;
-      font-size: 28px;
-    }
-    header p {
-      color: var(--dorado);
-      margin: 8px 0 0;
-    }
-    main {
-      max-width: 1150px;
-      margin: 30px auto;
-      padding: 0 18px;
-    }
-    .tarjeta {
-      background: white;
-      border: 1px solid var(--borde);
-      border-radius: 14px;
-      padding: 24px;
-      margin-bottom: 20px;
-    }
-    .menu {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 15px;
-    }
-    button, .boton {
-      display: inline-block;
-      background: var(--verde);
-      color: white;
-      border: 1px solid var(--dorado);
-      border-radius: 9px;
-      padding: 15px 18px;
-      font-size: 15px;
-      font-weight: bold;
-      cursor: pointer;
-      text-decoration: none;
-      text-align: center;
-    }
-    button:hover, .boton:hover {
-      background: var(--verde-claro);
-    }
-    button:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-    }
-    h2 { margin-top: 0; }
-    h3 {
-      margin-top: 0;
-      color: var(--verde);
-      font-size: 20px;
-    }
-    .oculto { display: none !important; }
-    .estado {
-      padding: 14px;
-      background: #f2f4ef;
-      border-radius: 9px;
-      line-height: 1.6;
-    }
-    .registro {
-      background: #f8f8f5;
-      border: 1px solid #ddd9cc;
-      border-radius: 12px;
-      padding: 22px;
-      margin-bottom: 15px;
-      overflow-wrap: anywhere;
-    }
-    .registro p {
-      margin: 9px 0;
-      line-height: 1.5;
-    }
-    .registro strong { color: #173b2b; }
-    .contador {
-      font-weight: 700;
-      margin: 18px 0;
-    }
-    .etiqueta {
-      display: inline-block;
-      padding: 6px 11px;
-      border-radius: 7px;
-      font-size: 12px;
-      font-weight: bold;
-      background: #e9e5d8;
-      color: var(--verde);
-      margin-bottom: 12px;
-    }
-    .enlaces {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-top: 24px;
-    }
-    @media (max-width: 650px) {
-      .menu { grid-template-columns: 1fr; }
-      header h1 { font-size: 23px; }
-      .tarjeta { padding: 18px; }
-      .registro { padding: 16px; }
-      .enlaces { flex-direction: column; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Administrador | Deportivos del Uruguay</title>
+
+<style>
+:root {
+  --verde: #102c22;
+  --verde-claro: #20513d;
+  --dorado: #c6a15b;
+  --fondo: #f5f5f0;
+  --borde: #deded8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--fondo);
+  color: var(--verde);
+}
+
+header {
+  background: var(--verde);
+  color: white;
+  padding: 26px 24px;
+  border-bottom: 4px solid var(--dorado);
+}
+
+header h1 {
+  margin: 0;
+  font-family: Georgia, serif;
+  font-size: 28px;
+}
+
+header p {
+  color: var(--dorado);
+  margin: 8px 0 0;
+}
+
+main {
+  max-width: 1150px;
+  margin: 30px auto;
+  padding: 0 18px;
+}
+
+.tarjeta {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 14px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.menu {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+}
+
+button, .boton {
+  display: inline-block;
+  background: var(--verde);
+  color: white;
+  border: 1px solid var(--dorado);
+  border-radius: 9px;
+  padding: 13px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  text-align: center;
+}
+
+button:hover, .boton:hover {
+  background: var(--verde-claro);
+}
+
+button:disabled {
+  opacity: .55;
+  cursor: not-allowed;
+}
+
+h2 { margin-top: 0; }
+h3 { margin: 0 0 12px; font-size: 20px; }
+.oculto { display: none !important; }
+
+.estado {
+  padding: 14px;
+  background: #f2f4ef;
+  border-radius: 9px;
+  line-height: 1.6;
+}
+
+.registro {
+  background: #f8f8f5;
+  border: 1px solid #ddd9cc;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 15px;
+  overflow-wrap: anywhere;
+}
+
+.registro p {
+  margin: 9px 0;
+  line-height: 1.5;
+}
+
+.registro strong { color: #173b2b; }
+
+.contador {
+  font-weight: 700;
+  margin: 18px 0;
+}
+
+.enlaces, .acciones {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.etiqueta {
+  display: inline-block;
+  background: #e9e5d8;
+  border-radius: 7px;
+  padding: 6px 11px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.panel-interior {
+  border: 1px solid var(--dorado);
+  border-radius: 11px;
+  background: #fffdf7;
+  padding: 20px;
+  margin: 16px 0;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.form-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.form-campo input,
+.form-campo textarea,
+.buscador-sdu {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid #bfc6bc;
+  border-radius: 8px;
+  background: white;
+  color: var(--verde);
+  font: inherit;
+  font-weight: normal;
+}
+
+.form-campo textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.ancho { grid-column: 1 / -1; }
+
+.ayuda {
+  color: #536057;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.resultado-sdu {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border: 1px solid #ddd9cc;
+  border-radius: 9px;
+  padding: 12px;
+  margin-top: 10px;
+  background: white;
+}
+
+.resultado-sdu small {
+  display: block;
+  margin-top: 5px;
+  color: #536057;
+}
+
+.resultado-sdu button { padding: 9px 12px; }
+
+.foto-fila {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  border: 1px solid #ddd9cc;
+  border-radius: 9px;
+  padding: 12px;
+  margin: 10px 0;
+}
+
+.foto-fila img {
+  width: 130px;
+  height: 100px;
+  object-fit: contain;
+  background: #ecebe6;
+  cursor: zoom-in;
+}
+
+.foto-fila label {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  cursor: pointer;
+}
+
+.genealogia {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 10px;
+  margin: 14px 0;
+}
+
+.col-pedigree {
+  display: grid;
+  gap: 7px;
+}
+
+.nodo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 7px;
+  padding: 9px 7px;
+  text-align: center;
+  min-height: 45px;
+  font-size: 13px;
+  font-weight: bold;
+  overflow-wrap: anywhere;
+}
+
+.principal { background: #fff2a9; }
+.macho { background: #d9eafc; }
+.hembra { background: #f8dbe4; }
+
+.nodo small {
+  font-weight: normal;
+  margin-top: 4px;
+}
+
+.descendencia {
+  margin: 12px 0;
+  padding-left: 22px;
+}
+
+.descendencia li { margin: 6px 0; }
+
+details {
+  border-top: 1px solid #ddd9cc;
+  margin-top: 15px;
+  padding-top: 12px;
+}
+
+summary {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+@media (max-width: 700px) {
+  .menu, .form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .ancho { grid-column: auto; }
+
+  .genealogia {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 3px;
+  }
+
+  .nodo {
+    padding: 6px 2px;
+    font-size: 10px;
+    min-height: 52px;
+  }
+
+  .foto-fila, .resultado-sdu {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .tarjeta, .registro { padding: 16px; }
+
+  .acciones button, .acciones a {
+    flex: 1 1 auto;
+  }
+
+  header h1 { font-size: 23px; }
+}
+</style>
 </head>
+
 <body>
-  <header>
-    <h1>DEPORTIVOS DEL URUGUAY</h1>
-    <p>Panel de administración</p>
-  </header>
-  <main>
-    <section class="tarjeta" id="verificacion">
-      <h2>Verificando acceso</h2>
-      <p id="mensajeAcceso">
-        Comprobando la sesión de Sangres del Uruguay...
-      </p>
-      <a class="boton oculto" id="irSDU"
-         href="../../index.html">
-        Ingresar desde Sangres del Uruguay
+
+<header>
+  <h1>DEPORTIVOS DEL URUGUAY</h1>
+  <p>Panel de administración</p>
+</header>
+
+<main>
+
+<section class="tarjeta" id="verificacion">
+  <h2>Verificando acceso</h2>
+  <p id="mensajeAcceso">
+    Comprobando la sesión de Sangres del Uruguay...
+  </p>
+  <a class="boton oculto" id="irSDU"
+     href="../../index.html">
+    Ingresar desde Sangres del Uruguay
+  </a>
+</section>
+
+<section id="panel" class="oculto">
+
+  <div class="tarjeta">
+    <h2>Administrador de Deportivos</h2>
+    <p id="correoAdmin"></p>
+    <p>Seleccioná una sección para trabajar.</p>
+
+    <div class="menu">
+      <button type="button"
+        onclick="abrirSeccion('publicaciones')">
+        Solicitudes de publicación
+      </button>
+
+      <button type="button"
+        onclick="abrirSeccion('ofertas')">
+        Consultas y ofertas
+      </button>
+
+      <button type="button"
+        onclick="abrirSeccion('ejemplares')">
+        Ejemplares publicados
+      </button>
+
+      <button type="button"
+        onclick="abrirSeccion('ventas')">
+        Ventas realizadas
+      </button>
+    </div>
+
+    <div class="enlaces">
+      <a class="boton"
+         href="../index.html?vista=solicitar">
+        Agregar ejemplar
       </a>
-    </section>
+    </div>
+  </div>
 
-    <section id="panel" class="oculto">
-      <div class="tarjeta">
-        <h2>Administrador de Deportivos</h2>
-        <p id="correoAdmin"></p>
-        <p>Seleccioná una sección para trabajar.</p>
-        <div class="menu">
-          <button type="button"
-                  onclick="abrirSeccion('publicaciones')">
-            Solicitudes de publicación
-          </button>
-          <button type="button"
-                  onclick="abrirSeccion('ofertas')">
-            Consultas y ofertas
-          </button>
-          <button type="button"
-                  onclick="abrirSeccion('ejemplares')">
-            Ejemplares publicados
-          </button>
-          <button type="button"
-                  onclick="abrirSeccion('ventas')">
-            Ventas realizadas
-          </button>
-        </div>
-      </div>
+  <section class="tarjeta" id="contenido">
+    <h2>Panel principal</h2>
+    <div class="estado">
+      Seleccioná una sección del administrador.
+    </div>
+  </section>
 
-      <section class="tarjeta" id="contenido">
-        <h2>Panel principal</h2>
-        <div class="estado">
-          Seleccioná una sección del administrador.
-        </div>
-      </section>
+  <div class="enlaces">
+    <a class="boton" href="../index.html">
+      Ver catálogo público
+    </a>
 
-      <div class="enlaces">
-        <a class="boton" href="../index.html">
-          Ver catálogo público
-        </a>
-        <a class="boton" href="../../index.html">
-          Volver a Sangres del Uruguay
-        </a>
-      </div>
-    </section>
-  </main>
+    <a class="boton" href="../../index.html">
+      Volver a Sangres del Uruguay
+    </a>
+  </div>
+
+</section>
+</main>
 
 <script>
 "use strict";
 
 const SUPABASE_URL =
   "https://arsjvaueyjwntefogmqz.supabase.co";
+
 const SUPABASE_KEY =
   "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+
 const WORKER_URL =
   "https://deportivos-fotos.sangresdeluruguay.workers.dev";
 
 let tokenActual = null;
 let seccionActual = "publicaciones";
 let urlFotosTemporales = [];
+let cargaActual = 0;
 
 const $ = id => document.getElementById(id);
 
-const el = (tag, texto = "", clase = "") => {
-  const e = document.createElement(tag);
-  e.textContent = texto ?? "—";
-  if (clase) e.className = clase;
-  return e;
-};
+function el(tag, texto = "", clase = "") {
+  const x = document.createElement(tag);
+  x.textContent = texto ?? "";
+  if (clase) x.className = clase;
+  return x;
+}
 
 function campo(padre, titulo, valor) {
   const p = el("p");
-  const b = el("strong", titulo + ": ");
+
   p.append(
-    b,
+    el("strong", titulo + ": "),
     document.createTextNode(
       valor === null ||
       valor === undefined ||
-      valor === ""
-        ? "—"
-        : String(valor)
+      valor === "" ? "—" : String(valor)
     )
   );
+
   padre.append(p);
 }
 
-function dinero(v) {
-  return v === null || v === undefined || v === ""
-    ? "Precio no registrado"
-    : "USD " + Number(v).toLocaleString("es-UY");
-}
-
 function aviso(texto, error = false) {
-  const a = el("div", texto, "estado");
-  if (error) a.style.color = "#a32929";
-  return a;
+  const x = el("div", texto, "estado");
+  if (error) x.style.color = "#a32929";
+  return x;
 }
 
-async function authFetch(ruta, token, opciones = {}) {
-  return await fetch(SUPABASE_URL + ruta, {
-    ...opciones,
-    headers: {
-      apikey: SUPABASE_KEY,
-      Authorization: "Bearer " + token,
-      "Content-Type": "application/json",
-      ...(opciones.headers || {})
-    }
-  });
+function dinero(valor) {
+  return valor == null || valor === ""
+    ? "Precio no registrado"
+    : "USD " + Number(valor).toLocaleString("es-UY");
 }
 
-async function verificarAdministrador() {
-  let sesion;
+function boton(texto, funcion) {
+  const b = el("button", texto);
+  b.type = "button";
+  b.onclick = funcion;
+  return b;
+}
 
+function estadoEn(elemento, texto, error = false) {
+  elemento.textContent = texto;
+  elemento.style.color = error ? "#a32929" : "";
+}
+
+function sesionGuardada() {
   try {
-    sesion = JSON.parse(
+    return JSON.parse(
       localStorage.getItem("sesionAdminSdU") || "null"
     );
   } catch {
-    sesion = null;
+    return null;
   }
+}
+
+async function renovarSesion() {
+  const sesion = sesionGuardada();
+
+  if (!sesion?.refresh_token) {
+    throw Error(
+      "La sesión venció. Ingresá nuevamente desde SDU."
+    );
+  }
+
+  const r = await fetch(
+    SUPABASE_URL +
+      "/auth/v1/token?grant_type=refresh_token",
+    {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_KEY,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        refresh_token: sesion.refresh_token
+      })
+    }
+  );
+
+  if (!r.ok) {
+    throw Error("No se pudo renovar la sesión de SDU.");
+  }
+
+  const nueva = await r.json();
+
+  localStorage.setItem(
+    "sesionAdminSdU",
+    JSON.stringify(nueva)
+  );
+
+  tokenActual = nueva.access_token;
+  return tokenActual;
+}
+
+async function authFetch(ruta, opciones = {}) {
+  if (!tokenActual) {
+    throw Error("Sesión no autorizada");
+  }
+
+  const enviar = () => fetch(
+    SUPABASE_URL + ruta,
+    {
+      ...opciones,
+      headers: {
+        apikey: SUPABASE_KEY,
+        Authorization: "Bearer " + tokenActual,
+        "Content-Type": "application/json",
+        ...(opciones.headers || {})
+      }
+    }
+  );
+
+  let r = await enviar();
+
+  if (r.status === 401) {
+    await renovarSesion();
+    r = await enviar();
+  }
+
+  return r;
+}
+
+async function verificarAdministrador() {
+  const sesion = sesionGuardada();
 
   if (!sesion?.access_token) {
     $("mensajeAcceso").textContent =
       "Primero iniciá sesión desde Sangres del Uruguay.";
+
     $("irSDU").classList.remove("oculto");
     return;
   }
 
   try {
-    let token = sesion.access_token;
-    let r = await authFetch("/auth/v1/user", token);
+    tokenActual = sesion.access_token;
 
-    if (!r.ok && sesion.refresh_token) {
-      const renovar = await fetch(
-        SUPABASE_URL +
-        "/auth/v1/token?grant_type=refresh_token",
-        {
-          method: "POST",
-          headers: {
-            apikey: SUPABASE_KEY,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            refresh_token: sesion.refresh_token
-          })
-        }
-      );
-
-      if (renovar.ok) {
-        sesion = await renovar.json();
-        token = sesion.access_token;
-        localStorage.setItem(
-          "sesionAdminSdU",
-          JSON.stringify(sesion)
-        );
-        r = await authFetch("/auth/v1/user", token);
-      }
-    }
+    let r = await authFetch("/auth/v1/user");
 
     if (!r.ok) {
-      throw new Error(
+      throw Error(
         "La sesión venció. Volvé a ingresar desde SDU."
       );
     }
 
     const usuario = await r.json();
 
-    const permiso = await authFetch(
+    r = await authFetch(
       "/rest/v1/rpc/es_admin_deportivos",
-      token,
       {
         method: "POST",
         body: "{}"
       }
     );
 
-    if (!permiso.ok || await permiso.json() !== true) {
-      throw new Error(
+    if (!r.ok || await r.json() !== true) {
+      throw Error(
         "Tu cuenta no está autorizada para Deportivos."
       );
     }
-
-    tokenActual = token;
 
     $("verificacion").classList.add("oculto");
     $("panel").classList.remove("oculto");
@@ -330,54 +575,82 @@ async function verificarAdministrador() {
     $("correoAdmin").textContent =
       "Sesión: " + (usuario.email || "Administrador");
 
+    const q = new URLSearchParams(location.search);
+
     await abrirSeccion(
-      new URLSearchParams(location.search)
-        .get("seccion") || "publicaciones"
+      q.get("seccion") || "publicaciones",
+      {
+        sinHistorial: true,
+        publicacion: q.get("publicacion"),
+        modo: q.get("modo")
+      }
     );
 
   } catch (error) {
-    $("mensajeAcceso").textContent =
-      error.message || "No se pudo verificar el acceso.";
+    $("mensajeAcceso").textContent = error.message;
     $("irSDU").classList.remove("oculto");
   }
 }
 
 async function consulta(tabla, filtros = "") {
-  if (!tokenActual) {
-    throw new Error("Sesión no autorizada");
-  }
-
   const r = await authFetch(
-    "/rest/v1/" + tabla + "?select=*" + filtros,
-    tokenActual
+    "/rest/v1/" + tabla + "?select=*" + filtros
   );
 
   if (!r.ok) {
-    throw new Error(
+    throw Error(
       "No se pudo consultar " + tabla +
       " (HTTP " + r.status + ")"
     );
   }
 
-  return await r.json();
+  return r.json();
+}
+
+async function rpc(nombre, datos) {
+  const r = await authFetch(
+    "/rest/v1/rpc/" + nombre,
+    {
+      method: "POST",
+      body: JSON.stringify(datos)
+    }
+  );
+
+  const respuesta = await r.json().catch(() => null);
+
+  if (!r.ok) {
+    throw Error(
+      respuesta?.message || "Error HTTP " + r.status
+    );
+  }
+
+  return respuesta;
 }
 
 async function workerAdmin(ruta, datos) {
-  const r = await fetch(WORKER_URL + ruta, {
-    method: "POST",
-    headers: {
-      Authorization: "Bearer " + tokenActual,
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(datos)
-  });
+  const enviar = () => fetch(
+    WORKER_URL + ruta,
+    {
+      method: "POST",
+      headers: {
+        Authorization: "Bearer " + tokenActual,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(datos)
+    }
+  );
+
+  let r = await enviar();
+
+  if (r.status === 401) {
+    await renovarSesion();
+    r = await enviar();
+  }
 
   const j = await r.json().catch(() => ({}));
 
   if (!r.ok || j.ok !== true) {
-    throw new Error(
-      j.error || "Error HTTP " + r.status
-    );
+    throw Error(j.error || "Error HTTP " + r.status);
   }
 
   return j;
@@ -387,14 +660,16 @@ function limpiarFotos() {
   for (const url of urlFotosTemporales) {
     URL.revokeObjectURL(url);
   }
+
   urlFotosTemporales = [];
 }
 
 async function fotoAdmin(id, img) {
   try {
-    const r = await fetch(
+    const cargar = () => fetch(
       WORKER_URL +
-      "/admin/fotos/" + encodeURIComponent(id),
+      "/admin/fotos/" +
+      encodeURIComponent(id),
       {
         headers: {
           Authorization: "Bearer " + tokenActual
@@ -402,20 +677,25 @@ async function fotoAdmin(id, img) {
       }
     );
 
-    if (!r.ok) {
-      throw new Error("HTTP " + r.status);
+    let r = await cargar();
+
+    if (r.status === 401) {
+      await renovarSesion();
+      r = await cargar();
     }
 
-    const blob = await r.blob();
-    const url = URL.createObjectURL(blob);
+    if (!r.ok) {
+      throw Error("HTTP " + r.status);
+    }
+
+    const url = URL.createObjectURL(await r.blob());
 
     urlFotosTemporales.push(url);
     img.src = url;
 
     img.onclick = () => {
-      const modal = $("visorFotoAdmin");
       $("visorImagenAdmin").src = url;
-      modal.classList.remove("oculto");
+      $("visorFotoAdmin").classList.remove("oculto");
     };
 
   } catch (error) {
@@ -425,7 +705,7 @@ async function fotoAdmin(id, img) {
 }
 
 function prepararVisor() {
-  const modal = document.createElement("div");
+  const modal = el("div");
   modal.id = "visorFotoAdmin";
   modal.className = "oculto";
 
@@ -457,66 +737,787 @@ function prepararVisor() {
   });
 }
 
-async function mostrarSolicitud(pub, padre) {
-  const tarjeta = el("article", "", "registro");
-  const titulo = el(
-    "h3",
-    pub.nombre || "Caballo sin nombre"
+function ruta(
+  seccion,
+  publicacion = null,
+  modo = null,
+  reemplazar = false
+) {
+  const url = new URL(location.href);
+
+  url.searchParams.set("seccion", seccion);
+
+  if (publicacion) {
+    url.searchParams.set("publicacion", publicacion);
+  } else {
+    url.searchParams.delete("publicacion");
+  }
+
+  if (modo) {
+    url.searchParams.set("modo", modo);
+  } else {
+    url.searchParams.delete("modo");
+  }
+
+  if (url.href !== location.href) {
+    history[
+      reemplazar ? "replaceState" : "pushState"
+    ]({}, "", url);
+  }
+}
+
+function arbolGenealogico(caballo, contenedor) {
+  const c = caballo;
+
+  const columnas = [
+    [
+      [c.Nombre || "—", "principal", c.Nacimiento]
+    ],
+    [
+      [c.Padre, "macho"],
+      [c.Madre, "hembra"]
+    ],
+    [
+      [c.abuelo_paterno, "macho"],
+      [c.abuela_paterno, "hembra"],
+      [c.abuelo_materno, "macho"],
+      [c.abuela_materna, "hembra"]
+    ],
+    [
+      [c.bisabuelo_pp, "macho"],
+      [c.bisabuela_pp, "hembra"],
+      [c.bisabuelo_pm, "macho"],
+      [c.bisabuela_pm, "hembra"],
+      [c.bisabuelo_mp, "macho"],
+      [c.bisabuela_mp, "hembra"],
+      [c.bisabuelo_mm, "macho"],
+      [c.bisabuela_mm, "hembra"]
+    ]
+  ];
+
+  const grilla = el("div", "", "genealogia");
+
+  for (const columnaDatos of columnas) {
+    const columna = el("div", "", "col-pedigree");
+
+    for (const [
+      nombre,
+      color,
+      nacimiento
+    ] of columnaDatos) {
+      const nodo = el(
+        "div",
+        nombre || "—",
+        "nodo " + color
+      );
+
+      if (nacimiento) {
+        nodo.append(
+          el("small", String(nacimiento))
+        );
+      }
+
+      columna.append(nodo);
+    }
+
+    grilla.append(columna);
+  }
+
+  contenedor.append(grilla);
+}
+
+async function mostrarGenealogia(pub, panel) {
+  panel.replaceChildren(
+    el("h3", "Genealogía y descendencia de SDU")
   );
 
-  tarjeta.append(titulo);
+  if (!pub.caballo_sdu_id) {
+    panel.append(
+      aviso(
+        "Este ejemplar todavía no está vinculado con SDU."
+      )
+    );
+    return;
+  }
+
+  const mensaje = aviso(
+    "Consultando el registro " +
+    pub.caballo_sdu_id + "..."
+  );
+
+  panel.append(mensaje);
+
+  try {
+    const respuesta = await rpc(
+      "obtener_ficha_sdu_deportivos",
+      {
+        p_caballo_id: Number(pub.caballo_sdu_id)
+      }
+    );
+
+    panel.replaceChildren(
+      el("h3", "Genealogía y descendencia de SDU")
+    );
+
+    if (!respuesta?.caballo) {
+      panel.append(
+        aviso(
+          "No se encontró el registro vinculado.",
+          true
+        )
+      );
+      return;
+    }
+
+    const c = respuesta.caballo;
+
+    panel.append(
+      el(
+        "p",
+        "Registro SDU " + c.id +
+        " · " + (c.Nombre || "Sin nombre")
+      )
+    );
+
+    arbolGenealogico(c, panel);
+
+    panel.append(
+      el("h3", "Descendencia registrada")
+    );
+
+    const hijos = Array.isArray(respuesta.descendencia)
+      ? respuesta.descendencia
+      : [];
+
+    if (!hijos.length) {
+      panel.append(
+        el(
+          "p",
+          "No se encontró descendencia vinculada " +
+          "en los registros consultados."
+        )
+      );
+    } else {
+      const lista = el(
+        "ol",
+        "",
+        "descendencia"
+      );
+
+      for (const hijo of hijos) {
+        const texto =
+          (hijo.Nombre || "Sin nombre") +
+          (hijo.Nacimiento
+            ? " · " + hijo.Nacimiento.slice(0, 4)
+            : "") +
+          " · Registro " + hijo.id;
+
+        lista.append(el("li", texto));
+      }
+
+      panel.append(lista);
+    }
+
+    panel.append(
+      el(
+        "p",
+        "Vista de comprobación administrativa. " +
+        "Para mostrar estos datos en el catálogo público " +
+        "también hay que actualizar la página pública.",
+        "ayuda"
+      )
+    );
+
+  } catch (error) {
+    panel.append(aviso(error.message, true));
+  }
+}
+
+function panelVincular(pub, contenedor) {
+  const panel = el(
+    "section",
+    "",
+    "panel-interior"
+  );
+
+  panel.append(
+    el("h3", "Vincular con Sangres del Uruguay")
+  );
+
+  const actual = el(
+    "p",
+    pub.caballo_sdu_id
+      ? "Registro SDU vinculado: " + pub.caballo_sdu_id
+      : "Sin vinculación con SDU"
+  );
+
+  panel.append(
+    actual,
+    el(
+      "p",
+      "Escribí el nombre, compará padre y madre " +
+      "y elegí el registro correcto.",
+      "ayuda"
+    )
+  );
+
+  const entrada = document.createElement("input");
+  entrada.type = "search";
+  entrada.className = "buscador-sdu";
+  entrada.placeholder = "Ej.: SS AMBAR";
+  entrada.value = pub.nombre || "";
+  entrada.maxLength = 100;
+
+  panel.append(entrada);
+
+  const acciones = el("div", "", "acciones");
+
+  const buscar = boton(
+    "Buscar en SDU",
+    buscarCaballos
+  );
+
+  acciones.append(buscar);
+
+  if (pub.caballo_sdu_id) {
+    acciones.append(
+      boton(
+        "Desvincular",
+        () => guardarVinculo(null, "")
+      )
+    );
+  }
+
+  panel.append(acciones);
+
+  const mensaje = el("p");
+  mensaje.setAttribute("role", "status");
+  panel.append(mensaje);
+
+  const resultados = el("div");
+  panel.append(resultados);
+
+  contenedor.append(panel);
+
+  async function guardarVinculo(id, nombre) {
+    const pregunta = id === null
+      ? "¿Quitar el vínculo con SDU?"
+      : "¿Vincular " + pub.nombre +
+        " con " + nombre +
+        " (registro " + id + ")?";
+
+    if (!confirm(pregunta)) return;
+
+    buscar.disabled = true;
+
+    estadoEn(
+      mensaje,
+      "Guardando vinculación..."
+    );
+
+    try {
+      await rpc(
+        "vincular_publicacion_sdu",
+        {
+          p_publicacion_id: pub.id,
+          p_caballo_id: id
+        }
+      );
+
+      await abrirSeccion(
+        seccionActual,
+        {
+          sinHistorial: true,
+          publicacion: pub.id,
+          modo: "vincular"
+        }
+      );
+
+    } catch (error) {
+      estadoEn(mensaje, error.message, true);
+      buscar.disabled = false;
+    }
+  }
+
+  async function buscarCaballos() {
+    const q = entrada.value.trim();
+
+    resultados.replaceChildren();
+
+    if (q.length < 2) {
+      estadoEn(
+        mensaje,
+        "Escribí al menos dos caracteres.",
+        true
+      );
+      return;
+    }
+
+    buscar.disabled = true;
+    estadoEn(mensaje, "Buscando...");
+
+    try {
+      const lista = await rpc(
+        "buscar_caballos_sdu_deportivos",
+        {
+          p_busqueda: q
+        }
+      );
+
+      estadoEn(
+        mensaje,
+        lista.length
+          ? "Elegí el caballo correcto."
+          : "No hay coincidencias. " +
+            "Podés publicar sin vincular."
+      );
+
+      for (const c of lista) {
+        const fila = el(
+          "div",
+          "",
+          "resultado-sdu"
+        );
+
+        const info = el("div");
+
+        info.append(
+          el(
+            "strong",
+            c.nombre || "Sin nombre"
+          ),
+          el(
+            "small",
+            "Registro " + c.id +
+            " · Padre: " + (c.padre || "—") +
+            " · Madre: " + (c.madre || "—")
+          )
+        );
+
+        const yaVinculado =
+          String(c.id) === String(pub.caballo_sdu_id);
+
+        const seleccionar = boton(
+          yaVinculado
+            ? "Ya vinculado"
+            : "Vincular",
+          () => guardarVinculo(c.id, c.nombre)
+        );
+
+        seleccionar.disabled = yaVinculado;
+
+        fila.append(info, seleccionar);
+        resultados.append(fila);
+      }
+
+    } catch (error) {
+      estadoEn(mensaje, error.message, true);
+    } finally {
+      buscar.disabled = false;
+    }
+  }
+
+  entrada.addEventListener("keydown", e => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      buscarCaballos();
+    }
+  });
+
+  return panel;
+}
+
+function panelEditar(pub, contenedor) {
+  const panel = el(
+    "section",
+    "",
+    "panel-interior"
+  );
+
+  panel.append(
+    el("h3", "Editar ficha: " + pub.nombre),
+    el(
+      "p",
+      "Se modifica la publicación de Deportivos, " +
+      "no el pedigree original de SDU.",
+      "ayuda"
+    )
+  );
+
+  const formulario = document.createElement("form");
+  const grilla = el("div", "", "form-grid");
+
+  const campos = [
+    ["nombre", "Nombre", "text", true],
+    ["raza", "Raza", "text"],
+    ["sexo", "Sexo", "text"],
+    ["edad", "Edad (años)", "number"],
+    ["altura_cm", "Altura (cm)", "number"],
+    ["pelo", "Pelo", "text"],
+    ["categoria", "Categoría", "text"],
+    ["ubicacion", "Ubicación", "text"],
+    ["pais", "País", "text"],
+    ["precio_usd", "Precio real (USD)", "number", true],
+    ["propietario_nombre", "Propietario", "text"],
+    ["propietario_email", "Correo del propietario", "email", true],
+    ["propietario_telefono", "Teléfono", "text"],
+    ["descripcion", "Descripción", "textarea"]
+  ];
+
+  const controles = {};
+
+  for (const [
+    clave,
+    etiqueta,
+    tipo,
+    obligatorio
+  ] of campos) {
+    const label = el(
+      "label",
+      etiqueta,
+      "form-campo" +
+        (clave === "descripcion" ? " ancho" : "")
+    );
+
+    const entrada = document.createElement(
+      tipo === "textarea" ? "textarea" : "input"
+    );
+
+    if (tipo !== "textarea") {
+      entrada.type = tipo;
+    }
+
+    entrada.name = clave;
+    entrada.value = pub[clave] ?? "";
+    entrada.required = !!obligatorio;
+
+    if (clave === "edad") {
+      entrada.min = "0";
+      entrada.max = "60";
+      entrada.step = "1";
+    }
+
+    if (clave === "altura_cm") {
+      entrada.min = "0";
+      entrada.max = "250";
+      entrada.step = "0.1";
+    }
+
+    if (clave === "precio_usd") {
+      entrada.min = "1";
+      entrada.max = "100000000";
+      entrada.step = "0.01";
+    }
+
+    label.append(entrada);
+    grilla.append(label);
+    controles[clave] = entrada;
+  }
+
+  const reservado = el(
+    "label",
+    "",
+    "form-campo ancho"
+  );
+
+  const checkReservado = document.createElement("input");
+  checkReservado.type = "checkbox";
+  checkReservado.checked =
+    pub.precio_reservado === true;
+  checkReservado.style.width = "auto";
+
+  reservado.append(
+    checkReservado,
+    document.createTextNode(
+      "Precio reservado (ocultar importe al público)"
+    )
+  );
+
+  grilla.append(reservado);
+  formulario.append(grilla);
+
+  const acciones = el("div", "", "acciones");
+
+  acciones.append(
+    boton(
+      "Pasar textos a MAYÚSCULAS",
+      () => {
+        for (const clave of [
+          "nombre",
+          "raza",
+          "pelo",
+          "ubicacion",
+          "pais",
+          "descripcion"
+        ]) {
+          controles[clave].value =
+            controles[clave].value.toLocaleUpperCase("es-UY");
+        }
+      }
+    )
+  );
+
+  const guardar = el(
+    "button",
+    "Guardar cambios"
+  );
+
+  guardar.type = "submit";
+  acciones.append(guardar);
+
+  formulario.append(acciones);
+
+  const mensaje = el("p");
+  mensaje.setAttribute("role", "status");
+
+  formulario.append(mensaje);
+
+  formulario.onsubmit = async e => {
+    e.preventDefault();
+
+    if (!formulario.reportValidity()) return;
+
+    const datos = {};
+
+    for (const [clave, , tipo] of campos) {
+      const valor = controles[clave].value.trim();
+
+      datos[clave] =
+        tipo === "number"
+          ? (valor === "" ? null : Number(valor))
+          : (valor || null);
+    }
+
+    datos.precio_reservado = checkReservado.checked;
+
+    guardar.disabled = true;
+
+    estadoEn(
+      mensaje,
+      "Guardando cambios..."
+    );
+
+    try {
+      await rpc(
+        "editar_publicacion_deportivos",
+        {
+          p_publicacion_id: pub.id,
+          p_datos: datos
+        }
+      );
+
+      await abrirSeccion(
+        "ejemplares",
+        {
+          sinHistorial: true,
+          publicacion: pub.id,
+          modo: "editar"
+        }
+      );
+
+    } catch (error) {
+      estadoEn(
+        mensaje,
+        error.message,
+        true
+      );
+
+      guardar.disabled = false;
+    }
+  };
+
+  panel.append(formulario);
+
+  const fotosPanel = el(
+    "section",
+    "",
+    "panel-interior"
+  );
+
+  fotosPanel.append(
+    el("h3", "Fotografías existentes"),
+    el(
+      "p",
+      "Elegí cuáles se muestran en el catálogo. " +
+      "Las fotografías siguen almacenadas en R2.",
+      "ayuda"
+    )
+  );
+
+  const fotosLista = el(
+    "div",
+    "Cargando fotografías..."
+  );
+
+  fotosPanel.append(fotosLista);
+
+  const guardarFotos = boton(
+    "Guardar fotografías visibles",
+    () => {}
+  );
+
+  guardarFotos.disabled = true;
+  fotosPanel.append(guardarFotos);
+
+  const mensajeFotos = el("p");
+  fotosPanel.append(mensajeFotos);
+
+  panel.append(fotosPanel);
+  contenedor.append(panel);
+
+  let fotosCargadas = false;
+
+  async function cargarFotos() {
+    if (fotosCargadas) return;
+    fotosCargadas = true;
+
+    try {
+      const fotos = await consulta(
+        "deportivos_fotos",
+        "&publicacion_id=eq." +
+        encodeURIComponent(pub.id) +
+        "&order=orden.asc"
+      );
+
+      fotosLista.replaceChildren();
+
+      if (!fotos.length) {
+        fotosLista.append(
+          el("p", "No hay fotografías.")
+        );
+        return;
+      }
+
+      const controlesFoto = [];
+
+      for (const foto of fotos) {
+        const fila = el(
+          "div",
+          "",
+          "foto-fila"
+        );
+
+        const img = document.createElement("img");
+        img.alt = "Foto del ejemplar";
+
+        fotoAdmin(foto.id, img);
+
+        const label = el("label");
+
+        const checkFoto = document.createElement("input");
+        checkFoto.type = "checkbox";
+        checkFoto.checked = foto.aprobada === true;
+
+        label.append(
+          checkFoto,
+          document.createTextNode("Mostrar en catálogo")
+        );
+
+        fila.append(img, label);
+        fotosLista.append(fila);
+
+        controlesFoto.push({
+          id: foto.id,
+          check: checkFoto
+        });
+      }
+
+      guardarFotos.disabled = false;
+
+      guardarFotos.onclick = async () => {
+        const ids = controlesFoto
+          .filter(f => f.check.checked)
+          .map(f => f.id);
+
+        if (!ids.length) {
+          estadoEn(
+            mensajeFotos,
+            "Seleccioná al menos una fotografía.",
+            true
+          );
+          return;
+        }
+
+        guardarFotos.disabled = true;
+
+        estadoEn(
+          mensajeFotos,
+          "Guardando fotografías..."
+        );
+
+        try {
+          await rpc(
+            "actualizar_fotos_publicacion_deportivos",
+            {
+              p_publicacion_id: pub.id,
+              p_fotos_ids: ids
+            }
+          );
+
+          estadoEn(
+            mensajeFotos,
+            "Fotografías actualizadas correctamente."
+          );
+
+        } catch (error) {
+          estadoEn(
+            mensajeFotos,
+            error.message,
+            true
+          );
+
+        } finally {
+          guardarFotos.disabled = false;
+        }
+      };
+
+    } catch (error) {
+      fotosLista.textContent = error.message;
+      fotosCargadas = false;
+    }
+  }
+
+  return {
+    panel,
+    cargarFotos
+  };
+}
+
+async function mostrarSolicitud(pub, padre) {
+  const tarjeta = el(
+    "article",
+    "",
+    "registro"
+  );
+
+  tarjeta.append(
+    el(
+      "h3",
+      pub.nombre || "Caballo sin nombre"
+    )
+  );
 
   for (const [nombre, valor] of [
     ["Raza", pub.raza],
     ["Sexo", pub.sexo],
     ["Categoría", pub.categoria],
-    [
-      "Edad",
-      pub.edad == null ? "" : pub.edad + " años"
-    ],
-    [
-      "Altura",
-      pub.altura_cm == null
-        ? ""
-        : pub.altura_cm + " cm"
-    ],
+    ["Edad", pub.edad],
+    ["Altura (cm)", pub.altura_cm],
     ["Pelo", pub.pelo],
     ["Ubicación", pub.ubicacion],
     ["Descripción", pub.descripcion],
+    ["Precio real", dinero(pub.precio_usd)],
     [
-      "Precio real (solo administrador)",
-      dinero(pub.precio_usd)
-    ],
-    [
-      "Visibilidad pública",
-      pub.precio_reservado
-        ? "Precio reservado"
-        : "Mostrar precio públicamente"
+      "Precio reservado",
+      pub.precio_reservado ? "Sí" : "No"
     ],
     ["Propietario", pub.propietario_nombre],
-    ["Email propietario", pub.propietario_email],
-    ["Teléfono propietario", pub.propietario_telefono],
-    ["Estado", pub.estado],
-    [
-      "Fecha",
-      pub.creado_en
-        ? new Date(pub.creado_en)
-            .toLocaleString("es-UY")
-        : ""
-    ]
+    ["Correo", pub.propietario_email],
+    ["Teléfono", pub.propietario_telefono],
+    ["Estado", pub.estado]
   ]) {
     campo(tarjeta, nombre, valor);
   }
-
-  tarjeta.append(el("h3", "Fotografías"));
-
-  tarjeta.append(
-    el(
-      "p",
-      "Ampliá las fotografías y seleccioná " +
-      "las que querés publicar."
-    )
-  );
 
   const fotos = await consulta(
     "deportivos_fotos",
@@ -525,28 +1526,25 @@ async function mostrarSolicitud(pub, padre) {
     "&order=orden.asc"
   );
 
+  tarjeta.append(
+    el("h3", "Fotografías para aprobar")
+  );
+
   const seleccionadas = new Set();
 
   for (const foto of fotos) {
-    const caja = el("div", "", "registro");
+    const fila = el(
+      "div",
+      "",
+      "foto-fila"
+    );
 
     const img = document.createElement("img");
-    img.alt = "Fotografía del caballo";
+    img.alt = "Fotografía";
 
-    img.style.cssText =
-      "display:block;width:100%;" +
-      "max-height:290px;object-fit:contain;" +
-      "background:#eae9e2;" +
-      "border:1px solid #c6a15b;" +
-      "border-radius:9px;cursor:zoom-in";
+    fotoAdmin(foto.id, img);
 
-    caja.append(img);
-
-    const label = document.createElement("label");
-
-    label.style.cssText =
-      "display:flex;align-items:center;" +
-      "gap:10px;margin-top:12px;cursor:pointer";
+    const label = el("label");
 
     const check = document.createElement("input");
     check.type = "checkbox";
@@ -569,33 +1567,26 @@ async function mostrarSolicitud(pub, padre) {
       )
     );
 
-    caja.append(label);
-    tarjeta.append(caja);
-
-    fotoAdmin(foto.id, img);
+    fila.append(img, label);
+    tarjeta.append(fila);
   }
 
-  const acciones = el("div", "", "enlaces");
+  const acciones = el("div", "", "acciones");
 
-  const aprobar = el(
-    "button",
-    "Aprobar y publicar"
+  const aprobar = boton(
+    "Aprobar y publicar",
+    () => actuar("aprobar")
   );
 
-  const rechazar = el(
-    "button",
-    "Rechazar solicitud"
+  const rechazar = boton(
+    "Rechazar solicitud",
+    () => actuar("rechazar")
   );
 
   acciones.append(aprobar, rechazar);
   tarjeta.append(acciones);
 
-  const mensaje = el(
-    "div",
-    "",
-    "estado oculto"
-  );
-
+  const mensaje = el("p");
   tarjeta.append(mensaje);
 
   async function actuar(accion) {
@@ -603,25 +1594,25 @@ async function mostrarSolicitud(pub, padre) {
       accion === "aprobar" &&
       seleccionadas.size === 0
     ) {
-      alert(
-        "Seleccioná al menos una fotografía."
+      estadoEn(
+        mensaje,
+        "Seleccioná al menos una fotografía.",
+        true
       );
       return;
     }
 
     const pregunta =
       accion === "aprobar"
-        ? `¿Aprobar y publicar ${pub.nombre} con ` +
-          `${seleccionadas.size} fotografía(s)?`
-        : `¿Rechazar la publicación de ${pub.nombre}?`;
+        ? "¿Aprobar y publicar " + pub.nombre + "?"
+        : "¿Rechazar la solicitud de " + pub.nombre + "?";
 
     if (!confirm(pregunta)) return;
 
     aprobar.disabled = true;
     rechazar.disabled = true;
 
-    mensaje.classList.remove("oculto");
-    mensaje.textContent = "Guardando cambios...";
+    estadoEn(mensaje, "Guardando...");
 
     try {
       await workerAdmin(
@@ -639,21 +1630,223 @@ async function mostrarSolicitud(pub, padre) {
       await abrirSeccion("publicaciones");
 
     } catch (error) {
-      mensaje.textContent = error.message;
-      mensaje.style.color = "#a32929";
+      estadoEn(mensaje, error.message, true);
 
       aprobar.disabled = false;
       rechazar.disabled = false;
     }
   }
 
-  aprobar.onclick = () => actuar("aprobar");
-  rechazar.onclick = () => actuar("rechazar");
-
   padre.append(tarjeta);
 }
 
-async function abrirSeccion(nombre) {
+function tarjetaEjemplar(
+  pub,
+  contenido,
+  opciones
+) {
+  const tarjeta = el(
+    "article",
+    "",
+    "registro"
+  );
+
+  tarjeta.append(
+    el("h3", pub.nombre || "Sin nombre")
+  );
+
+  tarjeta.append(
+    el(
+      "span",
+      pub.estado || "Sin estado",
+      "etiqueta"
+    )
+  );
+
+  campo(tarjeta, "Raza", pub.raza);
+  campo(tarjeta, "Sexo", pub.sexo);
+  campo(tarjeta, "Categoría", pub.categoria);
+  campo(tarjeta, "Precio real", dinero(pub.precio_usd));
+
+  campo(
+    tarjeta,
+    "Vínculo SDU",
+    pub.caballo_sdu_id
+      ? "Registro " + pub.caballo_sdu_id
+      : "Sin vincular"
+  );
+
+  const acciones = el(
+    "div",
+    "",
+    "acciones"
+  );
+
+  const editar = boton(
+    "Editar ficha",
+    () => mostrarModo("editar")
+  );
+
+  const vincular = boton(
+    pub.caballo_sdu_id
+      ? "Cambiar vínculo SDU"
+      : "Vincular con SDU",
+    () => mostrarModo("vincular")
+  );
+
+  const genealogia = boton(
+    "Ver genealogía",
+    () => mostrarModo("genealogia")
+  );
+
+  const ver = el(
+    "a",
+    "Ver ficha pública",
+    "boton"
+  );
+
+  ver.href =
+    "../index.html?caballo=" +
+    encodeURIComponent(pub.id);
+
+  acciones.append(
+    editar,
+    vincular,
+    genealogia,
+    ver
+  );
+
+  tarjeta.append(acciones);
+
+  const editorContenedor = el(
+    "div",
+    "",
+    "oculto"
+  );
+
+  const vinculoContenedor = el(
+    "div",
+    "",
+    "oculto"
+  );
+
+  const genealogiaContenedor = el(
+    "div",
+    "",
+    "panel-interior oculto"
+  );
+
+  const editor = panelEditar(
+    pub,
+    editorContenedor
+  );
+
+  panelVincular(
+    pub,
+    vinculoContenedor
+  );
+
+  tarjeta.append(
+    editorContenedor,
+    vinculoContenedor,
+    genealogiaContenedor
+  );
+
+  const detalles = document.createElement("details");
+
+  detalles.append(
+    el(
+      "summary",
+      "Ver todos los datos de la publicación"
+    )
+  );
+
+  for (const [nombre, valor] of Object.entries(pub)) {
+    if (
+      nombre === "id" ||
+      nombre === "ruta_r2"
+    ) {
+      continue;
+    }
+
+    campo(
+      detalles,
+      nombre,
+      nombre === "precio_usd"
+        ? dinero(valor)
+        : valor
+    );
+  }
+
+  tarjeta.append(detalles);
+  contenido.append(tarjeta);
+
+  function mostrarModo(
+    modo,
+    guardarRuta = true
+  ) {
+    editorContenedor.classList.toggle(
+      "oculto",
+      modo !== "editar"
+    );
+
+    vinculoContenedor.classList.toggle(
+      "oculto",
+      modo !== "vincular"
+    );
+
+    genealogiaContenedor.classList.toggle(
+      "oculto",
+      modo !== "genealogia"
+    );
+
+    if (guardarRuta) {
+      ruta(
+        "ejemplares",
+        pub.id,
+        modo
+      );
+    }
+
+    if (modo === "editar") {
+      editor.cargarFotos();
+    }
+
+    if (modo === "genealogia") {
+      mostrarGenealogia(
+        pub,
+        genealogiaContenedor
+      );
+    }
+
+    if (guardarRuta) {
+      const destino =
+        modo === "editar"
+          ? editorContenedor
+          : modo === "vincular"
+            ? vinculoContenedor
+            : genealogiaContenedor;
+
+      destino.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+  }
+
+  if (
+    pub.id === opciones.publicacion &&
+    ["editar", "vincular", "genealogia"]
+      .includes(opciones.modo)
+  ) {
+    mostrarModo(opciones.modo, false);
+  }
+}
+
+async function abrirSeccion(
+  nombre,
+  opciones = {}
+) {
   if (!tokenActual) return;
 
   const validas = [
@@ -669,21 +1862,22 @@ async function abrirSeccion(nombre) {
 
   seccionActual = nombre;
 
-  const params = new URLSearchParams(
-    location.search
-  );
+  const {
+    sinHistorial = false,
+    publicacion = null,
+    modo = null
+  } = opciones;
 
-  params.set("seccion", nombre);
-  params.delete("publicacion");
-
-  history.replaceState(
-    {},
-    "",
-    "?" + params
+  ruta(
+    nombre,
+    publicacion,
+    modo,
+    sinHistorial
   );
 
   limpiarFotos();
 
+  const carga = ++cargaActual;
   const contenido = $("contenido");
 
   const titulos = {
@@ -694,10 +1888,7 @@ async function abrirSeccion(nombre) {
   };
 
   contenido.replaceChildren(
-    el("h2", titulos[nombre])
-  );
-
-  contenido.append(
+    el("h2", titulos[nombre]),
     aviso("Cargando información...")
   );
 
@@ -715,7 +1906,7 @@ async function abrirSeccion(nombre) {
     if (nombre === "ejemplares") {
       registros = await consulta(
         "deportivos_publicaciones",
-        "&estado=in.(publicada,aprobada,publicado,vendido)" +
+        "&estado=in.(publicada,aprobada,publicado,aprobado,vendido)" +
         "&order=creado_en.desc&limit=100"
       );
     }
@@ -729,29 +1920,16 @@ async function abrirSeccion(nombre) {
     }
 
     if (nombre === "ofertas") {
-      try {
-        registros = await consulta(
-          "deportivos_consultas",
-          "&order=creado_en.desc&limit=100"
-        );
-      } catch {
-        contenido.replaceChildren(
-          el("h2", "Consultas y ofertas"),
-          aviso(
-            "Las consultas enviadas por WhatsApp " +
-            "se gestionan en el WhatsApp oficial de SDU. " +
-            "No se guardan automáticamente en esta sección."
-          )
-        );
-        return;
-      }
+      registros = await consulta(
+        "deportivos_consultas",
+        "&order=creado_en.desc&limit=100"
+      );
     }
 
-    contenido.replaceChildren(
-      el("h2", titulos[nombre])
-    );
+    if (carga !== cargaActual) return;
 
-    contenido.append(
+    contenido.replaceChildren(
+      el("h2", titulos[nombre]),
       el(
         "p",
         "Registros encontrados: " +
@@ -769,13 +1947,36 @@ async function abrirSeccion(nombre) {
 
     if (nombre === "publicaciones") {
       for (const pub of registros) {
-        await mostrarSolicitud(
+        if (carga !== cargaActual) return;
+
+        try {
+          await mostrarSolicitud(
+            pub,
+            contenido
+          );
+        } catch (error) {
+          contenido.append(
+            aviso(
+              "No se pudo cargar " +
+              pub.nombre + ": " +
+              error.message,
+              true
+            )
+          );
+        }
+      }
+
+    } else if (nombre === "ejemplares") {
+      for (const pub of registros) {
+        tarjetaEjemplar(
           pub,
-          contenido
+          contenido,
+          opciones
         );
       }
+
     } else {
-      for (const pub of registros) {
+      for (const registro of registros) {
         const tarjeta = el(
           "article",
           "",
@@ -785,46 +1986,30 @@ async function abrirSeccion(nombre) {
         tarjeta.append(
           el(
             "h3",
-            pub.nombre ||
-            pub.comprador_nombre ||
+            registro.nombre ||
+            registro.comprador_nombre ||
             "Registro"
           )
         );
 
-        for (
-          const [nombreCampo, valor]
-          of Object.entries(pub)
-        ) {
+        for (const [
+          nombreCampo,
+          valor
+        ] of Object.entries(registro)) {
           if (
-            ["id", "ruta_r2"]
-              .includes(nombreCampo)
+            nombreCampo === "id" ||
+            nombreCampo === "ruta_r2"
           ) {
             continue;
           }
 
           campo(
             tarjeta,
-            nombreCampo === "precio_usd"
-              ? "Precio real (USD)"
-              : nombreCampo,
+            nombreCampo,
             nombreCampo === "precio_usd"
               ? dinero(valor)
               : valor
           );
-        }
-
-        if (nombre === "ejemplares") {
-          const a = el(
-            "a",
-            "Ver en catálogo público",
-            "boton"
-          );
-
-          a.href =
-            "../index.html?caballo=" +
-            encodeURIComponent(pub.id);
-
-          tarjeta.append(a);
         }
 
         contenido.append(tarjeta);
@@ -832,18 +2017,38 @@ async function abrirSeccion(nombre) {
     }
 
   } catch (error) {
-    contenido.append(
-      aviso(
-        error.message ||
-        "Error al cargar registros",
-        true
-      )
+    if (carga !== cargaActual) return;
+
+    const mensaje = nombre === "ofertas"
+      ? "No se pudieron cargar las consultas registradas. " +
+        "Las consultas de WhatsApp se gestionan " +
+        "por el canal oficial de SDU. Detalle: " +
+        error.message
+      : error.message;
+
+    contenido.replaceChildren(
+      el("h2", titulos[nombre]),
+      aviso(mensaje, true)
     );
   }
 }
 
+window.addEventListener("popstate", () => {
+  const params = new URLSearchParams(location.search);
+
+  abrirSeccion(
+    params.get("seccion") || "publicaciones",
+    {
+      sinHistorial: true,
+      publicacion: params.get("publicacion"),
+      modo: params.get("modo")
+    }
+  );
+});
+
 prepararVisor();
 verificarAdministrador();
 </script>
+
 </body>
 </html>
