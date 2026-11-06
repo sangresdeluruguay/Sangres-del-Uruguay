@@ -1772,6 +1772,14 @@ margin: 0 -35px 0 35px !important;
   Padrillos
 </button>
 
+      
+<button
+  type="button"
+  onclick="window.location.href='Deportivos_del_Uruguay/index.html'"
+>
+  Deportivos del Uruguay
+</button>
+
 <button
   type="button"
   onclick="window.location.href='favoritos.html'"
@@ -5271,6 +5279,17 @@ setInterval(() => {
     opcionesBusquedaCaballo.style.display = "none";
   }
 }
+    
+function abrirAdministradorDeportivosSDU() {
+  if (!sesionAdmin || !sesionAdmin.access_token) {
+    alert("Primero iniciá sesión como administrador de Sangres del Uruguay.");
+    return;
+  }
+
+  window.location.href =
+    "Deportivos_del_Uruguay/admin/index.html?seccion=publicaciones";
+}
+
       function abrirPanelAdmin() {
   if (!sesionAdmin || !sesionAdmin.access_token) {
     alert("Tenés que iniciar sesión como administrador.");
@@ -5348,6 +5367,14 @@ if (seccionCriadoresPropietarios) {
 >
   🐎 Administrar Padrillos
 </button>
+
+<button
+  type="button"
+  onclick="abrirAdministradorDeportivosSDU()"
+>
+  Administrar Deportivos
+</button>
+
       </div>
 
     </div>
