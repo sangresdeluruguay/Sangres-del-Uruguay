@@ -89,6 +89,13 @@ th {background:#f1f5ef}
 .form-grilla {display:grid;grid-template-columns:repeat(2,1fr);gap:18px}
 .form-grilla .ancho-completo {grid-column:1/-1}
 .ayuda {font-size:12px;color:var(--gris);margin-top:7px;line-height:1.5}
+.condiciones {line-height:1.8}
+.condiciones h2 {margin-top:28px}
+.condiciones ul {padding-left:23px}
+.condiciones li {margin:7px 0}
+.aceptacion-condiciones {border:1px solid var(--borde);border-radius:8px;padding:16px;margin:20px 0;background:#f6f8f4}
+.aceptacion-condiciones label {display:flex;align-items:flex-start;gap:10px;font-size:14px;line-height:1.6;margin:0;cursor:pointer}
+.aceptacion-condiciones input[type="checkbox"] {width:auto;flex:none;margin-top:4px}
 .aviso {background:#fff8e8;border:1px solid #ead7a7;border-radius:8px;padding:15px;font-size:14px;line-height:1.6;margin:18px 0}
 .vacio {text-align:center;padding:55px 20px;background:white;border:1px solid var(--borde);border-radius:12px;color:var(--gris)}
 .oculto {display:none!important}
@@ -134,6 +141,11 @@ footer small {color:#bac9be}
   <strong>DEPORTIVOS DEL URUGUAY</strong>
   <p>Una propuesta de Sangres del Uruguay</p>
   <small>Publicaciones y consultas gestionadas por SDU.</small>
+  <p style="margin:16px 0 0;font-size:13px">
+    <a href="?vista=condiciones-vendedor" data-navegar style="text-decoration:underline">Condiciones para vendedores</a>
+    &nbsp;·&nbsp;
+    <a href="?vista=condiciones-comprador" data-navegar style="text-decoration:underline">Condiciones para compradores</a>
+  </p>
 </footer>
 
 <div id="visorFoto" class="oculto">
@@ -152,6 +164,8 @@ const TURNSTILE_SITE_KEY =
   "0x4AAAAAAFmpHxaIeKApIMeg";
 
 const WHATSAPP_SDU = "59891909423";
+
+const VERSION_CONDICIONES = "2026-11-06";
 
 const MAX_FOTOS = 8;
 const MAX_FOTO_BYTES = 15 * 1024 * 1024;
@@ -740,6 +754,72 @@ function mostrarFicha(c) {
   };
 }
 
+/* CONDICIONES COMERCIALES */
+
+function mostrarCondiciones(tipo) {
+  const vendedor = tipo === "vendedor";
+  document.title = (vendedor ? "Condiciones para vendedores" : "Condiciones para compradores") + " | Deportivos del Uruguay";
+  contenido.innerHTML = `
+    <article class="panel condiciones">
+      <h1>Condiciones para ${vendedor ? "vendedores" : "compradores"}</h1>
+      <p class="subtitulo">DEPORTIVOS DEL URUGUAY · Sangres del Uruguay (SDU)<br>
+        Versión ${VERSION_CONDICIONES}</p>
+      ${vendedor ? `
+        <h2>1. Publicación gratuita</h2>
+        <p>Solicitar y mantener una publicación es gratuito. No se cobra por inscripción ni por anunciar un caballo. SDU percibe las comisiones que correspondan cuando se concrete una venta originada mediante su intermediación.</p>
+        <h2>2. Solicitud y aprobación</h2>
+        <p>El propietario o representante autorizado debe proporcionar sus datos de contacto, información veraz del ejemplar, precio en USD y fotografías que esté autorizado a utilizar. SDU revisará la solicitud y podrá pedir aclaraciones, corregir la presentación, aprobarla o rechazarla.</p>
+        <h2>3. Información y responsabilidad del vendedor</h2>
+        <p>El vendedor declara estar autorizado para comercializar el caballo y se responsabiliza de la información facilitada. Debe comunicar las enfermedades, lesiones, limitaciones, antecedentes relevantes y condiciones reproductivas que conozca y que puedan influir en la decisión de compra.</p>
+        <h2>4. Precio</h2>
+        <p>El vendedor informa el precio solicitado en dólares estadounidenses (USD). Puede optar por mostrarlo públicamente o indicar «Precio reservado». El importe real se conservará para la gestión administrativa de SDU.</p>
+        <h2>5. Comisiones por venta</h2>
+        <ul>
+          <li>Venta nacional hasta USD 5.000: vendedor 0 %; comprador 6 %.</li>
+          <li>Venta nacional superior a USD 5.000 y hasta USD 10.000: vendedor 2 %; comprador 4 %.</li>
+          <li>Venta nacional superior a USD 10.000: vendedor 3 %; comprador 3 %.</li>
+          <li>Venta internacional: vendedor 0 %; comprador 10 %.</li>
+        </ul>
+        <p>Las comisiones se calculan sobre el precio final acordado y corresponden cuando la venta se concreta.</p>
+        <h2>6. Intermediación y obligación de comisión</h2>
+        <p>Las consultas, ofertas y contactos obtenidos mediante Deportivos del Uruguay son gestionados por SDU. Si la venta se concreta como consecuencia de una publicación, consulta, contacto, oferta o gestión originada mediante SDU, corresponde abonar las comisiones aplicables, aunque las partes concluyan posteriormente la operación fuera de la plataforma. El vendedor se compromete a informar a SDU cuando se concrete una venta de este tipo.</p>
+        <h2>7. Operaciones internacionales</h2>
+        <p>El vendedor coordinará la disponibilidad y entrega del caballo en el establecimiento de cuarentena o punto de entrega acordado. Solo asumirá el traslado hasta ese lugar si así se pacta previamente. Los gastos de cuarentena, controles sanitarios, certificaciones, documentación, exportación, importación, transporte internacional y demás gastos asociados estarán a cargo del comprador, sin perjuicio de las obligaciones legales y sanitarias que correspondan a cada parte.</p>
+        <h2>8. Pago de comisiones</h2>
+        <p>Las comisiones podrán pagarse por los medios habilitados por SDU. Se podrá ofrecer Mercado Pago y financiación en cuotas según disponibilidad y condiciones vigentes. Cualquier recargo o costo de financiación se informará antes de efectuar el pago. Esta opción no financia el precio del caballo.</p>
+        <h2>9. Disponibilidad y retiro</h2>
+        <p>El vendedor debe comunicar cambios de precio, reservas, ventas o retiros. SDU podrá suspender o retirar publicaciones por información incorrecta o incumplimientos. Retirar un anuncio no elimina las comisiones correspondientes a una venta originada mediante la intermediación de SDU.</p>
+        <h2>10. Datos personales y aceptación</h2>
+        <p>Los datos de contacto del propietario se utilizarán para gestionar la solicitud y las operaciones comerciales; no se mostrarán en la ficha pública del caballo. Al aceptar estas condiciones, el solicitante autoriza el uso de la información comercial y las fotografías facilitadas para promocionar el ejemplar, y se compromete a respetar las comisiones aplicables.</p>
+      ` : `
+        <h2>1. Consultas y ofertas</h2>
+        <p>Todas las consultas y ofertas sobre los caballos anunciados se canalizan a través de SDU. Presentar una oferta no implica que el vendedor la acepte ni que el ejemplar quede reservado automáticamente.</p>
+        <h2>2. Precios</h2>
+        <p>Los precios se expresan en dólares estadounidenses (USD). Los ejemplares con «Precio reservado» requieren consulta a SDU. Salvo indicación expresa, el precio del caballo no incluye comisiones de intermediación ni gastos adicionales.</p>
+        <h2>3. Comisiones para compradores</h2>
+        <ul>
+          <li>Venta nacional hasta USD 5.000: 6 %.</li>
+          <li>Venta nacional superior a USD 5.000 y hasta USD 10.000: 4 %.</li>
+          <li>Venta nacional superior a USD 10.000: 3 %.</li>
+          <li>Venta internacional: 10 %.</li>
+        </ul>
+        <p>La comisión se calcula sobre el precio final acordado y corresponde cuando se concreta la compraventa derivada de la intermediación de SDU, aunque se cierre posteriormente fuera de la plataforma.</p>
+        <h2>4. Pago de comisiones</h2>
+        <p>SDU podrá ofrecer Mercado Pago para el pago de sus comisiones, incluso en cuotas si están disponibles. Los posibles costos de financiación se comunicarán antes del pago. Esta facilidad no implica financiar el precio del caballo.</p>
+        <h2>5. Información e inspección veterinaria</h2>
+        <p>La información procede del vendedor y, si existe vinculación, de los registros genealógicos de SDU. Un pedigrí registrado no garantiza por sí solo salud, rendimiento ni aptitud reproductiva. Se recomienda al comprador una inspección veterinaria previa, cuyo alcance y costo deberá acordarse.</p>
+        <h2>6. Operaciones internacionales</h2>
+        <p>El comprador asume los gastos de cuarentena, análisis, controles y certificados sanitarios, documentación, trámites de exportación e importación, transporte internacional y demás servicios asociados. El vendedor coordina la entrega del ejemplar en el punto acordado y únicamente asume el traslado hasta ese punto si así se pacta. Estas condiciones económicas no sustituyen las obligaciones legales y sanitarias aplicables.</p>
+        <h2>7. Pago y entrega del caballo</h2>
+        <p>El precio final, los pagos, posibles señas, fechas y lugar de entrega deben acordarse antes de concretar la venta. La plataforma no procesa automáticamente el pago del caballo. No se deben realizar pagos sin verificar los datos del destinatario y las condiciones acordadas.</p>
+        <h2>8. Aceptación</h2>
+        <p>Antes de confirmar una oferta formal, el interesado debe conocer y aceptar estas condiciones y la comisión de intermediación correspondiente.</p>
+      `}
+      <p class="ayuda">Estas condiciones comerciales se aplican sin perjuicio de las normas legales y sanitarias vigentes.</p>
+    </article>
+  `;
+}
+
 /* VALIDACIÓN Y ENVÍO DE SOLICITUDES */
 
 function validarFotografias(fotos) {
@@ -1064,6 +1144,33 @@ function mostrarSolicitar() {
           </p>
         </div>
 
+        <div class="aceptacion-condiciones">
+          <strong>Publicación 100 % gratuita</strong>
+          <p class="ayuda">
+            SDU cobra comisión únicamente cuando se concreta
+            una venta originada mediante su intermediación,
+            incluso si se cierra posteriormente fuera de la plataforma.
+          </p>
+          <p>
+            <a href="?vista=condiciones-vendedor"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="color:var(--verde);text-decoration:underline;font-weight:bold">
+              Leer condiciones completas para vendedores
+            </a>
+          </p>
+          <label for="aceptoCondicionesVendedor">
+            <input id="aceptoCondicionesVendedor"
+              name="aceptoCondicionesVendedor"
+              type="checkbox" required>
+            <span>
+              Leí y acepto las condiciones de publicación
+              y venta, incluidas las comisiones de
+              intermediación de SDU.
+            </span>
+          </label>
+        </div>
+
         <div class="aviso">
           Tu solicitud se guardará como
           <strong>pendiente de aprobación</strong>.
@@ -1102,9 +1209,6 @@ function mostrarSolicitar() {
 
   const formulario =
     document.getElementById("formSolicitar");
-
-  const tipoPrecio =
-    formulario.querySelector("#tipoPrecio");
 
   const precio =
     formulario.querySelector("#precio");
@@ -1242,7 +1346,7 @@ function mostrarSolicitar() {
     if (enviando) return;
 
     formulario.querySelectorAll(
-      'input:not([type="file"]), textarea'
+      'input:not([type="file"]):not([type="checkbox"]), textarea'
     ).forEach(campo => {
       campo.value = campo.value.trim();
     });
@@ -1302,7 +1406,10 @@ function mostrarSolicitar() {
         texto("tipoPrecio") === "reservado",
       propietario_nombre: texto("propietario"),
       propietario_email: texto("email"),
-      propietario_telefono: texto("telefono")
+      propietario_telefono: texto("telefono"),
+      condiciones_vendedor_aceptadas:
+        datos.get("aceptoCondicionesVendedor") === "on",
+      condiciones_vendedor_version: VERSION_CONDICIONES
     };
 
     const tokenEnvio = token;
@@ -1466,7 +1573,16 @@ function mostrarConsultar(c) {
           </div>
         </div>
 
-        <details style="margin-top:25px">
+        <p style="margin-top:22px">
+          <a href="?vista=condiciones-comprador"
+            target="_blank"
+            rel="noopener noreferrer"
+            style="color:var(--verde);text-decoration:underline;font-weight:bold">
+            Leer condiciones completas para compradores
+          </a>
+        </p>
+
+        <details style="margin-top:15px">
           <summary style="cursor:pointer;color:var(--verde)">
             Ver condiciones y comisiones de intermediación
           </summary>
@@ -1499,6 +1615,19 @@ function mostrarConsultar(c) {
             </p>
           </div>
         </details>
+
+        <div id="aceptacionOferta"
+          class="aceptacion-condiciones oculto">
+          <label for="aceptoCondicionesComprador">
+            <input id="aceptoCondicionesComprador"
+              name="aceptoCondicionesComprador"
+              type="checkbox">
+            <span>
+              Leí y acepto las condiciones para compradores
+              y las comisiones de intermediación correspondientes.
+            </span>
+          </label>
+        </div>
 
         <div class="aviso">
           La consulta se preparará para enviar
@@ -1544,6 +1673,12 @@ function mostrarConsultar(c) {
       .classList.toggle("oculto", !esOferta);
 
     montoOferta.required = esOferta;
+
+    document.getElementById("aceptacionOferta")
+      .classList.toggle("oculto", !esOferta);
+
+    document.getElementById("aceptoCondicionesComprador")
+      .required = esOferta;
 
     const importe = esOferta
       ? Number(montoOferta.value)
@@ -1616,6 +1751,12 @@ function mostrarConsultar(c) {
         ...(accion === "OFERTA"
           ? ["Oferta: USD " + monto]
           : []),
+        ...(accion === "OFERTA"
+          ? [
+              "Condiciones compradores aceptadas: versión " +
+              VERSION_CONDICIONES
+            ]
+          : []),
         "Mensaje: " +
           (datos.get("mensaje") || "Sin mensaje adicional")
       ];
@@ -1648,6 +1789,16 @@ async function mostrarVista() {
 
   if (vista === "solicitar") {
     mostrarSolicitar();
+    return;
+  }
+
+  if (vista === "condiciones-vendedor") {
+    mostrarCondiciones("vendedor");
+    return;
+  }
+
+  if (vista === "condiciones-comprador") {
+    mostrarCondiciones("comprador");
     return;
   }
 
