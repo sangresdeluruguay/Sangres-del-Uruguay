@@ -3,315 +3,129 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Administrador | Deportivos del Uruguay</title>
-
 <style>
-:root {
-  --verde: #102c22;
-  --verde-claro: #20513d;
-  --dorado: #c6a15b;
-  --fondo: #f5f5f0;
-  --borde: #deded8;
+:root{
+  --verde:#102c22;
+  --verde-claro:#20513d;
+  --dorado:#c6a15b;
+  --fondo:#f5f5f0;
+  --borde:#deded8;
 }
-
-* { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: var(--fondo);
-  color: var(--verde);
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:var(--fondo);color:var(--verde)}
+header{background:var(--verde);color:white;padding:26px 24px;border-bottom:4px solid var(--dorado)}
+header h1{margin:0;font-family:Georgia,serif;font-size:28px}
+header p{color:var(--dorado);margin:8px 0 0}
+main{max-width:1150px;margin:30px auto;padding:0 18px}
+.tarjeta{background:white;border:1px solid var(--borde);border-radius:14px;padding:24px;margin-bottom:20px}
+.menu{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}
+button,.boton{
+  display:inline-block;background:var(--verde);color:white;
+  border:1px solid var(--dorado);border-radius:9px;
+  padding:13px 16px;font-size:14px;font-weight:bold;
+  cursor:pointer;text-decoration:none;text-align:center
 }
-
-header {
-  background: var(--verde);
-  color: white;
-  padding: 26px 24px;
-  border-bottom: 4px solid var(--dorado);
+button:hover,.boton:hover{background:var(--verde-claro)}
+button:disabled{opacity:.55;cursor:not-allowed}
+h2{margin-top:0}
+h3{margin:0 0 12px;font-size:20px}
+.oculto{display:none!important}
+.estado{padding:14px;background:#f2f4ef;border-radius:9px;line-height:1.6}
+.registro{
+  background:#f8f8f5;border:1px solid #ddd9cc;
+  border-radius:12px;padding:22px;margin-bottom:15px;
+  overflow-wrap:anywhere
 }
-
-header h1 {
-  margin: 0;
-  font-family: Georgia, serif;
-  font-size: 28px;
+.registro p{margin:9px 0;line-height:1.5}
+.registro strong{color:#173b2b}
+.contador{font-weight:700;margin:18px 0}
+.enlaces,.acciones{display:flex;flex-wrap:wrap;gap:10px;margin:14px 0}
+.etiqueta{
+  display:inline-block;background:#e9e5d8;border-radius:7px;
+  padding:6px 11px;font-size:12px;font-weight:bold
 }
-
-header p {
-  color: var(--dorado);
-  margin: 8px 0 0;
+.panel-interior{
+  border:1px solid var(--dorado);border-radius:11px;
+  background:#fffdf7;padding:20px;margin:16px 0
 }
-
-main {
-  max-width: 1150px;
-  margin: 30px auto;
-  padding: 0 18px;
+.form-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.form-campo{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:bold}
+.form-campo input,.form-campo textarea,.buscador-sdu{
+  width:100%;padding:11px;border:1px solid #bfc6bc;
+  border-radius:8px;background:white;color:var(--verde);
+  font:inherit;font-weight:normal
 }
-
-.tarjeta {
-  background: white;
-  border: 1px solid var(--borde);
-  border-radius: 14px;
-  padding: 24px;
-  margin-bottom: 20px;
+.form-campo textarea{min-height:100px;resize:vertical}
+.ancho{grid-column:1/-1}
+.ayuda{color:#536057;font-size:13px;line-height:1.5}
+.resultado-sdu{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;border:1px solid #ddd9cc;border-radius:9px;
+  padding:12px;margin-top:10px;background:white
 }
-
-.menu {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 15px;
+.resultado-sdu small{display:block;margin-top:5px;color:#536057}
+.resultado-sdu button{padding:9px 12px}
+.foto-fila{
+  display:flex;align-items:center;gap:15px;
+  border:1px solid #ddd9cc;border-radius:9px;
+  padding:12px;margin:10px 0
 }
-
-button, .boton {
-  display: inline-block;
-  background: var(--verde);
-  color: white;
-  border: 1px solid var(--dorado);
-  border-radius: 9px;
-  padding: 13px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  text-decoration: none;
-  text-align: center;
+.foto-fila img{
+  width:130px;height:100px;object-fit:contain;
+  background:#ecebe6;cursor:zoom-in
 }
-
-button:hover, .boton:hover {
-  background: var(--verde-claro);
+.foto-fila label{display:flex;gap:9px;align-items:center;cursor:pointer}
+.genealogia{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;margin:14px 0
 }
-
-button:disabled {
-  opacity: .55;
-  cursor: not-allowed;
+.col-pedigree{display:grid;gap:7px}
+.nodo{
+  display:flex;flex-direction:column;justify-content:center;
+  border-radius:7px;padding:9px 7px;text-align:center;
+  min-height:45px;font-size:13px;font-weight:bold;
+  overflow-wrap:anywhere
 }
-
-h2 { margin-top: 0; }
-h3 { margin: 0 0 12px; font-size: 20px; }
-.oculto { display: none !important; }
-
-.estado {
-  padding: 14px;
-  background: #f2f4ef;
-  border-radius: 9px;
-  line-height: 1.6;
+.principal{background:#fff2a9}
+.macho{background:#d9eafc}
+.hembra{background:#f8dbe4}
+.nodo small{font-weight:normal;margin-top:4px}
+.descendencia{margin:12px 0;padding-left:22px}
+.descendencia li{margin:6px 0}
+details{border-top:1px solid #ddd9cc;margin-top:15px;padding-top:12px}
+summary{cursor:pointer;font-weight:bold}
+.estado-venta{
+  display:inline-block;padding:7px 12px;border-radius:20px;
+  font-size:12px;font-weight:700;margin:8px 0
 }
-
-.registro {
-  background: #f8f8f5;
-  border: 1px solid #ddd9cc;
-  border-radius: 12px;
-  padding: 22px;
-  margin-bottom: 15px;
-  overflow-wrap: anywhere;
+.estado-venta.en-venta{
+  background:#d9f4e1;color:#136b35;border:1px solid #82c997
 }
-
-.registro p {
-  margin: 9px 0;
-  line-height: 1.5;
+.estado-venta.vendido{
+  background:#ffe0e0;color:#a32424;border:1px solid #e4a3a3
 }
-
-.registro strong { color: #173b2b; }
-
-.contador {
-  font-weight: 700;
-  margin: 18px 0;
+.menu-acciones{
+  margin:16px 0;border:1px solid #d5d9d1;
+  border-radius:10px;background:white;padding:12px
 }
-
-.enlaces, .acciones {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin: 14px 0;
-}
-
-.etiqueta {
-  display: inline-block;
-  background: #e9e5d8;
-  border-radius: 7px;
-  padding: 6px 11px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.panel-interior {
-  border: 1px solid var(--dorado);
-  border-radius: 11px;
-  background: #fffdf7;
-  padding: 20px;
-  margin: 16px 0;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
-}
-
-.form-campo {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.form-campo input,
-.form-campo textarea,
-.buscador-sdu {
-  width: 100%;
-  padding: 11px;
-  border: 1px solid #bfc6bc;
-  border-radius: 8px;
-  background: white;
-  color: var(--verde);
-  font: inherit;
-  font-weight: normal;
-}
-
-.form-campo textarea {
-  min-height: 100px;
-  resize: vertical;
-}
-
-.ancho { grid-column: 1 / -1; }
-
-.ayuda {
-  color: #536057;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.resultado-sdu {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  border: 1px solid #ddd9cc;
-  border-radius: 9px;
-  padding: 12px;
-  margin-top: 10px;
-  background: white;
-}
-
-.resultado-sdu small {
-  display: block;
-  margin-top: 5px;
-  color: #536057;
-}
-
-.resultado-sdu button { padding: 9px 12px; }
-
-.foto-fila {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  border: 1px solid #ddd9cc;
-  border-radius: 9px;
-  padding: 12px;
-  margin: 10px 0;
-}
-
-.foto-fila img {
-  width: 130px;
-  height: 100px;
-  object-fit: contain;
-  background: #ecebe6;
-  cursor: zoom-in;
-}
-
-.foto-fila label {
-  display: flex;
-  gap: 9px;
-  align-items: center;
-  cursor: pointer;
-}
-
-.genealogia {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  margin: 14px 0;
-}
-
-.col-pedigree {
-  display: grid;
-  gap: 7px;
-}
-
-.nodo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: 7px;
-  padding: 9px 7px;
-  text-align: center;
-  min-height: 45px;
-  font-size: 13px;
-  font-weight: bold;
-  overflow-wrap: anywhere;
-}
-
-.principal { background: #fff2a9; }
-.macho { background: #d9eafc; }
-.hembra { background: #f8dbe4; }
-
-.nodo small {
-  font-weight: normal;
-  margin-top: 4px;
-}
-
-.descendencia {
-  margin: 12px 0;
-  padding-left: 22px;
-}
-
-.descendencia li { margin: 6px 0; }
-
-details {
-  border-top: 1px solid #ddd9cc;
-  margin-top: 15px;
-  padding-top: 12px;
-}
-
-summary {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-@media (max-width: 700px) {
-  .menu, .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .ancho { grid-column: auto; }
-
-  .genealogia {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: 3px;
-  }
-
-  .nodo {
-    padding: 6px 2px;
-    font-size: 10px;
-    min-height: 52px;
-  }
-
-  .foto-fila, .resultado-sdu {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .tarjeta, .registro { padding: 16px; }
-
-  .acciones button, .acciones a {
-    flex: 1 1 auto;
-  }
-
-  header h1 { font-size: 23px; }
+.menu-acciones summary{font-size:15px;color:var(--verde)}
+.menu-acciones .acciones{margin:14px 0 4px}
+.menu-acciones button,.menu-acciones a{padding:11px 14px}
+.estado-fecha{color:#536057;font-size:13px;line-height:1.6}
+@media(max-width:700px){
+  .menu,.form-grid{grid-template-columns:1fr}
+  .ancho{grid-column:auto}
+  .genealogia{gap:3px}
+  .nodo{padding:6px 2px;font-size:10px;min-height:52px}
+  .foto-fila,.resultado-sdu{flex-direction:column;align-items:flex-start}
+  .tarjeta,.registro{padding:16px}
+  .acciones button,.acciones a{flex:1 1 auto}
+  header h1{font-size:23px}
 }
 </style>
 </head>
-
 <body>
 
 <header>
@@ -320,805 +134,573 @@ summary {
 </header>
 
 <main>
-
-<section class="tarjeta" id="verificacion">
-  <h2>Verificando acceso</h2>
-  <p id="mensajeAcceso">
-    Comprobando la sesión de Sangres del Uruguay...
-  </p>
-  <a class="boton oculto" id="irSDU"
-     href="../../index.html">
-    Ingresar desde Sangres del Uruguay
-  </a>
-</section>
-
-<section id="panel" class="oculto">
-
-  <div class="tarjeta">
-    <h2>Administrador de Deportivos</h2>
-    <p id="correoAdmin"></p>
-    <p>Seleccioná una sección para trabajar.</p>
-
-    <div class="menu">
-      <button type="button"
-        onclick="abrirSeccion('publicaciones')">
-        Solicitudes de publicación
-      </button>
-
-      <button type="button"
-        onclick="abrirSeccion('ofertas')">
-        Consultas y ofertas
-      </button>
-
-      <button type="button"
-        onclick="abrirSeccion('ejemplares')">
-        Ejemplares publicados
-      </button>
-
-      <button type="button"
-        onclick="abrirSeccion('ventas')">
-        Ventas realizadas
-      </button>
-    </div>
-
-    <div class="enlaces">
-      <a class="boton"
-         href="../index.html?vista=solicitar">
-        Agregar ejemplar
-      </a>
-    </div>
-  </div>
-
-  <section class="tarjeta" id="contenido">
-    <h2>Panel principal</h2>
-    <div class="estado">
-      Seleccioná una sección del administrador.
-    </div>
+  <section class="tarjeta" id="verificacion">
+    <h2>Verificando acceso</h2>
+    <p id="mensajeAcceso">Comprobando la sesión de Sangres del Uruguay...</p>
+    <a class="boton oculto" id="irSDU" href="../../index.html">
+      Ingresar desde Sangres del Uruguay
+    </a>
   </section>
 
-  <div class="enlaces">
-    <a class="boton" href="../index.html">
-      Ver catálogo público
-    </a>
+  <section id="panel" class="oculto">
+    <div class="tarjeta">
+      <h2>Administrador de Deportivos</h2>
+      <p id="correoAdmin"></p>
+      <p>Seleccioná una sección para trabajar.</p>
 
-    <a class="boton" href="../../index.html">
-      Volver a Sangres del Uruguay
-    </a>
-  </div>
+      <div class="menu">
+        <button type="button" onclick="abrirSeccion('publicaciones')">
+          Solicitudes de publicación
+        </button>
+        <button type="button" onclick="abrirSeccion('ofertas')">
+          Consultas y ofertas
+        </button>
+        <button type="button" onclick="abrirSeccion('ejemplares')">
+          Ejemplares publicados
+        </button>
+        <button type="button" onclick="abrirSeccion('ventas')">
+          Ventas realizadas
+        </button>
+      </div>
 
-</section>
+      <div class="enlaces">
+        <a class="boton" href="../index.html?vista=solicitar">
+          Agregar ejemplar
+        </a>
+      </div>
+    </div>
+
+    <section class="tarjeta" id="contenido">
+      <h2>Panel principal</h2>
+      <div class="estado">Seleccioná una sección del administrador.</div>
+    </section>
+
+    <div class="enlaces">
+      <a class="boton" href="../index.html">Ver catálogo público</a>
+      <a class="boton" href="../../index.html">Volver a Sangres del Uruguay</a>
+    </div>
+  </section>
 </main>
 
 <script>
 "use strict";
 
-const SUPABASE_URL =
-  "https://arsjvaueyjwntefogmqz.supabase.co";
+const SUPABASE_URL="https://arsjvaueyjwntefogmqz.supabase.co";
+const SUPABASE_KEY="sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+const WORKER_URL="https://deportivos-fotos.sangresdeluruguay.workers.dev";
 
-const SUPABASE_KEY =
-  "sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
+let tokenActual=null;
+let seccionActual="publicaciones";
+let urlFotosTemporales=[];
+let cargaActual=0;
 
-const WORKER_URL =
-  "https://deportivos-fotos.sangresdeluruguay.workers.dev";
+const $=id=>document.getElementById(id);
 
-let tokenActual = null;
-let seccionActual = "publicaciones";
-let urlFotosTemporales = [];
-let cargaActual = 0;
-
-const $ = id => document.getElementById(id);
-
-function el(tag, texto = "", clase = "") {
-  const x = document.createElement(tag);
-  x.textContent = texto ?? "";
-  if (clase) x.className = clase;
+function el(tag,texto="",clase=""){
+  const x=document.createElement(tag);
+  x.textContent=texto??"";
+  if(clase)x.className=clase;
   return x;
 }
 
-function campo(padre, titulo, valor) {
-  const p = el("p");
-
+function campo(padre,titulo,valor){
+  const p=el("p");
   p.append(
-    el("strong", titulo + ": "),
+    el("strong",titulo+": "),
     document.createTextNode(
-      valor === null ||
-      valor === undefined ||
-      valor === "" ? "—" : String(valor)
+      valor===null||valor===undefined||valor===""?"—":String(valor)
     )
   );
-
   padre.append(p);
 }
 
-function aviso(texto, error = false) {
-  const x = el("div", texto, "estado");
-  if (error) x.style.color = "#a32929";
+function aviso(texto,error=false){
+  const x=el("div",texto,"estado");
+  if(error)x.style.color="#a32929";
   return x;
 }
 
-function dinero(valor) {
-  return valor == null || valor === ""
-    ? "Precio no registrado"
-    : "USD " + Number(valor).toLocaleString("es-UY");
+function dinero(valor){
+  return valor==null||valor===""
+    ?"Precio no registrado"
+    :"USD "+Number(valor).toLocaleString("es-UY");
 }
 
-function boton(texto, funcion) {
-  const b = el("button", texto);
-  b.type = "button";
-  b.onclick = funcion;
+function boton(texto,funcion){
+  const b=el("button",texto);
+  b.type="button";
+  b.onclick=funcion;
   return b;
 }
 
-function estadoEn(elemento, texto, error = false) {
-  elemento.textContent = texto;
-  elemento.style.color = error ? "#a32929" : "";
+function estadoEn(elemento,texto,error=false){
+  elemento.textContent=texto;
+  elemento.style.color=error?"#a32929":"";
 }
 
-function sesionGuardada() {
-  try {
-    return JSON.parse(
-      localStorage.getItem("sesionAdminSdU") || "null"
-    );
-  } catch {
+function estaVendido(pub){
+  return String(pub.estado||"").toLowerCase()==="vendido";
+}
+
+function fechaVenta(pub){
+  if(!pub.vendido_en)return"Sin fecha registrada";
+  const fecha=new Date(pub.vendido_en);
+  return Number.isNaN(fecha.getTime())
+    ?"Fecha no válida"
+    :fecha.toLocaleDateString("es-UY",{
+      day:"2-digit",month:"2-digit",year:"numeric"
+    });
+}
+
+function sesionGuardada(){
+  try{
+    return JSON.parse(localStorage.getItem("sesionAdminSdU")||"null");
+  }catch{
     return null;
   }
 }
 
-async function renovarSesion() {
-  const sesion = sesionGuardada();
-
-  if (!sesion?.refresh_token) {
-    throw Error(
-      "La sesión venció. Ingresá nuevamente desde SDU."
-    );
+async function renovarSesion(){
+  const sesion=sesionGuardada();
+  if(!sesion?.refresh_token){
+    throw Error("La sesión venció. Ingresá nuevamente desde SDU.");
   }
 
-  const r = await fetch(
-    SUPABASE_URL +
-      "/auth/v1/token?grant_type=refresh_token",
+  const r=await fetch(
+    SUPABASE_URL+"/auth/v1/token?grant_type=refresh_token",
     {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_KEY,
-        "Content-Type": "application/json"
+      method:"POST",
+      headers:{
+        apikey:SUPABASE_KEY,
+        "Content-Type":"application/json"
       },
-      body: JSON.stringify({
-        refresh_token: sesion.refresh_token
-      })
+      body:JSON.stringify({refresh_token:sesion.refresh_token})
     }
   );
 
-  if (!r.ok) {
-    throw Error("No se pudo renovar la sesión de SDU.");
-  }
+  if(!r.ok)throw Error("No se pudo renovar la sesión de SDU.");
 
-  const nueva = await r.json();
-
-  localStorage.setItem(
-    "sesionAdminSdU",
-    JSON.stringify(nueva)
-  );
-
-  tokenActual = nueva.access_token;
+  const nueva=await r.json();
+  localStorage.setItem("sesionAdminSdU",JSON.stringify(nueva));
+  tokenActual=nueva.access_token;
   return tokenActual;
 }
 
-async function authFetch(ruta, opciones = {}) {
-  if (!tokenActual) {
-    throw Error("Sesión no autorizada");
-  }
+async function authFetch(ruta,opciones={}){
+  if(!tokenActual)throw Error("Sesión no autorizada");
 
-  const enviar = () => fetch(
-    SUPABASE_URL + ruta,
-    {
-      ...opciones,
-      headers: {
-        apikey: SUPABASE_KEY,
-        Authorization: "Bearer " + tokenActual,
-        "Content-Type": "application/json",
-        ...(opciones.headers || {})
-      }
+  const enviar=()=>fetch(SUPABASE_URL+ruta,{
+    ...opciones,
+    headers:{
+      apikey:SUPABASE_KEY,
+      Authorization:"Bearer "+tokenActual,
+      "Content-Type":"application/json",
+      ...(opciones.headers||{})
     }
-  );
+  });
 
-  let r = await enviar();
-
-  if (r.status === 401) {
+  let r=await enviar();
+  if(r.status===401){
     await renovarSesion();
-    r = await enviar();
+    r=await enviar();
   }
-
   return r;
 }
 
-async function verificarAdministrador() {
-  const sesion = sesionGuardada();
+async function verificarAdministrador(){
+  const sesion=sesionGuardada();
 
-  if (!sesion?.access_token) {
-    $("mensajeAcceso").textContent =
+  if(!sesion?.access_token){
+    $("mensajeAcceso").textContent=
       "Primero iniciá sesión desde Sangres del Uruguay.";
-
     $("irSDU").classList.remove("oculto");
     return;
   }
 
-  try {
-    tokenActual = sesion.access_token;
+  try{
+    tokenActual=sesion.access_token;
 
-    let r = await authFetch("/auth/v1/user");
+    let r=await authFetch("/auth/v1/user");
+    if(!r.ok)throw Error("La sesión venció. Volvé a ingresar desde SDU.");
 
-    if (!r.ok) {
-      throw Error(
-        "La sesión venció. Volvé a ingresar desde SDU."
-      );
-    }
+    const usuario=await r.json();
 
-    const usuario = await r.json();
+    r=await authFetch("/rest/v1/rpc/es_admin_deportivos",{
+      method:"POST",
+      body:"{}"
+    });
 
-    r = await authFetch(
-      "/rest/v1/rpc/es_admin_deportivos",
-      {
-        method: "POST",
-        body: "{}"
-      }
-    );
-
-    if (!r.ok || await r.json() !== true) {
-      throw Error(
-        "Tu cuenta no está autorizada para Deportivos."
-      );
+    if(!r.ok||await r.json()!==true){
+      throw Error("Tu cuenta no está autorizada para Deportivos.");
     }
 
     $("verificacion").classList.add("oculto");
     $("panel").classList.remove("oculto");
+    $("correoAdmin").textContent=
+      "Sesión: "+(usuario.email||"Administrador");
 
-    $("correoAdmin").textContent =
-      "Sesión: " + (usuario.email || "Administrador");
+    const q=new URLSearchParams(location.search);
+    await abrirSeccion(q.get("seccion")||"publicaciones",{
+      sinHistorial:true,
+      publicacion:q.get("publicacion"),
+      modo:q.get("modo")
+    });
 
-    const q = new URLSearchParams(location.search);
-
-    await abrirSeccion(
-      q.get("seccion") || "publicaciones",
-      {
-        sinHistorial: true,
-        publicacion: q.get("publicacion"),
-        modo: q.get("modo")
-      }
-    );
-
-  } catch (error) {
-    $("mensajeAcceso").textContent = error.message;
+  }catch(error){
+    $("mensajeAcceso").textContent=error.message;
     $("irSDU").classList.remove("oculto");
   }
 }
 
-async function consulta(tabla, filtros = "") {
-  const r = await authFetch(
-    "/rest/v1/" + tabla + "?select=*" + filtros
+async function consulta(tabla,filtros=""){
+  const r=await authFetch(
+    "/rest/v1/"+tabla+"?select=*"+filtros
   );
-
-  if (!r.ok) {
+  if(!r.ok){
     throw Error(
-      "No se pudo consultar " + tabla +
-      " (HTTP " + r.status + ")"
+      "No se pudo consultar "+tabla+" (HTTP "+r.status+")"
     );
   }
-
   return r.json();
 }
 
-async function rpc(nombre, datos) {
-  const r = await authFetch(
-    "/rest/v1/rpc/" + nombre,
-    {
-      method: "POST",
-      body: JSON.stringify(datos)
-    }
-  );
+async function rpc(nombre,datos){
+  const r=await authFetch("/rest/v1/rpc/"+nombre,{
+    method:"POST",
+    body:JSON.stringify(datos)
+  });
 
-  const respuesta = await r.json().catch(() => null);
-
-  if (!r.ok) {
-    throw Error(
-      respuesta?.message || "Error HTTP " + r.status
-    );
+  const respuesta=await r.json().catch(()=>null);
+  if(!r.ok){
+    throw Error(respuesta?.message||"Error HTTP "+r.status);
   }
-
   return respuesta;
 }
 
-async function workerAdmin(ruta, datos) {
-  const enviar = () => fetch(
-    WORKER_URL + ruta,
-    {
-      method: "POST",
-      headers: {
-        Authorization: "Bearer " + tokenActual,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(datos)
-    }
-  );
+async function workerAdmin(ruta,datos){
+  const enviar=()=>fetch(WORKER_URL+ruta,{
+    method:"POST",
+    headers:{
+      Authorization:"Bearer "+tokenActual,
+      "Content-Type":"application/json"
+    },
+    body:JSON.stringify(datos)
+  });
 
-  let r = await enviar();
-
-  if (r.status === 401) {
+  let r=await enviar();
+  if(r.status===401){
     await renovarSesion();
-    r = await enviar();
+    r=await enviar();
   }
 
-  const j = await r.json().catch(() => ({}));
-
-  if (!r.ok || j.ok !== true) {
-    throw Error(j.error || "Error HTTP " + r.status);
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok||j.ok!==true){
+    throw Error(j.error||"Error HTTP "+r.status);
   }
-
   return j;
 }
 
-function limpiarFotos() {
-  for (const url of urlFotosTemporales) {
+function limpiarFotos(){
+  for(const url of urlFotosTemporales){
     URL.revokeObjectURL(url);
   }
-
-  urlFotosTemporales = [];
+  urlFotosTemporales=[];
 }
 
-async function fotoAdmin(id, img) {
-  try {
-    const cargar = () => fetch(
-      WORKER_URL +
-      "/admin/fotos/" +
-      encodeURIComponent(id),
-      {
-        headers: {
-          Authorization: "Bearer " + tokenActual
-        }
-      }
+async function fotoAdmin(id,img){
+  try{
+    const cargar=()=>fetch(
+      WORKER_URL+"/admin/fotos/"+encodeURIComponent(id),
+      {headers:{Authorization:"Bearer "+tokenActual}}
     );
 
-    let r = await cargar();
-
-    if (r.status === 401) {
+    let r=await cargar();
+    if(r.status===401){
       await renovarSesion();
-      r = await cargar();
+      r=await cargar();
     }
+    if(!r.ok)throw Error("HTTP "+r.status);
 
-    if (!r.ok) {
-      throw Error("HTTP " + r.status);
-    }
-
-    const url = URL.createObjectURL(await r.blob());
-
+    const url=URL.createObjectURL(await r.blob());
     urlFotosTemporales.push(url);
-    img.src = url;
-
-    img.onclick = () => {
-      $("visorImagenAdmin").src = url;
+    img.src=url;
+    img.onclick=()=>{
+      $("visorImagenAdmin").src=url;
       $("visorFotoAdmin").classList.remove("oculto");
     };
 
-  } catch (error) {
-    img.alt = "No se pudo cargar la fotografía";
+  }catch(error){
+    img.alt="No se pudo cargar la fotografía";
     console.error(error);
   }
 }
 
-function prepararVisor() {
-  const modal = el("div");
-  modal.id = "visorFotoAdmin";
-  modal.className = "oculto";
+function prepararVisor(){
+  const modal=el("div");
+  modal.id="visorFotoAdmin";
+  modal.className="oculto";
+  modal.style.cssText=
+    "position:fixed;inset:0;z-index:1000;"+
+    "background:rgba(0,0,0,.9);"+
+    "display:flex;align-items:center;"+
+    "justify-content:center;padding:24px;cursor:zoom-out";
 
-  modal.style.cssText =
-    "position:fixed;inset:0;z-index:1000;" +
-    "background:rgba(0,0,0,.9);" +
-    "display:flex;align-items:center;" +
-    "justify-content:center;padding:24px;" +
-    "cursor:zoom-out";
-
-  const img = document.createElement("img");
-  img.id = "visorImagenAdmin";
-
-  img.style.cssText =
-    "max-width:95vw;max-height:90vh;" +
-    "object-fit:contain";
+  const img=document.createElement("img");
+  img.id="visorImagenAdmin";
+  img.style.cssText=
+    "max-width:95vw;max-height:90vh;object-fit:contain";
 
   modal.append(img);
-
-  modal.onclick = () =>
-    modal.classList.add("oculto");
-
+  modal.onclick=()=>modal.classList.add("oculto");
   document.body.append(modal);
 
-  document.addEventListener("keydown", e => {
-    if (e.key === "Escape") {
-      modal.classList.add("oculto");
-    }
+  document.addEventListener("keydown",e=>{
+    if(e.key==="Escape")modal.classList.add("oculto");
   });
 }
 
-function ruta(
-  seccion,
-  publicacion = null,
-  modo = null,
-  reemplazar = false
-) {
-  const url = new URL(location.href);
+function ruta(seccion,publicacion=null,modo=null,reemplazar=false){
+  const url=new URL(location.href);
+  url.searchParams.set("seccion",seccion);
 
-  url.searchParams.set("seccion", seccion);
+  if(publicacion)url.searchParams.set("publicacion",publicacion);
+  else url.searchParams.delete("publicacion");
 
-  if (publicacion) {
-    url.searchParams.set("publicacion", publicacion);
-  } else {
-    url.searchParams.delete("publicacion");
-  }
+  if(modo)url.searchParams.set("modo",modo);
+  else url.searchParams.delete("modo");
 
-  if (modo) {
-    url.searchParams.set("modo", modo);
-  } else {
-    url.searchParams.delete("modo");
-  }
-
-  if (url.href !== location.href) {
-    history[
-      reemplazar ? "replaceState" : "pushState"
-    ]({}, "", url);
+  if(url.href!==location.href){
+    history[reemplazar?"replaceState":"pushState"]({},"",url);
   }
 }
 
-function arbolGenealogico(caballo, contenedor) {
-  const c = caballo;
-
-  const columnas = [
+function arbolGenealogico(caballo,contenedor){
+  const c=caballo;
+  const columnas=[
+    [[c.Nombre||"—","principal",c.Nacimiento]],
     [
-      [c.Nombre || "—", "principal", c.Nacimiento]
+      [c.Padre,"macho"],
+      [c.Madre,"hembra"]
     ],
     [
-      [c.Padre, "macho"],
-      [c.Madre, "hembra"]
+      [c.abuelo_paterno,"macho"],
+      [c.abuela_paterno,"hembra"],
+      [c.abuelo_materno,"macho"],
+      [c.abuela_materna,"hembra"]
     ],
     [
-      [c.abuelo_paterno, "macho"],
-      [c.abuela_paterno, "hembra"],
-      [c.abuelo_materno, "macho"],
-      [c.abuela_materna, "hembra"]
-    ],
-    [
-      [c.bisabuelo_pp, "macho"],
-      [c.bisabuela_pp, "hembra"],
-      [c.bisabuelo_pm, "macho"],
-      [c.bisabuela_pm, "hembra"],
-      [c.bisabuelo_mp, "macho"],
-      [c.bisabuela_mp, "hembra"],
-      [c.bisabuelo_mm, "macho"],
-      [c.bisabuela_mm, "hembra"]
+      [c.bisabuelo_pp,"macho"],
+      [c.bisabuela_pp,"hembra"],
+      [c.bisabuelo_pm,"macho"],
+      [c.bisabuela_pm,"hembra"],
+      [c.bisabuelo_mp,"macho"],
+      [c.bisabuela_mp,"hembra"],
+      [c.bisabuelo_mm,"macho"],
+      [c.bisabuela_mm,"hembra"]
     ]
   ];
 
-  const grilla = el("div", "", "genealogia");
+  const grilla=el("div","","genealogia");
 
-  for (const columnaDatos of columnas) {
-    const columna = el("div", "", "col-pedigree");
+  for(const columnaDatos of columnas){
+    const columna=el("div","","col-pedigree");
 
-    for (const [
-      nombre,
-      color,
-      nacimiento
-    ] of columnaDatos) {
-      const nodo = el(
-        "div",
-        nombre || "—",
-        "nodo " + color
-      );
-
-      if (nacimiento) {
-        nodo.append(
-          el("small", String(nacimiento))
-        );
-      }
-
+    for(const [nombre,color,nacimiento] of columnaDatos){
+      const nodo=el("div",nombre||"—","nodo "+color);
+      if(nacimiento)nodo.append(el("small",String(nacimiento)));
       columna.append(nodo);
     }
-
     grilla.append(columna);
   }
-
   contenedor.append(grilla);
 }
 
-async function mostrarGenealogia(pub, panel) {
-  panel.replaceChildren(
-    el("h3", "Genealogía y descendencia de SDU")
-  );
+async function mostrarGenealogia(pub,panel){
+  panel.replaceChildren(el("h3","Genealogía y descendencia de SDU"));
 
-  if (!pub.caballo_sdu_id) {
-    panel.append(
-      aviso(
-        "Este ejemplar todavía no está vinculado con SDU."
-      )
-    );
+  if(!pub.caballo_sdu_id){
+    panel.append(aviso(
+      "Este ejemplar todavía no está vinculado con SDU."
+    ));
     return;
   }
 
-  const mensaje = aviso(
-    "Consultando el registro " +
-    pub.caballo_sdu_id + "..."
-  );
+  panel.append(aviso(
+    "Consultando el registro "+pub.caballo_sdu_id+"..."
+  ));
 
-  panel.append(mensaje);
+  try{
+    const respuesta=await rpc("obtener_ficha_sdu_deportivos",{
+      p_caballo_id:Number(pub.caballo_sdu_id)
+    });
 
-  try {
-    const respuesta = await rpc(
-      "obtener_ficha_sdu_deportivos",
-      {
-        p_caballo_id: Number(pub.caballo_sdu_id)
-      }
-    );
+    panel.replaceChildren(el("h3","Genealogía y descendencia de SDU"));
 
-    panel.replaceChildren(
-      el("h3", "Genealogía y descendencia de SDU")
-    );
-
-    if (!respuesta?.caballo) {
-      panel.append(
-        aviso(
-          "No se encontró el registro vinculado.",
-          true
-        )
-      );
+    if(!respuesta?.caballo){
+      panel.append(aviso("No se encontró el registro vinculado.",true));
       return;
     }
 
-    const c = respuesta.caballo;
+    const c=respuesta.caballo;
+    panel.append(el("p",
+      "Registro SDU "+c.id+" · "+(c.Nombre||"Sin nombre")
+    ));
 
-    panel.append(
-      el(
-        "p",
-        "Registro SDU " + c.id +
-        " · " + (c.Nombre || "Sin nombre")
-      )
+    arbolGenealogico(c,panel);
+    panel.append(el("h3","Descendencia registrada"));
+
+    const hijos=Array.isArray(respuesta.descendencia)
+      ?respuesta.descendencia:[];
+
+    hijos.sort((a,b)=>
+      String(a.Nacimiento||"").localeCompare(String(b.Nacimiento||""))
     );
 
-    arbolGenealogico(c, panel);
-
-    panel.append(
-      el("h3", "Descendencia registrada")
-    );
-
-    const hijos = Array.isArray(respuesta.descendencia)
-      ? respuesta.descendencia
-      : [];
-
-    if (!hijos.length) {
-      panel.append(
-        el(
-          "p",
-          "No se encontró descendencia vinculada " +
-          "en los registros consultados."
-        )
-      );
-    } else {
-      const lista = el(
-        "ol",
-        "",
-        "descendencia"
-      );
-
-      for (const hijo of hijos) {
-        const texto =
-          (hijo.Nombre || "Sin nombre") +
-          (hijo.Nacimiento
-            ? " · " + hijo.Nacimiento.slice(0, 4)
-            : "") +
-          " · Registro " + hijo.id;
-
-        lista.append(el("li", texto));
+    if(!hijos.length){
+      panel.append(el("p",
+        "No se encontró descendencia vinculada en los registros consultados."
+      ));
+    }else{
+      const lista=el("ol","","descendencia");
+      for(const hijo of hijos){
+        const texto=
+          (hijo.Nombre||"Sin nombre")+
+          (hijo.Nacimiento?" · "+String(hijo.Nacimiento).slice(0,4):"")+
+          " · Registro "+hijo.id;
+        lista.append(el("li",texto));
       }
-
       panel.append(lista);
     }
-
-    panel.append(
-      el(
-        "p",
-        "Vista de comprobación administrativa. " +
-        "Para mostrar estos datos en el catálogo público " +
-        "también hay que actualizar la página pública.",
-        "ayuda"
-      )
-    );
-
-  } catch (error) {
-    panel.append(aviso(error.message, true));
+  }catch(error){
+    panel.append(aviso(error.message,true));
   }
 }
 
-function panelVincular(pub, contenedor) {
-  const panel = el(
-    "section",
-    "",
-    "panel-interior"
-  );
+function panelVincular(pub,contenedor){
+  const panel=el("section","","panel-interior");
+  panel.append(el("h3","Vincular con Sangres del Uruguay"));
 
   panel.append(
-    el("h3", "Vincular con Sangres del Uruguay")
-  );
-
-  const actual = el(
-    "p",
-    pub.caballo_sdu_id
-      ? "Registro SDU vinculado: " + pub.caballo_sdu_id
-      : "Sin vinculación con SDU"
-  );
-
-  panel.append(
-    actual,
-    el(
-      "p",
-      "Escribí el nombre, compará padre y madre " +
-      "y elegí el registro correcto.",
+    el("p",pub.caballo_sdu_id
+      ?"Registro SDU vinculado: "+pub.caballo_sdu_id
+      :"Sin vinculación con SDU"
+    ),
+    el("p",
+      "Escribí el nombre, compará padre y madre y elegí el registro correcto.",
       "ayuda"
     )
   );
 
-  const entrada = document.createElement("input");
-  entrada.type = "search";
-  entrada.className = "buscador-sdu";
-  entrada.placeholder = "Ej.: SS AMBAR";
-  entrada.value = pub.nombre || "";
-  entrada.maxLength = 100;
-
+  const entrada=document.createElement("input");
+  entrada.type="search";
+  entrada.className="buscador-sdu";
+  entrada.placeholder="Ej.: SS AMBAR";
+  entrada.value=pub.nombre||"";
+  entrada.maxLength=100;
   panel.append(entrada);
 
-  const acciones = el("div", "", "acciones");
-
-  const buscar = boton(
-    "Buscar en SDU",
-    buscarCaballos
-  );
-
+  const acciones=el("div","","acciones");
+  const buscar=boton("Buscar en SDU",buscarCaballos);
   acciones.append(buscar);
 
-  if (pub.caballo_sdu_id) {
-    acciones.append(
-      boton(
-        "Desvincular",
-        () => guardarVinculo(null, "")
-      )
-    );
+  if(pub.caballo_sdu_id){
+    acciones.append(boton(
+      "Desvincular",()=>guardarVinculo(null,"")
+    ));
   }
 
   panel.append(acciones);
-
-  const mensaje = el("p");
-  mensaje.setAttribute("role", "status");
+  const mensaje=el("p");
+  mensaje.setAttribute("role","status");
   panel.append(mensaje);
 
-  const resultados = el("div");
+  const resultados=el("div");
   panel.append(resultados);
-
   contenedor.append(panel);
 
-  async function guardarVinculo(id, nombre) {
-    const pregunta = id === null
-      ? "¿Quitar el vínculo con SDU?"
-      : "¿Vincular " + pub.nombre +
-        " con " + nombre +
-        " (registro " + id + ")?";
+  async function guardarVinculo(id,nombre){
+    const pregunta=id===null
+      ?"¿Quitar el vínculo con SDU?"
+      :"¿Vincular "+pub.nombre+" con "+nombre+" (registro "+id+")?";
 
-    if (!confirm(pregunta)) return;
+    if(!confirm(pregunta))return;
 
-    buscar.disabled = true;
+    buscar.disabled=true;
+    estadoEn(mensaje,"Guardando vinculación...");
 
-    estadoEn(
-      mensaje,
-      "Guardando vinculación..."
-    );
+    try{
+      await rpc("vincular_publicacion_sdu",{
+        p_publicacion_id:pub.id,
+        p_caballo_id:id
+      });
 
-    try {
-      await rpc(
-        "vincular_publicacion_sdu",
-        {
-          p_publicacion_id: pub.id,
-          p_caballo_id: id
-        }
-      );
-
-      await abrirSeccion(
-        seccionActual,
-        {
-          sinHistorial: true,
-          publicacion: pub.id,
-          modo: "vincular"
-        }
-      );
-
-    } catch (error) {
-      estadoEn(mensaje, error.message, true);
-      buscar.disabled = false;
+      await abrirSeccion(seccionActual,{
+        sinHistorial:true,
+        publicacion:pub.id,
+        modo:"vincular"
+      });
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+      buscar.disabled=false;
     }
   }
 
-  async function buscarCaballos() {
-    const q = entrada.value.trim();
-
+  async function buscarCaballos(){
+    const q=entrada.value.trim();
     resultados.replaceChildren();
 
-    if (q.length < 2) {
-      estadoEn(
-        mensaje,
-        "Escribí al menos dos caracteres.",
-        true
-      );
+    if(q.length<2){
+      estadoEn(mensaje,"Escribí al menos dos caracteres.",true);
       return;
     }
 
-    buscar.disabled = true;
-    estadoEn(mensaje, "Buscando...");
+    buscar.disabled=true;
+    estadoEn(mensaje,"Buscando...");
 
-    try {
-      const lista = await rpc(
-        "buscar_caballos_sdu_deportivos",
-        {
-          p_busqueda: q
-        }
+    try{
+      const lista=await rpc("buscar_caballos_sdu_deportivos",{
+        p_busqueda:q
+      });
+
+      estadoEn(mensaje,lista.length
+        ?"Elegí el caballo correcto."
+        :"No hay coincidencias. Podés publicar sin vincular."
       );
 
-      estadoEn(
-        mensaje,
-        lista.length
-          ? "Elegí el caballo correcto."
-          : "No hay coincidencias. " +
-            "Podés publicar sin vincular."
-      );
-
-      for (const c of lista) {
-        const fila = el(
-          "div",
-          "",
-          "resultado-sdu"
-        );
-
-        const info = el("div");
+      for(const c of lista){
+        const fila=el("div","","resultado-sdu");
+        const info=el("div");
 
         info.append(
-          el(
-            "strong",
-            c.nombre || "Sin nombre"
-          ),
-          el(
-            "small",
-            "Registro " + c.id +
-            " · Padre: " + (c.padre || "—") +
-            " · Madre: " + (c.madre || "—")
+          el("strong",c.nombre||"Sin nombre"),
+          el("small",
+            "Registro "+c.id+
+            " · Padre: "+(c.padre||"—")+
+            " · Madre: "+(c.madre||"—")
           )
         );
 
-        const yaVinculado =
-          String(c.id) === String(pub.caballo_sdu_id);
+        const yaVinculado=
+          String(c.id)===String(pub.caballo_sdu_id);
 
-        const seleccionar = boton(
-          yaVinculado
-            ? "Ya vinculado"
-            : "Vincular",
-          () => guardarVinculo(c.id, c.nombre)
+        const seleccionar=boton(
+          yaVinculado?"Ya vinculado":"Vincular",
+          ()=>guardarVinculo(c.id,c.nombre)
         );
+        seleccionar.disabled=yaVinculado;
 
-        seleccionar.disabled = yaVinculado;
-
-        fila.append(info, seleccionar);
+        fila.append(info,seleccionar);
         resultados.append(fila);
       }
-
-    } catch (error) {
-      estadoEn(mensaje, error.message, true);
-    } finally {
-      buscar.disabled = false;
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+    }finally{
+      buscar.disabled=false;
     }
   }
 
-  entrada.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
+  entrada.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
       e.preventDefault();
       buscarCaballos();
     }
@@ -1127,182 +709,146 @@ function panelVincular(pub, contenedor) {
   return panel;
 }
 
+function panelVincularDeportivo(pub,contenedor){
+  const panel=el("section","","panel-interior");
+  panel.append(el("h3","Vincular historial deportivo"));
 
-// VINCULACIÓN DEL HISTORIAL DEPORTIVO
-// El registro deportivo puede existir sin pedigree en SDU.
-function panelVincularDeportivo(pub, contenedor) {
-  const panel = el("section", "", "panel-interior");
-
-  panel.append(
-    el("h3", "Vincular historial deportivo")
-  );
-
-  const vinculado = pub.caballo_deportivo_id;
-  const tieneVinculo =
-    vinculado !== null &&
-    vinculado !== undefined &&
-    vinculado !== "";
+  const vinculado=pub.caballo_deportivo_id;
+  const tieneVinculo=
+    vinculado!==null&&vinculado!==undefined&&vinculado!=="";
 
   panel.append(
-    el(
-      "p",
-      tieneVinculo
-        ? "Registro deportivo vinculado: " + vinculado
-        : "Sin registro deportivo vinculado"
+    el("p",tieneVinculo
+      ?"Registro deportivo vinculado: "+vinculado
+      :"Sin registro deportivo vinculado"
     ),
-    el(
-      "p",
-      "Buscá por nombre deportivo, nombre en la nómina, " +
-      "chip o pasaporte FEU. Compará los datos antes de vincular. " +
-      "El registro genealógico de SDU es independiente.",
+    el("p",
+      "Buscá por nombre deportivo, nombre en la nómina, chip o pasaporte FEU. Compará los datos antes de vincular. El registro genealógico de SDU es independiente.",
       "ayuda"
     )
   );
 
-  const entrada = document.createElement("input");
-  entrada.type = "search";
-  entrada.className = "buscador-sdu";
-  entrada.placeholder = "Nombre, chip o pasaporte FEU";
-  entrada.maxLength = 100;
-  entrada.value = pub.nombre || "";
+  const entrada=document.createElement("input");
+  entrada.type="search";
+  entrada.className="buscador-sdu";
+  entrada.placeholder="Nombre, chip o pasaporte FEU";
+  entrada.maxLength=100;
+  entrada.value=pub.nombre||"";
   panel.append(entrada);
 
-  const acciones = el("div", "", "acciones");
-  const buscar = boton(
-    "Buscar caballo deportivo",
-    buscarDeportivos
-  );
+  const acciones=el("div","","acciones");
+  const buscar=boton("Buscar caballo deportivo",buscarDeportivos);
   acciones.append(buscar);
 
-  if (tieneVinculo) {
-    acciones.append(
-      boton(
-        "Desvincular historial deportivo",
-        () => guardarVinculoDeportivo(null, "")
-      )
-    );
+  if(tieneVinculo){
+    acciones.append(boton(
+      "Desvincular historial deportivo",
+      ()=>guardarVinculoDeportivo(null,"")
+    ));
   }
 
   panel.append(acciones);
-
-  const mensaje = el("p");
-  mensaje.setAttribute("role", "status");
+  const mensaje=el("p");
+  mensaje.setAttribute("role","status");
   panel.append(mensaje);
 
-  const resultados = el("div");
+  const resultados=el("div");
   panel.append(resultados);
   contenedor.append(panel);
 
-  async function guardarVinculoDeportivo(id, nombre) {
-    const pregunta = id === null
-      ? "¿Desvincular el historial deportivo de " +
-        pub.nombre + "? Los resultados no se borrarán."
-      : "¿Vincular " + pub.nombre +
-        " con el registro deportivo " + id +
-        " (" + nombre + ")? Confirmá que sea el mismo caballo.";
+  async function guardarVinculoDeportivo(id,nombre){
+    const pregunta=id===null
+      ?"¿Desvincular el historial deportivo de "+pub.nombre+"? Los resultados no se borrarán."
+      :"¿Vincular "+pub.nombre+" con el registro deportivo "+id+" ("+nombre+")? Confirmá que sea el mismo caballo.";
 
-    if (!confirm(pregunta)) return;
+    if(!confirm(pregunta))return;
 
-    buscar.disabled = true;
-    estadoEn(mensaje, "Guardando vinculación...");
+    buscar.disabled=true;
+    estadoEn(mensaje,"Guardando vinculación...");
 
-    try {
-      await rpc(
-        "vincular_publicacion_deportivo",
-        {
-          p_publicacion_id: pub.id,
-          p_caballo_deportivo_id: id
-        }
-      );
+    try{
+      await rpc("vincular_publicacion_deportivo",{
+        p_publicacion_id:pub.id,
+        p_caballo_deportivo_id:id
+      });
 
       await abrirSeccion(
-        "ejemplares",
+        seccionActual==="ventas"?"ventas":"ejemplares",
         {
-          sinHistorial: true,
-          publicacion: pub.id,
-          modo: "deportivo"
+          sinHistorial:true,
+          publicacion:pub.id,
+          modo:"deportivo"
         }
       );
-    } catch (error) {
-      estadoEn(mensaje, error.message, true);
-      buscar.disabled = false;
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+      buscar.disabled=false;
     }
   }
 
-  async function buscarDeportivos() {
-    const q = entrada.value.trim();
+  async function buscarDeportivos(){
+    const q=entrada.value.trim();
     resultados.replaceChildren();
 
-    if (q.length < 2 || q.length > 100) {
-      estadoEn(
-        mensaje,
-        "Escribí entre 2 y 100 caracteres.",
-        true
-      );
+    if(q.length<2||q.length>100){
+      estadoEn(mensaje,"Escribí entre 2 y 100 caracteres.",true);
       return;
     }
 
-    buscar.disabled = true;
-    estadoEn(mensaje, "Buscando en los registros deportivos...");
+    buscar.disabled=true;
+    estadoEn(mensaje,"Buscando en los registros deportivos...");
 
-    try {
-      const lista = await rpc(
-        "buscar_deportivos_para_publicacion",
-        { p_busqueda: q }
-      );
+    try{
+      const lista=await rpc("buscar_deportivos_para_publicacion",{
+        p_busqueda:q
+      });
 
-      if (!Array.isArray(lista)) {
+      if(!Array.isArray(lista)){
         throw Error("La búsqueda devolvió una respuesta inválida.");
       }
 
-      estadoEn(
-        mensaje,
-        lista.length
-          ? "Compará nombre, chip y pasaporte antes de elegir."
-          : "No se encontraron registros deportivos."
+      estadoEn(mensaje,lista.length
+        ?"Compará nombre, chip y pasaporte antes de elegir."
+        :"No se encontraron registros deportivos."
       );
 
-      for (const c of lista) {
-        const fila = el("div", "", "resultado-sdu");
-        const info = el("div");
+      for(const c of lista){
+        const fila=el("div","","resultado-sdu");
+        const info=el("div");
 
         info.append(
-          el("strong", c.nombre || "Sin nombre principal"),
-          el(
-            "small",
-            "Registro deportivo " + c.id +
-            " · Chip: " + (c.chip || "—") +
-            " · Pasaporte FEU: " + (c.pasaporte_feu || "—")
+          el("strong",c.nombre||"Sin nombre principal"),
+          el("small",
+            "Registro deportivo "+c.id+
+            " · Chip: "+(c.chip||"—")+
+            " · Pasaporte FEU: "+(c.pasaporte_feu||"—")
           ),
-          el(
-            "small",
-            "Participaciones: " + Number(c.participaciones || 0) +
-            " · SDU: " + (c.caballo_sdu_id || "Sin vincular")
+          el("small",
+            "Participaciones: "+Number(c.participaciones||0)+
+            " · SDU: "+(c.caballo_sdu_id||"Sin vincular")
           )
         );
 
-        const yaVinculado = String(c.id) === String(vinculado);
-        const seleccionar = boton(
-          yaVinculado ? "Ya vinculado" : "Vincular historial",
-          () => guardarVinculoDeportivo(
-            c.id,
-            c.nombre || "Sin nombre"
-          )
-        );
-        seleccionar.disabled = yaVinculado;
+        const yaVinculado=String(c.id)===String(vinculado);
 
-        fila.append(info, seleccionar);
+        const seleccionar=boton(
+          yaVinculado?"Ya vinculado":"Vincular historial",
+          ()=>guardarVinculoDeportivo(c.id,c.nombre||"Sin nombre")
+        );
+        seleccionar.disabled=yaVinculado;
+
+        fila.append(info,seleccionar);
         resultados.append(fila);
       }
-    } catch (error) {
-      estadoEn(mensaje, error.message, true);
-    } finally {
-      buscar.disabled = false;
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+    }finally{
+      buscar.disabled=false;
     }
   }
 
-  entrada.addEventListener("keydown", e => {
-    if (e.key === "Enter") {
+  entrada.addEventListener("keydown",e=>{
+    if(e.key==="Enter"){
       e.preventDefault();
       buscarDeportivos();
     }
@@ -1311,104 +857,80 @@ function panelVincularDeportivo(pub, contenedor) {
   return panel;
 }
 
-function panelEditar(pub, contenedor) {
-  const panel = el(
-    "section",
-    "",
-    "panel-interior"
-  );
+function panelEditar(pub,contenedor){
+  const panel=el("section","","panel-interior");
 
   panel.append(
-    el("h3", "Editar ficha: " + pub.nombre),
-    el(
-      "p",
-      "Se modifica la publicación de Deportivos, " +
-      "no el pedigree original de SDU.",
+    el("h3","Editar ficha: "+pub.nombre),
+    el("p",
+      "Se modifica la publicación de Deportivos, no el pedigree original de SDU.",
       "ayuda"
     )
   );
 
-  const formulario = document.createElement("form");
-  const grilla = el("div", "", "form-grid");
+  const formulario=document.createElement("form");
+  const grilla=el("div","","form-grid");
 
-  const campos = [
-    ["nombre", "Nombre", "text", true],
-    ["raza", "Raza", "text"],
-    ["sexo", "Sexo", "text"],
-    ["edad", "Edad (años)", "number"],
-    ["altura_cm", "Altura (cm)", "number"],
-    ["pelo", "Pelo", "text"],
-    ["categoria", "Categoría", "text"],
-    ["ubicacion", "Ubicación", "text"],
-    ["pais", "País", "text"],
-    ["precio_usd", "Precio real (USD)", "number", true],
-    ["propietario_nombre", "Propietario", "text"],
-    ["propietario_email", "Correo del propietario", "email", true],
-    ["propietario_telefono", "Teléfono", "text"],
-    ["descripcion", "Descripción", "textarea"]
+  const campos=[
+    ["nombre","Nombre","text",true],
+    ["raza","Raza","text"],
+    ["sexo","Sexo","text"],
+    ["edad","Edad (años)","number"],
+    ["altura_cm","Altura (cm)","number"],
+    ["pelo","Pelo","text"],
+    ["categoria","Categoría","text"],
+    ["ubicacion","Ubicación","text"],
+    ["pais","País","text"],
+    ["precio_usd","Precio real (USD)","number",true],
+    ["propietario_nombre","Propietario","text"],
+    ["propietario_email","Correo del propietario","email",true],
+    ["propietario_telefono","Teléfono","text"],
+    ["descripcion","Descripción","textarea"]
   ];
 
-  const controles = {};
+  const controles={};
 
-  for (const [
-    clave,
-    etiqueta,
-    tipo,
-    obligatorio
-  ] of campos) {
-    const label = el(
-      "label",
-      etiqueta,
-      "form-campo" +
-        (clave === "descripcion" ? " ancho" : "")
+  for(const [clave,etiqueta,tipo,obligatorio] of campos){
+    const label=el(
+      "label",etiqueta,
+      "form-campo"+(clave==="descripcion"?" ancho":"")
     );
 
-    const entrada = document.createElement(
-      tipo === "textarea" ? "textarea" : "input"
+    const entrada=document.createElement(
+      tipo==="textarea"?"textarea":"input"
     );
 
-    if (tipo !== "textarea") {
-      entrada.type = tipo;
+    if(tipo!=="textarea")entrada.type=tipo;
+    entrada.name=clave;
+    entrada.value=pub[clave]??"";
+    entrada.required=!!obligatorio;
+
+    if(clave==="edad"){
+      entrada.min="0";
+      entrada.max="60";
+      entrada.step="1";
     }
-
-    entrada.name = clave;
-    entrada.value = pub[clave] ?? "";
-    entrada.required = !!obligatorio;
-
-    if (clave === "edad") {
-      entrada.min = "0";
-      entrada.max = "60";
-      entrada.step = "1";
+    if(clave==="altura_cm"){
+      entrada.min="0";
+      entrada.max="250";
+      entrada.step="0.1";
     }
-
-    if (clave === "altura_cm") {
-      entrada.min = "0";
-      entrada.max = "250";
-      entrada.step = "0.1";
-    }
-
-    if (clave === "precio_usd") {
-      entrada.min = "1";
-      entrada.max = "100000000";
-      entrada.step = "0.01";
+    if(clave==="precio_usd"){
+      entrada.min="1";
+      entrada.max="100000000";
+      entrada.step="0.01";
     }
 
     label.append(entrada);
     grilla.append(label);
-    controles[clave] = entrada;
+    controles[clave]=entrada;
   }
 
-  const reservado = el(
-    "label",
-    "",
-    "form-campo ancho"
-  );
-
-  const checkReservado = document.createElement("input");
-  checkReservado.type = "checkbox";
-  checkReservado.checked =
-    pub.precio_reservado === true;
-  checkReservado.style.width = "auto";
+  const reservado=el("label","","form-campo ancho");
+  const checkReservado=document.createElement("input");
+  checkReservado.type="checkbox";
+  checkReservado.checked=pub.precio_reservado===true;
+  checkReservado.style.width="auto";
 
   reservado.append(
     checkReservado,
@@ -1420,200 +942,142 @@ function panelEditar(pub, contenedor) {
   grilla.append(reservado);
   formulario.append(grilla);
 
-  const acciones = el("div", "", "acciones");
+  const acciones=el("div","","acciones");
 
-  acciones.append(
-    boton(
-      "Pasar textos a MAYÚSCULAS",
-      () => {
-        for (const clave of [
-          "nombre",
-          "raza",
-          "pelo",
-          "ubicacion",
-          "pais",
-          "descripcion"
-        ]) {
-          controles[clave].value =
-            controles[clave].value.toLocaleUpperCase("es-UY");
-        }
-      }
-    )
-  );
+  acciones.append(boton("Pasar textos a MAYÚSCULAS",()=>{
+    for(const clave of [
+      "nombre","raza","pelo","ubicacion","pais","descripcion"
+    ]){
+      controles[clave].value=
+        controles[clave].value.toLocaleUpperCase("es-UY");
+    }
+  }));
 
-  const guardar = el(
-    "button",
-    "Guardar cambios"
-  );
-
-  guardar.type = "submit";
+  const guardar=el("button","Guardar cambios");
+  guardar.type="submit";
   acciones.append(guardar);
-
   formulario.append(acciones);
 
-  const mensaje = el("p");
-  mensaje.setAttribute("role", "status");
-
+  const mensaje=el("p");
+  mensaje.setAttribute("role","status");
   formulario.append(mensaje);
 
-  formulario.onsubmit = async e => {
+  formulario.onsubmit=async e=>{
     e.preventDefault();
+    if(!formulario.reportValidity())return;
 
-    if (!formulario.reportValidity()) return;
+    const datos={};
 
-    const datos = {};
-
-    for (const [clave, , tipo] of campos) {
-      const valor = controles[clave].value.trim();
-
-      datos[clave] =
-        tipo === "number"
-          ? (valor === "" ? null : Number(valor))
-          : (valor || null);
+    for(const [clave,,tipo] of campos){
+      const valor=controles[clave].value.trim();
+      datos[clave]=tipo==="number"
+        ?(valor===""?null:Number(valor))
+        :(valor||null);
     }
 
-    datos.precio_reservado = checkReservado.checked;
+    datos.precio_reservado=checkReservado.checked;
 
-    guardar.disabled = true;
+    guardar.disabled=true;
+    estadoEn(mensaje,"Guardando cambios...");
 
-    estadoEn(
-      mensaje,
-      "Guardando cambios..."
-    );
-
-    try {
-      await rpc(
-        "editar_publicacion_deportivos",
-        {
-          p_publicacion_id: pub.id,
-          p_datos: datos
-        }
-      );
+    try{
+      await rpc("editar_publicacion_deportivos",{
+        p_publicacion_id:pub.id,
+        p_datos:datos
+      });
 
       await abrirSeccion(
-        "ejemplares",
+        seccionActual==="ventas"?"ventas":"ejemplares",
         {
-          sinHistorial: true,
-          publicacion: pub.id,
-          modo: "editar"
+          sinHistorial:true,
+          publicacion:pub.id,
+          modo:"editar"
         }
       );
-
-    } catch (error) {
-      estadoEn(
-        mensaje,
-        error.message,
-        true
-      );
-
-      guardar.disabled = false;
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+      guardar.disabled=false;
     }
   };
 
   panel.append(formulario);
 
-  const fotosPanel = el(
-    "section",
-    "",
-    "panel-interior"
-  );
-
+  const fotosPanel=el("section","","panel-interior");
   fotosPanel.append(
-    el("h3", "Fotografías existentes"),
-    el(
-      "p",
-      "Elegí cuáles se muestran en el catálogo. " +
-      "Las fotografías siguen almacenadas en R2.",
+    el("h3","Fotografías existentes"),
+    el("p",
+      "Elegí cuáles se muestran en el catálogo. Las fotografías siguen almacenadas en R2.",
       "ayuda"
     )
   );
 
-  const fotosLista = el(
-    "div",
-    "Cargando fotografías..."
-  );
-
+  const fotosLista=el("div","Cargando fotografías...");
   fotosPanel.append(fotosLista);
 
-  const guardarFotos = boton(
-    "Guardar fotografías visibles",
-    () => {}
+  const guardarFotos=boton(
+    "Guardar fotografías visibles",()=>{}
   );
-
-  guardarFotos.disabled = true;
+  guardarFotos.disabled=true;
   fotosPanel.append(guardarFotos);
 
-  const mensajeFotos = el("p");
+  const mensajeFotos=el("p");
   fotosPanel.append(mensajeFotos);
 
   panel.append(fotosPanel);
   contenedor.append(panel);
 
-  let fotosCargadas = false;
+  let fotosCargadas=false;
 
-  async function cargarFotos() {
-    if (fotosCargadas) return;
-    fotosCargadas = true;
+  async function cargarFotos(){
+    if(fotosCargadas)return;
+    fotosCargadas=true;
 
-    try {
-      const fotos = await consulta(
+    try{
+      const fotos=await consulta(
         "deportivos_fotos",
-        "&publicacion_id=eq." +
-        encodeURIComponent(pub.id) +
+        "&publicacion_id=eq."+encodeURIComponent(pub.id)+
         "&order=orden.asc"
       );
 
       fotosLista.replaceChildren();
 
-      if (!fotos.length) {
-        fotosLista.append(
-          el("p", "No hay fotografías.")
-        );
+      if(!fotos.length){
+        fotosLista.append(el("p","No hay fotografías."));
         return;
       }
 
-      const controlesFoto = [];
+      const controlesFoto=[];
 
-      for (const foto of fotos) {
-        const fila = el(
-          "div",
-          "",
-          "foto-fila"
-        );
+      for(const foto of fotos){
+        const fila=el("div","","foto-fila");
+        const img=document.createElement("img");
+        img.alt="Foto del ejemplar";
 
-        const img = document.createElement("img");
-        img.alt = "Foto del ejemplar";
+        fotoAdmin(foto.id,img);
 
-        fotoAdmin(foto.id, img);
-
-        const label = el("label");
-
-        const checkFoto = document.createElement("input");
-        checkFoto.type = "checkbox";
-        checkFoto.checked = foto.aprobada === true;
+        const label=el("label");
+        const checkFoto=document.createElement("input");
+        checkFoto.type="checkbox";
+        checkFoto.checked=foto.aprobada===true;
 
         label.append(
           checkFoto,
           document.createTextNode("Mostrar en catálogo")
         );
 
-        fila.append(img, label);
+        fila.append(img,label);
         fotosLista.append(fila);
-
-        controlesFoto.push({
-          id: foto.id,
-          check: checkFoto
-        });
+        controlesFoto.push({id:foto.id,check:checkFoto});
       }
 
-      guardarFotos.disabled = false;
+      guardarFotos.disabled=false;
 
-      guardarFotos.onclick = async () => {
-        const ids = controlesFoto
-          .filter(f => f.check.checked)
-          .map(f => f.id);
+      guardarFotos.onclick=async()=>{
+        const ids=controlesFoto
+          .filter(f=>f.check.checked)
+          .map(f=>f.id);
 
-        if (!ids.length) {
+        if(!ids.length){
           estadoEn(
             mensajeFotos,
             "Seleccioná al menos una fotografía.",
@@ -1622,340 +1086,300 @@ function panelEditar(pub, contenedor) {
           return;
         }
 
-        guardarFotos.disabled = true;
+        guardarFotos.disabled=true;
+        estadoEn(mensajeFotos,"Guardando fotografías...");
 
-        estadoEn(
-          mensajeFotos,
-          "Guardando fotografías..."
-        );
-
-        try {
-          await rpc(
-            "actualizar_fotos_publicacion_deportivos",
-            {
-              p_publicacion_id: pub.id,
-              p_fotos_ids: ids
-            }
-          );
+        try{
+          await rpc("actualizar_fotos_publicacion_deportivos",{
+            p_publicacion_id:pub.id,
+            p_fotos_ids:ids
+          });
 
           estadoEn(
             mensajeFotos,
             "Fotografías actualizadas correctamente."
           );
-
-        } catch (error) {
-          estadoEn(
-            mensajeFotos,
-            error.message,
-            true
-          );
-
-        } finally {
-          guardarFotos.disabled = false;
+        }catch(error){
+          estadoEn(mensajeFotos,error.message,true);
+        }finally{
+          guardarFotos.disabled=false;
         }
       };
-
-    } catch (error) {
-      fotosLista.textContent = error.message;
-      fotosCargadas = false;
+    }catch(error){
+      fotosLista.textContent=error.message;
+      fotosCargadas=false;
     }
   }
 
-  return {
-    panel,
-    cargarFotos
-  };
+  return {panel,cargarFotos};
 }
 
-async function mostrarSolicitud(pub, padre) {
-  const tarjeta = el(
-    "article",
-    "",
-    "registro"
-  );
+async function mostrarSolicitud(pub,padre){
+  const tarjeta=el("article","","registro");
+  tarjeta.append(el("h3",pub.nombre||"Caballo sin nombre"));
 
-  tarjeta.append(
-    el(
-      "h3",
-      pub.nombre || "Caballo sin nombre"
-    )
-  );
-
-  for (const [nombre, valor] of [
-    ["Raza", pub.raza],
-    ["Sexo", pub.sexo],
-    ["Categoría", pub.categoria],
-    ["Edad", pub.edad],
-    ["Altura (cm)", pub.altura_cm],
-    ["Pelo", pub.pelo],
-    ["Ubicación", pub.ubicacion],
-    ["Descripción", pub.descripcion],
-    ["Precio real", dinero(pub.precio_usd)],
-    [
-      "Precio reservado",
-      pub.precio_reservado ? "Sí" : "No"
-    ],
-    ["Propietario", pub.propietario_nombre],
-    ["Correo", pub.propietario_email],
-    ["Teléfono", pub.propietario_telefono],
-    ["Estado", pub.estado]
-  ]) {
-    campo(tarjeta, nombre, valor);
+  for(const [nombre,valor] of [
+    ["Raza",pub.raza],
+    ["Sexo",pub.sexo],
+    ["Categoría",pub.categoria],
+    ["Edad",pub.edad],
+    ["Altura (cm)",pub.altura_cm],
+    ["Pelo",pub.pelo],
+    ["Ubicación",pub.ubicacion],
+    ["Descripción",pub.descripcion],
+    ["Precio real",dinero(pub.precio_usd)],
+    ["Precio reservado",pub.precio_reservado?"Sí":"No"],
+    ["Propietario",pub.propietario_nombre],
+    ["Correo",pub.propietario_email],
+    ["Teléfono",pub.propietario_telefono],
+    ["Estado",pub.estado]
+  ]){
+    campo(tarjeta,nombre,valor);
   }
 
-  const fotos = await consulta(
+  const fotos=await consulta(
     "deportivos_fotos",
-    "&publicacion_id=eq." +
-    encodeURIComponent(pub.id) +
+    "&publicacion_id=eq."+encodeURIComponent(pub.id)+
     "&order=orden.asc"
   );
 
-  tarjeta.append(
-    el("h3", "Fotografías para aprobar")
-  );
+  tarjeta.append(el("h3","Fotografías para aprobar"));
 
-  const seleccionadas = new Set();
+  const seleccionadas=new Set();
 
-  for (const foto of fotos) {
-    const fila = el(
-      "div",
-      "",
-      "foto-fila"
-    );
+  for(const foto of fotos){
+    const fila=el("div","","foto-fila");
+    const img=document.createElement("img");
+    img.alt="Fotografía";
+    fotoAdmin(foto.id,img);
 
-    const img = document.createElement("img");
-    img.alt = "Fotografía";
-
-    fotoAdmin(foto.id, img);
-
-    const label = el("label");
-
-    const check = document.createElement("input");
-    check.type = "checkbox";
-    check.checked = true;
+    const label=el("label");
+    const check=document.createElement("input");
+    check.type="checkbox";
+    check.checked=true;
 
     seleccionadas.add(foto.id);
 
-    check.onchange = () => {
-      if (check.checked) {
-        seleccionadas.add(foto.id);
-      } else {
-        seleccionadas.delete(foto.id);
-      }
+    check.onchange=()=>{
+      if(check.checked)seleccionadas.add(foto.id);
+      else seleccionadas.delete(foto.id);
     };
 
     label.append(
       check,
-      document.createTextNode(
-        "Aprobar esta fotografía"
-      )
+      document.createTextNode("Aprobar esta fotografía")
     );
 
-    fila.append(img, label);
+    fila.append(img,label);
     tarjeta.append(fila);
   }
 
-  const acciones = el("div", "", "acciones");
+  const acciones=el("div","","acciones");
 
-  const aprobar = boton(
-    "Aprobar y publicar",
-    () => actuar("aprobar")
+  const aprobar=boton(
+    "Aprobar y publicar",()=>actuar("aprobar")
   );
 
-  const rechazar = boton(
-    "Rechazar solicitud",
-    () => actuar("rechazar")
+  const rechazar=boton(
+    "Rechazar solicitud",()=>actuar("rechazar")
   );
 
-  acciones.append(aprobar, rechazar);
+  acciones.append(aprobar,rechazar);
   tarjeta.append(acciones);
 
-  const mensaje = el("p");
+  const mensaje=el("p");
   tarjeta.append(mensaje);
 
-  async function actuar(accion) {
-    if (
-      accion === "aprobar" &&
-      seleccionadas.size === 0
-    ) {
+  async function actuar(accion){
+    if(accion==="aprobar"&&seleccionadas.size===0){
       estadoEn(
-        mensaje,
-        "Seleccioná al menos una fotografía.",
-        true
+        mensaje,"Seleccioná al menos una fotografía.",true
       );
       return;
     }
 
-    const pregunta =
-      accion === "aprobar"
-        ? "¿Aprobar y publicar " + pub.nombre + "?"
-        : "¿Rechazar la solicitud de " + pub.nombre + "?";
+    const pregunta=accion==="aprobar"
+      ?"¿Aprobar y publicar "+pub.nombre+"?"
+      :"¿Rechazar la solicitud de "+pub.nombre+"?";
 
-    if (!confirm(pregunta)) return;
+    if(!confirm(pregunta))return;
 
-    aprobar.disabled = true;
-    rechazar.disabled = true;
+    aprobar.disabled=true;
+    rechazar.disabled=true;
+    estadoEn(mensaje,"Guardando...");
 
-    estadoEn(mensaje, "Guardando...");
-
-    try {
+    try{
       await workerAdmin(
-        accion === "aprobar"
-          ? "/admin/publicar"
-          : "/admin/rechazar",
+        accion==="aprobar"
+          ?"/admin/publicar"
+          :"/admin/rechazar",
         {
-          publicacion_id: pub.id,
-          ...(accion === "aprobar"
-            ? { fotos_ids: [...seleccionadas] }
-            : {})
+          publicacion_id:pub.id,
+          ...(accion==="aprobar"
+            ?{fotos_ids:[...seleccionadas]}
+            :{})
         }
       );
 
       await abrirSeccion("publicaciones");
 
-    } catch (error) {
-      estadoEn(mensaje, error.message, true);
-
-      aprobar.disabled = false;
-      rechazar.disabled = false;
+    }catch(error){
+      estadoEn(mensaje,error.message,true);
+      aprobar.disabled=false;
+      rechazar.disabled=false;
     }
   }
 
   padre.append(tarjeta);
 }
 
-function tarjetaEjemplar(
-  pub,
-  contenido,
-  opciones
-) {
-  const tarjeta = el(
-    "article",
-    "",
-    "registro"
+async function cambiarEstadoVenta(pub,vendido,botonAccion,mensaje){
+  const accion=vendido
+    ?"marcar como VENDIDO"
+    :"volver a poner EN VENTA";
+
+  if(!confirm("¿Querés "+accion+" a "+pub.nombre+"?"))return;
+
+  botonAccion.disabled=true;
+  estadoEn(mensaje,"Guardando el estado comercial...");
+
+  try{
+    await rpc("cambiar_estado_venta_deportivos",{
+      p_publicacion_id:pub.id,
+      p_vendido:vendido
+    });
+
+    await abrirSeccion(seccionActual,{
+      sinHistorial:true,
+      publicacion:pub.id
+    });
+
+  }catch(error){
+    estadoEn(mensaje,error.message,true);
+    botonAccion.disabled=false;
+  }
+}
+
+function tarjetaEjemplar(pub,contenido,opciones={}){
+  const tarjeta=el("article","","registro");
+
+  tarjeta.append(el("h3",pub.nombre||"Sin nombre"));
+
+  tarjeta.append(el(
+    "span",
+    estaVendido(pub)?"VENDIDO":"EN VENTA",
+    "estado-venta "+(estaVendido(pub)?"vendido":"en-venta")
+  ));
+
+  campo(tarjeta,"Raza",pub.raza);
+  campo(tarjeta,"Sexo",pub.sexo);
+  campo(tarjeta,"Categoría",pub.categoria);
+  campo(tarjeta,"Precio real",dinero(pub.precio_usd));
+  campo(tarjeta,"Precio reservado",pub.precio_reservado?"Sí":"No");
+
+  campo(
+    tarjeta,"Vínculo SDU",
+    pub.caballo_sdu_id
+      ?"Registro "+pub.caballo_sdu_id
+      :"Sin vincular"
   );
 
-  tarjeta.append(
-    el("h3", pub.nombre || "Sin nombre")
+  campo(
+    tarjeta,"Historial deportivo",
+    pub.caballo_deportivo_id!=null
+      ?"Registro "+pub.caballo_deportivo_id
+      :"Sin vincular"
   );
 
-  tarjeta.append(
-    el(
-      "span",
-      pub.estado || "Sin estado",
-      "etiqueta"
+  if(estaVendido(pub)){
+    tarjeta.append(el(
+      "p",
+      "Fecha de venta: "+fechaVenta(pub),
+      "estado-fecha"
+    ));
+
+    tarjeta.append(el(
+      "p",
+      "El ejemplar vendido permanece visible durante 30 días. Después se oculta del catálogo público, pero sigue disponible en administración para republicarlo.",
+      "ayuda"
+    ));
+  }
+
+  const menu=el("details","","menu-acciones");
+  menu.append(el("summary","Acciones del ejemplar"));
+
+  const acciones=el("div","","acciones");
+
+  acciones.append(
+    boton("Editar ficha y fotografías",()=>mostrarModo("editar")),
+    boton(
+      pub.caballo_sdu_id
+        ?"Cambiar vínculo SDU"
+        :"Vincular con SDU",
+      ()=>mostrarModo("vincular")
+    ),
+    boton(
+      pub.caballo_deportivo_id!=null
+        ?"Cambiar vínculo deportivo"
+        :"Vincular historial deportivo",
+      ()=>mostrarModo("deportivo")
+    ),
+    boton(
+      "Ver genealogía y descendencia",
+      ()=>mostrarModo("genealogia")
     )
   );
 
-  campo(tarjeta, "Raza", pub.raza);
-  campo(tarjeta, "Sexo", pub.sexo);
-  campo(tarjeta, "Categoría", pub.categoria);
-  campo(tarjeta, "Precio real", dinero(pub.precio_usd));
+  const ver=el("a","Ver ficha pública","boton");
+  ver.href="../index.html?caballo="+encodeURIComponent(pub.id);
+  ver.target="_blank";
+  ver.rel="noopener noreferrer";
+  acciones.append(ver);
 
-  campo(
-    tarjeta,
-    "Vínculo SDU",
-    pub.caballo_sdu_id
-      ? "Registro " + pub.caballo_sdu_id
-      : "Sin vincular"
+  menu.append(acciones);
+  tarjeta.append(menu);
+
+  const menuVenta=el("details","","menu-acciones");
+  menuVenta.append(el(
+    "summary",
+    "Estado comercial · "+(estaVendido(pub)?"VENDIDO":"EN VENTA")
+  ));
+
+  const accionesVenta=el("div","","acciones");
+  const mensajeVenta=el("p");
+  mensajeVenta.setAttribute("role","status");
+
+  if(estaVendido(pub)){
+    const republicar=boton(
+      "Volver a poner EN VENTA / Republicar",
+      ()=>cambiarEstadoVenta(
+        pub,false,republicar,mensajeVenta
+      )
+    );
+    accionesVenta.append(republicar);
+  }else{
+    const vender=boton(
+      "Marcar como VENDIDO",
+      ()=>cambiarEstadoVenta(
+        pub,true,vender,mensajeVenta
+      )
+    );
+    accionesVenta.append(vender);
+  }
+
+  menuVenta.append(accionesVenta,mensajeVenta);
+  tarjeta.append(menuVenta);
+
+  const editorContenedor=el("div","","oculto");
+  const vinculoContenedor=el("div","","oculto");
+  const deportivoContenedor=el("div","","oculto");
+  const genealogiaContenedor=el(
+    "div","","panel-interior oculto"
   );
 
-  campo(
-    tarjeta,
-    "Historial deportivo",
-    pub.caballo_deportivo_id != null
-      ? "Registro " + pub.caballo_deportivo_id
-      : "Sin vincular"
-  );
-
-  const acciones = el(
-    "div",
-    "",
-    "acciones"
-  );
-
-  const editar = boton(
-    "Editar ficha",
-    () => mostrarModo("editar")
-  );
-
-  const vincular = boton(
-    pub.caballo_sdu_id
-      ? "Cambiar vínculo SDU"
-      : "Vincular con SDU",
-    () => mostrarModo("vincular")
-  );
-
-  const deportivo = boton(
-    pub.caballo_deportivo_id != null
-      ? "Cambiar vínculo deportivo"
-      : "Vincular historial deportivo",
-    () => mostrarModo("deportivo")
-  );
-
-  const genealogia = boton(
-    "Ver genealogía",
-    () => mostrarModo("genealogia")
-  );
-
-  const ver = el(
-    "a",
-    "Ver ficha pública",
-    "boton"
-  );
-
-  ver.href =
-    "../index.html?caballo=" +
-    encodeURIComponent(pub.id);
-
-  acciones.append(
-    editar,
-    vincular,
-    deportivo,
-    genealogia,
-    ver
-  );
-
-  tarjeta.append(acciones);
-
-  const editorContenedor = el(
-    "div",
-    "",
-    "oculto"
-  );
-
-  const vinculoContenedor = el(
-    "div",
-    "",
-    "oculto"
-  );
-
-  const deportivoContenedor = el(
-    "div",
-    "",
-    "oculto"
-  );
-
-  const genealogiaContenedor = el(
-    "div",
-    "",
-    "panel-interior oculto"
-  );
-
-  const editor = panelEditar(
-    pub,
-    editorContenedor
-  );
-
-  panelVincular(
-    pub,
-    vinculoContenedor
-  );
-
-  panelVincularDeportivo(
-    pub,
-    deportivoContenedor
-  );
+  const editor=panelEditar(pub,editorContenedor);
+  panelVincular(pub,vinculoContenedor);
+  panelVincularDeportivo(pub,deportivoContenedor);
 
   tarjeta.append(
     editorContenedor,
@@ -1964,270 +1388,198 @@ function tarjetaEjemplar(
     genealogiaContenedor
   );
 
-  const detalles = document.createElement("details");
+  const detalles=document.createElement("details");
+  detalles.append(el(
+    "summary","Ver todos los datos de la publicación"
+  ));
 
-  detalles.append(
-    el(
-      "summary",
-      "Ver todos los datos de la publicación"
-    )
-  );
-
-  for (const [nombre, valor] of Object.entries(pub)) {
-    if (
-      nombre === "id" ||
-      nombre === "ruta_r2"
-    ) {
-      continue;
-    }
+  for(const [nombre,valor] of Object.entries(pub)){
+    if(nombre==="id"||nombre==="ruta_r2")continue;
 
     campo(
       detalles,
       nombre,
-      nombre === "precio_usd"
-        ? dinero(valor)
-        : valor
+      nombre==="precio_usd"?dinero(valor):valor
     );
   }
 
   tarjeta.append(detalles);
   contenido.append(tarjeta);
 
-  function mostrarModo(
-    modo,
-    guardarRuta = true
-  ) {
+  function mostrarModo(modo,guardarRuta=true){
     editorContenedor.classList.toggle(
-      "oculto",
-      modo !== "editar"
+      "oculto",modo!=="editar"
     );
-
     vinculoContenedor.classList.toggle(
-      "oculto",
-      modo !== "vincular"
+      "oculto",modo!=="vincular"
     );
-
     deportivoContenedor.classList.toggle(
-      "oculto",
-      modo !== "deportivo"
+      "oculto",modo!=="deportivo"
     );
-
     genealogiaContenedor.classList.toggle(
-      "oculto",
-      modo !== "genealogia"
+      "oculto",modo!=="genealogia"
     );
 
-    if (guardarRuta) {
-      ruta(
-        "ejemplares",
-        pub.id,
-        modo
-      );
+    if(guardarRuta){
+      ruta(seccionActual,pub.id,modo);
     }
 
-    if (modo === "editar") {
+    if(modo==="editar"){
       editor.cargarFotos();
     }
 
-    if (modo === "genealogia") {
-      mostrarGenealogia(
-        pub,
-        genealogiaContenedor
-      );
+    if(modo==="genealogia"){
+      mostrarGenealogia(pub,genealogiaContenedor);
     }
 
-    if (guardarRuta) {
-      const destino =
-        modo === "editar"
-          ? editorContenedor
-          : modo === "vincular"
-            ? vinculoContenedor
-            : modo === "deportivo"
-              ? deportivoContenedor
-              : genealogiaContenedor;
+    if(guardarRuta){
+      const destino=modo==="editar"
+        ?editorContenedor
+        :modo==="vincular"
+          ?vinculoContenedor
+          :modo==="deportivo"
+            ?deportivoContenedor
+            :genealogiaContenedor;
 
       destino.scrollIntoView({
-        behavior: "smooth",
-        block: "start"
+        behavior:"smooth",
+        block:"start"
       });
     }
   }
 
-  if (
-    pub.id === opciones.publicacion &&
-    ["editar", "vincular", "deportivo", "genealogia"]
-      .includes(opciones.modo)
-  ) {
-    mostrarModo(opciones.modo, false);
+  if(
+    String(pub.id)===String(opciones.publicacion)&&
+    ["editar","vincular","deportivo","genealogia"].includes(opciones.modo)
+  ){
+    mostrarModo(opciones.modo,false);
   }
 }
 
-async function abrirSeccion(
-  nombre,
-  opciones = {}
-) {
-  if (!tokenActual) return;
+async function abrirSeccion(nombre,opciones={}){
+  if(!tokenActual)return;
 
-  const validas = [
-    "publicaciones",
-    "ejemplares",
-    "ofertas",
-    "ventas"
+  const validas=[
+    "publicaciones","ejemplares","ofertas","ventas"
   ];
 
-  if (!validas.includes(nombre)) {
-    nombre = "publicaciones";
-  }
+  if(!validas.includes(nombre))nombre="publicaciones";
 
-  seccionActual = nombre;
+  seccionActual=nombre;
 
   const {
-    sinHistorial = false,
-    publicacion = null,
-    modo = null
-  } = opciones;
+    sinHistorial=false,
+    publicacion=null,
+    modo=null
+  }=opciones;
 
-  ruta(
-    nombre,
-    publicacion,
-    modo,
-    sinHistorial
-  );
-
+  ruta(nombre,publicacion,modo,sinHistorial);
   limpiarFotos();
 
-  const carga = ++cargaActual;
-  const contenido = $("contenido");
+  const carga=++cargaActual;
+  const contenido=$("contenido");
 
-  const titulos = {
-    publicaciones: "Solicitudes de publicación",
-    ejemplares: "Ejemplares publicados",
-    ofertas: "Consultas y ofertas",
-    ventas: "Ventas realizadas"
+  const titulos={
+    publicaciones:"Solicitudes de publicación",
+    ejemplares:"Ejemplares publicados",
+    ofertas:"Consultas y ofertas",
+    ventas:"Ventas realizadas"
   };
 
   contenido.replaceChildren(
-    el("h2", titulos[nombre]),
+    el("h2",titulos[nombre]),
     aviso("Cargando información...")
   );
 
-  try {
-    let registros = [];
+  try{
+    let registros=[];
 
-    if (nombre === "publicaciones") {
-      registros = await consulta(
+    if(nombre==="publicaciones"){
+      registros=await consulta(
         "deportivos_publicaciones",
-        "&estado=eq.pendiente" +
+        "&estado=eq.pendiente"+
         "&order=creado_en.desc&limit=100"
       );
     }
 
-    if (nombre === "ejemplares") {
-      registros = await consulta(
+    if(nombre==="ejemplares"){
+      registros=await consulta(
         "deportivos_publicaciones",
-        "&estado=in.(publicada,aprobada,publicado,aprobado,vendido)" +
+        "&estado=in.(publicada,aprobada,publicado,aprobado,vendido)"+
         "&order=creado_en.desc&limit=100"
       );
     }
 
-    if (nombre === "ventas") {
-      registros = await consulta(
+    if(nombre==="ventas"){
+      registros=await consulta(
         "deportivos_publicaciones",
-        "&estado=eq.vendido" +
+        "&estado=eq.vendido"+
         "&order=creado_en.desc&limit=100"
       );
     }
 
-    if (nombre === "ofertas") {
-      registros = await consulta(
+    if(nombre==="ofertas"){
+      registros=await consulta(
         "deportivos_consultas",
         "&order=creado_en.desc&limit=100"
       );
     }
 
-    if (carga !== cargaActual) return;
+    if(carga!==cargaActual)return;
 
     contenido.replaceChildren(
-      el("h2", titulos[nombre]),
+      el("h2",titulos[nombre]),
       el(
         "p",
-        "Registros encontrados: " +
-        registros.length,
+        "Registros encontrados: "+registros.length,
         "contador"
       )
     );
 
-    if (!registros.length) {
-      contenido.append(
-        aviso("No hay registros en esta sección.")
-      );
+    if(!registros.length){
+      contenido.append(aviso(
+        "No hay registros en esta sección."
+      ));
       return;
     }
 
-    if (nombre === "publicaciones") {
-      for (const pub of registros) {
-        if (carga !== cargaActual) return;
+    if(nombre==="publicaciones"){
+      for(const pub of registros){
+        if(carga!==cargaActual)return;
 
-        try {
-          await mostrarSolicitud(
-            pub,
-            contenido
-          );
-        } catch (error) {
-          contenido.append(
-            aviso(
-              "No se pudo cargar " +
-              pub.nombre + ": " +
-              error.message,
-              true
-            )
-          );
+        try{
+          await mostrarSolicitud(pub,contenido);
+        }catch(error){
+          contenido.append(aviso(
+            "No se pudo cargar "+pub.nombre+": "+error.message,
+            true
+          ));
         }
       }
-
-    } else if (nombre === "ejemplares") {
-      for (const pub of registros) {
-        tarjetaEjemplar(
-          pub,
-          contenido,
-          opciones
-        );
+    }else if(nombre==="ejemplares"||nombre==="ventas"){
+      for(const pub of registros){
+        tarjetaEjemplar(pub,contenido,opciones);
       }
+    }else{
+      for(const registro of registros){
+        const tarjeta=el("article","","registro");
 
-    } else {
-      for (const registro of registros) {
-        const tarjeta = el(
-          "article",
-          "",
-          "registro"
-        );
+        tarjeta.append(el(
+          "h3",
+          registro.nombre||
+          registro.comprador_nombre||
+          "Registro"
+        ));
 
-        tarjeta.append(
-          el(
-            "h3",
-            registro.nombre ||
-            registro.comprador_nombre ||
-            "Registro"
-          )
-        );
-
-        for (const [
-          nombreCampo,
-          valor
-        ] of Object.entries(registro)) {
-          if (
-            nombreCampo === "id" ||
-            nombreCampo === "ruta_r2"
-          ) {
+        for(const [nombreCampo,valor] of Object.entries(registro)){
+          if(nombreCampo==="id"||nombreCampo==="ruta_r2"){
             continue;
           }
 
           campo(
             tarjeta,
             nombreCampo,
-            nombreCampo === "precio_usd"
-              ? dinero(valor)
-              : valor
+            nombreCampo==="precio_usd"?dinero(valor):valor
           );
         }
 
@@ -2235,32 +1587,29 @@ async function abrirSeccion(
       }
     }
 
-  } catch (error) {
-    if (carga !== cargaActual) return;
+  }catch(error){
+    if(carga!==cargaActual)return;
 
-    const mensaje = nombre === "ofertas"
-      ? "No se pudieron cargar las consultas registradas. " +
-        "Las consultas de WhatsApp se gestionan " +
-        "por el canal oficial de SDU. Detalle: " +
-        error.message
-      : error.message;
+    const mensaje=nombre==="ofertas"
+      ?"No se pudieron cargar las consultas registradas. Las consultas de WhatsApp se gestionan por el canal oficial de SDU. Detalle: "+error.message
+      :error.message;
 
     contenido.replaceChildren(
-      el("h2", titulos[nombre]),
-      aviso(mensaje, true)
+      el("h2",titulos[nombre]),
+      aviso(mensaje,true)
     );
   }
 }
 
-window.addEventListener("popstate", () => {
-  const params = new URLSearchParams(location.search);
+window.addEventListener("popstate",()=>{
+  const params=new URLSearchParams(location.search);
 
   abrirSeccion(
-    params.get("seccion") || "publicaciones",
+    params.get("seccion")||"publicaciones",
     {
-      sinHistorial: true,
-      publicacion: params.get("publicacion"),
-      modo: params.get("modo")
+      sinHistorial:true,
+      publicacion:params.get("publicacion"),
+      modo:params.get("modo")
     }
   );
 });
@@ -2268,6 +1617,5 @@ window.addEventListener("popstate", () => {
 prepararVisor();
 verificarAdministrador();
 </script>
-
 </body>
 </html>
