@@ -162,6 +162,7 @@ const contenido=document.getElementById("contenido");
 const CATEGORIAS={
 raid:"Raid",
 endurance:"Endurance",
+"carrera-corto":"Carrera/Corto",
 padrillos:"Padrillos",
 "yeguas-madres":"Yeguas madres"
 };
@@ -548,7 +549,7 @@ ${vendedor?`
 </ul>
 <p>Las comisiones se calculan sobre el precio final acordado y corresponden cuando la venta se concreta.</p>
 <h2>6. Intermediación y obligación de comisión</h2>
-<p>Las consultas, ofertas y contactos obtenidos mediante Deportivos del Uruguay son gestionados por SDU. Si la venta se concreta como consecuencia de una publicación, consulta, contacto, oferta o gestión originada mediante SDU, corresponde abonar las comisiones aplicables, aunque las partes concluyan posteriormente la operación fuera de la plataforma. El vendedor se compromete a informar a SDU cuando se concrete una venta de este tipo.</p>
+<p>Las consultas, ofertas y contactos obtenidos mediante Deportivos del Uruguay son gestionados por SDU. Si la venta se concreta como consecuencia de una publicación, consulta, contacto, oferta o gestión originada mediante SDU, corresponde abonar las comisiones aplicables, aunque las partes concluyan posteriormente fuera de la plataforma. El vendedor se compromete a informar a SDU cuando se concrete una venta de este tipo.</p>
 <h2>7. Operaciones internacionales</h2>
 <p>El vendedor coordinará la disponibilidad y entrega del caballo en el establecimiento de cuarentena o punto de entrega acordado. Solo asumirá el traslado hasta ese lugar si así se pacta previamente. Los gastos de cuarentena, controles sanitarios, certificaciones, documentación, exportación, importación, transporte internacional y demás gastos asociados estarán a cargo del comprador, sin perjuicio de las obligaciones legales y sanitarias que correspondan a cada parte.</p>
 <h2>8. Pago de comisiones</h2>
@@ -680,6 +681,7 @@ contenido.innerHTML=`
 <option value="">Seleccionar</option>
 <option value="raid">Raid</option>
 <option value="endurance">Endurance</option>
+<option value="carrera-corto">Carrera/Corto</option>
 <option value="padrillos">Padrillos</option>
 <option value="yeguas-madres">Yeguas madres</option>
 </select>
