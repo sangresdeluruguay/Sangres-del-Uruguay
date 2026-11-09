@@ -437,28 +437,40 @@ ${r.nombre_nomina&&r.nombre_nomina!==c.nombre?`<span class="dato-menor">Nómina:
 `:`<p>No hay participaciones registradas para este caballo.</p>`}
 </section>`;
 }
-function idYoutube(url){
+
+function idYoutube(valor){
+const entrada=typeof valor==="string"?valor:
+  (valor&&typeof valor==="object"?(valor.youtube_id||valor.url||valor.enlace||valor.video_url||""):"");
+const texto=String(entrada||"").trim();
+if(/^[A-Za-z0-9_-]{11}$/.test(texto))return texto;
 try{
-const u=new URL(url);
-if(u.hostname==="youtu.be")return u.pathname.slice(1).split("/")[0];
-if(["youtube.com","www.youtube.com","m.youtube.com"].includes(u.hostname)){
-if(u.pathname==="/watch")return u.searchParams.get("v");
-if(u.pathname.startsWith("/shorts/"))return u.pathname.split("/")[2];
-if(u.pathname.startsWith("/embed/"))return u.pathname.split("/")[2];
+const u=new URL(texto);
+if(!["https:","http:"].includes(u.protocol))return null;
+const host=u.hostname.toLowerCase();
+let id=null;
+if(["youtu.be","www.youtu.be"].includes(host))id=u.pathname.split("/")[1];
+else if(["youtube.com","www.youtube.com","m.youtube.com","music.youtube.com","youtube-nocookie.com","www.youtube-nocookie.com"].includes(host)){
+if(u.pathname==="/watch")id=u.searchParams.get("v");
+else if(/^\/(shorts|embed|live)\//.test(u.pathname))id=u.pathname.split("/")[2];
 }
-}catch{}
-return null;
+return /^[A-Za-z0-9_-]{11}$/.test(id||"")?id:null;
+}catch{return null;}
 }
+
 function htmlVideos(c){
-const videos=c.videos.map(idYoutube).filter(id=>/^[a-zA-Z0-9_-]{11}$/.test(id));
+const videos=[...new Set((Array.isArray(c.videos)?c.videos:[])
+  .map(idYoutube).filter(Boolean))];
 if(!videos.length)return "";
-return `<section class="panel"><h2>Videos del ejemplar</h2>
+return `<section class="panel"><h2>Vídeos del caballo</h2>
 ${videos.map(id=>`
 <iframe class="video" src="https://www.youtube-nocookie.com/embed/${id}"
-title="Video del caballo" loading="lazy" allowfullscreen></iframe>
+title="Vídeo de ${escapar(c.nombre)}" loading="lazy"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 `).join("")}
 </section>`;
 }
+
 function mostrarFicha(c){
 indiceFoto=0;
 const fotos=c.fotos.length?c.fotos:[FOTO_PLACEHOLDER];
@@ -484,6 +496,7 @@ ${fotos.map((foto,i)=>`
 </button>`).join("")}
 </div>
 </section>
+${htmlVideos(c)}
 <section class="panel">
 <h2>Datos del caballo</h2>
 <div class="datos">
@@ -504,7 +517,6 @@ ${htmlHistorialDeportivo(c)}
 <h2>Descripción</h2>
 <div class="descripcion">${escapar(c.descripcion)}</div>
 </section>
-${htmlVideos(c)}
 <section class="panel" style="text-align:center">
 <h2>Precio de venta</h2>
 <div class="precio" style="font-size:29px">${escapar(precioTexto(c))}</div>
@@ -576,7 +588,7 @@ ${vendedor?`
 <h2>5. Información e inspección veterinaria</h2>
 <p>La información procede del vendedor y, si existe vinculación, de los registros genealógicos de SDU. Un pedigrí registrado no garantiza por sí solo salud, rendimiento ni aptitud reproductiva. Se recomienda al comprador una inspección veterinaria previa, cuyo alcance y costo deberá acordarse.</p>
 <h2>6. Operaciones internacionales</h2>
-<p>El comprador asume los gastos de cuarentena, análisis, controles y certificados sanitarios, documentación, trámites de exportación e importación, transporte internacional y demás servicios asociados. El vendedor coordina la entrega del ejemplar en el punto acordado y únicamente asume el traslado hasta ese punto si así se pacta. Estas condiciones económicas no sustituyen las obligaciones legales y sanitarias aplicables.</p>
+<p>El comprador asume los gastos de cuarentena, análisis, controles y certificados sanitarios, documentación, trámites de exportación e importación, transporte internacional y demás gastos asociados. El vendedor coordina la entrega del ejemplar en el punto acordado y únicamente asume el traslado hasta ese punto si así se pacta. Estas condiciones económicas no sustituyen las obligaciones legales y sanitarias aplicables.</p>
 <h2>7. Pago y entrega del caballo</h2>
 <p>El precio final, los pagos, posibles señas, fechas y lugar de entrega deben acordarse antes de concretar la venta. La plataforma no procesa automáticamente el pago del caballo. No se deben realizar pagos sin verificar los datos del destinatario y las condiciones acordadas.</p>
 <h2>8. Aceptación</h2>
