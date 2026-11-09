@@ -400,6 +400,30 @@ async function workerAdmin(ruta,datos){
   return j;
 }
 
+// Subida autenticada de fotografías a una publicación ya aprobada.
+async function subirFotosAdmin(publicacionId,archivos){
+  const enviar=()=>{
+    const datos=new FormData();
+    datos.append("publicacion_id",publicacionId);
+    for(const archivo of archivos)datos.append("fotos",archivo);
+    return fetch(WORKER_URL+"/admin/agregar-fotos",{
+      method:"POST",
+      headers:{Authorization:"Bearer "+tokenActual},
+      body:datos
+    });
+  };
+  let respuesta=await enviar();
+  if(respuesta.status===401){
+    await renovarSesion();
+    respuesta=await enviar();
+  }
+  const datos=await respuesta.json().catch(()=>({}));
+  if(!respuesta.ok||datos.ok!==true){
+    throw Error(datos.error||"No se pudieron subir las fotografías.");
+  }
+  return datos;
+}
+
 function limpiarFotos(){
   for(const url of urlFotosTemporales){
     URL.revokeObjectURL(url);
@@ -1002,103 +1026,147 @@ function panelEditar(pub,contenedor){
 
   panel.append(formulario);
 
+  // FOTOGRAFÍAS: agregar, elegir principal, ocultar y eliminar.
   const fotosPanel=el("section","","panel-interior");
   fotosPanel.append(
-    el("h3","Fotografías existentes"),
-    el("p",
-      "Elegí cuáles se muestran en el catálogo. Las fotografías siguen almacenadas en R2.",
-      "ayuda"
-    )
+    el("h3","Fotografías del ejemplar"),
+    el("p","Agregá fotos del caballo desde tu ordenador. Podés elegir la principal, ocultar imágenes del catálogo o eliminarlas.","ayuda")
   );
+
+  const selectorFotos=document.createElement("input");
+  selectorFotos.type="file";
+  selectorFotos.accept="image/jpeg,image/png,image/webp";
+  selectorFotos.multiple=true;
+  selectorFotos.style.cssText="display:block;max-width:100%;margin:14px 0";
+  selectorFotos.setAttribute("aria-label","Seleccionar fotografías del caballo");
+
+  const subirFotos=boton("Agregar fotografías",async()=>{
+    const archivos=Array.from(selectorFotos.files||[]);
+    if(!archivos.length){
+      estadoEn(mensajeFotos,"Primero seleccioná una o varias fotografías.",true);
+      return;
+    }
+    if(archivos.length>8||archivos.some(f=>f.size===0||f.size>15*1024*1024)){
+      estadoEn(mensajeFotos,"Máximo 8 fotografías, de hasta 15 MB cada una.",true);
+      return;
+    }
+    if(archivos.reduce((n,f)=>n+f.size,0)>40*1024*1024){
+      estadoEn(mensajeFotos,"Las imágenes seleccionadas no pueden superar 40 MB en total.",true);
+      return;
+    }
+    subirFotos.disabled=true;
+    estadoEn(mensajeFotos,"Subiendo fotografías a R2 y publicándolas...");
+    try{
+      const respuesta=await subirFotosAdmin(pub.id,archivos);
+      selectorFotos.value="";
+      fotosCargadas=false;
+      await cargarFotos();
+      estadoEn(mensajeFotos,
+        respuesta.fotos_agregadas+" fotografía(s) agregada(s) correctamente. Ahora elegí la principal y, si querés, eliminá el pedigree.");
+    }catch(error){
+      estadoEn(mensajeFotos,error.message,true);
+    }finally{
+      subirFotos.disabled=false;
+    }
+  });
 
   const fotosLista=el("div","Cargando fotografías...");
-  fotosPanel.append(fotosLista);
-
-  const guardarFotos=boton(
-    "Guardar fotografías visibles",()=>{}
-  );
+  const guardarFotos=boton("Guardar fotografías visibles",()=>{});
   guardarFotos.disabled=true;
-  fotosPanel.append(guardarFotos);
-
   const mensajeFotos=el("p");
-  fotosPanel.append(mensajeFotos);
-
+  mensajeFotos.setAttribute("role","status");
+  fotosPanel.append(selectorFotos,subirFotos,fotosLista,guardarFotos,mensajeFotos);
   panel.append(fotosPanel);
   contenedor.append(panel);
 
   let fotosCargadas=false;
-
   async function cargarFotos(){
     if(fotosCargadas)return;
     fotosCargadas=true;
-
     try{
-      const fotos=await consulta(
-        "deportivos_fotos",
-        "&publicacion_id=eq."+encodeURIComponent(pub.id)+
-        "&order=orden.asc"
-      );
-
+      const fotos=await consulta("deportivos_fotos",
+        "&publicacion_id=eq."+encodeURIComponent(pub.id)+"&order=orden.asc,creado_en.asc");
       fotosLista.replaceChildren();
-
       if(!fotos.length){
-        fotosLista.append(el("p","No hay fotografías."));
+        fotosLista.append(el("p","Todavía no hay fotografías. Agregá una arriba."));
+        guardarFotos.disabled=true;
         return;
       }
-
       const controlesFoto=[];
-
-      for(const foto of fotos){
+      for(let i=0;i<fotos.length;i++){
+        const foto=fotos[i];
         const fila=el("div","","foto-fila");
         const img=document.createElement("img");
         img.alt="Foto del ejemplar";
-
         fotoAdmin(foto.id,img);
-
+        const accionesFoto=el("div");
+        accionesFoto.style.cssText="display:flex;flex-direction:column;gap:9px;align-items:flex-start";
+        if(i===0)accionesFoto.append(el("strong","Fotografía principal"));
         const label=el("label");
         const checkFoto=document.createElement("input");
         checkFoto.type="checkbox";
         checkFoto.checked=foto.aprobada===true;
-
-        label.append(
-          checkFoto,
-          document.createTextNode("Mostrar en catálogo")
-        );
-
-        fila.append(img,label);
+        label.append(checkFoto,document.createTextNode("Mostrar en catálogo"));
+        accionesFoto.append(label);
+        if(i!==0){
+          const principal=boton("Elegir como principal",async()=>{
+            if(!checkFoto.checked){
+              estadoEn(mensajeFotos,"Primero marcá la foto para mostrarla y guardá las fotografías visibles.",true);
+              return;
+            }
+            principal.disabled=true;
+            estadoEn(mensajeFotos,"Cambiando fotografía principal...");
+            try{
+              await workerAdmin("/admin/foto-principal",{
+                publicacion_id:pub.id,foto_id:foto.id
+              });
+              fotosCargadas=false;
+              await cargarFotos();
+              estadoEn(mensajeFotos,"Fotografía principal actualizada.");
+            }catch(error){
+              estadoEn(mensajeFotos,error.message,true);
+              principal.disabled=false;
+            }
+          });
+          accionesFoto.append(principal);
+        }
+        const eliminar=boton("Eliminar fotografía",async()=>{
+          if(!confirm("¿Eliminar definitivamente esta fotografía de Deportivos y R2?"))return;
+          eliminar.disabled=true;
+          estadoEn(mensajeFotos,"Eliminando fotografía...");
+          try{
+            await workerAdmin("/admin/eliminar-foto",{
+              publicacion_id:pub.id,foto_id:foto.id
+            });
+            fotosCargadas=false;
+            await cargarFotos();
+            estadoEn(mensajeFotos,"Fotografía eliminada correctamente.");
+          }catch(error){
+            estadoEn(mensajeFotos,error.message,true);
+            eliminar.disabled=false;
+          }
+        });
+        accionesFoto.append(eliminar);
+        fila.append(img,accionesFoto);
         fotosLista.append(fila);
         controlesFoto.push({id:foto.id,check:checkFoto});
       }
-
       guardarFotos.disabled=false;
-
       guardarFotos.onclick=async()=>{
-        const ids=controlesFoto
-          .filter(f=>f.check.checked)
-          .map(f=>f.id);
-
+        const ids=controlesFoto.filter(f=>f.check.checked).map(f=>f.id);
         if(!ids.length){
-          estadoEn(
-            mensajeFotos,
-            "Seleccioná al menos una fotografía.",
-            true
-          );
+          estadoEn(mensajeFotos,"Seleccioná al menos una fotografía.",true);
           return;
         }
-
         guardarFotos.disabled=true;
-        estadoEn(mensajeFotos,"Guardando fotografías...");
-
+        estadoEn(mensajeFotos,"Guardando fotografías visibles...");
         try{
           await rpc("actualizar_fotos_publicacion_deportivos",{
-            p_publicacion_id:pub.id,
-            p_fotos_ids:ids
+            p_publicacion_id:pub.id,p_fotos_ids:ids
           });
-
-          estadoEn(
-            mensajeFotos,
-            "Fotografías actualizadas correctamente."
-          );
+          fotosCargadas=false;
+          await cargarFotos();
+          estadoEn(mensajeFotos,"Fotografías visibles actualizadas correctamente.");
         }catch(error){
           estadoEn(mensajeFotos,error.message,true);
         }finally{
@@ -1111,7 +1179,6 @@ function panelEditar(pub,contenedor){
     }
   }
 
- 
   // VÍDEOS DE YOUTUBE - SOLO ADMINISTRADORES
 
   const videosPanel=el("section","","panel-interior");
