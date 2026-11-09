@@ -152,6 +152,8 @@ DEPORTIVOS DEL URUGUAY
 "use strict";
 
 const WORKER_URL="https://deportivos-fotos.sangresdeluruguay.workers.dev";
+const SUPABASE_URL="https://arsjvaueyjwntefogmqz.supabase.co";
+const SUPABASE_PUBLIC_KEY="sb_publishable_Q180CMeKmdMMVRa3WUBvIQ_0ceNY6zK";
 const TURNSTILE_SITE_KEY="0x4AAAAAAFmpHxaIeKApIMeg";
 const WHATSAPP_SDU="59891909423";
 const VERSION_CONDICIONES="2026-11-06";
@@ -333,12 +335,39 @@ function dato(titulo,valor){
 if(valor===null||valor===undefined||valor==="")return "";
 return `<div class="dato"><strong>${escapar(titulo)}</strong><span>${escapar(valor)}</span></div>`;
 }
-function cambiarFoto(nuevoIndice,fotos){
-indiceFoto=(nuevoIndice+fotos.length)%fotos.length;
-document.getElementById("fotoGrande").src=fotos[indiceFoto];
-document.querySelectorAll("[data-foto]").forEach(b=>{
-b.classList.toggle("activa",Number(b.dataset.foto)===indiceFoto);
+function cambiarElementoGaleria(nuevoIndice,elementos){
+indiceFoto=(nuevoIndice+elementos.length)%elementos.length;
+const elemento=elementos[indiceFoto];
+const foto=document.getElementById("fotoGrande");
+const video=document.getElementById("videoGrande");
+if(elemento.tipo==="foto"){
+video.src="about:blank";
+video.style.display="none";
+foto.src=elemento.src;
+foto.style.display="block";
+}else{
+foto.style.display="none";
+video.style.display="block";
+const nuevaUrl="https://www.youtube-nocookie.com/embed/"+elemento.id;
+if(video.getAttribute("src")!==nuevaUrl)video.src=nuevaUrl;
+}
+document.querySelectorAll("[data-elemento]").forEach(b=>{
+b.classList.toggle("activa",Number(b.dataset.elemento)===indiceFoto);
 });
+}
+async function cargarVideosPublicos(publicacionId){
+const parametros=new URLSearchParams({
+select:"youtube_id,orden",
+publicacion_id:"eq."+publicacionId,
+order:"orden.asc,id.asc"
+});
+const respuesta=await fetch(SUPABASE_URL+"/rest/v1/deportivos_videos_youtube?"+parametros,{
+headers:{apikey:SUPABASE_PUBLIC_KEY},cache:"no-store"
+});
+if(!respuesta.ok)throw new Error("No se pudieron cargar los vídeos: "+respuesta.status);
+const filas=await respuesta.json();
+if(!Array.isArray(filas))throw new Error("Respuesta de vídeos no válida");
+return filas.map(f=>f.youtube_id).filter(id=>/^[A-Za-z0-9_-]{11}$/.test(id));
 }
 function nombrePedigree(nombre,sexo,nacimiento=null){
 return `<div class="pedigree-nombre ${sexo}">
@@ -437,7 +466,6 @@ ${r.nombre_nomina&&r.nombre_nomina!==c.nombre?`<span class="dato-menor">Nómina:
 `:`<p>No hay participaciones registradas para este caballo.</p>`}
 </section>`;
 }
-
 function idYoutube(valor){
 const entrada=typeof valor==="string"?valor:
   (valor&&typeof valor==="object"?(valor.youtube_id||valor.url||valor.enlace||valor.video_url||""):"");
@@ -457,23 +485,17 @@ return /^[A-Za-z0-9_-]{11}$/.test(id||"")?id:null;
 }catch{return null;}
 }
 
-function htmlVideos(c){
-const videos=[...new Set((Array.isArray(c.videos)?c.videos:[])
-  .map(idYoutube).filter(Boolean))];
-if(!videos.length)return "";
-return `<section class="panel"><h2>Vídeos del caballo</h2>
-${videos.map(id=>`
-<iframe class="video" src="https://www.youtube-nocookie.com/embed/${id}"
-title="Vídeo de ${escapar(c.nombre)}" loading="lazy"
-allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-`).join("")}
-</section>`;
-}
-
-function mostrarFicha(c){
+async function mostrarFicha(c){
+const rutaFicha=location.href;
+let videos=[...new Set((Array.isArray(c.videos)?c.videos:[]).map(idYoutube).filter(Boolean))];
+try{
+const guardados=await cargarVideosPublicos(c.id);
+videos=[...new Set([...guardados,...videos])];
+}catch(error){console.error("Error al consultar vídeos de YouTube:",error);}
+if(location.href!==rutaFicha)return;
 indiceFoto=0;
 const fotos=c.fotos.length?c.fotos:[FOTO_PLACEHOLDER];
+const elementos=[...fotos.map(src=>({tipo:"foto",src})),...videos.map(id=>({tipo:"video",id}))];
 contenido.innerHTML=`
 <div class="ficha-cabecera">
 <div>
@@ -485,18 +507,21 @@ contenido.innerHTML=`
 <section>
 <div class="galeria">
 <img id="fotoGrande" src="${escapar(fotos[0])}" alt="Fotografía de ${escapar(c.nombre)}">
-${fotos.length>1?`
-<button class="flecha flecha-izq" id="fotoAnterior" aria-label="Fotografía anterior">&#8249;</button>
-<button class="flecha flecha-der" id="fotoSiguiente" aria-label="Fotografía siguiente">&#8250;</button>`:""}
+<iframe id="videoGrande" title="Vídeo de ${escapar(c.nombre)}" style="display:none;width:100%;height:100%;border:0"
+allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+${elementos.length>1?`
+<button class="flecha flecha-izq" id="fotoAnterior" aria-label="Elemento anterior" style="z-index:2">&#8249;</button>
+<button class="flecha flecha-der" id="fotoSiguiente" aria-label="Elemento siguiente" style="z-index:2">&#8250;</button>`:""}
 </div>
 <div class="miniaturas">
-${fotos.map((foto,i)=>`
-<button data-foto="${i}" class="${i===0?"activa":""}" aria-label="Ver fotografía ${i+1}">
-<img src="${escapar(foto)}" alt="Miniatura ${i+1}">
+${elementos.map((elemento,i)=>`
+<button data-elemento="${i}" class="${i===0?"activa":""}" aria-label="${elemento.tipo==="foto"?"Ver fotografía":"Ver vídeo"} ${i+1}" style="position:relative">
+<img src="${escapar(elemento.tipo==="foto"?elemento.src:"https://img.youtube.com/vi/"+elemento.id+"/hqdefault.jpg")}" alt="${elemento.tipo==="foto"?"Miniatura de fotografía":"Miniatura de vídeo"}">
+${elemento.tipo==="video"?`<span aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:white;font-size:24px;text-shadow:0 1px 6px #000;background:#0003">▶</span>`:""}
 </button>`).join("")}
 </div>
 </section>
-${htmlVideos(c)}
 <section class="panel">
 <h2>Datos del caballo</h2>
 <div class="datos">
@@ -525,13 +550,14 @@ ${c.estado==="VENDIDO"
 :`<a class="boton boton-dorado" href="?vista=consultar&caballo=${encodeURIComponent(c.id)}" data-navegar>Consultar / Hacer oferta</a>`}
 </section>`;
 
-document.querySelectorAll("[data-foto]").forEach(b=>{
-b.onclick=()=>cambiarFoto(Number(b.dataset.foto),fotos);
+document.querySelectorAll("[data-elemento]").forEach(b=>{
+b.onclick=()=>cambiarElementoGaleria(Number(b.dataset.elemento),elementos);
 });
-document.getElementById("fotoAnterior")?.addEventListener("click",()=>cambiarFoto(indiceFoto-1,fotos));
-document.getElementById("fotoSiguiente")?.addEventListener("click",()=>cambiarFoto(indiceFoto+1,fotos));
+document.getElementById("fotoAnterior")?.addEventListener("click",()=>cambiarElementoGaleria(indiceFoto-1,elementos));
+document.getElementById("fotoSiguiente")?.addEventListener("click",()=>cambiarElementoGaleria(indiceFoto+1,elementos));
 document.getElementById("fotoGrande").onclick=()=>{
-document.getElementById("visorImagen").src=fotos[indiceFoto];
+if(elementos[indiceFoto]?.tipo!=="foto")return;
+document.getElementById("visorImagen").src=elementos[indiceFoto].src;
 document.getElementById("visorFoto").classList.remove("oculto");
 };
 }
