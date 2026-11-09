@@ -1111,7 +1111,257 @@ function panelEditar(pub,contenedor){
     }
   }
 
-  return {panel,cargarFotos};
+ 
+  // VÍDEOS DE YOUTUBE - SOLO ADMINISTRADORES
+
+  const videosPanel=el("section","","panel-interior");
+  videosPanel.append(
+    el("h3","Vídeos de YouTube"),
+    el("p",
+      "Agregá enlaces de YouTube para mostrarlos en la ficha pública del caballo. Solo los administradores pueden gestionarlos.",
+      "ayuda"
+    )
+  );
+
+  const videoEntrada=document.createElement("input");
+  videoEntrada.type="url";
+  videoEntrada.className="buscador-sdu";
+  videoEntrada.placeholder="https://www.youtube.com/watch?v=...";
+  videoEntrada.setAttribute("aria-label","Enlace de YouTube");
+
+  const videoAcciones=el("div","","acciones");
+  const agregarVideo=boton("Agregar vídeo",guardarVideo);
+  videoAcciones.append(agregarVideo);
+
+  const videoMensaje=el("p");
+  videoMensaje.setAttribute("role","status");
+
+  const videosLista=el("div");
+
+  videosPanel.append(
+    videoEntrada,
+    videoAcciones,
+    videoMensaje,
+    videosLista
+  );
+
+  panel.append(videosPanel);
+
+  function obtenerYoutubeId(texto){
+    let url;
+
+    try{
+      url=new URL(texto.trim());
+    }catch{
+      throw Error("Pegá un enlace válido de YouTube.");
+    }
+
+    if(!["http:","https:"].includes(url.protocol)){
+      throw Error("El enlace debe ser de YouTube.");
+    }
+
+    const host=url.hostname.toLowerCase();
+
+    const dominios=[
+      "youtube.com",
+      "www.youtube.com",
+      "m.youtube.com",
+      "music.youtube.com",
+      "youtube-nocookie.com",
+      "www.youtube-nocookie.com",
+      "youtu.be",
+      "www.youtu.be"
+    ];
+
+    if(!dominios.includes(host)){
+      throw Error("Solo se permiten enlaces de YouTube.");
+    }
+
+    let id="";
+
+    if(host==="youtu.be"||host==="www.youtu.be"){
+      id=url.pathname.split("/")[1]||"";
+    }else if(url.pathname==="/watch"){
+      id=url.searchParams.get("v")||"";
+    }else{
+      const partes=url.pathname.split("/").filter(Boolean);
+
+      if(["shorts","live","embed","v"].includes(partes[0])){
+        id=partes[1]||"";
+      }
+    }
+
+    if(!/^[A-Za-z0-9_-]{11}$/.test(id)){
+      throw Error("No se pudo reconocer el vídeo de YouTube.");
+    }
+
+    return id;
+  }
+
+  let videosCargados=false;
+  let videosActuales=[];
+
+  async function cargarVideos(){
+    if(videosCargados)return;
+    videosCargados=true;
+
+    estadoEn(videoMensaje,"Cargando vídeos...");
+
+    try{
+      videosActuales=await consulta(
+        "deportivos_videos_youtube",
+        "&publicacion_id=eq."+encodeURIComponent(pub.id)+
+        "&order=orden.asc,id.asc"
+      );
+
+      mostrarVideos();
+      estadoEn(videoMensaje,"");
+    }catch(error){
+      videosCargados=false;
+      estadoEn(videoMensaje,error.message,true);
+    }
+  }
+
+  function mostrarVideos(){
+    videosLista.replaceChildren();
+
+    if(!videosActuales.length){
+      videosLista.append(
+        el("p","Este caballo todavía no tiene vídeos de YouTube.")
+      );
+      return;
+    }
+
+    for(const video of videosActuales){
+      const fila=el("div","","panel-interior");
+
+      const marco=document.createElement("iframe");
+      marco.src=
+        "https://www.youtube-nocookie.com/embed/"+
+        encodeURIComponent(video.youtube_id);
+
+      marco.title="Vídeo de YouTube";
+      marco.loading="lazy";
+      marco.allowFullscreen=true;
+      marco.allow=
+        "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+
+      marco.style.cssText=
+        "width:100%;max-width:560px;aspect-ratio:16/9;"+
+        "border:0;border-radius:9px;display:block";
+
+      const enlace=el(
+        "a",
+        "Ver vídeo en YouTube"
+      );
+      enlace.href=
+        "https://www.youtube.com/watch?v="+video.youtube_id;
+      enlace.target="_blank";
+      enlace.rel="noopener noreferrer";
+
+      const accionesVideo=el("div","","acciones");
+
+      const eliminar=boton("Eliminar vídeo",async()=>{
+        if(!confirm("¿Eliminar este vídeo de la ficha del caballo?")){
+          return;
+        }
+
+        eliminar.disabled=true;
+        estadoEn(videoMensaje,"Eliminando vídeo...");
+
+        try{
+          const respuesta=await authFetch(
+            "/rest/v1/deportivos_videos_youtube"+
+            "?id=eq."+encodeURIComponent(video.id)+
+            "&publicacion_id=eq."+encodeURIComponent(pub.id),
+            {method:"DELETE"}
+          );
+
+          if(!respuesta.ok){
+            const detalle=await respuesta.json().catch(()=>({}));
+            throw Error(detalle.message||"No se pudo eliminar el vídeo.");
+          }
+
+          videosActuales=videosActuales.filter(
+            v=>String(v.id)!==String(video.id)
+          );
+
+          mostrarVideos();
+          estadoEn(videoMensaje,"Vídeo eliminado correctamente.");
+        }catch(error){
+          eliminar.disabled=false;
+          estadoEn(videoMensaje,error.message,true);
+        }
+      });
+
+      accionesVideo.append(enlace,eliminar);
+      fila.append(marco,accionesVideo);
+      videosLista.append(fila);
+    }
+  }
+
+  async function guardarVideo(){
+    let youtubeId;
+
+    try{
+      youtubeId=obtenerYoutubeId(videoEntrada.value);
+    }catch(error){
+      estadoEn(videoMensaje,error.message,true);
+      return;
+    }
+
+    if(videosActuales.some(v=>v.youtube_id===youtubeId)){
+      estadoEn(videoMensaje,"Este vídeo ya está agregado.",true);
+      return;
+    }
+
+    agregarVideo.disabled=true;
+    estadoEn(videoMensaje,"Guardando vídeo...");
+
+    try{
+      const orden=videosActuales.reduce(
+        (max,v)=>Math.max(max,Number(v.orden)||0),-1
+      )+1;
+
+      const respuesta=await authFetch(
+        "/rest/v1/deportivos_videos_youtube",
+        {
+          method:"POST",
+          headers:{Prefer:"return=representation"},
+          body:JSON.stringify({
+            publicacion_id:pub.id,
+            youtube_id:youtubeId,
+            orden
+          })
+        }
+      );
+
+      const resultado=await respuesta.json().catch(()=>null);
+
+      if(!respuesta.ok){
+        throw Error(
+          resultado?.message||"No se pudo guardar el vídeo."
+        );
+      }
+
+      if(!Array.isArray(resultado)||!resultado.length){
+        throw Error("No se pudo confirmar el vídeo guardado.");
+      }
+
+      videosActuales.push(resultado[0]);
+      videoEntrada.value="";
+      mostrarVideos();
+
+      estadoEn(videoMensaje,"Vídeo guardado correctamente.");
+    }catch(error){
+      estadoEn(videoMensaje,error.message,true);
+    }finally{
+      agregarVideo.disabled=false;
+    }
+  }
+
+  return {panel,cargarFotos,cargarVideos};
+
 }
 
 async function mostrarSolicitud(pub,padre){
@@ -1426,6 +1676,7 @@ function tarjetaEjemplar(pub,contenido,opciones={}){
 
     if(modo==="editar"){
       editor.cargarFotos();
+      editor.cargarVideos();
     }
 
     if(modo==="genealogia"){
