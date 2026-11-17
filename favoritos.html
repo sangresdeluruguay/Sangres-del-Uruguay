@@ -533,6 +533,11 @@ main { padding: 18px 14px 45px; }
 .tabla-estadisticas td:first-child { font-weight:800; color:#b18b25; }
 .tabla-estadisticas a { color:#173b72; text-decoration:none; font-weight:700; }
 .tabla-estadisticas a:hover { text-decoration:underline; }
+/* Copas discretas para los tres primeros del Top 10, sin modificar la tabla. */
+.copa-puesto { width:16px; height:16px; display:inline-block; vertical-align:-3px; margin-right:6px; }
+.copa-puesto-1 { color:#b89a56; }
+.copa-puesto-2 { color:#a5abb4; }
+.copa-puesto-3 { color:#b47b57; }
 @media (max-width:1200px) { .estadisticas-destacadas { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:600px) { .estadisticas-destacadas { grid-template-columns:1fr; } .pestana-temporada { flex:1; justify-content:center; } }
 /* Separación de estadísticas oficiales por distancia */
@@ -1036,6 +1041,11 @@ function compararDestacados(a, b) {
  b.terceros - a.terceros || b.top5 - a.top5 || b.top10 - a.top10 ||
  a.nc - b.nc || a.nombre.localeCompare(b.nombre, "es");
 }
+function iconoCopaEstadistica(posicion) {
+ if (posicion < 1 || posicion > 3) return "";
+ // SVG con color propio para cada puesto; no depende de emojis ni fuentes externas.
+ return `<svg class="copa-puesto copa-puesto-${posicion}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 21h8"/><path d="M12 17v4"/><path d="M7 4h10v7a5 5 0 0 1-10 0V4Z"/><path d="M7 7H4v2a4 4 0 0 0 4 4"/><path d="M17 7h3v2a4 4 0 0 1-4 4"/></svg>`;
+}
 async function mostrarEstadisticasTemporada(anio, competencias) {
  const parametros = new URLSearchParams(window.location.search);
  const tipo = parametros.get("tipo") === "cortas" ? "cortas" : "largas";
@@ -1100,7 +1110,7 @@ async function mostrarEstadisticasTemporada(anio, competencias) {
  <thead><tr><th>Pos.</th><th>Caballo</th><th>1.º</th><th>2.º</th><th>3.º</th>
  <th>Top 5</th><th>Top 10</th><th>NC</th></tr></thead>
  <tbody>${destacados.map((c, i) => `<tr>
- <td>${i + 1}º</td><td>${nombreEnlaceEstadistica(c)}</td>
+ <td>${iconoCopaEstadistica(i + 1)}${i + 1}º</td><td>${nombreEnlaceEstadistica(c)}</td>
  <td>${c.primeros}</td><td>${c.segundos}</td><td>${c.terceros}</td>
  <td>${c.top5}</td><td>${c.top10}</td><td>${c.nc}</td>
  </tr>`).join("")}</tbody>
