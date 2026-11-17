@@ -1110,7 +1110,7 @@ async function mostrarEstadisticasTemporada(anio, competencias) {
  <thead><tr><th>Pos.</th><th>Caballo</th><th>1.º</th><th>2.º</th><th>3.º</th>
  <th>Top 5</th><th>Top 10</th><th>NC</th></tr></thead>
  <tbody>${destacados.map((c, i) => `<tr>
- <td>${iconoCopaEstadistica(i + 1)}${i + 1}º</td><td>${nombreEnlaceEstadistica(c)}</td>
+ <td>${i < 3 ? iconoCopaEstadistica(i + 1) : `${i + 1}º`}</td><td>${nombreEnlaceEstadistica(c)}</td>
  <td>${c.primeros}</td><td>${c.segundos}</td><td>${c.terceros}</td>
  <td>${c.top5}</td><td>${c.top10}</td><td>${c.nc}</td>
  </tr>`).join("")}</tbody>
