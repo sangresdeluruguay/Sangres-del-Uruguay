@@ -535,6 +535,18 @@ main { padding: 18px 14px 45px; }
 .tabla-estadisticas a:hover { text-decoration:underline; }
 @media (max-width:1200px) { .estadisticas-destacadas { grid-template-columns:repeat(2,minmax(0,1fr)); } }
 @media (max-width:600px) { .estadisticas-destacadas { grid-template-columns:1fr; } .pestana-temporada { flex:1; justify-content:center; } }
+/* Separación de estadísticas oficiales por distancia */
+.pestanas-distancia { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin: 16px 0 20px; }
+.pestana-distancia { display:block; padding:17px 20px; border:1px solid #dce2eb; border-radius:12px; background:white; color:#17233b; text-decoration:none; }
+.pestana-distancia strong { display:block; font-size:16px; margin-bottom:5px; }
+.pestana-distancia small { display:block; color:#65738a; font-size:12px; }
+.pestana-distancia.activa { background:#17233b; border-color:#17233b; color:white; }
+.pestana-distancia.activa small { color:#d6dfed; }
+@media(max-width:620px) { .pestanas-distancia { grid-template-columns:1fr; } }
+.tabla-destacados { min-width: 620px; }
+.tabla-destacados th:not(:nth-child(2)), .tabla-destacados td:not(:nth-child(2)) { text-align: center; }
+.tabla-destacados th:nth-child(2), .tabla-destacados td:nth-child(2) { min-width: 165px; }
+.tabla-destacados tbody tr:nth-child(-n+3) td:first-child { color: #b18b25; font-weight: 800; }
 </style>
 </head>
 <body>
@@ -998,87 +1010,110 @@ function tarjetaLider(titulo, caballo, campo, singular, plural) {
  <span class="detalle">${cantidad === 1 ? singular : plural}</span>
  </div>`;
 }
+function categoriaDistanciaEstadistica(competencia) {
+ // Dos categorías deportivas independientes: 60 km exactos y 80 km o más.
+ // Las distancias intermedias o sin dato no se suman a ninguna clasificación.
+ const distancia = Number(String(competencia.distancia_km ?? "").replace(",", "."));
+ if (!Number.isFinite(distancia) || distancia <= 0) return null;
+ if (distancia === 60) return "cortas";
+ if (distancia >= 80) return "largas";
+ return null;
+}
+function pestanasDistanciaEstadistica(anio, tipo) {
+ // Las distancias se calculan internamente; no se muestran kilómetros en las pestañas.
+ return `<nav class="pestanas-distancia" aria-label="Categorías de estadísticas">
+ <a class="pestana-distancia ${tipo === "largas" ? "activa" : ""}"
+ href="favoritos.html?vista=estadisticas&anio=${anio}&tipo=largas"
+ ${tipo === "largas" ? 'aria-current="page"' : ""}>
+ <strong>Pruebas largas</strong>
+ </a>
+ <a class="pestana-distancia ${tipo === "cortas" ? "activa" : ""}"
+ href="favoritos.html?vista=estadisticas&anio=${anio}&tipo=cortas"
+ ${tipo === "cortas" ? 'aria-current="page"' : ""}>
+ <strong>Pruebas cortas</strong>
+ </a>
+ </nav>`;
+}
+function compararDestacados(a, b) {
+ // Prioridad deportiva: primeros, segundos, terceros, puestos 4-5 y puestos 6-10.
+ // Los NC no suman méritos deportivos y se usan solo para desempatar.
+ return b.primeros - a.primeros || b.segundos - a.segundos ||
+ b.terceros - a.terceros || b.top5 - a.top5 || b.top10 - a.top10 ||
+ a.nc - b.nc || a.nombre.localeCompare(b.nombre, "es");
+}
 async function mostrarEstadisticasTemporada(anio, competencias) {
- const oficiales = competencias.filter(c => c.estado === "resultado_definitivo");
- const fechas = new Set(competencias.map(c => c.fecha).filter(Boolean));
- const resumen = `<div class="resumen-estadisticas">
- <div class="dato-estadistica"><strong>${competencias.length}</strong><span>Competencias publicadas</span></div>
- <div class="dato-estadistica"><strong>${fechas.size}</strong><span>Fechas de competición</span></div>
- <div class="dato-estadistica"><strong>${oficiales.length}</strong><span>Resultados definitivos</span></div>
- </div>`;
- const base = cabeceraPortada(`Temporada ${anio}`, "Archivo histórico de competencias y estadísticas") +
- pestanasTemporada(anio, "estadisticas") + resumen;
+ const parametros = new URLSearchParams(window.location.search);
+ const tipo = parametros.get("tipo") === "cortas" ? "cortas" : "largas";
+ const etiqueta = tipo === "cortas" ? "Pruebas cortas" : "Pruebas largas";
+ const oficiales = competencias.filter(c =>
+ c.estado === "resultado_definitivo" && categoriaDistanciaEstadistica(c) === tipo);
+ const base = cabeceraPortada(`Estadísticas ${anio}`, "Caballos destacados de la temporada") +
+ pestanasTemporada(anio, "estadisticas") +
+ pestanasDistanciaEstadistica(anio, tipo) +
+ `<div class="cabecera-bloque"><div><h2>${etiqueta}</h2>
+ <p>Los 10 caballos más destacados según sus resultados oficiales.</p></div></div>`;
  if (!oficiales.length) {
- app.innerHTML = base + `<div class="mensaje">Todavía no hay resultados definitivos de esta temporada. Los rankings se publicarán automáticamente cuando haya resultados oficiales.</div>`;
+ app.innerHTML = base + `<div class="mensaje">Todavía no hay resultados definitivos para ${etiqueta.toLowerCase()} en esta temporada.</div>`;
  return;
  }
- app.innerHTML = base + `<div class="mensaje">Calculando las estadísticas oficiales...</div>`;
+ app.innerHTML = base + `<div class="mensaje">Calculando los resultados oficiales...</div>`;
  try {
  const participantes = await consultarEnLotes("participantes_competencia",
- "id,competencia_id,caballo_deportivo_id,nombre_nomina,jinete", "competencia_id",
+ "id,competencia_id,caballo_deportivo_id,nombre_nomina", "competencia_id",
  oficiales.map(c => c.id), 25);
  const resultados = await consultarEnLotes("resultados_competencia",
- "participante_id,puesto,estado_resultado,promedio_kmh", "participante_id",
+ "participante_id,puesto,estado_resultado", "participante_id",
  participantes.map(p => p.id), 45);
  const mapaResultados = new Map(resultados.map(r => [Number(r.participante_id), r]));
  const caballos = new Map();
- const jinetes = new Map();
  participantes.forEach(p => {
  const clave = claveCaballoEstadistica(p);
  if (clave === "nombre:") return;
+ const r = mapaResultados.get(Number(p.id));
+ // Un caballo cuenta una sola vez por competencia. No se infiere NC por ausencia de resultado.
  if (!caballos.has(clave)) caballos.set(clave, {
  nombre: p.nombre_nomina || "Sin nombre", deportivoId: p.caballo_deportivo_id || null,
- participaciones: 0, triunfos: 0, segundos: 0, terceros: 0, carreras: new Set()
+ primeros: 0, segundos: 0, terceros: 0, top5: 0, top10: 0, nc: 0,
+ carreras: new Set()
  });
- const c = caballos.get(clave);
- // Cada caballo cuenta una sola vez por competencia.
- if (!c.carreras.has(p.competencia_id)) {
- c.carreras.add(p.competencia_id);
- c.participaciones++;
+ const caballo = caballos.get(clave);
+ if (caballo.carreras.has(p.competencia_id)) return;
+ caballo.carreras.add(p.competencia_id);
+ if (!r) return;
+ const estado = String(r.estado_resultado || "").trim().toUpperCase().replaceAll(" ", "_");
+ if (estado === "NC" || estado === "NO_CLASIFICADO") {
+ caballo.nc++;
+ return;
  }
- const r = mapaResultados.get(Number(p.id));
- if (!r || r.estado_resultado !== "clasificado") return;
- const puesto = Number(r.puesto);
- if (puesto === 1) c.triunfos++;
- else if (puesto === 2) c.segundos++;
- else if (puesto === 3) c.terceros++;
- if (puesto === 1 && p.jinete && String(p.jinete).trim()) {
- const jinete = String(p.jinete).trim();
- const claveJinete = jinete.toLocaleUpperCase("es-UY");
- const j = jinetes.get(claveJinete) || { nombre: jinete, triunfos: 0 };
- j.triunfos++;
- jinetes.set(claveJinete, j);
- }
+ if (estado !== "CLASIFICADO") return;
+ const puesto = numeroOrden(r.puesto);
+ if (puesto === 1) caballo.primeros++;
+ else if (puesto === 2) caballo.segundos++;
+ else if (puesto === 3) caballo.terceros++;
+ else if (puesto === 4 || puesto === 5) caballo.top5++;
+ else if (puesto >= 6 && puesto <= 10 && Number.isInteger(puesto)) caballo.top10++;
  });
- const lista = [...caballos.values()];
- const ranking = [...lista].sort((a,b) =>
- b.triunfos - a.triunfos || b.segundos - a.segundos || b.terceros - a.terceros ||
- b.participaciones - a.participaciones || a.nombre.localeCompare(b.nombre,"es"));
- const mejorJinete = [...jinetes.values()].sort((a,b) => b.triunfos-a.triunfos || a.nombre.localeCompare(b.nombre,"es"))[0];
- app.innerHTML = base + `
- <div class="cabecera-bloque"><div><h2>Caballos destacados · ${anio}</h2>
- <p>Únicamente competencias con resultado definitivo</p></div></div>
- <div class="estadisticas-destacadas">
- ${tarjetaLider("Más triunfos", liderEstadistica(lista,"triunfos"),"triunfos","triunfo","triunfos")}
- ${tarjetaLider("Más segundos puestos", liderEstadistica(lista,"segundos"),"segundos","segundo puesto","segundos puestos")}
- ${tarjetaLider("Más terceros puestos", liderEstadistica(lista,"terceros"),"terceros","tercer puesto","terceros puestos")}
- ${tarjetaLider("Más participaciones", liderEstadistica(lista,"participaciones"),"participaciones","competencia","competencias")}
- </div>
- <div class="tarjeta">
- <h3>Clasificación general de caballos</h3>
- <p class="subtitulo">Ordenada por triunfos, segundos y terceros puestos.</p>
- ${ranking.length ? `<div class="tabla-contenedor"><table class="tabla-estadisticas">
- <thead><tr><th>Pos.</th><th>Caballo</th><th>Triunfos</th><th>2.º</th><th>3.º</th><th>Carreras</th></tr></thead>
- <tbody>${ranking.map((c,i) => `<tr><td>${i+1}º</td><td>${nombreEnlaceEstadistica(c)}</td>
- <td>${c.triunfos}</td><td>${c.segundos}</td><td>${c.terceros}</td><td>${c.participaciones}</td></tr>`).join("")}</tbody>
- </table></div>` : `<div class="mensaje">No hay caballos con participaciones registradas.</div>`}
- </div>
- ${mejorJinete ? `<div class="tarjeta"><h3>Jinete con más triunfos</h3>
- <p><strong>${escapar(mejorJinete.nombre)}</strong> · ${mejorJinete.triunfos} ${mejorJinete.triunfos === 1 ? "triunfo" : "triunfos"}</p></div>` : ""}
- <div class="texto-informativo">Las estadísticas se calculan automáticamente a partir de los resultados definitivos de Supabase. Los resultados provisorios, votaciones y borradores no se incluyen. Las participaciones cuentan las carreras con resultado definitivo, incluso cuando el caballo no clasificó.</div>`;
+ // Solo aparecen caballos con al menos un resultado entre los diez primeros.
+ // Un NC se muestra en su columna, pero no convierte al caballo en destacado.
+ const destacados = [...caballos.values()]
+ .filter(c => c.primeros + c.segundos + c.terceros + c.top5 + c.top10 > 0)
+ .sort(compararDestacados)
+ .slice(0, 10);
+ app.innerHTML = base + `<div class="tarjeta">
+ <h3>Top 10 · Caballos destacados</h3>
+ ${destacados.length ? `<div class="tabla-contenedor"><table class="tabla-estadisticas tabla-destacados">
+ <thead><tr><th>Pos.</th><th>Caballo</th><th>1.º</th><th>2.º</th><th>3.º</th>
+ <th>Top 5</th><th>Top 10</th><th>NC</th></tr></thead>
+ <tbody>${destacados.map((c, i) => `<tr>
+ <td>${i + 1}º</td><td>${nombreEnlaceEstadistica(c)}</td>
+ <td>${c.primeros}</td><td>${c.segundos}</td><td>${c.terceros}</td>
+ <td>${c.top5}</td><td>${c.top10}</td><td>${c.nc}</td>
+ </tr>`).join("")}</tbody>
+ </table></div>` : `<div class="mensaje">Todavía no hay caballos con puestos entre los diez primeros en esta categoría.</div>`}
+ </div>`;
  } catch (error) {
- console.error("No se pudieron calcular estadísticas oficiales", error);
- app.innerHTML = base + `<div class="mensaje mensaje-error">No se pudieron cargar los datos necesarios para las estadísticas. Las competencias y sus resultados siguen disponibles en «Ver competencias».</div>`;
+ console.error("No se pudieron calcular las estadísticas oficiales", error);
+ app.innerHTML = base + `<div class="mensaje mensaje-error">No se pudieron cargar las estadísticas. Las competencias siguen disponibles en «Ver competencias».</div>`;
  }
 }
 async function mostrarInicio() {
